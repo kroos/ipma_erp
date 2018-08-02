@@ -29,6 +29,6 @@ class Login extends Authenticatable
 
     public function belongtostaff()
     {
-        $this->belongsTo('App\Staff');
+       return $this->belongsTo('App\Staff', 'staff_id');
     }
 }

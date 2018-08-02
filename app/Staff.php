@@ -6,8 +6,9 @@ namespace App;
 
 class Staff extends Model
 {
+	protected $table = 'staffs';
 	public function hasmanylogin()
 	{
-		return $this->hasMany('App\Login', 'staff_id');
+		return $this->hasMany('App\Login');
 	}
 }
