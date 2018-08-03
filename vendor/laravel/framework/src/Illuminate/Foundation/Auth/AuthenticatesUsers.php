@@ -125,6 +125,7 @@ trait AuthenticatesUsers
      */
     protected function authenticated(Request $request, $user)
     {
+        // record each time succesfull login
         Auth::user()->touch();
     }
 
