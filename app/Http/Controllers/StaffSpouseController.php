@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\StaffSpouse;
 use Illuminate\Http\Request;
 
-class MainController extends Controller
+class StaffSpouseController extends Controller
 {
-    function __construct()
-    {
-        $this->middleware('guest');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +14,7 @@ class MainController extends Controller
      */
     public function index()
     {
-        return view('welcome');
+        //
     }
 
     /**
@@ -44,10 +41,10 @@ class MainController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\StaffSpouse  $staffSpouse
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(StaffSpouse $staffSpouse)
     {
         //
     }
@@ -55,10 +52,10 @@ class MainController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\StaffSpouse  $staffSpouse
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(StaffSpouse $staffSpouse)
     {
         //
     }
@@ -67,10 +64,10 @@ class MainController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\StaffSpouse  $staffSpouse
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, StaffSpouse $staffSpouse)
     {
         //
     }
@@ -78,10 +75,10 @@ class MainController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\StaffSpouse  $staffSpouse
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(StaffSpouse $staffSpouse)
     {
         //
     }

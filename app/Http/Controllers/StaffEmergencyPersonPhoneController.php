@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\StaffEmergencyPersonPhone;
 use Illuminate\Http\Request;
 
-class MainController extends Controller
+class StaffEmergencyPersonPhoneController extends Controller
 {
-    function __construct()
-    {
-        $this->middleware('guest');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +14,7 @@ class MainController extends Controller
      */
     public function index()
     {
-        return view('welcome');
+        //
     }
 
     /**
@@ -44,10 +41,10 @@ class MainController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\StaffEmergencyPersonPhone  $staffEmergencyPersonPhone
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(StaffEmergencyPersonPhone $staffEmergencyPersonPhone)
     {
         //
     }
@@ -55,10 +52,10 @@ class MainController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\StaffEmergencyPersonPhone  $staffEmergencyPersonPhone
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(StaffEmergencyPersonPhone $staffEmergencyPersonPhone)
     {
         //
     }
@@ -67,10 +64,10 @@ class MainController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\StaffEmergencyPersonPhone  $staffEmergencyPersonPhone
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, StaffEmergencyPersonPhone $staffEmergencyPersonPhone)
     {
         //
     }
@@ -78,10 +75,10 @@ class MainController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\StaffEmergencyPersonPhone  $staffEmergencyPersonPhone
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(StaffEmergencyPersonPhone $staffEmergencyPersonPhone)
     {
         //
     }
