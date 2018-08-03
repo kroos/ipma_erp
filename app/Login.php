@@ -15,7 +15,7 @@ class Login extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'password',
+        'staff_id', 'username', 'password', 'email', 'active'
     ];
 
     /**

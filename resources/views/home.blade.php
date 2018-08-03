@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header">Dashboard</div>
+	<div class="card-header"><h1>Dashboard</h1></div>
 
 	<div class="card-body">
 		@if (session('status'))
@@ -11,7 +11,7 @@
 		</div>
 		@endif
 
-		You are logged in!
+		<p>You are logged in!</p>
 	</div>
 </div>
 @endsection

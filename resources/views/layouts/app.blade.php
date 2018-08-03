@@ -5,10 +5,14 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
+	<meta name=description content="Content">
+	<meta name=author content="Author">
+	<title>{{ config('app.name') }}</title>
+	<link href="{{ asset('images/logo.png') }}" type="image/x-icon" rel="icon" />
+	<meta name="keywords" content="" />
 	<!-- CSRF Token -->
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
-	<title>{{ config('app.name') }}</title>
 
 	<!-- Styles -->
 	<link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -23,7 +27,8 @@
 		<main class="py-4">
 			<div class="container">
 				<div class="row justify-content-center">
-					<div class="col-md-12 animated flipInY delay-5s">
+					<!-- <div class="col-md-12 animated flipInY delay-5s"> -->
+					<div class="col-md-12">
 
 						@yield('content')
 
