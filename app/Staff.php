@@ -28,8 +28,8 @@ class Staff extends Model
 		return $this->hasMany('App\StaffSibling');
 	}
 
-	public function FunctionName($value='')
+	public function hasmanyspouse()
 	{
-		# code...
+		return $this->hasMany('App\StaffSpouse');
 	}
 }
