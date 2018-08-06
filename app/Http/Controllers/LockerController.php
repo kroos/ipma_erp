@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Locker;
+use App\Model\Locker;
 use Illuminate\Http\Request;
 
 class LockerController extends Controller

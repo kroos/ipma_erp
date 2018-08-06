@@ -2,13 +2,15 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header"><h1>Profile</h1></div>
+	<div class="card-header"><h1 class="card-title">Profile</h1></div>
 	<div class="card-body">
-		@include('layout.info')
-		@include('layout.errorform')
+		@include('layouts.info')
+		@include('layouts.errorform')
+{!! Form::model($staff, ['route' => ['staff.update', $staff->id], 'method' => 'PATCH', 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) !!}
 
+@include('profile._form')
 
-		
+{{ Form::close() }}
 	</div>
 </div>
 @endsection

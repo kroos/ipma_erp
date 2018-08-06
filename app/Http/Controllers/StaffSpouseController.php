@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\StaffSpouse;
+use App\Model\StaffSpouse;
 use Illuminate\Http\Request;
 
 class StaffSpouseController extends Controller

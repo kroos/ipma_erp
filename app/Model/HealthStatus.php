@@ -7,5 +7,11 @@ namespace App\Model;
 class HealthStatus extends Model
 {
     protected $table = 'health_statuses';
-    
+
+    public function hasmanystaffchildren()
+    {
+    	return $this->hasMany('App\Model\StaffChildren');
+    }
+
+
 }

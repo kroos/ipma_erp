@@ -7,4 +7,11 @@ namespace App\Model;
 class EducationLevel extends Model
 {
     protected $table = 'educations_levels';
+
+    public function hasmanystaffchildren()
+    {
+    	return $this->hasMany('App\Model\StaffChildren');
+    }
+
+
 }

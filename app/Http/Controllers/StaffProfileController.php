@@ -2,10 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Model\Staff;
+
 use Illuminate\Http\Request;
 
 class StaffProfileController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('auth');
+        // $this->middleware('admin', ['except' => ['create', 'store']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +21,6 @@ class StaffProfileController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -43,9 +50,9 @@ class StaffProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Staff $staff)
     {
-        //
+        return view('profile.show', compact(['staff']));
     }
 
     /**
@@ -54,7 +61,7 @@ class StaffProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Staff $staff)
     {
         //
     }
@@ -66,7 +73,7 @@ class StaffProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Staff $staff)
     {
         //
     }
@@ -77,7 +84,7 @@ class StaffProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Staff $staff)
     {
         //
     }

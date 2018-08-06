@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\StaffDrivingLicense;
+use App\Model\StaffDrivingLicense;
 use Illuminate\Http\Request;
 
 class StaffDrivingLicenseController extends Controller

@@ -4,9 +4,14 @@ namespace App\Model;
 
 // use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Staff extends Model
 {
+	use SoftDeletes;
+
 	protected $table = 'staffs';
+	protected $dates = ['deleted_at'];
 
 	public function hasmanylogin()
 	{
@@ -42,4 +47,34 @@ class Staff extends Model
 	{
 		return $this->hasMany('App\Model\StaffEducation');
 	}
+
+    public function belongtogender()
+    {
+    	return $this->belongsTo('App\Model\Gender', 'gender_id');
+    }
+
+    public function belongtocountry()
+    {
+    	return $this->belongsTo('App\Model\Country', 'country_id');
+    }
+
+    public function belongtoreligion()
+    {
+    	return $this->belongsTo('App\Model\Religion', 'religion_id');
+    }
+
+    public function belongtorace()
+    {
+    	return $this->belongsTo('App\Model\Race', 'race_id');
+    }
+
+    public function belongtostatus()
+    {
+    	return $this->belongsTo('App\Model\Status', 'status_id');
+    }
+
+    public function belongtomaritalstatus()
+    {
+    	return $this->belongsTo('App\Model\MaritalStatus', 'marital_status_id');
+    }
 }

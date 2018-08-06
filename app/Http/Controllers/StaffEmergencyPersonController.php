@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\StaffEmergencyPerson;
+use App\Model\StaffEmergencyPerson;
 use Illuminate\Http\Request;
 
 class StaffEmergencyPersonController extends Controller

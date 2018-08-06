@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Model\CategoryPosition;
+use App\Model\Status;
 use Illuminate\Http\Request;
 
-class CategoryPositionController extends Controller
+class StatusController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class CategoryPositionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\CategoryPosition  $categoryPosition
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(CategoryPosition $categoryPosition)
+    public function show($id)
     {
         //
     }
@@ -52,10 +52,10 @@ class CategoryPositionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\CategoryPosition  $categoryPosition
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(CategoryPosition $categoryPosition)
+    public function edit($id)
     {
         //
     }
@@ -64,10 +64,10 @@ class CategoryPositionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\CategoryPosition  $categoryPosition
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CategoryPosition $categoryPosition)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -75,10 +75,10 @@ class CategoryPositionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\CategoryPosition  $categoryPosition
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CategoryPosition $categoryPosition)
+    public function destroy($id)
     {
         //
     }

@@ -7,4 +7,15 @@ namespace App\Model;
 class Gender extends Model
 {
     protected $table = 'genders';
+
+    public function hasonestaffprofile()
+    {
+    	return $this->hasOne('App\Model\StaffProfile');
+    }
+
+    public function hasonestaffchildren()
+    {
+    	return $this->hasOne('App\Model\StaffChildren');
+    }
+
 }

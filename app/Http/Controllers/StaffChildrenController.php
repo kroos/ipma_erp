@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\StaffChildren;
+use App\Model\StaffChildren;
 use Illuminate\Http\Request;
 
 class StaffChildrenController extends Controller

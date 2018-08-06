@@ -8,4 +8,15 @@ class Category extends Model
 {
     protected $table = 'categories';
 
+    public function hasmanycategoryposition()
+    {
+    	return $this->hasMany('App\Model\CategoryPosition');
+    }
+
+    public function hasmanylocker()
+    {
+    	return $this->hasMany('App\Model\Locker');
+    }
+
+    
 }

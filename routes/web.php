@@ -24,6 +24,6 @@ Route::get('/home', [
 	]);
 
 ############################################################################
-// Item Controller
+// StaffProfile Controller
 
-// Route::resource('item', 'ItemController');
+Route::resource('staff', 'StaffProfileController');
