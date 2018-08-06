@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 // use Illuminate\Database\Eloquent\Model;
 
@@ -10,6 +10,6 @@ class StaffSibling extends Model
 
     public function belongtostaff()
     {
-    	return $this->belongsTo('App\Staff');
+    	return $this->belongsTo('App\Model\Staff');
     }
 }

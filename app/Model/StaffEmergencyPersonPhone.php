@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 // use Illuminate\Database\Eloquent\Model;
 
@@ -10,6 +10,6 @@ class StaffEmergencyPersonPhone extends Model
 
     public function belongtoemergencyperson()
     {
-    	return $this->belongsTo('App\StaffEmergencyPerson', 'emergency_person_id');
+    	return $this->belongsTo('App\Model\StaffEmergencyPerson', 'emergency_person_id');
     }
 }

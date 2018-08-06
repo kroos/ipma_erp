@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 // use Illuminate\Database\Eloquent\Model;
 
@@ -10,11 +10,11 @@ class Position extends Model
 
     public function belongtodivision()
     {
-    	return $this->belongsTo('App\Division', 'division_id');
+    	return $this->belongsTo('App\Model\Division', 'division_id');
     }
 
     public function belongtodepartment()
     {
-    	return $this->belongsTo('App\Department', 'department_id');
+    	return $this->belongsTo('App\Model\Department', 'department_id');
     }
 }

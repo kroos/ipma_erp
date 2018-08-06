@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 // use Illuminate\Database\Eloquent\Model;
 
@@ -10,11 +10,11 @@ class StaffEmergencyPerson extends Model
 
     public function hasmanyemergencypersonphone()
     {
-    	return $this->hasMany('App\StaffEmergencyPersonPhone');
+    	return $this->hasMany('App\Model\StaffEmergencyPersonPhone');
     }
 
     public function belongtostaff()
     {
-    	return $this->belongsTo('App\Staff', 'staff_id');
+    	return $this->belongsTo('App\Model\Staff', 'staff_id');
     }
 }

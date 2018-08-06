@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 // use Illuminate\Database\Eloquent\Model;
 
@@ -10,11 +10,11 @@ class CategoryPosition extends Model
 
     public function belongtocategory()
     {
-    	return $this->belongsTo('App\Category', 'category_id');
+    	return $this->belongsTo('App\Model\Category', 'category_id');
     }
 
     public function belongtoposition()
     {
-    	return $this->belongsTo('App\Position', 'position_id');
+    	return $this->belongsTo('App\Model\Position', 'position_id');
     }
 }

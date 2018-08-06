@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Model;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -29,6 +29,6 @@ class Login extends Authenticatable
 
     public function belongtostaff()
     {
-       return $this->belongsTo('App\Staff', 'staff_id');
+       return $this->belongsTo('App\Model\Staff', 'staff_id');
     }
 }
