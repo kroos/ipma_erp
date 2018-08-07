@@ -161,6 +161,13 @@ return [
         App\Providers\RouteServiceProvider::class,
 
 
+//////////////////////////////////////////////////////////////////////////////////////////
+        // $ composer require intervention/image
+        // Intervention\Image\ImageServiceProviderLaravel5::class,
+        Intervention\Image\ImageServiceProvider::class,
+
+        // $ composer require crabbly/fpdf-laravel
+        Crabbly\FPDF\FpdfServiceProvider::class,
 
         Collective\Html\HtmlServiceProvider::class,
 
@@ -213,8 +220,16 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+//////////////////////////////////////////////////////////////////////////////////////////
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+
+        // $ composer require intervention/image
+        // "require": {
+        //     "laravel/framework": "5.4.*",
+        //     "intervention/image": "dev-master"
+        // },
+        'Image' => Intervention\Image\Facades\Image::class,
 
     ],
 

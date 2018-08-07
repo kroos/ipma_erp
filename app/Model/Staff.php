@@ -3,6 +3,9 @@
 namespace App\Model;
 
 // use Illuminate\Database\Eloquent\Model;
+// load Model
+// use App\Model\Status;
+
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 

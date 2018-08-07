@@ -1,4 +1,11 @@
 <?php return array (
+  'crabbly/fpdf-laravel' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Crabbly\\FPDF\\FpdfServiceProvider',
+    ),
+  ),
   'cviebrock/eloquent-sluggable' => 
   array (
     'providers' => 
@@ -11,6 +18,17 @@
     'providers' => 
     array (
       0 => 'Fideloper\\Proxy\\TrustedProxyServiceProvider',
+    ),
+  ),
+  'intervention/image' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Intervention\\Image\\ImageServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Image' => 'Intervention\\Image\\Facades\\Image',
     ),
   ),
   'laravel/tinker' => 

@@ -37,7 +37,8 @@ function my($string) {
 }
 ?>
 
-									<p class="align-left">Status : {{ empty($staff->belongtostatus->status)? 'Not Set' : $staff->belongtostatus->status }}, {{ empty($staff->belongtostatus->code)? 'Not Set' : $staff->belongtostatus->code }}</p>
+
+									<p class="align-left">Status : {{ empty($staff->belongtostatus->status)? 'Not Set' : $staff->belongtostatus->status }}, {{ empty($staff->belongtostatus->code)? '' : $staff->belongtostatus->code }}</p>
 									<p class="align-left">Kad Pengenalan : {{ $staff->id_card_passport }}</p>
 									<p class="align-left">Agama : {{ empty($staff->belongtoreligion->religion)? 'Not Set' : $staff->belongtoreligion->religion }}</p>
 									<p class="align-left">Jantina : {{ empty($staff->belongtogender->gender)? 'Not Set' : $staff->belongtogender->gender }}</p>

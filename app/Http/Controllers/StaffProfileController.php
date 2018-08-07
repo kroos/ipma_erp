@@ -2,9 +2,18 @@
 
 namespace App\Http\Controllers;
 
+// load model
 use App\Model\Staff;
 
 use Illuminate\Http\Request;
+
+// load validation
+use App\Http\Requests\StaffProfileRequest;
+
+// for manipulating image
+// http://image.intervention.io/
+// use Intervention\Image\Facades\Image as Image;       <-- ajaran sesat depa... hareeyyyyy!!
+use Intervention\Image\ImageManagerStatic as Image;
 
 class StaffProfileController extends Controller
 {
@@ -39,7 +48,7 @@ class StaffProfileController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StaffProfileRequest $request)
     {
         //
     }
@@ -63,7 +72,7 @@ class StaffProfileController extends Controller
      */
     public function edit(Staff $staff)
     {
-        //
+        return view('profile.edit', compact(['staff']));
     }
 
     /**
@@ -73,9 +82,9 @@ class StaffProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Staff $staff)
+    public function update(StaffProfileRequest $request, Staff $staff)
     {
-        //
+        dd($request->all());
     }
 
     /**
