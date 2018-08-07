@@ -87,8 +87,15 @@ class StaffProfileController extends Controller
     public function update(StaffProfileRequest $request, Staff $staff)
     {
         // dd($request->all());
-        $filename = $request->file('image')->store('images/profiles');
-        $imag = Image::make(public_path().'/images/profiles/'.$filename);
+        $filename = $request->file('image')->store('public/images/profiles');
+
+        $ass1 = explode('/', $filename);
+        $ass2 = array_except($ass1, ['0']);
+        $image = implode('/', $ass2);
+
+        // dd($image);
+
+        $imag = Image::make(storage_path('app/'.$filename));
 
         // resize the image to a height of 400 and constrain aspect ratio (auto width)
         $imag->resize(null, 400, function ($constraint) {
@@ -97,13 +104,13 @@ class StaffProfileController extends Controller
 
         $imag->save();
 
-        $res = \App\Model\Staff::updateOrCreate(['id' => $staff->id], $request->only([
-                                                                                        'id_card_passport', 'religion_id', 'gender_id', 'race_id', 'address', 'pob', 'country_id', 'marital_status_id', 'mobile', 'phone', 'dob', 'cimb_account', 'epf_no', 'income_tax_no', 'created_at', 'updated_at'
-                                                                                    ])
-                                                );
+        // $request->file('image') = $request->image
+        // dd( array_add($request->except(['image']), 'image', $filename) );
 
-        // Session::flash('flash_message', 'Data successfully edited!');
-        // return redirect( route('staff.show', $staff->id) );
+        $res = \App\Model\Staff::updateOrCreate(['id' => $staff->id], array_add($request->except(['image']), 'image', $image));
+
+        Session::flash('flash_message', 'Data successfully edited!');
+        return redirect( route('staff.show', $staff->id) );
     }
 
     /**

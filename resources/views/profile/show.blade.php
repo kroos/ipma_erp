@@ -9,8 +9,8 @@
 
 		<div class="container">
 			<div class="row justify-content-center">
-				<div class="col-md-12">
-					<img src="{{ asset('images/profiles/'.$staff->image) }}" class="img-fluid rounded" alt="">
+				<div class="col-md-12 align-center">
+					<img src="{{ asset('storage/'.$staff->image) }}" class="img-fluid rounded" alt="">
 				</div>
 			</div>
 			<div class="card">
