@@ -10,7 +10,7 @@
 		<div class="container">
 			<div class="row justify-content-center">
 				<div class="col-md-12">
-					<img src="{{ $staff->image }}" class="img-fluid rounded" alt="">
+					<img src="{{ asset('images/profiles/'.$staff->image) }}" class="img-fluid rounded" alt="">
 				</div>
 			</div>
 			<div class="card">
