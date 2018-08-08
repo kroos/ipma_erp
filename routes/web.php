@@ -25,5 +25,18 @@ Route::get('/home', [
 
 ############################################################################
 // StaffProfile Controller
-
 Route::resource('staff', 'StaffProfileController');
+
+############################################################################
+// StaffSpouse Controller
+Route::resource('staffSpouse', 'StaffSpouseController');
+
+############################################################################
+// StaffSpouse Controller
+Route::resource('staffSibling', 'StaffSiblingController');
+
+
+
+
+
+

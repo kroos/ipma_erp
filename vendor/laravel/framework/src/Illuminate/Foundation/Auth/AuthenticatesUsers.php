@@ -61,11 +61,18 @@ trait AuthenticatesUsers
      */
     protected function validateLogin(Request $request)
     {
+        // original
+        // $this->validate($request, [
+        //     $this->username() => 'required|string',
+        //     'password' => 'required|string',
+        // ]);
+
+
         $this->validate($request, [
-            $this->username() => 'required|string|exists:logins,'.$this->username().',active,1',
+            $this->username() => 'required|exists:logins,' . $this->username() . ',active,1',
             'password' => 'required|string',
         ], [
-            $this->username() . '.exists' => 'The selected email is invalid or the account has been disabled.'
+            $this->username() . '.exists' => 'The selected account is invalid or the account has been disabled.'
         ]);
     }
 
@@ -118,7 +125,8 @@ trait AuthenticatesUsers
      */
     protected function authenticated(Request $request, $user)
     {
-        //
+        // record each time succesfull login
+        Auth::user()->touch();
     }
 
     /**

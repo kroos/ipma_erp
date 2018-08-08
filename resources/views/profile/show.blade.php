@@ -7,9 +7,8 @@
 		@include('layouts.info')
 		@include('layouts.errorform')
 
-		<div class="container">
 			<div class="card text-center">
-				<img class="card-img-top" src="{{ asset('storage/'.$staff->image) }}" alt="Card image cap">
+				<img class="card-img-top" src="{{ asset('storage/'.$staff->image) }}" alt="{{ $staff->name }} Image">
 				<h2 class="card-title card-title">{{ $staff->name }}</h2>
 				<div class="card-body">
 					<div class="row justify-content-center">
@@ -18,7 +17,7 @@
 								<div class="card-header">
 									<h2 class="card-title">Butiran</h2>
 								</div>
-								<div class="card-body">
+								<div class="card-body text-left">
 
 <?php
 function my($string) {
@@ -29,24 +28,22 @@ function my($string) {
 	return date('D, d F Y', mktime(0, 0, 0, $rt->month, $rt->day, $rt->year));
 }
 ?>
-
-
-									<p class="align-left card-text">Status : {{ empty($staff->belongtostatus->status)? 'Not Set' : $staff->belongtostatus->status }}, {{ empty($staff->belongtostatus->code)? '' : $staff->belongtostatus->code }}</p>
-									<p class="align-left card-text">Kad Pengenalan : {{ $staff->id_card_passport }}</p>
-									<p class="align-left card-text">Agama : {{ empty($staff->belongtoreligion->religion)? 'Not Set' : $staff->belongtoreligion->religion }}</p>
-									<p class="align-left card-text">Jantina : {{ empty($staff->belongtogender->gender)? 'Not Set' : $staff->belongtogender->gender }}</p>
-									<p class="align-left card-text">Bangsa : {{ empty($staff->belongtorace->race)? 'Not Set' : $staff->belongtorace->race }}</p>
-									<p class="align-left card-text">Alamat : {{ empty($staff->address) ? 'Not Set' : $staff->address }}</p>
-									<p class="align-left card-text">Tempat Lahir : {{ $staff->place_of_birth }}</p>
-									<p class="align-left card-text">Warganegara : {{ empty($staff->belongtocountry->country)? 'Not Set' : $staff->belongtocountry->country }}</p>
-									<p class="align-left card-text">Taraf Perkahwinan : {{ empty($staff->belongtomaritalstatus->marital_status)? 'Not Set' : $staff->belongtomaritalstatus->marital_status }}</p>
-									<p class="align-left card-text">Telefon Bimbit : {{ $staff->mobile }}</p>
-									<p class="align-left card-text">Talian Tetap : {{ $staff->phone }}</p>
-									<p class="align-left card-text">Tarikh Lahir : {{ my($staff->dob) }}</p>
-									<p class="align-left card-text">Umur : {{ \Carbon\Carbon::parse($staff->dob)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days') }}</p>
-									<p class="align-left card-text">Akaun CIMB : {{ $staff->cimb_account }}</p>
-									<p class="align-left card-text">Nombor KWSP : {{ $staff->epf_no }}</p>
-									<p class="align-left card-text">Nombor Cukai Pendapatan : {{ $staff->income_tax_no }}</p>
+									<p class="card-text">Status : {{ empty($staff->belongtostatus->status)? 'Not Set' : $staff->belongtostatus->status }}, {{ empty($staff->belongtostatus->code)? '' : $staff->belongtostatus->code }}</p>
+									<p class="card-text">Kad Pengenalan : {{ $staff->id_card_passport }}</p>
+									<p class="card-text">Agama : {{ empty($staff->belongtoreligion->religion)? 'Not Set' : $staff->belongtoreligion->religion }}</p>
+									<p class="card-text">Jantina : {{ empty($staff->belongtogender->gender)? 'Not Set' : $staff->belongtogender->gender }}</p>
+									<p class="card-text">Bangsa : {{ empty($staff->belongtorace->race)? 'Not Set' : $staff->belongtorace->race }}</p>
+									<p class="card-text">Alamat : {{ empty($staff->address) ? 'Not Set' : $staff->address }}</p>
+									<p class="card-text">Tempat Lahir : {{ $staff->place_of_birth }}</p>
+									<p class="card-text">Warganegara : {{ empty($staff->belongtocountry->country)? 'Not Set' : $staff->belongtocountry->country }}</p>
+									<p class="card-text">Taraf Perkahwinan : {{ empty($staff->belongtomaritalstatus->marital_status)? 'Not Set' : $staff->belongtomaritalstatus->marital_status }}</p>
+									<p class="card-text">Telefon Bimbit : {{ $staff->mobile }}</p>
+									<p class="card-text">Talian Tetap : {{ $staff->phone }}</p>
+									<p class="card-text">Tarikh Lahir : {{ my($staff->dob) }}</p>
+									<p class="card-text">Umur : {{ \Carbon\Carbon::parse($staff->dob)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days') }}</p>
+									<p class="card-text">Akaun CIMB : {{ $staff->cimb_account }}</p>
+									<p class="card-text">Nombor KWSP : {{ $staff->epf_no }}</p>
+									<p class="card-text">Nombor Cukai Pendapatan : {{ $staff->income_tax_no }}</p>
 
 								</div>
 								<div class="card-footer text-muted">
@@ -56,9 +53,95 @@ function my($string) {
 						</div>
 						<div class="col-md-6">
 							<div class="card">
-								<div class="card-header"><h2 class="card-title">nnt lu</h2></div>
-								<div class="card-body">
-									card body
+								<div class="card-header"><h2 class="card-title">Keluarga (Family And Siblings)</h2></div>
+								<div class="card-body text-center table-responsive">
+<?php
+$spo = \App\Model\StaffSpouse::where('staff_id', $staff->id)->orderBy('spouse')->get();
+?>
+									<div class="col">
+										<h4 class="card-title">Pasangan</h4>
+										@if($spo->count() > 0 )
+										<table class="table table-hover">
+											<thead>
+												<tr>
+													<th scope="col">#</th>
+													<th scope="col">Pasangan</th>
+													<th scope="col">ID Kad</th>
+													<th scope="col">Telefon</th>
+													<th scope="col">Umur</th>
+													<th scope="col">Pekerjaan</th>
+												</tr>
+											</thead>
+											<tbody>
+												@foreach($spo as $spou)
+												<tr>
+													<td>
+														<a href="{!! route('staffSpouse.edit', $spou->id) !!}" title="Edit"><i class="fas fa-pen-square fa-lg" aria-hidden="true"></i></a>
+										
+														<a href="{!! route('staffSpouse.destroy', $spou->id) !!}" data-id="{!! $spou->id !!}" data-token="{{ csrf_token() }}" id="delete_product_<?=$spou->id ?>" title="Delete" class="delete_button"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
+													</td>
+													<td>{{ $spou->spouse }}</td>
+													<td>{{ $spou->id_card_passport }}</td>
+													<td>{{ $spou->phone }}</td>
+													<td>{{ \Carbon\Carbon::parse($spou->dob)->diff(\Carbon\Carbon::now())->format('%y years') }}</td>
+													<td>{{ $spou->profession }}</td>
+												</tr>
+												@endforeach
+											</tbody>
+										</table>
+										@else
+										<p class="card-text text-justify">Sorry, no record for your spouse. Please fill this form by clicking "Add Spouse"</p>
+										@endif
+										<p class="card-text text-center"><a href="{{ route('staffSpouse.create') }}" class="btn btn-primary">Add Spouse</a></p>
+									</div>
+									<p>&nbsp;</p>
+									<p>&nbsp;</p>
+									<p>&nbsp;</p>
+<?php
+$sib = \App\Model\StaffSibling::where('staff_id', $staff->id)->orderBy('sibling')->get();
+?>
+									<div class="col">
+										<h4 class="card-title">Saudara Kandung</h4>
+										@if($sib->count() > 0 )
+										<table class="table table-hover">
+											<thead>
+												<tr>
+													<th scope="col">#</th>
+													<th scope="col">Nama</th>
+													<th scope="col">Telefon</th>
+													<th scope="col">Umur</th>
+													<th scope="col">Pekerjaan</th>
+												</tr>
+											</thead>
+											<tbody>
+												@foreach($sib as $sibl)
+												<tr>
+													<td>
+														<a href="{!! route('staffSibling.edit', $sibl->id) !!}" title="Edit"><i class="fas fa-pen-square fa-lg" aria-hidden="true"></i></a>
+										
+														<a href="{!! route('staffSibling.destroy', $sibl->id) !!}" data-id="{!! $sibl->id !!}" data-token="{{ csrf_token() }}" id="delete_product_<?=$sibl->id ?>" title="Delete" class="delete_button"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
+													</td>
+													<td>{{ $sibl->sibling }}</td>
+													<td>{{ $sibl->phone }}</td>
+													<td>{{ \Carbon\Carbon::parse($sibl->dob)->diff(\Carbon\Carbon::now())->format('%y years') }}</td>
+													<td>{{ $sibl->profession }}</td>
+												</tr>
+												@endforeach
+											</tbody>
+										</table>
+										@else
+										<p class="card-text text-justify">Sorry, no record for your sibling. Please fill this form by clicking "Add Sibling"</p>
+										@endif
+										<p class="card-text text-center"><a href="{{ route('staffSibling.create') }}" class="btn btn-primary">Add Sibling</a></p>
+									</div>
+
+
+
+
+
+								</div>
+								<div class="card-footer text-muted">
+									<!-- <a href="{{ route('staff.edit', $staff->id) }}" class="btn btn-primary">Edit Family</a> -->
 								</div>
 							</div>
 						</div>
@@ -66,7 +149,7 @@ function my($string) {
 				</div>
 
 			</div>
-		</div>
+
 	</div>
 </div>
 @endsection
@@ -79,5 +162,70 @@ $("#username").keyup(function() {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+
+$.ajaxSetup({
+    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
+});
+
+// ajax post delete row
+// readProducts(); /* it will load products when document loads */
+
+$(document).on('click', '.delete_button', function(e){
+	var productId = $(this).data('id');
+	SwalDelete(productId);
+	e.preventDefault();
+});
+
+// function readProducts(){
+// 	$('#load-products').load('read.php');
+// }
+
+function SwalDelete(productId){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+		allowOutsideClick: false,
+
+		preConfirm: function()                {
+			return new Promise(function(resolve) {
+				$.ajax({
+					headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+					url: '{{ route('staffSpouse.destroy', '1') }}',
+					type: 'delete',
+					data:	{
+								id: productId,
+								_token : $('meta[name=csrf-token]').attr('content')
+							},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status);
+					// readProducts();
+					$('#delete_product_' + productId).text('imhere').css({"color": "red"});
+					$('#delete_product_' + productId).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax!', 'error');
+				});
+			});
+		},
+	})
+	.then((result) => {
+		if(result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe', 'info');
+		}
+	});
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
 @endsection
 

@@ -149,6 +149,10 @@ $('#form').bootstrapValidator({
 				notEmpty: {
 					message: 'Sila masukkan tarikh lahir anda. '
 				},
+				date: {
+					format: 'YYYY-MM-DD',
+					message: 'The value is not a valid date. '
+				},
 			}
 		},
 		cimb_account: {
