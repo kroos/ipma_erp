@@ -44,7 +44,7 @@ class StaffSiblingController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StaffSiblingRequest $request)
     {
         foreach ($request->staff as $key => $val)
         {
@@ -73,7 +73,7 @@ class StaffSiblingController extends Controller
      */
     public function edit(StaffSibling $staffSibling)
     {
-        return view('staffSibling.edit', compact(['staffSpouse']));
+        return view('staffSibling.edit', compact(['staffSibling']));
     }
 
     /**
@@ -83,7 +83,7 @@ class StaffSiblingController extends Controller
      * @param  \App\StaffSibling  $staffSibling
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, StaffSibling $staffSibling)
+    public function update(StaffSiblingEditRequest $request, StaffSibling $staffSibling)
     {
         StaffSibling::where('id', $staffSibling->id)->update($request->except(['_method', '_token']) );
 

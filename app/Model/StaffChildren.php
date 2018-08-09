@@ -6,6 +6,8 @@ namespace App\Model;
 
 class StaffChildren extends Model
 {
+    protected $table = 'staff_childrens';
+
     public function belongtostaff()
     {
     	return $this->belongsTo('App\Model\Staff', 'staff_id');
@@ -28,6 +30,6 @@ class StaffChildren extends Model
 
     public function belongtotaxexemptionpercentage()
     {
-    	return $this->belongsTo('App\Model\TaxExamptionPercentage', 'tax_examption_percentage_id');
+    	return $this->belongsTo('App\Model\TaxExemptionPercentage', 'tax_exemption_percentage_id');
     }
 }

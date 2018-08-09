@@ -1,6 +1,6 @@
 <div class="card">
 	<div class="card-header">
-		<h2 class="card-title">Edit Spouse</h2>
+		<h2 class="card-title">Edit Sibling</h2>
 	</div>
 	<div class="card-body">
 
@@ -8,13 +8,7 @@
 
 			<div class="col-sm-3">
 				<div class="form-group {{ $errors->has('spouse') ? 'has-error' : '' }}">
-					{{ Form::text('spouse', @$value, ['class' => 'form-control', 'id' => 'npasa', 'placeholder' => 'Nama Pasangan', 'autocomplete' => 'off']) }}
-				</div>
-			</div>
-
-			<div class="col-sm-2">
-				<div class="form-group {{ $errors->has('id_card_passport') ? 'has-error' : '' }}">
-					{{ Form::text('id_card_passport', @$value, ['class' => 'form-control', 'id' => 'iccard', 'placeholder' => 'ID Kad', 'autocomplete' => 'off']) }}
+					{{ Form::text('sibling', @$value, ['class' => 'form-control', 'id' => 'npasa', 'placeholder' => 'Nama Saudara Kandung', 'autocomplete' => 'off']) }}
 				</div>
 			</div>
 

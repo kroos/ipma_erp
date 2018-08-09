@@ -1,6 +1,6 @@
 <div class="card">
 	<div class="card-header">
-		<h2 class="card-title">Add Spouse</h2>
+		<h2 class="card-title">Edit Spouse</h2>
 	</div>
 	<div class="card-body">
 

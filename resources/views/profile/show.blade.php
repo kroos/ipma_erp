@@ -8,7 +8,9 @@
 		@include('layouts.errorform')
 
 			<div class="card text-center">
-				<img class="card-img-top" src="{{ asset('storage/'.$staff->image) }}" alt="{{ $staff->name }} Image">
+				<div class="col-2 offset-5">
+					<img class="card-img-top" src="{{ asset('storage/'.$staff->image) }}" alt="{{ $staff->name }} Image">
+				</div>
 				<h2 class="card-title card-title">{{ $staff->name }}</h2>
 				<div class="card-body">
 					<div class="row justify-content-center">
@@ -55,8 +57,49 @@ function my($string) {
 							<div class="card">
 								<div class="card-header"><h2 class="card-title">Keluarga (Family And Siblings)</h2></div>
 								<div class="card-body text-center table-responsive">
+
 <?php
-$spo = \App\Model\StaffSpouse::where('staff_id', $staff->id)->orderBy('spouse')->get();
+$sib = \App\Model\StaffSibling::where('staff_id', $staff->id)->orderBy('dob')->get();
+?>
+									<div class="col">
+										<h4 class="card-title">Saudara Kandung</h4>
+										@if($sib->count() > 0 )
+										<table class="table table-hover">
+											<thead>
+												<tr>
+													<th scope="col">#</th>
+													<th scope="col">Nama</th>
+													<th scope="col">Telefon</th>
+													<th scope="col">Umur</th>
+													<th scope="col">Pekerjaan</th>
+												</tr>
+											</thead>
+											<tbody>
+												@foreach($sib as $sibl)
+												<tr>
+													<td>
+														<a href="{!! route('staffSibling.edit', $sibl->id) !!}" title="Edit"><i class="fas fa-pen-square fa-lg" aria-hidden="true"></i></a>
+
+														<a href="{!! route('staffSibling.destroy', $sibl->id) !!}" data-id="{!! $sibl->id !!}" data-token="{{ csrf_token() }}" id="delete_sibling_<?=$sibl->id ?>" title="Delete" class="delete_sibling"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
+													</td>
+													<td>{{ $sibl->sibling }}</td>
+													<td>{{ $sibl->phone }}</td>
+													<td>{{ \Carbon\Carbon::parse($sibl->dob)->diff(\Carbon\Carbon::now())->format('%y years') }}</td>
+													<td>{{ $sibl->profession }}</td>
+												</tr>
+												@endforeach
+											</tbody>
+										</table>
+										@else
+										<p class="card-text text-justify">Sorry, no record for your sibling. Please fill this form by clicking "Add Sibling"</p>
+										@endif
+										<p class="card-text text-center"><a href="{{ route('staffSibling.create') }}" class="btn btn-primary">Add Sibling</a></p>
+									</div>
+<hr>
+									<p>&nbsp;</p>
+@if($staff->marital_status_id != 1)
+<?php
+$spo = \App\Model\StaffSpouse::where('staff_id', $staff->id)->orderBy('dob')->get();
 ?>
 									<div class="col">
 										<h4 class="card-title">Pasangan</h4>
@@ -77,8 +120,8 @@ $spo = \App\Model\StaffSpouse::where('staff_id', $staff->id)->orderBy('spouse')-
 												<tr>
 													<td>
 														<a href="{!! route('staffSpouse.edit', $spou->id) !!}" title="Edit"><i class="fas fa-pen-square fa-lg" aria-hidden="true"></i></a>
-										
-														<a href="{!! route('staffSpouse.destroy', $spou->id) !!}" data-id="{!! $spou->id !!}" data-token="{{ csrf_token() }}" id="delete_product_<?=$spou->id ?>" title="Delete" class="delete_button"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
+
+														<a href="{!! route('staffSpouse.destroy', $spou->id) !!}" data-id="{!! $spou->id !!}" data-token="{{ csrf_token() }}" id="delete_spouse_<?=$spou->id ?>" title="Delete" class="delete_spouse"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
 													</td>
 													<td>{{ $spou->spouse }}</td>
 													<td>{{ $spou->id_card_passport }}</td>
@@ -94,51 +137,57 @@ $spo = \App\Model\StaffSpouse::where('staff_id', $staff->id)->orderBy('spouse')-
 										@endif
 										<p class="card-text text-center"><a href="{{ route('staffSpouse.create') }}" class="btn btn-primary">Add Spouse</a></p>
 									</div>
-									<p>&nbsp;</p>
-									<p>&nbsp;</p>
+<hr>
 									<p>&nbsp;</p>
 <?php
-$sib = \App\Model\StaffSibling::where('staff_id', $staff->id)->orderBy('sibling')->get();
+$chi = \App\Model\StaffChildren::where('staff_id', $staff->id)->orderBy('dob')->get();
 ?>
 									<div class="col">
-										<h4 class="card-title">Saudara Kandung</h4>
-										@if($sib->count() > 0 )
+										<h4 class="card-title">Anak</h4>
+										@if($chi->count() > 0 )
 										<table class="table table-hover">
 											<thead>
 												<tr>
 													<th scope="col">#</th>
-													<th scope="col">Nama</th>
-													<th scope="col">Telefon</th>
+													<th scope="col">Anak</th>
 													<th scope="col">Umur</th>
-													<th scope="col">Pekerjaan</th>
+													<th scope="col">Jantina</th>
+													<th scope="col">Tahap Pengajian</th>
+													<th scope="col">Kesihatan</th>
+													<th scope="col">Pengecualian Cukai</th>
+													<th scope="col">Peratus Pengecualian Cukai</th>
 												</tr>
 											</thead>
 											<tbody>
-												@foreach($sib as $sibl)
+												@foreach($chi as $chil)
 												<tr>
 													<td>
-														<a href="{!! route('staffSibling.edit', $sibl->id) !!}" title="Edit"><i class="fas fa-pen-square fa-lg" aria-hidden="true"></i></a>
-										
-														<a href="{!! route('staffSibling.destroy', $sibl->id) !!}" data-id="{!! $sibl->id !!}" data-token="{{ csrf_token() }}" id="delete_product_<?=$sibl->id ?>" title="Delete" class="delete_button"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
+														<a href="{!! route('staffChildren.edit', $chil->id) !!}" title="Edit"><i class="fas fa-pen-square fa-lg" aria-hidden="true"></i></a>
+
+														<a href="{!! route('staffChildren.destroy', $chil->id) !!}" data-id="{{ $chil->id }}" data-token="{{ csrf_token() }}" id="delete_children_{{ $chil->id }}" title="Delete" class="delete_children"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
 													</td>
-													<td>{{ $sibl->sibling }}</td>
-													<td>{{ $sibl->phone }}</td>
-													<td>{{ \Carbon\Carbon::parse($sibl->dob)->diff(\Carbon\Carbon::now())->format('%y years') }}</td>
-													<td>{{ $sibl->profession }}</td>
+													<td>{{ $chil->children }}</td>
+													<td>{{ \Carbon\Carbon::parse($chil->dob)->diff(\Carbon\Carbon::now())->format('%y years') }}</td>
+													<td>{{ $chil->belongtogender->gender }}</td>
+													<td>{{ $chil->belongtoeducationlevel->education_level }}</td>
+													<td>{{ $chil->belongtohealthstatus->health_status }}</td>
+													<td>{{ ($chil->tax_exemption != 0)? 'Ya' : 'Tidak' }}</td>
+													<td>{{ !isset($chil->tax_exemption_percentage_id) ? '' : $chil->belongtotaxexemptionpercentage->tax_exemption_percentage }}</td>
 												</tr>
 												@endforeach
 											</tbody>
 										</table>
 										@else
-										<p class="card-text text-justify">Sorry, no record for your sibling. Please fill this form by clicking "Add Sibling"</p>
+										<p class="card-text text-justify">Sorry, no record for your children. Please fill this form by clicking "Add Children"</p>
 										@endif
-										<p class="card-text text-center"><a href="{{ route('staffSibling.create') }}" class="btn btn-primary">Add Sibling</a></p>
+										<p class="card-text text-center"><a href="{{ route('staffChildren.create') }}" class="btn btn-primary">Add Children</a></p>
 									</div>
+<hr>
+									<p>&nbsp;</p>
 
 
 
-
-
+@endif
 								</div>
 								<div class="card-footer text-muted">
 									<!-- <a href="{{ route('staff.edit', $staff->id) }}" class="btn btn-primary">Edit Family</a> -->
@@ -162,23 +211,16 @@ $("#username").keyup(function() {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
-
+// sweetalert2 delete spouse
 $.ajaxSetup({
     headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
 });
 
-// ajax post delete row
-// readProducts(); /* it will load products when document loads */
-
-$(document).on('click', '.delete_button', function(e){
+$(document).on('click', '.delete_spouse', function(e){
 	var productId = $(this).data('id');
 	SwalDelete(productId);
 	e.preventDefault();
 });
-
-// function readProducts(){
-// 	$('#load-products').load('read.php');
-// }
 
 function SwalDelete(productId){
 	swal({
@@ -196,8 +238,8 @@ function SwalDelete(productId){
 			return new Promise(function(resolve) {
 				$.ajax({
 					headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-					url: '{{ route('staffSpouse.destroy', '1') }}',
-					type: 'delete',
+					url: '{{ url('staffSpouse') }}' + '/' + productId,
+					type: 'DELETE',
 					data:	{
 								id: productId,
 								_token : $('meta[name=csrf-token]').attr('content')
@@ -206,9 +248,7 @@ function SwalDelete(productId){
 				})
 				.done(function(response){
 					swal('Deleted!', response.message, response.status);
-					// readProducts();
-					$('#delete_product_' + productId).text('imhere').css({"color": "red"});
-					$('#delete_product_' + productId).parent().parent().remove();
+					$('#delete_spouse_' + productId).parent().parent().remove();
 				})
 				.fail(function(){
 					swal('Oops...', 'Something went wrong with ajax!', 'error');
@@ -224,7 +264,106 @@ function SwalDelete(productId){
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
+// sweetalert2 delete sibling
 
+$(document).on('click', '.delete_sibling', function(e){
+	var siblingID = $(this).data('id');
+	SwalDeletesibling(siblingID);
+	e.preventDefault();
+});
+
+function SwalDeletesibling(siblingID){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+		allowOutsideClick: false,
+
+		preConfirm: function()                {
+			return new Promise(function(resolve) {
+				$.ajax({
+					headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+					url: '{{ url('staffSibling') }}' + '/' + siblingID,
+					type: 'DELETE',
+					data:	{
+								id: siblingID,
+								_token : $('meta[name=csrf-token]').attr('content')
+							},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status);
+					$('#delete_sibling_' + siblingID).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax!', 'error');
+				});
+			});
+		},
+	})
+	.then((result) => {
+		if(result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe', 'info');
+		}
+	});
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// sweetalert2 delete children
+
+$(document).on('click', '.delete_children', function(e){
+	var childrenID = $(this).data('id');
+	SwalDeletechildren(childrenID);
+	e.preventDefault();
+});
+
+function SwalDeletechildren(childrenID){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+		allowOutsideClick: false,
+
+		preConfirm: function()                {
+			return new Promise(function(resolve) {
+				$.ajax({
+					headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+					url: '{{ url('staffChildren') }}' + '/' + childrenID,
+					type: 'DELETE',
+					data:	{
+								id: childrenID,
+								_token : $('meta[name=csrf-token]').attr('content')
+							},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status);
+					$('#delete_children_' + childrenID).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax!', 'error');
+				});
+			});
+		},
+	})
+	.then((result) => {
+		if(result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe', 'info');
+		}
+	});
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
 @endsection

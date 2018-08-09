@@ -35,6 +35,14 @@ Route::resource('staffSpouse', 'StaffSpouseController');
 // StaffSpouse Controller
 Route::resource('staffSibling', 'StaffSiblingController');
 
+############################################################################
+// StaffChildren Controller
+Route::resource('staffChildren', 'StaffChildrenController');
+
+############################################################################
+// StaffEmergencyPerson Controller
+Route::resource('staffEmergencyPerson', 'StaffEmergencyPersonController');
+
 
 
 

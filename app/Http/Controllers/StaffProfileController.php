@@ -87,27 +87,33 @@ class StaffProfileController extends Controller
     public function update(StaffProfileRequest $request, Staff $staff)
     {
         // dd($request->all());
-        $filename = $request->file('image')->store('public/images/profiles');
+        // $request->file('image') == $request->image
 
-        $ass1 = explode('/', $filename);
-        $ass2 = array_except($ass1, ['0']);
-        $image = implode('/', $ass2);
+        if(!empty($request->file('image'))) {
+            $filename = $request->file('image')->store('public/images/profiles');
 
-        // dd($image);
+            $ass1 = explode('/', $filename);
+            $ass2 = array_except($ass1, ['0']);
+            $image = implode('/', $ass2);
 
-        $imag = Image::make(storage_path('app/'.$filename));
+            // dd($image);
 
-        // resize the image to a height of 400 and constrain aspect ratio (auto width)
-        $imag->resize(null, 400, function ($constraint) {
-            $constraint->aspectRatio();
-        });
+            $imag = Image::make(storage_path('app/'.$filename));
 
-        $imag->save();
+            // resize the image to a height of 400 and constrain aspect ratio (auto width)
+            $imag->resize(null, 400, function ($constraint) {
+                $constraint->aspectRatio();
+            });
 
-        // $request->file('image') = $request->image
-        // dd( array_add($request->except(['image']), 'image', $filename) );
+            $imag->save();
+            // dd( array_add($request->except(['image']), 'image', $filename) );
 
-        $res = \App\Model\Staff::updateOrCreate(['id' => $staff->id], array_add($request->except(['image']), 'image', $image));
+            $res = \App\Model\Staff::updateOrCreate(['id' => $staff->id], array_add($request->except(['image']), 'image', $image));
+
+        } else {
+            $res = \App\Model\Staff::updateOrCreate(['id' => $staff->id], $request->except(['image']));
+        }
+
 
         Session::flash('flash_message', 'Data successfully edited!');
         return redirect( route('staff.show', $staff->id) );

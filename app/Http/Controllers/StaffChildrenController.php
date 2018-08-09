@@ -5,8 +5,21 @@ namespace App\Http\Controllers;
 use App\Model\StaffChildren;
 use Illuminate\Http\Request;
 
+// load validation
+use App\Http\Requests\StaffChildrenRequest;
+
+use Session;
+
 class StaffChildrenController extends Controller
 {
+
+    // must always refer to php artisan route:list
+
+    function __construct()
+    {
+        $this->middleware('auth');
+        // $this->middleware('admin', ['except' => ['create', 'store']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +37,7 @@ class StaffChildrenController extends Controller
      */
     public function create()
     {
-        //
+        return view('staffChildren.create');
     }
 
     /**
@@ -33,9 +46,12 @@ class StaffChildrenController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StaffChildrenRequest $request)
     {
-        //
+        StaffChildren::create( array_add( $request->except(['_method', '_token']), 'staff_id', auth()->user()->belongtostaff->id) );
+
+        Session::flash('flash_message', 'Data successfully edited!');
+        return redirect( route('staff.show', auth()->user()->belongtostaff->id) );
     }
 
     /**
@@ -44,7 +60,7 @@ class StaffChildrenController extends Controller
      * @param  \App\StaffChildren  $staffChildren
      * @return \Illuminate\Http\Response
      */
-    public function show(StaffChildren $staffChildren)
+    public function show(StaffChildren $staffChild)
     {
         //
     }
@@ -55,9 +71,9 @@ class StaffChildrenController extends Controller
      * @param  \App\StaffChildren  $staffChildren
      * @return \Illuminate\Http\Response
      */
-    public function edit(StaffChildren $staffChildren)
+    public function edit(StaffChildren $staffChild)
     {
-        //
+        return view('staffChildren.edit', compact(['staffChild']) );
     }
 
     /**
@@ -67,9 +83,13 @@ class StaffChildrenController extends Controller
      * @param  \App\StaffChildren  $staffChildren
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, StaffChildren $staffChildren)
+    public function update(Request $request, StaffChildren $staffChild)
     {
-        //
+        StaffChildren::where('id', $staffChild->id)->update($request->except(['_method', '_token']) );
+
+        // info when update success
+        Session::flash('flash_message', 'Data successfully edited!');
+        return redirect( route('staff.show', auth()->user()->belongtostaff->id) );
     }
 
     /**
@@ -78,8 +98,12 @@ class StaffChildrenController extends Controller
      * @param  \App\StaffChildren  $staffChildren
      * @return \Illuminate\Http\Response
      */
-    public function destroy(StaffChildren $staffChildren)
+    public function destroy(StaffChildren $staffChild)
     {
-        //
+        StaffChildren::destroy($staffChild->id);
+        return response()->json([
+                                    'message' => 'Data deleted',
+                                    'status' => 'success'
+                                ]);
     }
 }
