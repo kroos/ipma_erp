@@ -57,7 +57,6 @@ function my($string) {
 							<div class="card">
 								<div class="card-header"><h2 class="card-title">Keluarga (Family And Siblings)</h2></div>
 								<div class="card-body text-center table-responsive">
-
 <?php
 $sib = \App\Model\StaffSibling::where('staff_id', $staff->id)->orderBy('dob')->get();
 ?>

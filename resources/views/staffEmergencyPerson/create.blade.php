@@ -2,13 +2,13 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header"><h1>Anak</h1></div>
+	<div class="card-header"><h1>Emergency Contact Person</h1></div>
 	<div class="card-body">
 		@include('layouts.info')
 		@include('layouts.errorform')
 
-{!! Form::open(['route' => ['staffChildren.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
-	@include('staffChildren._form')
+{!! Form::open(['route' => ['staffEmergencyPerson.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
+	@include('staffEmergencyPerson._form')
 {{ Form::close() }}
 		
 	</div>

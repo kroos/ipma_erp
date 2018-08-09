@@ -1,6 +1,6 @@
 <div class="card">
 	<div class="card-header">
-		<h2 class="card-title">Children</h2>
+		<h2 class="card-title">Emergency Contact Person</h2>
 	</div>
 	<div class="card-body">
 

@@ -2,13 +2,13 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header"><h1>Edit Children</h1></div>
+	<div class="card-header"><h1>Edit Emergency Contact Person</h1></div>
 	<div class="card-body">
 		@include('layouts.info')
 		@include('layouts.errorform')
 
-{{ Form::model( $staffChild, ['route' => ['staffChildren.update', $staffChild->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
-	@include('staffChildren._form')
+{{ Form::model( $staffEmergencyPerson, ['route' => ['staffEmergencyPerson.update', $staffEmergencyPerson->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
+	@include('staffEmergencyPerson._form')
 {{ Form::close() }}
 
 
