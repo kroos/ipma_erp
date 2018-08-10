@@ -39,6 +39,13 @@ $status = App\Model\Status::pluck('status', 'id')->sortKeys()->toArray();
 										</div>
 									</div>
 @endif
+									<div class="form-group row {{ $errors->has('email') ? ' has-error' : '' }}">
+										{{ Form::label('email', 'Email : ', ['class' => 'col-sm-2 col-form-label']) }}
+										<div class="col-sm-10">
+											{{ Form::text('email', @$value, ['class' => 'form-control', 'id' => 'email', 'placeholder' => 'Email', 'autocomplete' => 'off']) }}
+										</div>
+									</div>
+
 									<div class="form-group row {{ $errors->has('id_card_passport') ? ' has-error' : '' }}">
 										{{ Form::label('iccard', 'Kad Pengenalan : ', ['class' => 'col-sm-2 col-form-label']) }}
 										<div class="col-sm-10">
@@ -52,6 +59,18 @@ $religion = App\Model\Religion::pluck('religion', 'id')->sortKeys()->toArray();
 										{{ Form::label('religion', 'Agama : ', ['class' => 'col-sm-2 col-form-label']) }}
 										<div class="col-sm-10">
 											{{ Form::select('religion_id', $religion, @$value, ['class' => 'form-control', 'id' => 'religion', 'placeholder' => 'Please Select', 'autocomplete' => 'off']) }}
+										</div>
+									</div>
+<?php
+$drivelice = App\Model\DrivingLicense::all('id', 'class', 'description')->sortKeys()->toArray();
+foreach ($drivelice as $key => $val) {
+	$drive[$val['id']] = $val['class'].' => '.$val['description'];
+}
+?>
+									<div class="form-group row {{ $errors->has('drivelicense.*') ? ' has-error' : '' }}">
+										{{ Form::label('drivelicense', 'Lesen Memandu : ', ['class' => 'col-sm-2 col-form-label']) }}
+										<div class="col-sm-10">
+											{{ Form::select('drivelicense[]', $drive, @$value, ['class' => 'form-control', 'id' => 'drivelicense', 'autocomplete' => 'off', 'multiple' => 'multiple']) }}
 										</div>
 									</div>
 <?php

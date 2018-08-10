@@ -31,8 +31,17 @@ function my($string) {
 }
 ?>
 									<p class="card-text">Status : {{ empty($staff->belongtostatus->status)? 'Not Set' : $staff->belongtostatus->status }}, {{ empty($staff->belongtostatus->code)? '' : $staff->belongtostatus->code }}</p>
+									<p class="card-text">Email : {{ $staff->email }}</p>
 									<p class="card-text">Kad Pengenalan : {{ $staff->id_card_passport }}</p>
 									<p class="card-text">Agama : {{ empty($staff->belongtoreligion->religion)? 'Not Set' : $staff->belongtoreligion->religion }}</p>
+									<p class="card-text">Kelas Lesen Memandu : 
+<?php
+$dr = \App\Model\StaffDrivingLicense::where('staff_id', $staff->id)->orderBy('id')->get();
+?>
+@foreach($dr as $drv)
+	{{ $drv->belongtodrivinglicense->class }} => {{ $drv->belongtodrivinglicense->description }}<br />
+@endforeach
+									</p>
 									<p class="card-text">Jantina : {{ empty($staff->belongtogender->gender)? 'Not Set' : $staff->belongtogender->gender }}</p>
 									<p class="card-text">Bangsa : {{ empty($staff->belongtorace->race)? 'Not Set' : $staff->belongtorace->race }}</p>
 									<p class="card-text">Alamat : {{ empty($staff->address) ? 'Not Set' : $staff->address }}</p>

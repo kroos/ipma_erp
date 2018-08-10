@@ -26,6 +26,11 @@ Route::get('/home', [
 ############################################################################
 // StaffProfile Controller
 Route::resource('staff', 'StaffProfileController');
+//remote
+Route::post('/staffSearch', [
+		'as' => 'staffSearch.search',
+		'uses' => 'StaffProfileController@search'
+	]);
 
 ############################################################################
 // StaffSpouse Controller
@@ -52,6 +57,16 @@ Route::post('/staffEmergencyPersonPhonesearch', [
 		'as' => 'staffEmergencyPersonPhone.search',
 		'uses' => 'StaffEmergencyPersonPhoneController@search'
 	]);
+
+// ############################################################################
+// // StaffEmergencyPersonPhone Controller
+// Route::resource('staffEmergencyPersonPhone', 'StaffEmergencyPersonPhoneController');
+
+// //remote
+// Route::post('/staffEmergencyPersonPhonesearch', [
+// 		'as' => 'staffEmergencyPersonPhone.search',
+// 		'uses' => 'StaffEmergencyPersonPhoneController@search'
+// 	]);
 
 
 

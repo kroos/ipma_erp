@@ -14,7 +14,6 @@ class StaffChildrenController extends Controller
 {
 
     // must always refer to php artisan route:list
-
     function __construct()
     {
         $this->middleware('auth');

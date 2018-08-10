@@ -86,8 +86,12 @@ class StaffProfileController extends Controller
      */
     public function update(StaffProfileRequest $request, Staff $staff)
     {
-        // dd($request->all());
+        dd($request->drivelicense);
         // $request->file('image') == $request->image
+
+        if (!empty($request->drivelicense)) {
+            
+        }
 
         if(!empty($request->file('image'))) {
             $filename = $request->file('image')->store('public/images/profiles');
@@ -128,5 +132,17 @@ class StaffProfileController extends Controller
     public function destroy(Staff $staff)
     {
         //
+    }
+
+    public function search()
+    {
+        $valid = TRUE;
+        $phone = StaffEmergencyPersonPhone::where('phone', $value['phone'])->count();
+
+        if ($phone == 1) 
+        {
+            $valid = FALSE;
+        }
+        return response()->json(['valid' => $valid]);
     }
 }
