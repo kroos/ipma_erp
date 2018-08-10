@@ -43,6 +43,19 @@ Route::resource('staffChildren', 'StaffChildrenController');
 // StaffEmergencyPerson Controller
 Route::resource('staffEmergencyPerson', 'StaffEmergencyPersonController');
 
+############################################################################
+// StaffEmergencyPersonPhone Controller
+Route::resource('staffEmergencyPersonPhone', 'StaffEmergencyPersonPhoneController');
+
+//remote
+Route::post('/staffEmergencyPersonPhonesearch', [
+		'as' => 'staffEmergencyPersonPhone.search',
+		'uses' => 'StaffEmergencyPersonPhoneController@search'
+	]);
+
+
+
+
 
 
 

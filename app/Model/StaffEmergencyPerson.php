@@ -10,7 +10,7 @@ class StaffEmergencyPerson extends Model
 
     public function hasmanyemergencypersonphone()
     {
-    	return $this->hasMany('App\Model\StaffEmergencyPersonPhone');
+    	return $this->hasMany('App\Model\StaffEmergencyPersonPhone', 'emergency_person_id');
     }
 
     public function belongtostaff()

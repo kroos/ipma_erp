@@ -49,6 +49,7 @@ $healthStat = App\Model\HealthStatus::pluck('health_status', 'id')->sortKeys()->
 						{{ Form::label( 'te', 'Pengecualian Cukai Keatas Anak : ', ['class' => 'col-sm-2 col-form-label'] ) }}
 						<div class="col-sm-10">
 							<div class="pretty p-default p-curve p-has-hover">
+								<input type='hidden' value='0' name='tax_exemption'>
 								<input type="checkbox" name="tax_exemption" value="1" class="form-check" id="te" {{ (isset($staffChild->tax_exemption))?($staffChild->tax_exemption == 1)?'checked':'':'' }}>
 								<div class="state p-success-o">
 									<label>Dikecualikan Cukai</label>

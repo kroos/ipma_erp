@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers;
 
+// load model
 use App\Model\StaffEmergencyPerson;
+use App\Model\StaffEmergencyPersonPhone;
+
 use Illuminate\Http\Request;
+
+// load validation
+use App\Http\Requests\StaffEmergencyPersonRequest;
+
+use Session;
 
 class StaffEmergencyPersonController extends Controller
 {
-	
 	// must always refer to php artisan route:list
 	
 	function __construct()
@@ -33,7 +40,7 @@ class StaffEmergencyPersonController extends Controller
 	*/
 	public function create()
 	{
-		//
+		return view('staffEmergencyPerson.create');
 	}
 	
 	/**
@@ -42,9 +49,18 @@ class StaffEmergencyPersonController extends Controller
 	* @param  \Illuminate\Http\Request  $request
 	* @return \Illuminate\Http\Response
 	*/
-	public function store(Request $request)
+	public function store(StaffEmergencyPersonRequest $request)
 	{
-		//
+		// dd($request->except(['_method', '_token', 'emerg']));
+
+		$emergency = StaffEmergencyPerson::create( array_add($request->except(['_method', '_token', 'emerg']), 'staff_id', auth()->user()->belongtostaff->id) );
+
+        foreach ($request->emerg as $key => $val) {
+            StaffEmergencyPersonPhone::create( array_add($val, 'emergency_person_id', $emergency->id) );
+        }
+
+        Session::flash('flash_message', 'Data successfully edited!');
+        return redirect( route('staff.show', auth()->user()->belongtostaff->id) );
 	}
 	
 	/**
@@ -66,7 +82,7 @@ class StaffEmergencyPersonController extends Controller
 	*/
 	public function edit(StaffEmergencyPerson $staffEmergencyPerson)
 	{
-		//
+		return view('staffEmergencyPerson.edit', compact(['staffEmergencyPerson']));
 	}
 	
 	/**
@@ -76,9 +92,13 @@ class StaffEmergencyPersonController extends Controller
 	* @param  \App\StaffEmergencyPerson  $staffEmergencyPerson
 	* @return \Illuminate\Http\Response
 	*/
-	public function update(Request $request, StaffEmergencyPerson $staffEmergencyPerson)
+	public function update(StaffEmergencyPersonRequest $request, StaffEmergencyPerson $staffEmergencyPerson)
 	{
-		//
+		StaffEmergencyPerson::where('id', $staffEmergencyPerson->id)->update($request->except(['_method', '_token']) );
+
+		// info when update success
+		Session::flash('flash_message', 'Data successfully edited!');
+		return redirect( route('staff.show', auth()->user()->belongtostaff->id) );
 	}
 	
 	/**
@@ -89,6 +109,16 @@ class StaffEmergencyPersonController extends Controller
 	*/
 	public function destroy(StaffEmergencyPerson $staffEmergencyPerson)
 	{
-		//
+		// StaffEmergencyPerson::destroy($staffEmergencyPerson->id);
+
+		$sale = StaffEmergencyPerson::find($staffEmergencyPerson->id);
+		// Sales::destroy($sales->id);
+		$sale->hasmanyemergencypersonphone()->delete();
+		$sale->delete();
+
+		return response()->json([
+									'message' => 'Data deleted',
+									'status' => 'success'
+								]);
 	}
 }

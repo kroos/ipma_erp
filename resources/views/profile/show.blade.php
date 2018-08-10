@@ -14,7 +14,7 @@
 				<h2 class="card-title card-title">{{ $staff->name }}</h2>
 				<div class="card-body">
 					<div class="row justify-content-center">
-						<div class="col-md-6">
+						<div class="col-md-5">
 							<div class="card">
 								<div class="card-header">
 									<h2 class="card-title">Butiran</h2>
@@ -53,7 +53,7 @@ function my($string) {
 								</div>
 							</div>
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-7">
 							<div class="card">
 								<div class="card-header"><h2 class="card-title">Keluarga (Family And Siblings)</h2></div>
 								<div class="card-body text-center table-responsive">
@@ -62,7 +62,7 @@ $sib = \App\Model\StaffSibling::where('staff_id', $staff->id)->orderBy('dob')->g
 ?>
 									<div class="col">
 										<h4 class="card-title">Saudara Kandung</h4>
-										@if($sib->count() > 0 )
+@if($sib->count() > 0 )
 										<table class="table table-hover">
 											<thead>
 												<tr>
@@ -74,7 +74,7 @@ $sib = \App\Model\StaffSibling::where('staff_id', $staff->id)->orderBy('dob')->g
 												</tr>
 											</thead>
 											<tbody>
-												@foreach($sib as $sibl)
+@foreach($sib as $sibl)
 												<tr>
 													<td>
 														<a href="{!! route('staffSibling.edit', $sibl->id) !!}" title="Edit"><i class="fas fa-pen-square fa-lg" aria-hidden="true"></i></a>
@@ -86,12 +86,12 @@ $sib = \App\Model\StaffSibling::where('staff_id', $staff->id)->orderBy('dob')->g
 													<td>{{ \Carbon\Carbon::parse($sibl->dob)->diff(\Carbon\Carbon::now())->format('%y years') }}</td>
 													<td>{{ $sibl->profession }}</td>
 												</tr>
-												@endforeach
+@endforeach
 											</tbody>
 										</table>
-										@else
+@else
 										<p class="card-text text-justify">Sorry, no record for your sibling. Please fill this form by clicking "Add Sibling"</p>
-										@endif
+@endif
 										<p class="card-text text-center"><a href="{{ route('staffSibling.create') }}" class="btn btn-primary">Add Sibling</a></p>
 									</div>
 <hr>
@@ -102,7 +102,7 @@ $spo = \App\Model\StaffSpouse::where('staff_id', $staff->id)->orderBy('dob')->ge
 ?>
 									<div class="col">
 										<h4 class="card-title">Pasangan</h4>
-										@if($spo->count() > 0 )
+@if($spo->count() > 0 )
 										<table class="table table-hover">
 											<thead>
 												<tr>
@@ -115,7 +115,7 @@ $spo = \App\Model\StaffSpouse::where('staff_id', $staff->id)->orderBy('dob')->ge
 												</tr>
 											</thead>
 											<tbody>
-												@foreach($spo as $spou)
+@foreach($spo as $spou)
 												<tr>
 													<td>
 														<a href="{!! route('staffSpouse.edit', $spou->id) !!}" title="Edit"><i class="fas fa-pen-square fa-lg" aria-hidden="true"></i></a>
@@ -128,22 +128,22 @@ $spo = \App\Model\StaffSpouse::where('staff_id', $staff->id)->orderBy('dob')->ge
 													<td>{{ \Carbon\Carbon::parse($spou->dob)->diff(\Carbon\Carbon::now())->format('%y years') }}</td>
 													<td>{{ $spou->profession }}</td>
 												</tr>
-												@endforeach
+@endforeach
 											</tbody>
 										</table>
-										@else
+@else
 										<p class="card-text text-justify">Sorry, no record for your spouse. Please fill this form by clicking "Add Spouse"</p>
-										@endif
+@endif
 										<p class="card-text text-center"><a href="{{ route('staffSpouse.create') }}" class="btn btn-primary">Add Spouse</a></p>
 									</div>
-<hr>
+									<hr>
 									<p>&nbsp;</p>
 <?php
 $chi = \App\Model\StaffChildren::where('staff_id', $staff->id)->orderBy('dob')->get();
 ?>
 									<div class="col">
 										<h4 class="card-title">Anak</h4>
-										@if($chi->count() > 0 )
+@if($chi->count() > 0 )
 										<table class="table table-hover">
 											<thead>
 												<tr>
@@ -158,7 +158,7 @@ $chi = \App\Model\StaffChildren::where('staff_id', $staff->id)->orderBy('dob')->
 												</tr>
 											</thead>
 											<tbody>
-												@foreach($chi as $chil)
+@foreach($chi as $chil)
 												<tr>
 													<td>
 														<a href="{!! route('staffChildren.edit', $chil->id) !!}" title="Edit"><i class="fas fa-pen-square fa-lg" aria-hidden="true"></i></a>
@@ -173,19 +173,16 @@ $chi = \App\Model\StaffChildren::where('staff_id', $staff->id)->orderBy('dob')->
 													<td>{{ ($chil->tax_exemption != 0)? 'Ya' : 'Tidak' }}</td>
 													<td>{{ !isset($chil->tax_exemption_percentage_id) ? '' : $chil->belongtotaxexemptionpercentage->tax_exemption_percentage }}</td>
 												</tr>
-												@endforeach
+@endforeach
 											</tbody>
 										</table>
-										@else
+@else
 										<p class="card-text text-justify">Sorry, no record for your children. Please fill this form by clicking "Add Children"</p>
-										@endif
+@endif
 										<p class="card-text text-center"><a href="{{ route('staffChildren.create') }}" class="btn btn-primary">Add Children</a></p>
 									</div>
-<hr>
+									<hr>
 									<p>&nbsp;</p>
-
-
-
 @endif
 								</div>
 								<div class="card-footer text-muted">
@@ -193,6 +190,84 @@ $chi = \App\Model\StaffChildren::where('staff_id', $staff->id)->orderBy('dob')->
 								</div>
 							</div>
 						</div>
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header"><h2 class="card-title">Personal Waktu Kecemasan (Emergency Contact Person)</h2></div>
+								<div class="card-body text-center table-responsive">
+
+									<div class="col">
+										<h4 class="card-title">Senarai Orang Yang Dihubungi Sewaktu Kecemasan</h4>
+<?php
+$eme = \App\Model\StaffEmergencyPerson::where('staff_id', $staff->id)->orderBy('id')->get();
+?>
+@if($eme->count() > 0 )
+										<table class="table table-hover">
+											<thead>
+												<tr>
+													<th scope="col">#</th>
+													<th scope="col">Nama</th>
+													<th scope="col">Hubungan</th>
+													<th scope="col">Alamat</th>
+													<th scope="col">&nbsp;</th>
+												</tr>
+											</thead>
+											<tbody>
+@foreach($eme as $emer)
+												<tr>
+													<td>
+														<a href="{!! route('staffEmergencyPerson.edit', $emer->id) !!}" title="Edit"><i class="fas fa-pen-square fa-lg" aria-hidden="true"></i></a>
+
+														<a href="{!! route('staffEmergencyPerson.destroy', $emer->id) !!}" data-id="{!! $emer->id !!}" data-token="{{ csrf_token() }}" id="delete_emergencyperson_<?=$emer->id ?>" title="Delete" class="delete_emergencyperson"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
+													</td>
+													<td>{{ $emer->contact_person }}</td>
+													<td>{{ $emer->relationship }}</td>
+													<td>{{ $emer->address }}</td>
+													<td>
+														<table>
+															<thead>
+																<tr>
+																	<th>#</th>
+																	<th>Telefon</th>
+																</tr>
+															</thead>
+															<tbody>
+<?php
+$ph = \App\Model\StaffEmergencyPersonPhone::where('emergency_person_id', $emer->id)->orderBy('id')->get();
+?>
+@foreach ($ph as $phe)
+																<tr>
+																	<td>
+																		<a href="{!! route('staffEmergencyPersonPhone.edit', $phe->id) !!}" title="Edit"><i class="fas fa-pen-square fa-lg" aria-hidden="true"></i></a>
+																		
+																		@if($ph->count() > 1)
+																		<a href="{!! route('staffEmergencyPersonPhone.destroy', $phe->id) !!}" data-id="{!! $phe->id !!}" data-token="{{ csrf_token() }}" id="delete_emergencypersonphone_<?=$phe->id ?>" title="Delete" class="delete_emergencypersonphone"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
+@else
+@endif
+																	</td>
+																	<td>{{ $phe->phone }}</td>
+																</tr>
+@endforeach
+															</tbody>
+														</table>
+													</td>
+												</tr>
+@endforeach
+											</tbody>
+										</table>
+@else
+										<p class="card-text text-justify text-lead">Sorry, no record for your emergency contact person. Please fill this form by clicking "Add Emergency Contact Person"</p>
+@endif
+									</div>
+									<hr>
+									<p>&nbsp;</p>
+
+								</div>
+								<div class="card-footer text-muted">
+									<p class="card-text text-center"><a href="{{ route('staffEmergencyPerson.create') }}" class="btn btn-primary">Add Emergency Contact Person</a></p>
+								</div>
+							</div>
+						</div>
+
 					</div>
 				</div>
 
@@ -363,6 +438,105 @@ function SwalDeletechildren(childrenID){
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
+// sweetalert2 delete emergency person
+
+$(document).on('click', '.delete_emergencyperson', function(e){
+	var emergencypersonID = $(this).data('id');
+	SwalDeleteemergencyperson(emergencypersonID);
+	e.preventDefault();
+});
+
+function SwalDeleteemergencyperson(emergencypersonID){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+		allowOutsideClick: false,
+
+		preConfirm: function()                {
+			return new Promise(function(resolve) {
+				$.ajax({
+					headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+					url: '{{ url('staffEmergencyPerson') }}' + '/' + emergencypersonID,
+					type: 'DELETE',
+					data:	{
+								id: emergencypersonID,
+								_token : $('meta[name=csrf-token]').attr('content')
+							},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status);
+					$('#delete_emergencyperson_' + emergencypersonID).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax!', 'error');
+				});
+			});
+		},
+	})
+	.then((result) => {
+		if(result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe', 'info');
+		}
+	});
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// sweetalert2 delete emergency person phone
+
+$(document).on('click', '.delete_emergencypersonphone', function(e){
+	var emergencypersonphoneID = $(this).data('id');
+	SwalDeleteemergencypersonphone(emergencypersonphoneID);
+	e.preventDefault();
+});
+
+function SwalDeleteemergencypersonphone(emergencypersonphoneID){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+		allowOutsideClick: false,
+
+		preConfirm: function()                {
+			return new Promise(function(resolve) {
+				$.ajax({
+					headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+					url: '{{ url('staffEmergencyPersonPhone') }}' + '/' + emergencypersonphoneID,
+					type: 'DELETE',
+					data:	{
+								id: emergencypersonphoneID,
+								_token : $('meta[name=csrf-token]').attr('content')
+							},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status);
+					$('#delete_emergencypersonphone_' + emergencypersonphoneID).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax!', 'error');
+				});
+			});
+		},
+	})
+	.then((result) => {
+		if(result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe', 'info');
+		}
+	});
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////
 
 @endsection

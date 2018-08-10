@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use App\Model\StaffEmergencyPersonPhone;
 use Illuminate\Http\Request;
 
+// load validation
+use App\Http\Requests\StaffEmergencyPersonPhoneRequest;
+
+use Session;
+
 class StaffEmergencyPersonPhoneController extends Controller
 {
     /**
@@ -33,7 +38,7 @@ class StaffEmergencyPersonPhoneController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StaffEmergencyPersonPhoneRequest $request)
     {
         //
     }
@@ -57,7 +62,7 @@ class StaffEmergencyPersonPhoneController extends Controller
      */
     public function edit(StaffEmergencyPersonPhone $staffEmergencyPersonPhone)
     {
-        //
+        return view('staffEmergencyPersonPhone.edit', compact(['staffEmergencyPersonPhone']));
     }
 
     /**
@@ -67,9 +72,13 @@ class StaffEmergencyPersonPhoneController extends Controller
      * @param  \App\StaffEmergencyPersonPhone  $staffEmergencyPersonPhone
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, StaffEmergencyPersonPhone $staffEmergencyPersonPhone)
+    public function update(StaffEmergencyPersonPhoneRequest $request, StaffEmergencyPersonPhone $staffEmergencyPersonPhone)
     {
-        //
+        StaffEmergencyPersonPhone::where('id', $staffEmergencyPersonPhone->id)->update($request->except(['_method', '_token']));
+
+        // info when update success
+        Session::flash('flash_message', 'Data successfully edited!');
+        return redirect( route('staff.show', auth()->user()->belongtostaff->id) );
     }
 
     /**
@@ -80,6 +89,24 @@ class StaffEmergencyPersonPhoneController extends Controller
      */
     public function destroy(StaffEmergencyPersonPhone $staffEmergencyPersonPhone)
     {
-        //
+        StaffEmergencyPersonPhone::destroy($staffEmergencyPersonPhone->id);
+        return response()->json([
+                                    'message' => 'Data deleted',
+                                    'status' => 'success'
+                                ]);
     }
+
+    public function search(Request $request)
+    {
+        foreach ($request->emerg as $key => $value) {
+            $valid = TRUE;
+            $phone = StaffEmergencyPersonPhone::where('phone', $value['phone'])->count();
+            if ($phone == 1) 
+            {
+                $valid = FALSE;
+            }
+            return response()->json(['valid' => $valid]);
+        }
+    }
+
 }

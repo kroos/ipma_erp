@@ -23,10 +23,11 @@ class StaffProfileRequest extends FormRequest
      */
     public function rules()
     {
-        // dd($this->user['id']);
+        dd($this->staff['id']);
         return [
             'image' => 'file|image|max:5000',
             'id_card_passport' => 'required|integer',
+            'email' => 'required|email|unique:staffs,email,'.$this->staff['id'],
             'religion_id' => 'required|integer',
             'gender_id' => 'required|integer',
             'race_id' => 'required|integer',
@@ -34,7 +35,7 @@ class StaffProfileRequest extends FormRequest
             'pob' => 'nullable',
             'country_id' => 'required|integer',
             'marital_status_id' => 'required|integer',
-            'mobile' => 'required|numeric',
+            'mobile' => 'required|numeric|unique:staffs,mobile,'.$this->staff['id'],
             'phone' => 'nullable|numeric',
             'dob' => 'required|date_format:Y-m-d',
             'cimb_account' => 'required|digits:10',

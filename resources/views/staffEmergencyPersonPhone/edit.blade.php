@@ -2,13 +2,13 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header"><h1>Edit Emergency Contact Person</h1></div>
+	<div class="card-header"><h1>Edit Emergency Contact Person Phone</h1></div>
 	<div class="card-body">
 		@include('layouts.info')
 		@include('layouts.errorform')
 
-{{ Form::model( $staffEmergencyPerson, ['route' => ['staffEmergencyPerson.update', $staffEmergencyPerson->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
-	@include('staffEmergencyPerson._form_edit')
+{{ Form::model( $staffEmergencyPersonPhone, ['route' => ['staffEmergencyPersonPhone.update', $staffEmergencyPersonPhone->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
+	@include('staffEmergencyPersonPhone._form')
 {{ Form::close() }}
 
 
@@ -39,38 +39,19 @@ $('#form').bootstrapValidator({
 	},
 	fields: {
 
-		contact_person: {
+		'phone': {
 			validators: {
 				notEmpty: {
-					message: 'Sila masukkan nama orang untuk dihubungi. '
+					message: 'Sila masukkan nombor telefon. '
 				},
 				regexp: {
-					regexp: /^[a-z\s\'\@]+$/i,
-					message: 'The full name can consist of alphabetical characters, \', @ and spaces only'
-				},
-			}
-		},
-		relationship: {
-			validators: {
-				notEmpty: {
-					message: 'Sila masukkan hubungan anda dengan penama diatas. '
-				},
-			}
-		},
-		address: {
-			validators: {
-				notEmpty: {
-					message: 'Sila masukkan alamat. '
+					regexp: /^(\+?6?01)[0|1|2|3|4|6|7|8|9]\-*[0-9]{7,8}$/,
+					message: 'Please insert your valid phone number'
 				},
 			}
 		},
 	}
 });
-
-
-/////////////////////////////////////////////////////////////////////////////////////////
-//add more row
-
 
 /////////////////////////////////////////////////////////////////////////////////////////
 @endsection
