@@ -61,16 +61,27 @@ $religion = App\Model\Religion::pluck('religion', 'id')->sortKeys()->toArray();
 											{{ Form::select('religion_id', $religion, @$value, ['class' => 'form-control', 'id' => 'religion', 'placeholder' => 'Please Select', 'autocomplete' => 'off']) }}
 										</div>
 									</div>
-<?php
-$drivelice = App\Model\DrivingLicense::all('id', 'class', 'description')->sortKeys()->toArray();
-foreach ($drivelice as $key => $val) {
-	$drive[$val['id']] = $val['class'].' => '.$val['description'];
-}
-?>
+
 									<div class="form-group row {{ $errors->has('drivelicense.*') ? ' has-error' : '' }}">
 										{{ Form::label('drivelicense', 'Lesen Memandu : ', ['class' => 'col-sm-2 col-form-label']) }}
 										<div class="col-sm-10">
-											{{ Form::select('drivelicense[]', $drive, @$value, ['class' => 'form-control', 'id' => 'drivelicense', 'autocomplete' => 'off', 'multiple' => 'multiple']) }}
+											<select name="drivelicense[]" class="form-control" id="drivelicense" autocomplete="off" multiple="multiple">
+<?php
+$drivelice = App\Model\DrivingLicense::all('id', 'class', 'description');
+?>
+@foreach ($drivelice as $k)
+												<option value="{{ $k->id }}" 
+<?php
+$t = App\Model\StaffDrivingLicense::where('staff_id', $staff->id)->get();
+foreach ($t as $l) {
+	if ($l->driving_license_id == $k->id) {
+		echo 'selected';
+	}
+}
+?>
+													>{{ $k->class }} => {{ $k->description }}</option>>
+@endforeach
+											</select>
 										</div>
 									</div>
 <?php

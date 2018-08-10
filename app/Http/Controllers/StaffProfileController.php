@@ -86,12 +86,8 @@ class StaffProfileController extends Controller
      */
     public function update(StaffProfileRequest $request, Staff $staff)
     {
-        dd($request->drivelicense);
+        // dd($request->drivelicense);
         // $request->file('image') == $request->image
-
-        if (!empty($request->drivelicense)) {
-            
-        }
 
         if(!empty($request->file('image'))) {
             $filename = $request->file('image')->store('public/images/profiles');
@@ -112,12 +108,24 @@ class StaffProfileController extends Controller
             $imag->save();
             // dd( array_add($request->except(['image']), 'image', $filename) );
 
-            $res = \App\Model\Staff::updateOrCreate(['id' => $staff->id], array_add($request->except(['image']), 'image', $image));
-
+            $res = \App\Model\Staff::updateOrCreate(['id' => $staff->id], array_add($request->except(['image', 'drivelicense']), 'image', $image));
         } else {
-            $res = \App\Model\Staff::updateOrCreate(['id' => $staff->id], $request->except(['image']));
+            $res = \App\Model\Staff::updateOrCreate(['id' => $staff->id], $request->except(['image', 'drivelicense']));
         }
 
+        //////////////////////////////////////////////////////////////////////////////////////
+        // driving license part
+        if (!empty($request->drivelicense)) {
+            \App\Model\StaffDrivingLicense::where(['staff_id' => $staff->id])->delete();
+            foreach ($request->drivelicense as $y) {
+                $invoice = \App\Model\StaffDrivingLicense::create([
+                        'staff_id' => $staff->id,
+                        'driving_license_id' => $y,
+                    ]);
+            }
+        } else {
+            SalesTax::where(['id_sales' => $sales->id])->delete();
+        }
 
         Session::flash('flash_message', 'Data successfully edited!');
         return redirect( route('staff.show', $staff->id) );

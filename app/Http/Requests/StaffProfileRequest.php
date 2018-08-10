@@ -28,7 +28,7 @@ class StaffProfileRequest extends FormRequest
             'image' => 'file|image|max:5000',
             'id_card_passport' => 'required|integer',
             'email' => 'required|email|unique:staffs,email,'.$this->staff['id'],
-            'drivelicense.*' => 'nullable'
+            'drivelicense.*' => 'nullable',
             'religion_id' => 'required|integer',
             'gender_id' => 'required|integer',
             'race_id' => 'required|integer',

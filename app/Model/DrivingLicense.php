@@ -10,6 +10,6 @@ class DrivingLicense extends Model
 
     public function hasmanystaffdrivinglicense()
     {
-    	return $this->hasMany('App\Model\StaffDrivingLicense');
+    	return $this->hasMany('App\Model\StaffDrivingLicense', 'driving_license_id');
     }
 }
