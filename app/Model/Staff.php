@@ -18,7 +18,7 @@ class Staff extends Model
 
 	public function hasmanylogin()
 	{
-		return $this->hasMany('App\Model\Login');
+		return $this->hasMany('App\Model\Login', 'staff_id');
 	}
 
 	public function hasmanychildren()
@@ -79,5 +79,10 @@ class Staff extends Model
     public function belongtomaritalstatus()
     {
     	return $this->belongsTo('App\Model\MaritalStatus', 'marital_status_id');
+    }
+
+    public function belongtolocation()
+    {
+    	return $this->belongsTo('App\Model\Location', 'location_id');
     }
 }
