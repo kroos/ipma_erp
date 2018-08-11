@@ -58,15 +58,9 @@ Route::post('/staffEmergencyPersonPhonesearch', [
 		'uses' => 'StaffEmergencyPersonPhoneController@search'
 	]);
 
-// ############################################################################
-// // StaffEmergencyPersonPhone Controller
-// Route::resource('staffEmergencyPersonPhone', 'StaffEmergencyPersonPhoneController');
-
-// //remote
-// Route::post('/staffEmergencyPersonPhonesearch', [
-// 		'as' => 'staffEmergencyPersonPhone.search',
-// 		'uses' => 'StaffEmergencyPersonPhoneController@search'
-// 	]);
+############################################################################
+// StaffEducation Controller
+Route::resource('staffEducation', 'StaffEducationController');
 
 
 

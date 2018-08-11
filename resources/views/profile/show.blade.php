@@ -19,7 +19,7 @@
 								<div class="card-header">
 									<h2 class="card-title">Butiran</h2>
 								</div>
-								<div class="card-body text-left">
+								<div class="card-body text-left table-responsive">
 
 <?php
 function my($string) {
@@ -30,31 +30,96 @@ function my($string) {
 	return date('D, d F Y', mktime(0, 0, 0, $rt->month, $rt->day, $rt->year));
 }
 ?>
-									<p class="card-text">Status : {{ empty($staff->belongtostatus->status)? 'Not Set' : $staff->belongtostatus->status }}, {{ empty($staff->belongtostatus->code)? '' : $staff->belongtostatus->code }}</p>
-									<p class="card-text">Email : {{ $staff->email }}</p>
-									<p class="card-text">Kad Pengenalan : {{ $staff->id_card_passport }}</p>
-									<p class="card-text">Agama : {{ empty($staff->belongtoreligion->religion)? 'Not Set' : $staff->belongtoreligion->religion }}</p>
-									<p class="card-text">Kelas Lesen Memandu : 
+
+								<table class="table table-hover">
+									<tbody>
+										<tr>
+											<td scope="col">Status :</td>
+											<td scope="col">{{ empty($staff->belongtostatus->status)? 'Not Set' : $staff->belongtostatus->status }}, {{ empty($staff->belongtostatus->code)? '' : $staff->belongtostatus->code }}</td>
+										</tr>
+										<tr>
+											<td scope="col">Email :</td>
+											<td scope="col">{{ $staff->email }}</td>
+										</tr>
+										<tr>
+											<td scope="col">Kad Pengenalan :</td>
+											<td scope="col">{{ $staff->id_card_passport }}</td>
+										</tr>
+										<tr>
+											<td scope="col">Agama :</td>
+											<td scope="col">{{ empty($staff->belongtoreligion->religion)? 'Not Set' : $staff->belongtoreligion->religion }}</td>
+										</tr>
+										<tr>
+											<td scope="col">Lesen Memandu :</td>
+											<td scope="col">
+												<table>
+													<tbody>
 <?php
 $dr = \App\Model\StaffDrivingLicense::where('staff_id', $staff->id)->orderBy('id')->get();
 ?>
 @foreach($dr as $drv)
-	{{ $drv->belongtodrivinglicense->class }} => {{ $drv->belongtodrivinglicense->description }}<br />
-@endforeach
-									</p>
-									<p class="card-text">Jantina : {{ empty($staff->belongtogender->gender)? 'Not Set' : $staff->belongtogender->gender }}</p>
-									<p class="card-text">Bangsa : {{ empty($staff->belongtorace->race)? 'Not Set' : $staff->belongtorace->race }}</p>
-									<p class="card-text">Alamat : {{ empty($staff->address) ? 'Not Set' : $staff->address }}</p>
-									<p class="card-text">Tempat Lahir : {{ $staff->place_of_birth }}</p>
-									<p class="card-text">Warganegara : {{ empty($staff->belongtocountry->country)? 'Not Set' : $staff->belongtocountry->country }}</p>
-									<p class="card-text">Taraf Perkahwinan : {{ empty($staff->belongtomaritalstatus->marital_status)? 'Not Set' : $staff->belongtomaritalstatus->marital_status }}</p>
-									<p class="card-text">Telefon Bimbit : {{ $staff->mobile }}</p>
-									<p class="card-text">Talian Tetap : {{ $staff->phone }}</p>
-									<p class="card-text">Tarikh Lahir : {{ my($staff->dob) }}</p>
-									<p class="card-text">Umur : {{ \Carbon\Carbon::parse($staff->dob)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days') }}</p>
-									<p class="card-text">Akaun CIMB : {{ $staff->cimb_account }}</p>
-									<p class="card-text">Nombor KWSP : {{ $staff->epf_no }}</p>
-									<p class="card-text">Nombor Cukai Pendapatan : {{ $staff->income_tax_no }}</p>
+														<tr>
+															<td>{{ $drv->belongtodrivinglicense->class }} => {{ $drv->belongtodrivinglicense->description }}</td>
+														</tr>
+@endforeach														
+													</tbody>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td>Jantina :</td>
+											<td>{{ empty($staff->belongtogender->gender)? 'Not Set' : $staff->belongtogender->gender }}</td>
+										</tr>
+										<tr>
+											<td>Bangsa :</td>
+											<td>{{ empty($staff->belongtorace->race)? 'Not Set' : $staff->belongtorace->race }}</td>
+										</tr>
+										<tr>
+											<td>Alamat :</td>
+											<td>{{ empty($staff->address) ? 'Not Set' : $staff->address }}</td>
+										</tr>
+										<tr>
+											<td>Tempat Lahir :</td>
+											<td>{{ $staff->place_of_birth }}</td>
+										</tr>
+										<tr>
+											<td>Warganegara :</td>
+											<td>{{ empty($staff->belongtocountry->country)? 'Not Set' : $staff->belongtocountry->country }}</td>
+										</tr>
+										<tr>
+											<td>Taraf Perkahwinan :</td>
+											<td>{{ empty($staff->belongtomaritalstatus->marital_status)? 'Not Set' : $staff->belongtomaritalstatus->marital_status }}</td>
+										</tr>
+										<tr>
+											<td>Telefon Bimbit :</td>
+											<td>{{ $staff->mobile }}</td>
+										</tr>
+										<tr>
+											<td>Talian Tetap :</td>
+											<td>{{ $staff->phone }}</td>
+										</tr>
+										<tr>
+											<td>Tarikh Lahir :</td>
+											<td>{{ my($staff->dob) }}</td>
+										</tr>
+										<tr>
+											<td>Umur :</td>
+											<td>{{ \Carbon\Carbon::parse($staff->dob)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days') }}</td>
+										</tr>
+										<tr>
+											<td>Akaun CIMB :</td>
+											<td>{{ $staff->cimb_account }}</td>
+										</tr>
+										<tr>
+											<td>Akaun KWSP :</td>
+											<td>{{ $staff->epf_no }}</td>
+										</tr>
+										<tr>
+											<td>Nombor Cukai Pendapatan :</td>
+											<td>{{ $staff->income_tax_no }}</td>
+										</tr>
+									</tbody>
+								</table>
 
 								</div>
 								<div class="card-footer text-muted">
@@ -90,10 +155,10 @@ $sib = \App\Model\StaffSibling::where('staff_id', $staff->id)->orderBy('dob')->g
 
 														<a href="{!! route('staffSibling.destroy', $sibl->id) !!}" data-id="{!! $sibl->id !!}" data-token="{{ csrf_token() }}" id="delete_sibling_<?=$sibl->id ?>" title="Delete" class="delete_sibling"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
 													</td>
-													<td>{{ $sibl->sibling }}</td>
-													<td>{{ $sibl->phone }}</td>
-													<td>{{ \Carbon\Carbon::parse($sibl->dob)->diff(\Carbon\Carbon::now())->format('%y years') }}</td>
-													<td>{{ $sibl->profession }}</td>
+													<td scope="col">{{ $sibl->sibling }}</td>
+													<td scope="col">{{ $sibl->phone }}</td>
+													<td scope="col">{{ \Carbon\Carbon::parse($sibl->dob)->diff(\Carbon\Carbon::now())->format('%y years') }}</td>
+													<td scope="col">{{ $sibl->profession }}</td>
 												</tr>
 @endforeach
 											</tbody>
@@ -126,16 +191,16 @@ $spo = \App\Model\StaffSpouse::where('staff_id', $staff->id)->orderBy('dob')->ge
 											<tbody>
 @foreach($spo as $spou)
 												<tr>
-													<td>
+													<td scope="col">
 														<a href="{!! route('staffSpouse.edit', $spou->id) !!}" title="Edit"><i class="fas fa-pen-square fa-lg" aria-hidden="true"></i></a>
 
 														<a href="{!! route('staffSpouse.destroy', $spou->id) !!}" data-id="{!! $spou->id !!}" data-token="{{ csrf_token() }}" id="delete_spouse_<?=$spou->id ?>" title="Delete" class="delete_spouse"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
 													</td>
-													<td>{{ $spou->spouse }}</td>
-													<td>{{ $spou->id_card_passport }}</td>
-													<td>{{ $spou->phone }}</td>
-													<td>{{ \Carbon\Carbon::parse($spou->dob)->diff(\Carbon\Carbon::now())->format('%y years') }}</td>
-													<td>{{ $spou->profession }}</td>
+													<td scope="col">{{ $spou->spouse }}</td>
+													<td scope="col">{{ $spou->id_card_passport }}</td>
+													<td scope="col">{{ $spou->phone }}</td>
+													<td scope="col">{{ \Carbon\Carbon::parse($spou->dob)->diff(\Carbon\Carbon::now())->format('%y years') }}</td>
+													<td scope="col">{{ $spou->profession }}</td>
 												</tr>
 @endforeach
 											</tbody>
@@ -169,18 +234,18 @@ $chi = \App\Model\StaffChildren::where('staff_id', $staff->id)->orderBy('dob')->
 											<tbody>
 @foreach($chi as $chil)
 												<tr>
-													<td>
+													<td scope="col">
 														<a href="{!! route('staffChildren.edit', $chil->id) !!}" title="Edit"><i class="fas fa-pen-square fa-lg" aria-hidden="true"></i></a>
 
 														<a href="{!! route('staffChildren.destroy', $chil->id) !!}" data-id="{{ $chil->id }}" data-token="{{ csrf_token() }}" id="delete_children_{{ $chil->id }}" title="Delete" class="delete_children"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
 													</td>
-													<td>{{ $chil->children }}</td>
-													<td>{{ \Carbon\Carbon::parse($chil->dob)->diff(\Carbon\Carbon::now())->format('%y years') }}</td>
-													<td>{{ $chil->belongtogender->gender }}</td>
-													<td>{{ $chil->belongtoeducationlevel->education_level }}</td>
-													<td>{{ $chil->belongtohealthstatus->health_status }}</td>
-													<td>{{ ($chil->tax_exemption != 0)? 'Ya' : 'Tidak' }}</td>
-													<td>{{ !isset($chil->tax_exemption_percentage_id) ? '' : $chil->belongtotaxexemptionpercentage->tax_exemption_percentage }}</td>
+													<td scope="col">{{ $chil->children }}</td>
+													<td scope="col">{{ \Carbon\Carbon::parse($chil->dob)->diff(\Carbon\Carbon::now())->format('%y years') }}</td>
+													<td scope="col">{{ $chil->belongtogender->gender }}</td>
+													<td scope="col">{{ $chil->belongtoeducationlevel->education_level }}</td>
+													<td scope="col">{{ $chil->belongtohealthstatus->health_status }}</td>
+													<td scope="col">{{ ($chil->tax_exemption != 0)? 'Ya' : 'Tidak' }}</td>
+													<td scope="col">{{ !isset($chil->tax_exemption_percentage_id) ? '' : $chil->belongtotaxexemptionpercentage->tax_exemption_percentage }}</td>
 												</tr>
 @endforeach
 											</tbody>
@@ -199,6 +264,11 @@ $chi = \App\Model\StaffChildren::where('staff_id', $staff->id)->orderBy('dob')->
 								</div>
 							</div>
 						</div>
+
+					</div>
+
+					<hr>
+					<div class="row justify-content-center">
 						<div class="col-md-12">
 							<div class="card">
 								<div class="card-header"><h2 class="card-title">Personal Waktu Kecemasan (Emergency Contact Person)</h2></div>
@@ -223,20 +293,20 @@ $eme = \App\Model\StaffEmergencyPerson::where('staff_id', $staff->id)->orderBy('
 											<tbody>
 @foreach($eme as $emer)
 												<tr>
-													<td>
+													<td scope="col">
 														<a href="{!! route('staffEmergencyPerson.edit', $emer->id) !!}" title="Edit"><i class="fas fa-pen-square fa-lg" aria-hidden="true"></i></a>
 
 														<a href="{!! route('staffEmergencyPerson.destroy', $emer->id) !!}" data-id="{!! $emer->id !!}" data-token="{{ csrf_token() }}" id="delete_emergencyperson_<?=$emer->id ?>" title="Delete" class="delete_emergencyperson"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
 													</td>
-													<td>{{ $emer->contact_person }}</td>
-													<td>{{ $emer->relationship }}</td>
-													<td>{{ $emer->address }}</td>
-													<td>
+													<td scope="col">{{ $emer->contact_person }}</td>
+													<td scope="col">{{ $emer->relationship }}</td>
+													<td scope="col">{{ $emer->address }}</td>
+													<td scope="col">
 														<table>
 															<thead>
 																<tr>
-																	<th>#</th>
-																	<th>Telefon</th>
+																	<th scope="col">#</th>
+																	<th scope="col">Telefon</th>
 																</tr>
 															</thead>
 															<tbody>
@@ -245,7 +315,7 @@ $ph = \App\Model\StaffEmergencyPersonPhone::where('emergency_person_id', $emer->
 ?>
 @foreach ($ph as $phe)
 																<tr>
-																	<td>
+																	<td scope="col">
 																		<a href="{!! route('staffEmergencyPersonPhone.edit', $phe->id) !!}" title="Edit"><i class="fas fa-pen-square fa-lg" aria-hidden="true"></i></a>
 																		
 																		@if($ph->count() > 1)
@@ -253,7 +323,7 @@ $ph = \App\Model\StaffEmergencyPersonPhone::where('emergency_person_id', $emer->
 @else
 @endif
 																	</td>
-																	<td>{{ $phe->phone }}</td>
+																	<td scope="col">{{ $phe->phone }}</td>
 																</tr>
 @endforeach
 															</tbody>
@@ -276,8 +346,60 @@ $ph = \App\Model\StaffEmergencyPersonPhone::where('emergency_person_id', $emer->
 								</div>
 							</div>
 						</div>
-
 					</div>
+					
+					<hr>
+					<div class="row justify-content-center">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="card-header">
+									<h2 class="card-title">Pengajian</h2>
+								</div>
+								<div class="card-body text-center table-responsive">
+
+									<div class="col">
+										<h4 class="card-title">Rekod Pengajian</h4>
+<?php
+$sib = \App\Model\StaffEducation::where('staff_id', $staff->id)->orderBy('from')->get();
+?>
+@if($sib->count() > 0 )
+										<table class="table table-hover">
+											<thead>
+												<tr>
+													<th scope="col">#</th>
+													<th scope="col">Institusi</th>
+													<th scope="col">Dari</th>
+													<th scope="col">Hingga</th>
+													<th scope="col">Kelulusan Tertinggi</th>
+												</tr>
+											</thead>
+											<tbody>
+@foreach($sib as $sibd)
+												<tr>
+													<td scope="col">
+														<a href="{!! route('staffEducation.edit', $sibd->id) !!}" title="Edit"><i class="fas fa-pen-square fa-lg" aria-hidden="true"></i></a>
+
+														<a href="{!! route('staffEducation.destroy', $sibd->id) !!}" data-id="{!! $sibd->id !!}" data-token="{{ csrf_token() }}" id="delete_staffEducation_<?=$sibd->id ?>" title="Delete" class="delete_staffEducation"><i class="fas fa-trash fa-lg" aria-hidden="true"></i></a>
+													</td>
+													<td scope="col">{{ $sibd->institution }}</td>
+													<td scope="col">{{ my($sibd->from) }}</td>
+													<td scope="col">{{ my($sibd->to) }}</td>
+													<td scope="col">{{ $sibd->qualification }}</td>
+												</tr>
+@endforeach
+											</tbody>
+										</table>
+@else
+										<p class="card-text text-justify">Sorry, no record for your educations. Please fill this form by clicking "Add Educations"</p>
+@endif
+								</div>
+								<div class="card-footer text-muted">
+									<p class="card-text text-center"><a href="{{ route('staffEducation.create') }}" class="btn btn-primary">Add Educations</a></p>
+								</div>
+							</div>
+						</div>
+					</div>
+
 				</div>
 
 			</div>
@@ -532,6 +654,56 @@ function SwalDeleteemergencypersonphone(emergencypersonphoneID){
 				.done(function(response){
 					swal('Deleted!', response.message, response.status);
 					$('#delete_emergencypersonphone_' + emergencypersonphoneID).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax!', 'error');
+				});
+			});
+		},
+	})
+	.then((result) => {
+		if(result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe', 'info');
+		}
+	});
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// sweetalert2 delete staff education
+
+$(document).on('click', '.delete_staffEducation', function(e){
+	var staffEducationID = $(this).data('id');
+	SwalDeletestaffEducation(staffEducationID);
+	e.preventDefault();
+});
+
+function SwalDeletestaffEducation(staffEducationID){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+		allowOutsideClick: false,
+
+		preConfirm: function()                {
+			return new Promise(function(resolve) {
+				$.ajax({
+					headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+					url: '{{ url('staffEducation') }}' + '/' + staffEducationID,
+					type: 'DELETE',
+					data:	{
+								id: staffEducationID,
+								_token : $('meta[name=csrf-token]').attr('content')
+							},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status);
+					$('#delete_staffEducation_' + staffEducationID).parent().parent().remove();
 				})
 				.fail(function(){
 					swal('Oops...', 'Something went wrong with ajax!', 'error');

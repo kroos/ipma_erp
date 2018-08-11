@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class StaffDrivingLicenseController extends Controller
 {
+    // must always refer to php artisan route:list
+    function __construct()
+    {
+        $this->middleware('auth');
+        // $this->middleware('admin', ['except' => ['create', 'store']]);
+    }
     /**
      * Display a listing of the resource.
      *
