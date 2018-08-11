@@ -22,6 +22,14 @@
 					<a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
 				</li> -->
 			@else
+<?php
+$div = App\Model\Division::all();
+?>
+@foreach($div as $divs)
+				<li class="nav-item">
+					<a class="nav-link" href="{{ route("$divs->route.index") }}">{{ $divs->division }}</a>
+				</li>
+@endforeach
 				<li class="nav-item dropdown">
 					<a id="navbarDropdown" class="btn btn-info btn-sm nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
 						{{ Auth::user()->belongtostaff->name }} <span class="caret"></span>

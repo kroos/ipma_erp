@@ -9,6 +9,6 @@ class Division extends Model
 	// protected $table = 'divisions';
 
     public function hasmanydepartment() {
-    	return $this->hasMany('App\Model\Department')
+    	return $this->hasMany('App\Model\Department', 'division_id');
     }
 }

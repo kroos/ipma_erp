@@ -9,12 +9,12 @@
 
 			<div class="card text-center">
 				<div class="col-2 offset-5">
-					<img class="card-img-top" src="{{ asset('storage/'.$staff->image) }}" alt="{{ $staff->name }} Image">
+					<img class="card-img-top rounded" src="{{ asset('storage/'.$staff->image) }}" alt="{{ $staff->name }} Image">
 				</div>
 				<h2 class="card-title card-title">{{ $staff->name }}</h2>
 				<div class="card-body">
 					<div class="row justify-content-center">
-						<div class="col-md-5">
+						<div class="col-lg-5">
 							<div class="card">
 								<div class="card-header">
 									<h2 class="card-title">Butiran</h2>
@@ -36,6 +36,38 @@ function my($string) {
 										<tr>
 											<td scope="col">Status :</td>
 											<td scope="col">{{ empty($staff->belongtostatus->status)? 'Not Set' : $staff->belongtostatus->status }}, {{ empty($staff->belongtostatus->code)? '' : $staff->belongtostatus->code }}</td>
+										</tr>
+										<tr>
+											<td scope="col">ID Pekerja :</td>
+											<td scope="col">{{ empty($staff->hasmanylogin()->where('active', 1)->first()->username)?'Not Set':$staff->hasmanylogin()->where('active', 1)->first()->username }}</td>
+										</tr>
+										<tr>
+											<td scope="col">Divisi :</td>
+											<td scope="col"></td>
+										</tr>
+										<tr>
+											<td scope="col">Jabatan :</td>
+											<td scope="col"></td>
+										</tr>
+										<tr>
+											<td scope="col">Jawatan :</td>
+											<td scope="col"></td>
+										</tr>
+										<tr>
+											<td scope="col"></td>
+											<td scope="col"></td>
+										</tr>
+										<tr>
+											<td scope="col"></td>
+											<td scope="col"></td>
+										</tr>
+										<tr>
+											<td scope="col"></td>
+											<td scope="col"></td>
+										</tr>
+										<tr>
+											<td scope="col">Lokasi :</td>
+											<td scope="col">{{ empty($staff->location_id)?'Not Set':$staff->belongtolocation->location }}</td>
 										</tr>
 										<tr>
 											<td scope="col">Email :</td>
@@ -127,7 +159,7 @@ $dr = \App\Model\StaffDrivingLicense::where('staff_id', $staff->id)->orderBy('id
 								</div>
 							</div>
 						</div>
-						<div class="col-md-7">
+						<div class="col-lg-7">
 							<div class="card">
 								<div class="card-header"><h2 class="card-title">Keluarga (Family And Siblings)</h2></div>
 								<div class="card-body text-center table-responsive">
@@ -269,7 +301,7 @@ $chi = \App\Model\StaffChildren::where('staff_id', $staff->id)->orderBy('dob')->
 
 					<hr>
 					<div class="row justify-content-center">
-						<div class="col-md-12">
+						<div class="col-lg-12">
 							<div class="card">
 								<div class="card-header"><h2 class="card-title">Personal Waktu Kecemasan (Emergency Contact Person)</h2></div>
 								<div class="card-body text-center table-responsive">
@@ -350,7 +382,7 @@ $ph = \App\Model\StaffEmergencyPersonPhone::where('emergency_person_id', $emer->
 					
 					<hr>
 					<div class="row justify-content-center">
-						<div class="col-md-12">
+						<div class="col-lg-12">
 							<div class="card">
 								<div class="card-header">
 									<h2 class="card-title">Pengajian</h2>
