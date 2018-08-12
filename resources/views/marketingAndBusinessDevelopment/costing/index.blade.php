@@ -2,15 +2,15 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header"><h1>Cutting Department</h1></div>
+	<div class="card-header"><h1>Costing Department</h1></div>
 	<div class="card-body">
 		@include('layouts.info')
 		@include('layouts.errorform')
 
 		<ul class="nav nav-tabs">
-@foreach( App\Model\Division::find(2)->hasmanydepartment()->get() as $key)
+@foreach( App\Model\Division::find(3)->hasmanydepartment()->get() as $key)
 			<li class="nav-item">
-				<a class="nav-link {{ ($key->id == 11)? 'active' : '' }}" href="{{ route("$key->route.index") }}">{{ $key->department }}</a>
+				<a class="nav-link {{ ($key->id == 7)? 'active' : '' }}" href="{{ route("$key->route.index") }}">{{ $key->department }}</a>
 			</li>
 @endforeach
 			<li class="nav-item">

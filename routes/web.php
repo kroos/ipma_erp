@@ -25,195 +25,195 @@ Route::get('/home', [
 
 ############################################################################
 // StaffProfile Controller
-Route::resource('staff', 'StaffProfileController');
+Route::resource('staff', 'Profile\StaffProfileController');
 //remote
 Route::post('/staffSearch', [
 		'as' => 'staffSearch.search',
-		'uses' => 'StaffProfileController@search'
+		'uses' => 'Profile\StaffProfileController@search'
 	]);
 
 ############################################################################
 // StaffSpouse Controller
-Route::resource('staffSpouse', 'StaffSpouseController');
+Route::resource('staffSpouse', 'Profile\StaffSpouseController');
 
 ############################################################################
 // StaffSpouse Controller
-Route::resource('staffSibling', 'StaffSiblingController');
+Route::resource('staffSibling', 'Profile\StaffSiblingController');
 
 ############################################################################
 // StaffChildren Controller
-Route::resource('staffChildren', 'StaffChildrenController');
+Route::resource('staffChildren', 'Profile\StaffChildrenController');
 
 ############################################################################
 // StaffEmergencyPerson Controller
-Route::resource('staffEmergencyPerson', 'StaffEmergencyPersonController');
+Route::resource('staffEmergencyPerson', 'Profile\StaffEmergencyPersonController');
 
 ############################################################################
 // StaffEmergencyPersonPhone Controller
-Route::resource('staffEmergencyPersonPhone', 'StaffEmergencyPersonPhoneController');
+Route::resource('staffEmergencyPersonPhone', 'Profile\StaffEmergencyPersonPhoneController');
 
 //remote
 Route::post('/staffEmergencyPersonPhonesearch', [
 		'as' => 'staffEmergencyPersonPhone.search',
-		'uses' => 'StaffEmergencyPersonPhoneController@search'
+		'uses' => 'Profile\StaffEmergencyPersonPhoneController@search'
 	]);
 
 ############################################################################
 // StaffEducation Controller
-Route::resource('staffEducation', 'StaffEducationController');
+Route::resource('staffEducation', 'Profile\StaffEducationController');
 
 ############################################################################
 // GeneralAndAdministrative Controller
 Route::get('/general-and-administrative', [
 		'as' => 'general-and-administrative.index',
-		'uses' => 'GeneralAndAdministrativeController@index'
+		'uses' => 'Division\GeneralAndAdministrativeController@index'
 	]);
 
 ############################################################################
 // StaffEducation Controller
 Route::get('/production', [
 		'as' => 'production.index',
-		'uses' => 'ProductionController@index'
+		'uses' => 'Division\ProductionController@index'
 	]);
 
 ############################################################################
 // StaffEducation Controller
 Route::get('/marketing-and-business-development', [
 		'as' => 'marketing-and-business-development.index',
-		'uses' => 'MarketingAndBusinessDevelopmentController@index'
+		'uses' => 'Division\MarketingAndBusinessDevelopmentController@index'
 	]);
 
 ############################################################################
 // AccountDepartment Controller
 Route::get('/account', [
 		'as' => 'account.index',
-		'uses' => 'AccountDepartmentController@index'
+		'uses' => 'Administrative\AccountDepartmentController@index'
 	]);
 
 ############################################################################
 // PurchasingDepartment Controller
 Route::get('/purchasing', [
 		'as' => 'purchasing.index',
-		'uses' => 'PurchasingDepartmentController@index'
+		'uses' => 'Administrative\PurchasingDepartmentController@index'
 	]);
 
 ############################################################################
 // PurchasingDepartment Controller
 Route::get('/human-resource', [
 		'as' => 'human-resource.index',
-		'uses' => 'HumanResourceDepartmentController@index'
+		'uses' => 'Administrative\HumanResourceDepartmentController@index'
 	]);
 
 ############################################################################
 // PurchasingDepartment Controller
 Route::get('/it', [
 		'as' => 'it.index',
-		'uses' => 'InformationTechnologyDepartmentController@index'
+		'uses' => 'Administrative\InformationTechnologyDepartmentController@index'
 	]);
 
 ############################################################################
 // CuttingDepartment Controller
 Route::get('/cutting', [
 		'as' => 'cutting.index',
-		'uses' => 'CuttingDepartmentController@index'
+		'uses' => 'Production\CuttingDepartmentController@index'
 	]);
 
 ############################################################################
 // MachiningDepartment Controller
 Route::get('/machining', [
 		'as' => 'machining.index',
-		'uses' => 'MachiningDepartmentController@index'
+		'uses' => 'Production\MachiningDepartmentController@index'
 	]);
 
 ############################################################################
 // BendingDepartment Controller
 Route::get('/bending', [
 		'as' => 'bending.index',
-		'uses' => 'BendingDepartmentController@index'
+		'uses' => 'Production\BendingDepartmentController@index'
 	]);
 
 ############################################################################
 // WeldingDepartment Controller
 Route::get('/welding', [
 		'as' => 'welding.index',
-		'uses' => 'WeldingDepartmentController@index'
+		'uses' => 'Production\WeldingDepartmentController@index'
 	]);
 
 ############################################################################
 // PaintingDepartment Controller
 Route::get('/painting', [
 		'as' => 'painting.index',
-		'uses' => 'PaintingDepartmentController@index'
+		'uses' => 'Production\PaintingDepartmentController@index'
 	]);
 
 ############################################################################
 // AutomationDepartment Controller
 Route::get('/automation', [
 		'as' => 'automation.index',
-		'uses' => 'AutomationDepartmentController@index'
+		'uses' => 'Production\AutomationDepartmentController@index'
 	]);
 
 ############################################################################
 // QualityControlDepartment Controller
 Route::get('/quality-control', [
 		'as' => 'quality-control.index',
-		'uses' => 'QualityControlDepartmentController@index'
+		'uses' => 'Production\QualityControlDepartmentController@index'
 	]);
 
 ############################################################################
 // AssemblyDepartment Controller
 Route::get('/assembly', [
 		'as' => 'assembly.index',
-		'uses' => 'AssemblyDepartmentController@index'
+		'uses' => 'Production\AssemblyDepartmentController@index'
 	]);
 
 ############################################################################
 // DeliveryDepartment Controller
 Route::get('/delivery', [
 		'as' => 'delivery.index',
-		'uses' => 'DeliveryDepartmentController@index'
+		'uses' => 'Production\DeliveryDepartmentController@index'
 	]);
 
 ############################################################################
 // MaintenanceDepartment Controller
 Route::get('/maintenance', [
 		'as' => 'maintenance.index',
-		'uses' => 'MaintenanceDepartmentController@index'
+		'uses' => 'Production\MaintenanceDepartmentController@index'
 	]);
 
 ############################################################################
 // InventoryDepartment Controller
 Route::get('/inventory', [
 		'as' => 'inventory.index',
-		'uses' => 'InventoryDepartmentController@index'
+		'uses' => 'Production\InventoryDepartmentController@index'
 	]);
 
 ############################################################################
 // SalesMarketingDepartment Controller
 Route::get('/sales-marketing', [
 		'as' => 'sales-marketing.index',
-		'uses' => 'SalesMarketingDepartmentController@index'
+		'uses' => 'Sales\SalesMarketingDepartmentController@index'
 	]);
 
 ############################################################################
 // CostingDepartment Controller
 Route::get('/costing', [
 		'as' => 'costing.index',
-		'uses' => 'CostingDepartmentController@index'
+		'uses' => 'Sales\CostingDepartmentController@index'
 	]);
 
 ############################################################################
 // EngineeringDepartment Controller
 Route::get('/engineering', [
 		'as' => 'engineering.index',
-		'uses' => 'EngineeringDepartmentController@index'
+		'uses' => 'Sales\EngineeringDepartmentController@index'
 	]);
 
 ############################################################################
 // CustomerServiceDepartment Controller
 Route::get('/cust-service', [
 		'as' => 'cust-service.index',
-		'uses' => 'CustomerServiceDepartmentController@index'
+		'uses' => 'Sales\CustomerServiceDepartmentController@index'
 	]);
 
 

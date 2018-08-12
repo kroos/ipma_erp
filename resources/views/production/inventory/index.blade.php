@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header"><h1>Cutting Department</h1></div>
+	<div class="card-header"><h1>Inventory Department</h1></div>
 	<div class="card-body">
 		@include('layouts.info')
 		@include('layouts.errorform')
@@ -10,7 +10,7 @@
 		<ul class="nav nav-tabs">
 @foreach( App\Model\Division::find(2)->hasmanydepartment()->get() as $key)
 			<li class="nav-item">
-				<a class="nav-link {{ ($key->id == 11)? 'active' : '' }}" href="{{ route("$key->route.index") }}">{{ $key->department }}</a>
+				<a class="nav-link {{ ($key->id == 21)? 'active' : '' }}" href="{{ route("$key->route.index") }}">{{ $key->department }}</a>
 			</li>
 @endforeach
 			<li class="nav-item">
