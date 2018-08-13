@@ -216,6 +216,11 @@ Route::get('/cust-service', [
 		'uses' => 'Sales\CustomerServiceDepartmentController@index'
 	]);
 
+############################################################################
+// human resource dept
+// StaffAnnualMCLeave Controller
+Route::resource('staffAnnualMCLeaveController', 'Administrative\HumanResource\StaffAnnualMCLeaveController');
+
 
 
 

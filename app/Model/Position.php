@@ -6,7 +6,17 @@ namespace App\Model;
 
 class Position extends Model
 {
-    // protected $table = 'positions';
+    protected $table = 'positions';
+
+    public function hasonestaff()
+    {
+    	return $this->hasOne('App\Model\Staff', 'position_id');
+    }
+
+    public function hasonecategoryposition()
+    {
+    	return $this->hasOne('App\Model\CategoryPosition', 'position_id');
+    }
 
     public function belongtodivision()
     {

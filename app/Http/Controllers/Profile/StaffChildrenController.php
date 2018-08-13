@@ -20,7 +20,7 @@ class StaffChildrenController extends Controller
     function __construct()
     {
         $this->middleware('auth');
-        // $this->middleware('admin', ['except' => ['create', 'store']]);
+        $this->middleware('userchild', ['only' => ['show', 'edit', 'update', 'destroy']]);
     }
     /**
      * Display a listing of the resource.

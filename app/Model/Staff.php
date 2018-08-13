@@ -51,6 +51,16 @@ class Staff extends Model
 		return $this->hasMany('App\Model\StaffEducation');
 	}
 
+    public function hasmanystaffannualmcleave()
+    {
+        return $this->hasMany('App\Model\StaffAnnualMCLeave', 'staff_id');
+    }
+
+    public function belongtoposition()
+    {
+        return $this->belongsTo('App\Model\Position', 'position_id');
+    }
+
     public function belongtogender()
     {
     	return $this->belongsTo('App\Model\Gender', 'gender_id');
@@ -85,4 +95,5 @@ class Staff extends Model
     {
     	return $this->belongsTo('App\Model\Location', 'location_id');
     }
+
 }

@@ -25,7 +25,7 @@ class StaffProfileController extends Controller
     function __construct()
     {
         $this->middleware('auth');
-        // $this->middleware('admin', ['except' => ['create', 'store']]);
+        $this->middleware('userown', ['only' => ['show', 'edit', 'update']]);
     }
 
     /**

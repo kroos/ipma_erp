@@ -59,5 +59,16 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // middleware for Director, HR and User (me) purpose
+        'userown' => \App\Http\Middleware\StaffProfile\RedirectIfNotOwner::class,
+        'userchild' => \App\Http\Middleware\StaffProfile\RedirectIfNotChildren::class,
+        'userspouse' => \App\Http\Middleware\StaffProfile\RedirectIfNotSpouse::class,
+        'usersibling' => \App\Http\Middleware\StaffProfile\RedirectIfNotSibling::class,
+        'useremergencyperson' => \App\Http\Middleware\StaffProfile\RedirectIfNotEmergencyPerson::class,
+        'usereducation' => \App\Http\Middleware\StaffProfile\RedirectIfNotEducation::class,
+        'useremergencyphone' => \App\Http\Middleware\StaffProfile\RedirectIfNotEmergencyPerson::class,
+
     ];
 }

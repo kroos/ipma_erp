@@ -19,7 +19,7 @@ class StaffEducationController extends Controller
 	function __construct()
 	{
 		$this->middleware('auth');
-		// $this->middleware('admin', ['except' => ['create', 'store']]);
+		$this->middleware('usereducation', ['except' => ['create', 'store']]);
 	}
 	/**
 	* Display a listing of the resource.

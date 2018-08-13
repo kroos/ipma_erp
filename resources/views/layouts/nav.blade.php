@@ -18,16 +18,13 @@
 				<li class="nav-item">
 					<a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
 				</li>
-<!-- 				<li class="nav-item">
-					<a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-				</li> -->
 			@else
 <?php
 $div = App\Model\Division::all();
 ?>
 @foreach($div as $divs)
 				<li class="nav-item">
-					<a class="nav-link" href="{{ route("$divs->route.index") }}">{{ $divs->division }}</a>
+					<a class="nav-link active" href="{{ route("$divs->route.index") }}">{{ $divs->division }}</a>
 				</li>
 @endforeach
 				<li class="nav-item dropdown">
