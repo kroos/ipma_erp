@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Administrative\HumanResource;
 
-use App\Model\CategoryPosition;
+use App\Model\StaffAnnualMCLeave;
+
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class CategoryPositionController extends Controller
+class StaffAnnualMCLeaveController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +43,10 @@ class CategoryPositionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\CategoryPosition  $categoryPosition
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(CategoryPosition $categoryPosition)
+    public function show(StaffAnnualMCLeave $staffAnnualMCLeave )
     {
         //
     }
@@ -52,10 +54,10 @@ class CategoryPositionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\CategoryPosition  $categoryPosition
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(CategoryPosition $categoryPosition)
+    public function edit(StaffAnnualMCLeave $staffAnnualMCLeave)
     {
         //
     }
@@ -64,10 +66,10 @@ class CategoryPositionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\CategoryPosition  $categoryPosition
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CategoryPosition $categoryPosition)
+    public function update(Request $request, StaffAnnualMCLeave $staffAnnualMCLeave)
     {
         //
     }
@@ -75,10 +77,10 @@ class CategoryPositionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\CategoryPosition  $categoryPosition
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CategoryPosition $categoryPosition)
+    public function destroy(StaffAnnualMCLeave $staffAnnualMCLeave)
     {
         //
     }

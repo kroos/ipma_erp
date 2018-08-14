@@ -24,7 +24,7 @@ $div = App\Model\Division::all();
 ?>
 @foreach($div as $divs)
 				<li class="nav-item">
-					<a class="nav-link active" href="{{ route("$divs->route.index") }}">{{ $divs->division }}</a>
+					<a class="nav-link {{ (\Auth::user()->belongtostaff->belongtoposition->belongtodivision->id == $divs->id)?'active':'disable' }}" href="{{ route("$divs->route.index") }}">{{ $divs->division }}</a>
 				</li>
 @endforeach
 				<li class="nav-item dropdown">

@@ -15,8 +15,9 @@ class RedirectIfNotEmergencyPersonPhone
      */
     public function handle($request, Closure $next)
     {
-        // dd( $request->route()->staffEmergencyPersonPhone->emergency_person_id );
-        if ( ! $request->user()->editStaffEmergencyPersonPhone( $request->route()->staffEmergencyPersonPhone->emergency_person_id ) ) {
+        // dd( $request->route()->staffEmergencyPersonPhone->belongtoemergencyperson->get() );
+        // dd( $request->user()->editStaffEmergencyPersonPhone('1') );
+        if ( ! $request->user()->editStaffEmergencyPersonPhone( $request->route()->staffEmergencyPersonPhone->belongtoemergencyperson->staff_id ) ) {
             return redirect()->back();
         }
         return $next($request);

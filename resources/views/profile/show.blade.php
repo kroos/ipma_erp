@@ -43,7 +43,7 @@ function my($string) {
 										</tr>
 										<tr>
 											<td scope="col">Kategori :</td>
-											<td scope="col">{{ empty($staff->position_id)?'Not Set':$staff->belongtoposition->hasonecategoryposition->belongtocategory->category }}</td>
+											<td scope="col">{{ empty($staff->position_id)?'Not Set':$staff->belongtoposition->belongtocategory->category }}</td>
 										</tr>
 										<tr>
 											<td scope="col">Divisi :</td>
@@ -51,7 +51,7 @@ function my($string) {
 										</tr>
 										<tr>
 											<td scope="col">Jabatan :</td>
-											<td scope="col">{{ empty($staff->position_id)?'Not Set':$staff->belongtoposition->belongtodepartment->department }}</td>
+											<td scope="col">{{ empty($staff->position_id)?'Not Set': empty($staff->belongtoposition->belongtodepartment->department)?'': $staff->belongtoposition->belongtodepartment->department }}</td>
 										</tr>
 										<tr>
 											<td scope="col">Jawatan :</td>

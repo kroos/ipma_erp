@@ -13,11 +13,6 @@ class Position extends Model
     	return $this->hasOne('App\Model\Staff', 'position_id');
     }
 
-    public function hasonecategoryposition()
-    {
-    	return $this->hasOne('App\Model\CategoryPosition', 'position_id');
-    }
-
     public function belongtodivision()
     {
     	return $this->belongsTo('App\Model\Division', 'division_id');
@@ -26,5 +21,15 @@ class Position extends Model
     public function belongtodepartment()
     {
     	return $this->belongsTo('App\Model\Department', 'department_id');
+    }
+
+    public function belongtogroup()
+    {
+        return $this->belongsTo('App\Model\Group', 'group_id');
+    }
+
+    public function belongtocategory()
+    {
+        return $this->belongsTo('App\Model\Category', 'category_id');
     }
 }

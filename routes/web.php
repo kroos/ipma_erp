@@ -64,8 +64,8 @@ Route::resource('staffEducation', 'Profile\StaffEducationController');
 
 ############################################################################
 // GeneralAndAdministrative Controller
-Route::get('/general-and-administrative', [
-		'as' => 'general-and-administrative.index',
+Route::get('/generalandadministrative', [
+		'as' => 'generalandadministrative.index',
 		'uses' => 'Division\GeneralAndAdministrativeController@index'
 	]);
 
@@ -78,8 +78,8 @@ Route::get('/production', [
 
 ############################################################################
 // StaffEducation Controller
-Route::get('/marketing-and-business-development', [
-		'as' => 'marketing-and-business-development.index',
+Route::get('/marketingandbusinessdevelopment', [
+		'as' => 'marketingandbusinessdevelopment.index',
 		'uses' => 'Division\MarketingAndBusinessDevelopmentController@index'
 	]);
 
@@ -99,8 +99,8 @@ Route::get('/purchasing', [
 
 ############################################################################
 // PurchasingDepartment Controller
-Route::get('/human-resource', [
-		'as' => 'human-resource.index',
+Route::get('/humanresource', [
+		'as' => 'humanresource.index',
 		'uses' => 'Administrative\HumanResourceDepartmentController@index'
 	]);
 
@@ -155,8 +155,8 @@ Route::get('/automation', [
 
 ############################################################################
 // QualityControlDepartment Controller
-Route::get('/quality-control', [
-		'as' => 'quality-control.index',
+Route::get('/qualitycontrol', [
+		'as' => 'qualitycontrol.index',
 		'uses' => 'Production\QualityControlDepartmentController@index'
 	]);
 
@@ -190,8 +190,8 @@ Route::get('/inventory', [
 
 ############################################################################
 // SalesMarketingDepartment Controller
-Route::get('/sales-marketing', [
-		'as' => 'sales-marketing.index',
+Route::get('/salesmarketing', [
+		'as' => 'salesmarketing.index',
 		'uses' => 'Sales\SalesMarketingDepartmentController@index'
 	]);
 
@@ -211,15 +211,15 @@ Route::get('/engineering', [
 
 ############################################################################
 // CustomerServiceDepartment Controller
-Route::get('/cust-service', [
-		'as' => 'cust-service.index',
+Route::get('/custservice', [
+		'as' => 'custservice.index',
 		'uses' => 'Sales\CustomerServiceDepartmentController@index'
 	]);
 
 ############################################################################
 // human resource dept
 // StaffAnnualMCLeave Controller
-Route::resource('staffAnnualMCLeaveController', 'Administrative\HumanResource\StaffAnnualMCLeaveController');
+Route::resource('staffAnnualMCLeave', 'Administrative\HumanResource\StaffAnnualMCLeaveController');
 
 
 

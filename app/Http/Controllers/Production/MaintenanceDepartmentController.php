@@ -13,7 +13,7 @@ class MaintenanceDepartmentController extends Controller
 	function __construct()
 	{
 		$this->middleware('auth');
-		// $this->middleware('admin', ['except' => ['create', 'store']]);
+		$this->middleware('deptaccess');
 	}
 
 	public function index()

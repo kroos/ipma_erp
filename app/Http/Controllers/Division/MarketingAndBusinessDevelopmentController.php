@@ -12,7 +12,7 @@ class MarketingAndBusinessDevelopmentController extends Controller
 	function __construct()
 	{
 		$this->middleware('auth');
-		// $this->middleware('admin', ['except' => ['create', 'store']]);
+		$this->middleware('diviaccess');
 	}
 
 	public function index()

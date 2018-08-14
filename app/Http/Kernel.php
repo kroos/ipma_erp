@@ -35,6 +35,8 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+
+
         ],
 
         'api' => [
@@ -66,9 +68,15 @@ class Kernel extends HttpKernel
         'userchild' => \App\Http\Middleware\StaffProfile\RedirectIfNotChildren::class,
         'userspouse' => \App\Http\Middleware\StaffProfile\RedirectIfNotSpouse::class,
         'usersibling' => \App\Http\Middleware\StaffProfile\RedirectIfNotSibling::class,
-        'useremergencyperson' => \App\Http\Middleware\StaffProfile\RedirectIfNotEmergencyPerson::class,
         'usereducation' => \App\Http\Middleware\StaffProfile\RedirectIfNotEducation::class,
-        'useremergencyphone' => \App\Http\Middleware\StaffProfile\RedirectIfNotEmergencyPerson::class,
+        'useremergencyperson' => \App\Http\Middleware\StaffProfile\RedirectIfNotEmergencyPerson::class,
+        'useremergencyphone' => \App\Http\Middleware\StaffProfile\RedirectIfNotEmergencyPersonPhone::class,
+
+        'diviaccess' => \App\Http\Middleware\Division\RedirectIfNotDivision::class,
+
+        'deptaccess' => \App\Http\Middleware\Department\RedirectIfNotDepartment::class,
+
+
 
     ];
 }

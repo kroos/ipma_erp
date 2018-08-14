@@ -10,12 +10,9 @@
 		<ul class="nav nav-tabs">
 @foreach( App\Model\Division::find(2)->hasmanydepartment()->get() as $key)
 			<li class="nav-item">
-				<a class="nav-link {{ ($key->id == 11)? 'active' : '' }}" href="{{ route("$key->route.index") }}">{{ $key->department }}</a>
+				<a class="nav-link {{ ($key->id == 11)? 'active' : 'disabled' }}" href="{{ route("$key->route.index") }}">{{ $key->department }}</a>
 			</li>
 @endforeach
-			<li class="nav-item">
-				<a class="nav-link disabled" href="#">Disabled</a>
-			</li>
 		</ul>
 
 	</div>
