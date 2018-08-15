@@ -41,22 +41,27 @@ function my($string) {
 											<td scope="col">ID Pekerja :</td>
 											<td scope="col">{{ empty($staff->hasmanylogin()->where('active', 1)->first()->username)?'Not Set':$staff->hasmanylogin()->where('active', 1)->first()->username }}</td>
 										</tr>
+
 										<tr>
 											<td scope="col">Kategori :</td>
 											<td scope="col">{{ empty($staff->position_id)?'Not Set':$staff->belongtoposition->belongtocategory->category }}</td>
 										</tr>
+
 										<tr>
 											<td scope="col">Divisi :</td>
 											<td scope="col">{{ empty($staff->position_id)?'Not Set':$staff->belongtoposition->belongtodivision->division }}</td>
 										</tr>
+
 										<tr>
 											<td scope="col">Jabatan :</td>
 											<td scope="col">{{ empty($staff->position_id)?'Not Set': empty($staff->belongtoposition->belongtodepartment->department)?'': $staff->belongtoposition->belongtodepartment->department }}</td>
 										</tr>
+
 										<tr>
 											<td scope="col">Jawatan :</td>
 											<td scope="col">{{ empty($staff->position_id)?'Not Set':$staff->belongtoposition->position }}</td>
 										</tr>
+
 										<tr>
 											<td scope="col">Lokasi :</td>
 											<td scope="col">{{ empty($staff->location_id)?'Not Set':$staff->belongtolocation->location }}</td>
