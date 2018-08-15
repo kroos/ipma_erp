@@ -21,10 +21,15 @@
 			@else
 <?php
 $div = App\Model\Division::all();
+// dd( \Auth::user()->belongtostaff->belongtomanyposition );
 ?>
 @foreach($div as $divs)
 				<li class="nav-item">
-					<a class="nav-link {{ (\Auth::user()->belongtostaff->belongtoposition->belongtodivision->id == $divs->id)?'active':'disable' }}" href="{{ route("$divs->route.index") }}">{{ $divs->division }}</a>
+					<a class="nav-link 
+@foreach( \Auth::user()->belongtostaff->belongtomanyposition as $val )
+										{{ ( $val->division_id == $divs->id )?'active':'disable' }}
+@endforeach
+					" href="{{ route("$divs->route.index") }}">{{ $divs->division }}</a>
 				</li>
 @endforeach
 				<li class="nav-item dropdown">
@@ -34,6 +39,7 @@ $div = App\Model\Division::all();
 
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 						<a class="dropdown-item" href="{{ route('staff.show', Auth::user()->staff_id ) }}">{{ __('Profile') }}</a>
+						<a class="dropdown-item" href="{{ route('staffLeave.index') }}">{{ __('Staff Leave Record') }}</a>
 
 						<a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
 							{{ __('Logout') }}

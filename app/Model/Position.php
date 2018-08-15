@@ -8,9 +8,10 @@ class Position extends Model
 {
     protected $table = 'positions';
 
-    public function hasonestaff()
+// https://laravel.com/docs/5.6/eloquent-relationships#many-to-many
+    public function belongtomanystaff()
     {
-    	return $this->hasOne('App\Model\Staff', 'position_id');
+    	return $this->belongsToMany('App\Model\Staff', 'staff_positions', 'staff_id', 'position_id' )->withPivot('main')->withTimestamps();
     }
 
     public function belongtodivision()

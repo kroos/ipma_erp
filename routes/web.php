@@ -221,6 +221,15 @@ Route::get('/custservice', [
 // StaffAnnualMCLeave Controller
 Route::resource('staffAnnualMCLeave', 'Administrative\HumanResource\StaffAnnualMCLeaveController');
 
+############################################################################
+// human resource dept
+// StaffLeave Controller
+Route::resource('staffLeave', 'Profile\StaffLeaveController');
+
+
+
+
+
 
 
 

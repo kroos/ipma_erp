@@ -56,11 +56,20 @@ class Staff extends Model
         return $this->hasMany('App\Model\StaffAnnualMCLeave', 'staff_id');
     }
 
-    public function belongtoposition()
+    public function hasmanystaffleave()
     {
-        return $this->belongsTo('App\Model\Position', 'position_id');
+        return $this->hasMany('App\Model\StaffLeave', 'staff_id');
     }
 
+// https://laravel.com/docs/5.6/eloquent-relationships#many-to-many
+    public function belongtomanyposition()
+    {
+        return $this->belongsToMany('App\Model\Position', 'staff_positions', 'staff_id', 'position_id' )->withPivot('main')->withTimestamps();
+    }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+    // belongto
     public function belongtogender()
     {
     	return $this->belongsTo('App\Model\Gender', 'gender_id');
