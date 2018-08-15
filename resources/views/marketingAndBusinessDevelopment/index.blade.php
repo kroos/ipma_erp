@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header"><h1>Production Division</h1></div>
+	<div class="card-header"><h1>Marketing & Business Development Division</h1></div>
 	<div class="card-body">
 		@include('layouts.info')
 		@include('layouts.errorform')

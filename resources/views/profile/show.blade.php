@@ -41,21 +41,20 @@ function my($string) {
 											<td scope="col">ID Pekerja :</td>
 											<td scope="col">{{ empty($staff->hasmanylogin()->where('active', 1)->first()->username)?'Not Set':$staff->hasmanylogin()->where('active', 1)->first()->username }}</td>
 										</tr>
-@dd(\Auth::user()->belongtostaff->belongtomanyposition())
-@foreach( \Auth::user()->belongtostaff->belongtomanyposition()->orderBy('staff_positions.main', 'desc') as $val )
-										<tr class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}">
+@foreach( \Auth::user()->belongtostaff->belongtomanyposition()->orderBy('staff_positions.main', 'desc')->get() as $val )
+										<tr>
 											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">Kategori :</td>
 											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">{{ empty($val->id)?'Not Set':$val->belongtocategory->category }}</td>
 										</tr>
-										<tr class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}">
+										<tr>
 											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">Divisi :</td>
 											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">{{ empty($val->id)?'Not Set':$val->belongtodivision->division }}</td>
 										</tr>
-										<tr class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}">
+										<tr>
 											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">Jabatan :</td>
 											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">{{ empty($val->id)?'Not Set': empty($val->department_id)?'': $val->belongtodepartment->department }}</td>
 										</tr>
-										<tr class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}">
+										<tr>
 											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">Jawatan :</td>
 											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">{{ empty($val->id)?'Not Set':$val->position }}</td>
 										</tr>
