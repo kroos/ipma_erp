@@ -34,17 +34,18 @@ class Login extends Authenticatable
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // all acl will be done here
+    // only main position is counted, else, deny access
     public function isOwner( $id ) {
         if ( auth()->user()->belongtostaff->id == $id ) {
             return true;
         } else {
-            if( \Auth::user()->belongtostaff->belongtoposition->belongtogroup->id == '1' || \Auth::user()->belongtostaff->belongtoposition->belongtogroup->id == '2' ){
-                return true;
-            }else{
-                return false;
+            $re = \Auth::user()->belongtostaff->belongtomanyposition;
+            foreach ($re as $key) {
+                if($key->pivot->main == 1) {
+                    if($key->group_id == 1 || $key->group_id == 2) {return true;} else {return false;}
+                }
             }
-            // return false;
-       }
+        }
     }
 
     public function editStaffChildren( $id )
@@ -59,7 +60,6 @@ class Login extends Authenticatable
                 }else{
                     return false;
                 }
-                // return false;
             }
         }
     }

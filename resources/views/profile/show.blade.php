@@ -41,7 +41,8 @@ function my($string) {
 											<td scope="col">ID Pekerja :</td>
 											<td scope="col">{{ empty($staff->hasmanylogin()->where('active', 1)->first()->username)?'Not Set':$staff->hasmanylogin()->where('active', 1)->first()->username }}</td>
 										</tr>
-@foreach( \Auth::user()->belongtostaff->belongtomanyposition as $val )
+@dd(\Auth::user()->belongtostaff->belongtomanyposition())
+@foreach( \Auth::user()->belongtostaff->belongtomanyposition()->orderBy('staff_positions.main', 'desc') as $val )
 										<tr class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}">
 											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">Kategori :</td>
 											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">{{ empty($val->id)?'Not Set':$val->belongtocategory->category }}</td>
