@@ -41,27 +41,24 @@ function my($string) {
 											<td scope="col">ID Pekerja :</td>
 											<td scope="col">{{ empty($staff->hasmanylogin()->where('active', 1)->first()->username)?'Not Set':$staff->hasmanylogin()->where('active', 1)->first()->username }}</td>
 										</tr>
-
-										<tr>
-											<td scope="col">Kategori :</td>
-											<td scope="col">{{ empty($staff->position_id)?'Not Set':$staff->belongtoposition->belongtocategory->category }}</td>
+@foreach( \Auth::user()->belongtostaff->belongtomanyposition as $val )
+										<tr class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}">
+											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">Kategori :</td>
+											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">{{ empty($val->id)?'Not Set':$val->belongtocategory->category }}</td>
 										</tr>
-
-										<tr>
-											<td scope="col">Divisi :</td>
-											<td scope="col">{{ empty($staff->position_id)?'Not Set':$staff->belongtoposition->belongtodivision->division }}</td>
+										<tr class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}">
+											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">Divisi :</td>
+											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">{{ empty($val->id)?'Not Set':$val->belongtodivision->division }}</td>
 										</tr>
-
-										<tr>
-											<td scope="col">Jabatan :</td>
-											<td scope="col">{{ empty($staff->position_id)?'Not Set': empty($staff->belongtoposition->belongtodepartment->department)?'': $staff->belongtoposition->belongtodepartment->department }}</td>
+										<tr class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}">
+											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">Jabatan :</td>
+											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">{{ empty($val->id)?'Not Set': empty($val->department_id)?'': $val->belongtodepartment->department }}</td>
 										</tr>
-
-										<tr>
-											<td scope="col">Jawatan :</td>
-											<td scope="col">{{ empty($staff->position_id)?'Not Set':$staff->belongtoposition->position }}</td>
+										<tr class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}">
+											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">Jawatan :</td>
+											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">{{ empty($val->id)?'Not Set':$val->position }}</td>
 										</tr>
-
+@endforeach
 										<tr>
 											<td scope="col">Lokasi :</td>
 											<td scope="col">{{ empty($staff->location_id)?'Not Set':$staff->belongtolocation->location }}</td>
