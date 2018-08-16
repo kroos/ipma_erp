@@ -13,7 +13,16 @@
 // dd(\Auth::user()->belongtostaff->id);
 $lea = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where( 'created_at', '>=', \Carbon\Carbon::now()->copy()->startOfYear() )->get();
 // dd($lea);
+
+function my($string) {
+	if (empty($string))	{
+		$string = '1900-01-01';		
+	}
+	$rt = \Carbon\Carbon::createFromFormat('Y-m-d', $string);
+	return date('D, d F Y', mktime(0, 0, 0, $rt->month, $rt->day, $rt->year));
+}
 ?>
+Y-m-d H:i
 @if( $lea->count() > 0 )
 		<table class="table table-hover" id="leaves">
 			<thead>
@@ -21,7 +30,8 @@ $lea = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->i
 					<th>id</th>
 					<th>Date Apply</th>
 					<th>Leave</th>
-					<th>Date Leave</th>
+					<th>Reason</th>
+					<th>Date/Time Leave</th>
 					<th>Period</th>
 					<th>Backup Person</th>
 					<th>Approval & Remarks</th>
@@ -30,12 +40,26 @@ $lea = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->i
 			<tbody>
 @foreach($lea as $leav)
 				<tr>
-					<td>{{ $leav->id }}</td>
-					<td>{{ \Carbon\Carbon::parse($leav->created_at)->format('Y-m-d H:i') }}</td>
-					<td>{{ $leav->leave_id }}</td>
+					<td>HR{{ date('Y-m').'-'.$leav->id }}</td>
+					<td>{{ \Carbon\Carbon::parse($leav->created_at)->format('D, j F Y') }}</td>
+					<td>{{ $leav->belongtoleave->leave }}</td>
 					<td>{{ $leav->reason }}</td>
-					<td>{{ $leav->date_time_start.' => '.$leav->date_time_end }}</td>
-					<td></td>
+					<td>
+						<table class="table table-hover">
+							<tbody>
+								<tr><td>From :</td>
+									<td>{{ ($leav->leave_id != 8)?\Carbon\Carbon::parse($leav->date_time_start)->format('j F Y '):\Carbon\Carbon::parse($leav->date_time_start)->format('j F Y g:i a') }}</td>
+								</tr>
+								<tr>
+									<td>To :</td>
+									<td>{{ ($leav->leave_id != 8 )?\Carbon\Carbon::parse($leav->date_time_end)->format('j F Y'):\Carbon\Carbon::parse($leav->date_time_end)->format('j F Y g:i a') }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+					<td>
+						{{ \Carbon\Carbon::parse($leav->date_time_start)->diff(\Carbon\Carbon::parse($leav->date_time_end))->format('%d days %h hours %i minutes') }}
+					</td>
 					<td></td>
 					<td></td>
 				</tr>
@@ -46,7 +70,8 @@ $lea = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->i
 					<th>id</th>
 					<th>Date Apply</th>
 					<th>Leave</th>
-					<th>Date Leave</th>
+					<th>Reason</th>
+					<th>Date/Time Leave</th>
 					<th>Period</th>
 					<th>Backup Person</th>
 					<th>Approval & Remarks</th>
