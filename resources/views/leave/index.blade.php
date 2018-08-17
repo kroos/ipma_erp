@@ -26,7 +26,7 @@ function my($string) {
 		<table class="table table-hover" id="leaves">
 			<thead>
 				<tr>
-					<th>id</th>
+					<th>ID</th>
 					<th>Date Apply</th>
 					<th>Leave</th>
 					<th>Reason</th>
@@ -47,7 +47,11 @@ $userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
 			<tbody>
 @foreach($lea as $leav)
 				<tr>
-					<td>HR{{ date('Y-m').'-'.$leav->id }}</td>
+					<td>
+						<a href="{{ route('staffLeave.show', $leav->id) }}" alt="Details" title="Details">HR{{ date('Y-m').'-'.$leav->id }}</a><br />
+						<a href="{{ __('route') }}" alt="Print PDF" title="Print PDF"><i class="far fa-file-pdf"></i></a><br />
+						<a href="{{ __('route') }}" alt="Cancel" title="Cancel"><i class="fas fa-ban"></i></a><br />
+					</td>
 					<td>{{ \Carbon\Carbon::parse($leav->created_at)->format('D, j F Y') }}</td>
 					<td>{{ $leav->belongtoleave->leave }}</td>
 					<td>{{ $leav->reason }}</td>
@@ -70,12 +74,7 @@ $userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
 @if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
 					<td>
 						<table class="table table-hover">
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Status</th>
-								</tr>
-							</thead>
+
 							<tbody>
 								<tr>
 									<td>{{ (empty($leav->hasonestaffleavebackup))?'':$leav->hasonestaffleavebackup->belongtostaff->name }}</td>
@@ -87,13 +86,6 @@ $userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
 @endif
 					<td>
 						<table class="table table-hover">
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Status</th>
-									<th>Remarks</th>
-								</tr>
-							</thead>
 							<tbody>
 @foreach( $leav->hasmanystaffapproval()->get() as $appr )
 								<tr>
