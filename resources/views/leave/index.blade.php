@@ -22,7 +22,6 @@ function my($string) {
 	return date('D, d F Y', mktime(0, 0, 0, $rt->month, $rt->day, $rt->year));
 }
 ?>
-Y-m-d H:i
 @if( $lea->count() > 0 )
 		<table class="table table-hover" id="leaves">
 			<thead>
@@ -33,7 +32,15 @@ Y-m-d H:i
 					<th>Reason</th>
 					<th>Date/Time Leave</th>
 					<th>Period</th>
+<!-- checking if the user dont need a backup -->
+<?php
+$usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
+$userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
+// dd( $userneedbackup );
+?>
+@if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
 					<th>Backup Person</th>
+@endif
 					<th>Approval & Remarks</th>
 				</tr>
 			</thead>
@@ -48,35 +55,59 @@ Y-m-d H:i
 						<table class="table table-hover">
 							<tbody>
 								<tr><td>From :</td>
-									<td>{{ ($leav->leave_id != 8)?\Carbon\Carbon::parse($leav->date_time_start)->format('j F Y '):\Carbon\Carbon::parse($leav->date_time_start)->format('j F Y g:i a') }}</td>
+									<td>{{ ($leav->leave_id != 8)?\Carbon\Carbon::parse($leav->date_time_start)->format('D, j F Y '):\Carbon\Carbon::parse($leav->date_time_start)->format('D, j F Y g:i a') }}</td>
 								</tr>
 								<tr>
 									<td>To :</td>
-									<td>{{ ($leav->leave_id != 8 )?\Carbon\Carbon::parse($leav->date_time_end)->format('j F Y'):\Carbon\Carbon::parse($leav->date_time_end)->format('j F Y g:i a') }}</td>
+									<td>{{ ($leav->leave_id != 8 )?\Carbon\Carbon::parse($leav->date_time_end)->format('D, j F Y'):\Carbon\Carbon::parse($leav->date_time_end)->format('D, j F Y g:i a') }}</td>
 								</tr>
 							</tbody>
 						</table>
 					</td>
 					<td>
-						{{ \Carbon\Carbon::parse($leav->date_time_start)->diff(\Carbon\Carbon::parse($leav->date_time_end))->format('%d days %h hours %i minutes') }}
+						{{ ($leav->leave_id != 8 )?\Carbon\Carbon::parse($leav->date_time_start)->diff(\Carbon\Carbon::parse($leav->date_time_end)->addDay())->format('%d day/s'):\Carbon\Carbon::parse($leav->date_time_start)->diff(\Carbon\Carbon::parse($leav->date_time_end))->format('%h hours %i minutes') }}
 					</td>
-					<td></td>
-					<td></td>
+@if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
+					<td>
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>{{ (empty($leav->hasonestaffleavebackup))?'':$leav->hasonestaffleavebackup->belongtostaff->name }}</td>
+									<td>{{ (empty($leav->hasonestaffleavebackup))?'':($leav->hasonestaffleavebackup->acknowledge != 0)?'Accept':'Pending' }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+@endif
+					<td>
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Status</th>
+									<th>Remarks</th>
+								</tr>
+							</thead>
+							<tbody>
+@foreach( $leav->hasmanystaffapproval()->get() as $appr )
+								<tr>
+									<td>{{ $appr->belongtostaff->name }}</td>
+									<td>{{ ( !isset($appr->approval) )?'Pending':(($appr->approval == 1)?'Approve':'Reject') }}</td>
+									<td>{{ $appr->notes_by_approval }}</td>
+								</tr>
+@endforeach
+							</tbody>
+						</table>
+					</td>
 				</tr>
 @endforeach
 			</tbody>
-			<tfoot>
-				<tr>
-					<th>id</th>
-					<th>Date Apply</th>
-					<th>Leave</th>
-					<th>Reason</th>
-					<th>Date/Time Leave</th>
-					<th>Period</th>
-					<th>Backup Person</th>
-					<th>Approval & Remarks</th>
-				</tr>
-			</tfoot>
 		</table>
 
 @else
