@@ -12,7 +12,7 @@ class StaffAnnualMCLeave extends Model
 {
 	use SoftDeletes;
 
-	protected $table = 'staff_annual_mc_leaves';
+	protected $table = 'staff_annual_mc_maternity_leaves';
 
     public function belomgtostaff()
     {
