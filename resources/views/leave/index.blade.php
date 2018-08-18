@@ -48,9 +48,12 @@ $userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
 @foreach($lea as $leav)
 				<tr>
 					<td>
-						<a href="{{ route('staffLeave.show', $leav->id) }}" alt="Details" title="Details">HR{{ date('Y-m').'-'.$leav->id }}</a><br />
-						<a href="{{ __('route') }}" alt="Print PDF" title="Print PDF"><i class="far fa-file-pdf"></i></a><br />
-						<a href="{{ __('route') }}" alt="Cancel" title="Cancel"><i class="fas fa-ban"></i></a><br />
+						<a href="{{ route('staffLeave.show', $leav->id) }}" alt="Details" title="Details">HR9-{{ str_pad( $leav->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ date('Y') }}</a>
+							<br />
+						<a href="{{ __('route') }}" alt="Print PDF" title="Print PDF"><i class="far fa-file-pdf"></i></a>
+							<br />
+						<a href="{{ __('route') }}" alt="Cancel" title="Cancel"><i class="fas fa-ban"></i></a>
+							<br />
 					</td>
 					<td>{{ \Carbon\Carbon::parse($leav->created_at)->format('D, j F Y') }}</td>
 					<td>{{ $leav->belongtoleave->leave }}</td>

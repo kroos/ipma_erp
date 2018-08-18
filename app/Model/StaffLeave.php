@@ -4,9 +4,15 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+
 class StaffLeave extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'staff_leaves';
+    protected $dates = ['deleted_at'];
 
     public function hasonestaffleavebackup()
     {
