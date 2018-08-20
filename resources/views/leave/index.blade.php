@@ -26,29 +26,38 @@ function my($string) {
 		<table class="table table-hover" id="leaves">
 			<thead>
 				<tr>
-					<th>ID</th>
-					<th>Date Apply</th>
-					<th>Leave</th>
-					<th>Reason</th>
-					<th>Date/Time Leave</th>
-					<th>Period</th>
+					<th rowspan="2">ID</th>
+					<th rowspan="2">Date Apply</th>
+					<th rowspan="2">Leave</th>
+					<th rowspan="2">Reason</th>
+					<th colspan="2">Date/Time Leave</th>
+					<th rowspan="2">Period</th>
 <!-- checking if the user dont need a backup -->
 <?php
 $usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
 $userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
-// dd( $userneedbackup );
 ?>
 @if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
-					<th>Backup Person</th>
+					<th colspan="2">Backup Person</th>
 @endif
-					<th>Approval & Remarks</th>
+					<th rowspan="2">Approval & Remarks</th>
+				</tr>
+				<tr>
+					<th>From</th>
+					<th>To</th>
+					<th>Name</th>
+					<th>Status</th>
 				</tr>
 			</thead>
 			<tbody>
 @foreach($lea as $leav)
 				<tr>
 					<td>
-						<a href="{{ route('staffLeave.show', $leav->id) }}" alt="Details" title="Details">HR9-{{ str_pad( $leav->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ date('Y') }}</a>
+<?php
+$arr = str_split( date('Y'), 2 );
+// echo $arr[1].'<br />';
+?>
+						<a href="{{ route('staffLeave.show', $leav->id) }}" alt="Details" title="Details">HR9-{{ str_pad( $leav->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}</a>
 							<br />
 						<a href="{{ __('route') }}" alt="Print PDF" title="Print PDF"><i class="far fa-file-pdf"></i></a>
 							<br />
@@ -59,33 +68,17 @@ $userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
 					<td>{{ $leav->belongtoleave->leave }}</td>
 					<td>{{ $leav->reason }}</td>
 					<td>
-						<table class="table table-hover">
-							<tbody>
-								<tr><td>From :</td>
-									<td>{{ ($leav->leave_id != 8)?\Carbon\Carbon::parse($leav->date_time_start)->format('D, j F Y '):\Carbon\Carbon::parse($leav->date_time_start)->format('D, j F Y g:i a') }}</td>
-								</tr>
-								<tr>
-									<td>To :</td>
-									<td>{{ ($leav->leave_id != 8 )?\Carbon\Carbon::parse($leav->date_time_end)->format('D, j F Y'):\Carbon\Carbon::parse($leav->date_time_end)->format('D, j F Y g:i a') }}</td>
-								</tr>
-							</tbody>
-						</table>
+						{{ ($leav->leave_id != 8)?\Carbon\Carbon::parse($leav->date_time_start)->format('D, j F Y '):\Carbon\Carbon::parse($leav->date_time_start)->format('D, j F Y g:i a') }}
+					</td>
+					<td>
+						{{ ($leav->leave_id != 8 )?\Carbon\Carbon::parse($leav->date_time_end)->format('D, j F Y'):\Carbon\Carbon::parse($leav->date_time_end)->format('D, j F Y g:i a') }}
 					</td>
 					<td>
 						{{ ($leav->leave_id != 8 )?\Carbon\Carbon::parse($leav->date_time_start)->diff(\Carbon\Carbon::parse($leav->date_time_end)->addDay())->format('%d day/s'):\Carbon\Carbon::parse($leav->date_time_start)->diff(\Carbon\Carbon::parse($leav->date_time_end))->format('%h hours %i minutes') }}
 					</td>
 @if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
-					<td>
-						<table class="table table-hover">
-
-							<tbody>
-								<tr>
-									<td>{{ (empty($leav->hasonestaffleavebackup))?'':$leav->hasonestaffleavebackup->belongtostaff->name }}</td>
-									<td>{{ (empty($leav->hasonestaffleavebackup))?'':($leav->hasonestaffleavebackup->acknowledge != 0)?'Accept':'Pending' }}</td>
-								</tr>
-							</tbody>
-						</table>
-					</td>
+					<td>{{ (empty($leav->hasonestaffleavebackup))?'':$leav->hasonestaffleavebackup->belongtostaff->name }}</td>
+					<td>{{ (empty($leav->hasonestaffleavebackup))?'':($leav->hasonestaffleavebackup->acknowledge != 0)?'Accept':'Pending' }}</td>
 @endif
 					<td>
 						<table class="table table-hover">

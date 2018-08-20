@@ -1,11 +1,11 @@
-<div class="col-6">
+<div class="col-12">
 	<div class="card">
 		<div class="card-header">
-			<h2 class="card-title">Children</h2>
+			<h2 class="card-title">Leave Application</h2>
 		</div>
 		<div class="card-body">
 
-						<div class="form-group row {{ $errors->has('children') ? 'has-error' : '' }}">
+<!-- 						<div class="form-group row {{ $errors->has('children') ? 'has-error' : '' }}">
 							{{ Form::label( 'npasa', 'Nama Anak : ', ['class' => 'col-sm-2 col-form-label'] ) }}
 							<div class="col-sm-10">
 								{{ Form::text('children', @$value, ['class' => 'form-control', 'id' => 'npasa', 'placeholder' => 'Nama Anak', 'autocomplete' => 'off']) }}
@@ -17,25 +17,47 @@
 							<div class="col-sm-10">
 								{{ Form::text('dob', @$value, ['class' => 'form-control', 'id' => 'dob_1', 'placeholder' => 'Tarikh Lahir', 'autocomplete' => 'off']) }}
 							</div>
-						</div>
-	<?php
-	$gender = App\Model\Gender::pluck('gender', 'id')->sortKeys()->toArray();
-	?>
-						<div class="form-group row {{ $errors->has('gender_id') ? 'has-error' : '' }}">
-							{{ Form::label( 'gen', 'Jantina : ', ['class' => 'col-sm-2 col-form-label'] ) }}
-							<div class="col-sm-10">
-								{{ Form::select('gender_id', $gender, @$value, ['class' => 'form-control', 'id' => 'gen', 'placeholder' => 'Jantina', 'autocomplete' => 'off']) }}
+						</div> -->
+
+						<div class="row">
+							<div class="col-lg-6">
+								<div class="form-group {{ $errors->has('date_time_start') ? 'has-error' : '' }}">
+									{{ Form::label('from', 'From : ') }}
+									{{ Form::text('date_time_start', @$value, ['class' => 'form-control', 'id' => 'from', 'placeholder' => 'From : ', 'autocomplete' => 'off']) }}
+								</div>
+							</div>
+							<div class="col-lg-6">
+								<div class="form-group {{ $errors->has('date_time_end') ? 'has-error' : '' }}">
+									{{ Form::label('to', 'To : ') }}
+									{{ Form::text('date_time_end', @$value, ['class' => 'form-control', 'id' => 'to', 'placeholder' => 'To : ', 'autocomplete' => 'off']) }}
+								</div>
+
 							</div>
 						</div>
-	<?php
-	$eduLevel = App\Model\EducationLevel::pluck('education_level', 'id')->sortKeys()->toArray();
-	?>
-						<div class="form-group row {{ $errors->has('education_level_id') ? 'has-error' : '' }}">
-							{{ Form::label( 'edulevel', 'Tahap Pengajian : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+
+
+						<div class="form-group row {{ $errors->has('leave_id') ? 'has-error' : '' }}">
+							{{ Form::label( 'leave', 'Cuti : ', ['class' => 'col-sm-2 col-form-label'] ) }}
 							<div class="col-sm-10">
-								{{ Form::select('education_level_id', $eduLevel, @$value, ['class' => 'form-control', 'id' => 'edulevel', 'placeholder' => 'Tahap Pelajaran', 'autocomplete' => 'off']) }}
+	<?php
+	$leave = App\Model\leave::all('leave', 'id');
+	?>
+								<select name="leave_id" class="form-control" id="leave" autocomplete="off">
+									<option value="" >Leave Type</option>
+	@foreach($leave as $leav)
+		@//if()
+									<option value="{{ $leav->id }}" >{{ $leav->leave }}</option>
+		@//endif
+	@endforeach
+								</select>
 							</div>
 						</div>
+
+
+
+
+
+
 	<?php
 	$healthStat = App\Model\HealthStatus::pluck('health_status', 'id')->sortKeys()->toArray();
 	?>
@@ -82,3 +104,14 @@
 
 	</div>
 </div>
+<!-- <div class="col-6">
+	<div class="card">
+		<div class="card-title"><h2>second column</h2></div>
+		<div class="card-body">
+			asd
+		</div>
+		<div class="card-footer">
+			asd
+		</div>
+	</div>
+</div> -->

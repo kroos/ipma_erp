@@ -25,5 +25,37 @@ $("#username").keyup(function() {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+//select2
+$('#leave').select2({
+	placeholder: 'Leave Type'
+});
+/////////////////////////////////////////////////////////////////////////////////////////
+// datetime for the 1st one
+$('#from').datetimepicker({
+	format:'YYYY-MM-DD',
+	format:'LT',
+	// viewMode: 'years',
+	useCurrent: true,
+})
+.on('dp.change dp.show dp.update', function(e) {
+	// $('#form').bootstrapValidator('revalidateField', 'from');
+	var minDate = $('#from').val();
+	$('#to').datetimepicker('minDate', minDate);
+});
+
+$('#to').datetimepicker({
+	format:'YYYY-MM-DD',
+	format:'LT',
+	// viewMode: 'years',
+	useCurrent: true,
+})
+.on('dp.change dp.show dp.update', function(e) {
+	// $('#form').bootstrapValidator('revalidateField', 'to');
+	var maxDate = $('#to').val();
+	$('#from').datetimepicker('maxDate', maxDate);
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
 @endsection
 
