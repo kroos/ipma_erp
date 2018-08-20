@@ -25,6 +25,7 @@ try {
 	require('jquery.cookie');
 	require('pc-bootstrap4-datetimepicker');
 	require('select2');
+	require('moment');
 	window.swal = require ('sweetalert2');
 
 
