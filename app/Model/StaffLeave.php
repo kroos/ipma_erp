@@ -23,6 +23,11 @@ class StaffLeave extends Model
     {
         return $this->hasMany('App\Model\StaffLeaveApproval', 'staff_leave_id');
     }
+
+    public function hasmanystaffleavereplacement()
+    {
+        return $this->hasMany('App\Model\StaffLeaveReplacement', 'staff_leave_id');
+    }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function belongtostaff()
     {
