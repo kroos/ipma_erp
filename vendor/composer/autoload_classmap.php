@@ -39,7 +39,6 @@ return array(
     'App\\Http\\Controllers\\StaffProfileController' => $baseDir . '/app/Http/Controllers/StaffProfileController.php',
     'App\\Http\\Controllers\\StaffSiblingController' => $baseDir . '/app/Http/Controllers/StaffSiblingController.php',
     'App\\Http\\Controllers\\StaffSpouseController' => $baseDir . '/app/Http/Controllers/StaffSpouseController.php',
-    'App\\Http\\Controllers\\StaffStatusController' => $baseDir . '/app/Http/Controllers/StaffStatusController.php',
     'App\\Http\\Controllers\\StatusController' => $baseDir . '/app/Http/Controllers/StatusController.php',
     'App\\Http\\Controllers\\TaxExamptionPercentageController' => $baseDir . '/app/Http/Controllers/TaxExamptionPercentageController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',

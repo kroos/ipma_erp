@@ -6,7 +6,7 @@ namespace App\Model;
 // load Model
 // use App\Model\Status;
 
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StaffAnnualMCLeave extends Model
 {

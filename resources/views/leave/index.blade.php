@@ -8,35 +8,59 @@
 		@include('layouts.errorform')
 		<h2 class="card-title">Leaves Detail</h2>
 
-
-
-
-
-
-
+<?php
+// checking AL, MC
+$leaveALMC = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->where('year', date('Y'))->first();
+// dd($leaveALMC->first());
+?>
 		<dl class="row">
-			<dt class="col-sm-3">Description lists</dt>
-			<dd class="col-sm-9">A description list is perfect for defining terms.</dd>
-
-			<dt class="col-sm-3">Euismod</dt>
+			<dt class="col-sm-3"><h5 class="text-danger">Perhatian :</h5></dt>
 			<dd class="col-sm-9">
-				<p>Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.</p>
-				<p>Donec id elit non mi porta gravida at eget metus.</p>
+				<p>Sebelum anda boleh mengisi borang permohonan cuti, sila isikan dahulu butiran mengenai anda <a href="{{ route('staff.edit', \Auth::user()->belongtostaff->id ) }}" >disini</a>.</p>
+				<p>Sebaik sahaja anda selesai melengkapkan maklumat mengenai diri anda, anda dibenarkan untuk memohon cuti melaui pautan dibawah <span class="font-weight-bold">"Leave Application"</span></p>
 			</dd>
 
-			<dt class="col-sm-3">Malesuada porta</dt>
-			<dd class="col-sm-9">Etiam porta sem malesuada magna mollis euismod.</dd>
-
-			<dt class="col-sm-3 text-truncate">Truncated term is truncated</dt>
-			<dd class="col-sm-9">Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</dd>
-
-			<dt class="col-sm-3">Nesting</dt>
+			<dt class="col-sm-3"><h5>Annual Leave :</h5></dt>
 			<dd class="col-sm-9">
 				<dl class="row">
-					<dt class="col-sm-4">Nested definition list</dt>
-					<dd class="col-sm-8">Aenean posuere, tortor sed cursus feugiat, nunc augue blandit nunc.</dd>
+					<dt class="col-sm-3">Initialize : </dt>
+					<dd class="col-sm-9">{{ $leaveALMC->annual_leave + $leaveALMC->annual_leave_adjustment }} days</dd>
+					<dt class="col-sm-3">Balance :</dt>
+					<dd class="col-sm-9"><span class=" {{ ($leaveALMC->annual_leave_balance < 4)?'text-danger font-weight-bold':'' }}">{{ $leaveALMC->annual_leave_balance }} days</span>
+					</dd>
 				</dl>
 			</dd>
+
+			<dt class="col-sm-3"><h5>MC Leave :</h5></dt>
+			<dd class="col-sm-9">
+				<dl class="row">
+					<dt class="col-sm-3">Initialize :</dt>
+					<dd class="col-sm-9">{{ $leaveALMC->medical_leave + $leaveALMC->medical_leave_adjustment }} days</dd>
+					<dt class="col-sm-3">Balance :</dt>
+					<dd class="col-sm-9"><span class=" {{ ($leaveALMC->medical_leave_balance < 4)?'text-danger font-weight-bold':'' }}">{{ $leaveALMC->medical_leave_balance }} days</span></dd>
+				</dl>
+			</dd>
+
+@if( \Auth::user()->belongtostaff->gender_id == 2 )
+			<dt class="col-sm-3 text-truncate"><h5>Maternity Leave :</h5></dt>
+			<dd class="col-sm-9">
+				<dl class="row">
+					<dt class="col-sm-3">Initialize :</dt>
+					<dd class="col-sm-9">{{ $leaveALMC->maternity_leave + $leaveALMC->maternity_leave_adjustment }} days</dd>
+					<dt class="col-sm-3">Balance :</dt>
+					<dd class="col-sm-9"><span class=" {{ ($leaveALMC->maternity_leave_balance < 4)?'text-danger font-weight-bold':'' }}">{{ $leaveALMC->maternity_leave_balance }} days</span></dd>
+				</dl>
+			</dd>
+@endif
+			<dt class="col-sm-3"><h5>Unpaid Leave Utilize :</h5></dt>
+			<dd class="col-sm-9">{{ \Auth::user()->belongtostaff->hasmanystaffleave()->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [5, 6])->get()->count() }} days</dd>
+<?php
+$oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave_balance', '<>', 0)->get();
+?>
+@if($oi->sum('leave_balance') > 0)
+			<dt class="col-sm-3"><h5>Non Replacement Leave (Cuti Ganti) :</h5></dt>
+			<dd class="col-sm-9">{{ $oi->sum('leave_balance') }} days</dd>
+@endif
 		</dl>
 
 
@@ -142,7 +166,12 @@ $arr = str_split( date('Y'), 2 );
 
 	</div>
 	<div class="card-footer">
-		<p><a href="{{ route('staffLeave.create') }}" class="btn btn-primary">Apply Leave</a></p>
+<?php
+$w = \Auth::user()->belongtostaff->gender_id;
+$r = \Auth::user()->belongtostaff->mobile;
+?>
+
+		<p><a href="{{ ( empty($w) && empty($r) )?route('staff.edit', \Auth::user()->belongtostaff->id):route('staffLeave.create') }}" class="btn btn-primary">{{ ( empty($w) && empty($r) )?'Butiran Diri':'Leave Application' }}</a></p>
 	</div>
 </div>
 @endsection

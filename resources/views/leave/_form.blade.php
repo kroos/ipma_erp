@@ -11,13 +11,28 @@
 								{{ Form::text('children', @$value, ['class' => 'form-control', 'id' => 'npasa', 'placeholder' => 'Nama Anak', 'autocomplete' => 'off']) }}
 							</div>
 						</div>
+-->
 
-						<div class="form-group row {{ $errors->has('dob') ? 'has-error' : '' }}">
-							{{ Form::label( 'dob_1', 'Tarikh Lahir : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+						<div class="form-group row {{ $errors->has('leave_id') ? 'has-error' : '' }}">
+							{{ Form::label( 'leave_id', 'Pilih Cuti : ', ['class' => 'col-sm-2 col-form-label'] ) }}
 							<div class="col-sm-10">
-								{{ Form::text('dob', @$value, ['class' => 'form-control', 'id' => 'dob_1', 'placeholder' => 'Tarikh Lahir', 'autocomplete' => 'off']) }}
+<?php
+$er = App\Model\Leave::all();
+
+// checking for annual leave, mc, nrl and maternity
+$ty = \Auth::user()->belongtostaff->gender_id;
+// dd($ty);
+?>
+								<select name="leave_id" id="leave_id" class="form-control" autocomplete="off">
+									<option value="">Leave Type</option>
+@foreach($er as $lev)
+	@if( $ty->gender_id != 2 )
+									<option value="{{ $lev->id }}">{{ $lev->leave }}</option>
+	@endif
+@endforeach
+								</select>
 							</div>
-						</div> -->
+						</div>
 
 						<div class="row">
 							<div class="col-lg-6">

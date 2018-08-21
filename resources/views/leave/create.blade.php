@@ -7,6 +7,13 @@
 		@include('layouts.info')
 		@include('layouts.errorform')
 
+		<dl class="row">
+			<dt class="col-sm-3"><h5 class="text-danger">Perhatian :</h5></dt>
+			<dd class="col-sm-9">
+				<p class="lead"></p>
+			</dd>
+		</dl>
+
 {!! Form::open(['route' => ['staffLeave.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
 	@include('leave._form')
 {{ Form::close() }}
@@ -26,14 +33,14 @@ $("#username").keyup(function() {
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //select2
-$('#leave').select2({
+$('#leave_id').select2({
 	placeholder: 'Leave Type'
 });
 /////////////////////////////////////////////////////////////////////////////////////////
 // datetime for the 1st one
 $('#from').datetimepicker({
 	format:'YYYY-MM-DD',
-	format:'LT',
+	// format:'LT',
 	// viewMode: 'years',
 	useCurrent: true,
 })
@@ -45,7 +52,7 @@ $('#from').datetimepicker({
 
 $('#to').datetimepicker({
 	format:'YYYY-MM-DD',
-	format:'LT',
+	// format:'LT',
 	// viewMode: 'years',
 	useCurrent: true,
 })
