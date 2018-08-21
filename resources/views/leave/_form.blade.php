@@ -123,21 +123,29 @@ if($lev->id != 5 && $lev->id != 6) {
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="col-lg-6">
-					<div class="form-group {{ $errors->has('date_time_start') ? 'has-error' : '' }}">
-						{{ Form::label('from', 'From : ') }}
-						{{ Form::text('date_time_start', @$value, ['class' => 'form-control', 'id' => 'from', 'placeholder' => 'From : ', 'autocomplete' => 'off']) }}
+
+
+			<div id="wrapper">
+				<div class="row">
+					<div class="col-lg-6">
+						<div class="form-group {{ $errors->has('date_time_start') ? 'has-error' : '' }}">
+							{{ Form::label('from', 'From : ') }}
+							{{ Form::text('date_time_start', @$value, ['class' => 'form-control', 'id' => 'from', 'placeholder' => 'From : ', 'autocomplete' => 'off']) }}
+						</div>
 					</div>
-				</div>
-				<div class="col-lg-6">
-					<div class="form-group {{ $errors->has('date_time_end') ? 'has-error' : '' }}">
-						{{ Form::label('to', 'To : ') }}
-						{{ Form::text('date_time_end', @$value, ['class' => 'form-control', 'id' => 'to', 'placeholder' => 'To : ', 'autocomplete' => 'off']) }}
+					<div class="col-lg-6">
+						<div class="form-group {{ $errors->has('date_time_end') ? 'has-error' : '' }}">
+							{{ Form::label('to', 'To : ') }}
+							{{ Form::text('date_time_end', @$value, ['class' => 'form-control', 'id' => 'to', 'placeholder' => 'To : ', 'autocomplete' => 'off']) }}
+						</div>
+				
 					</div>
-			
 				</div>
 			</div>
+
+
+
+
 
 
 
