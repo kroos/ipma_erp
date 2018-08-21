@@ -16,7 +16,7 @@ $leaveALMC = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->where('y
 		<dl class="row">
 			<dt class="col-sm-3"><h5 class="text-danger">Perhatian :</h5></dt>
 			<dd class="col-sm-9">
-				<p>Sebelum anda boleh mengisi borang permohonan cuti, sila isikan dahulu butiran mengenai anda <a href="{{ route('staff.edit', \Auth::user()->belongtostaff->id ) }}" >disini</a>.</p>
+				<p>Sebelum anda boleh mengisi borang permohonan cuti, sila isikan dahulu butiran mengenai anda <a href="{{ route('staff.edit', \Auth::user()->belongtostaff->id ) }}" class="font-weight-bold" >disini</a>.</p>
 				<p>Sebaik sahaja anda selesai melengkapkan maklumat mengenai diri anda, anda dibenarkan untuk memohon cuti melaui pautan dibawah <span class="font-weight-bold">"Leave Application"</span></p>
 			</dd>
 

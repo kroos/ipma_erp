@@ -10,7 +10,7 @@
 		<dl class="row">
 			<dt class="col-sm-3"><h5 class="text-danger">Perhatian :</h5></dt>
 			<dd class="col-sm-9">
-				<p class="lead"></p>
+				<p class="lead">Permohonan Cuti Mestilah Sekurang-kurangnya <span class="font-weight-bold">TIGA (3)</span> Hari Lebih Awal dari Tarikh Bercuti.</p>
 			</dd>
 		</dl>
 
