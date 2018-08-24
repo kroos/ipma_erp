@@ -22,9 +22,11 @@
 		
 	</div>
 </div>
+<script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"></script>
 @endsection
 
 @section('js')
+<!-- console.log(moment().add(3, 'days').format('YYYY-MM-DD')); -->
 /////////////////////////////////////////////////////////////////////////////////////////
 //ucwords
 $("#username").keyup(function() {
@@ -42,7 +44,9 @@ $('#from').datetimepicker({
 	format:'YYYY-MM-DD',
 	// format:'LT',
 	// viewMode: 'years',
-	useCurrent: true,
+	// useCurrent: true,
+	daysOfWeekDisabled: [0],
+	minDate: moment().add(3, 'days').format('YYYY-MM-DD'),
 })
 .on('dp.change dp.show dp.update', function(e) {
 	// $('#form').bootstrapValidator('revalidateField', 'from');
@@ -54,7 +58,9 @@ $('#to').datetimepicker({
 	format:'YYYY-MM-DD',
 	// format:'LT',
 	// viewMode: 'years',
-	useCurrent: true,
+	// useCurrent: true,
+	daysOfWeekDisabled: [0],
+	minDate: moment().add(3, 'days').format('YYYY-MM-DD'),
 })
 .on('dp.change dp.show dp.update', function(e) {
 	// $('#form').bootstrapValidator('revalidateField', 'to');
@@ -63,6 +69,27 @@ $('#to').datetimepicker({
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+$('#leave_id').on('change', function() {
+	$selection = $(this).find(':selected');
+	// $('#opt_value').val($selection.val());
+	// $('#opt_price').val($selection.data('price'));
 
+	if ($selection.val() == '9') {
+		$('#remove').remove();
+		$('#wrapper').append(
+				'<p class="text-danger text-justify" id="remove">Price 3</p>'
+			);
+	}
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// ckeditor
+CKEDITOR.replace( 'reason' );
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////
 @endsection
 

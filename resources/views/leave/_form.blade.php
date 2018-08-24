@@ -126,21 +126,63 @@ if($lev->id != 5 && $lev->id != 6) {
 
 
 			<div id="wrapper">
-				<div class="row">
-					<div class="col-lg-6">
-						<div class="form-group {{ $errors->has('date_time_start') ? 'has-error' : '' }}">
-							{{ Form::label('from', 'From : ') }}
-							{{ Form::text('date_time_start', @$value, ['class' => 'form-control', 'id' => 'from', 'placeholder' => 'From : ', 'autocomplete' => 'off']) }}
-						</div>
-					</div>
-					<div class="col-lg-6">
-						<div class="form-group {{ $errors->has('date_time_end') ? 'has-error' : '' }}">
-							{{ Form::label('to', 'To : ') }}
-							{{ Form::text('date_time_end', @$value, ['class' => 'form-control', 'id' => 'to', 'placeholder' => 'To : ', 'autocomplete' => 'off']) }}
-						</div>
-				
+
+				<!-- annual leave -->
+				<div class="form-group row {{ $errors->has('reason') ? 'has-error' : '' }}">
+					{{ Form::label( 'reason', 'Sebab Cuti : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+					<div class="col-sm-10">
+						{{ Form::textarea('reason', @$value, ['class' => 'form-control', 'id' => 'reason', 'placeholder' => 'Sebab Cuti', 'autocomplete' => 'off']) }}
 					</div>
 				</div>
+
+				<div class="form-group row {{ $errors->has('date_time_start') ? 'has-error' : '' }}">
+					{{ Form::label('from', 'From : ', ['class' => 'col-sm-2 col-form-label']) }}
+					<div class="col-sm-10">
+						{{ Form::text('date_time_start', @$value, ['class' => 'form-control', 'id' => 'from', 'placeholder' => 'From : ', 'autocomplete' => 'off']) }}
+					</div>
+				</div>
+
+				<div class="form-group row {{ $errors->has('date_time_end') ? 'has-error' : '' }}">
+					{{ Form::label('to', 'To : ', ['class' => 'col-sm-2 col-form-label']) }}
+					<div class="col-sm-10">
+						{{ Form::text('date_time_end', @$value, ['class' => 'form-control', 'id' => 'to', 'placeholder' => 'To : ', 'autocomplete' => 'off']) }}
+					</div>
+				</div>
+
+				<div class="form-group row {{ $errors->has('date_time_end') ? 'has-error' : '' }}">
+					{{ Form::label('leave_type', 'Jenis Cuti : ', ['class' => 'col-sm-2 col-form-label']) }}
+					<div class="col-sm-10">
+						<div class="pretty p-default p-curve form-check">
+							{{ Form::radio('leave_type', '1', true, ['id' => 'radio1']) }}
+							<div class="state p-success">
+								{{ Form::label('radio1', 'Cuti Penuh', ['class' => 'form-check-label']) }}
+							</div>
+						</div>
+						<div class="pretty p-default p-curve form-check">
+							{{ Form::radio('leave_type', '0', NULL, ['id' => 'radio2']) }}
+							<div class="state p-success">
+								{{ Form::label('radio2', 'Cuti Separuh', ['class' => 'form-check-label']) }}
+							</div>
+						</div>
+					</div>
+
+					<div class="row col-sm-10 offset-sm-2"  id="leave_period">
+						<div class="pretty p-default p-curve form-check">
+							{{ Form::radio('leave_half', '1', true, ['id' => 'am']) }}
+							<div class="state p-primary">
+								{{ Form::label('am', 'Pagi time', ['class' => 'form-check-label']) }}
+							</div>
+						</div>
+						<div class="pretty p-default p-curve form-check">
+							{{ Form::radio('leave_half', '0', true, ['id' => 'pm']) }}
+							<div class="state p-primary">
+								{{ Form::label('pm', 'Petang time', ['class' => 'form-check-label']) }}
+							</div>
+						</div>
+					</div>
+
+				</div>
+
 			</div>
 
 
