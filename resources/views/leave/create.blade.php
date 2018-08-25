@@ -22,21 +22,21 @@
 		
 	</div>
 </div>
-<script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"></script>
+<!-- <script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"></script> -->
 @endsection
 
 @section('js')
 <!-- console.log(moment().add(3, 'days').format('YYYY-MM-DD')); -->
 /////////////////////////////////////////////////////////////////////////////////////////
 //ucwords
-$("#username").keyup(function() {
-	uch(this);
+$("#reason").keyup(function() {
+	tch(this);
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //select2
-$('#leave_id').select2({
-	placeholder: 'Leave Type'
+$('#leave_id, #backupperson').select2({
+	placeholder: 'Please Choose'
 });
 /////////////////////////////////////////////////////////////////////////////////////////
 // datetime for the 1st one
@@ -52,6 +52,32 @@ $('#from').datetimepicker({
 	// $('#form').bootstrapValidator('revalidateField', 'from');
 	var minDate = $('#from').val();
 	$('#to').datetimepicker('minDate', minDate);
+	if($('#from').val() === $('#to').val()) {
+		if( $('.removehalfleave').length === 0) {
+			$('#wrapperday').append(
+					'{{ Form::label('leave_type', 'Jenis Cuti : ', ['class' => 'col-sm-2 col-form-label removehalfleave']) }}' +
+					'<div class="col-sm-10 removehalfleave" id="halfleave">' +
+						'<div class="pretty p-default p-curve form-check removehalfleave" id="removeleavehalf">' +
+							'{{ Form::radio('leave_type', '1', true, ['id' => 'radio1', 'class' => ' removehalfleave']) }}' +
+							'<div class="state p-success removehalfleave">' +
+								'{{ Form::label('radio1', 'Cuti Penuh', ['class' => 'form-check-label removehalfleave']) }}' +
+							'</div>' +
+						'</div>' +
+						'<div class="pretty p-default p-curve form-check removehalfleave" id="appendleavehalf">' +
+							'{{ Form::radio('leave_type', '0', NULL, ['id' => 'radio2', 'class' => ' removehalfleave']) }}' +
+							'<div class="state p-success removehalfleave">' +
+								'{{ Form::label('radio2', 'Cuti Separuh', ['class' => 'form-check-label removehalfleave']) }}' +
+							'</div>' +
+						'</div>' +
+					'</div>' +
+					'<div class="form-group row col-sm-10 offset-sm-2 {{ $errors->has('leave_half') ? 'has-error' : '' }} removehalfleave"  id="wrappertest">' +
+					'</div>'
+			);
+		}
+	}
+	if($('#from').val() !== $('#to').val()) {
+		$('.removehalfleave').remove();
+	}
 });
 
 $('#to').datetimepicker({
@@ -66,7 +92,34 @@ $('#to').datetimepicker({
 	// $('#form').bootstrapValidator('revalidateField', 'to');
 	var maxDate = $('#to').val();
 	$('#from').datetimepicker('maxDate', maxDate);
+	if($('#from').val() === $('#to').val()) {
+		if( $('.removehalfleave').length === 0) {
+			$('#wrapperday').append(
+					'{{ Form::label('leave_type', 'Jenis Cuti : ', ['class' => 'col-sm-2 col-form-label removehalfleave']) }}' +
+					'<div class="col-sm-10 removehalfleave" id="halfleave">' +
+						'<div class="pretty p-default p-curve form-check removehalfleave" id="removeleavehalf">' +
+							'{{ Form::radio('leave_type', '1', true, ['id' => 'radio1', 'class' => ' removehalfleave']) }}' +
+							'<div class="state p-success removehalfleave">' +
+								'{{ Form::label('radio1', 'Cuti Penuh', ['class' => 'form-check-label removehalfleave']) }}' +
+							'</div>' +
+						'</div>' +
+						'<div class="pretty p-default p-curve form-check removehalfleave" id="appendleavehalf">' +
+							'{{ Form::radio('leave_type', '0', NULL, ['id' => 'radio2', 'class' => ' removehalfleave']) }}' +
+							'<div class="state p-success removehalfleave">' +
+								'{{ Form::label('radio2', 'Cuti Separuh', ['class' => 'form-check-label removehalfleave']) }}' +
+							'</div>' +
+						'</div>' +
+					'</div>' +
+					'<div class="form-group row col-sm-10 offset-sm-2 {{ $errors->has('leave_half') ? 'has-error' : '' }} removehalfleave"  id="wrappertest">' +
+					'</div>'
+			);
+		}
+	}
+	if($('#from').val() !== $('#to').val()) {
+		$('.removehalfleave').remove();
+	}
 });
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
 $('#leave_id').on('change', function() {
@@ -84,11 +137,12 @@ $('#leave_id').on('change', function() {
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // ckeditor
-CKEDITOR.replace( 'reason' );
+// CKEDITOR.replace( 'reason' );
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // radio
-$('#appendleavehalf :radio').change(function() {
+$(document).on('change', '#appendleavehalf :radio', function () {
+//$('#appendleavehalf :radio').change(function() {
 	if (this.checked) {
 		$('#wrappertest').append(
 			'<div class="pretty p-default p-curve form-check removetest">' +
@@ -107,7 +161,8 @@ $('#appendleavehalf :radio').change(function() {
 	}
 });
 
-$('#removeleavehalf :radio').change(function() {
+$(document).on('change', '#removeleavehalf :radio', function () {
+//$('#removeleavehalf :radio').change(function() {
 	if (this.checked) {
 		$('.removetest').remove();
 	}
