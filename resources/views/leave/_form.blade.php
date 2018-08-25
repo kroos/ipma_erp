@@ -29,7 +29,7 @@ if($lev->id != 5 && $lev->id != 6) {
 	// geng pempuan, ada maternity leave
 	if( $ty->gender_id == 2 ) {
 		// kalau ada annual balance
-		if($leaveALMC->annual_leave_balance > 0) {
+		if($leaveALMC->annual_leave_balance > 0 && $lev->id != 3) {
 			if($leaveALMC->medical_leave_balance > 0) {
 				if($oi->sum('leave_balance') > 0 ) {
 					echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
@@ -75,7 +75,7 @@ if($lev->id != 5 && $lev->id != 6) {
 		if($ty->gender_id == 1 && $lev->id != 7) {
 
 			// ada annual abalance so ada annual leave
-			if( $leaveALMC->annual_leave_balance > 0 ) {
+			if( $leaveALMC->annual_leave_balance > 0 && $lev->id != 3) {
 
 				// bila medical balance ada, jgn exclude MC leave
 				if( $leaveALMC->medical_leave_balance > 0 ) {
@@ -149,16 +149,16 @@ if($lev->id != 5 && $lev->id != 6) {
 					</div>
 				</div>
 
-				<div class="form-group row {{ $errors->has('date_time_end') ? 'has-error' : '' }}">
+				<div class="form-group row {{ $errors->has('leave_type') ? 'has-error' : '' }}">
 					{{ Form::label('leave_type', 'Jenis Cuti : ', ['class' => 'col-sm-2 col-form-label']) }}
-					<div class="col-sm-10">
-						<div class="pretty p-default p-curve form-check">
+					<div class="col-sm-10" id="halfleave">
+						<div class="pretty p-default p-curve form-check" id="removeleavehalf">
 							{{ Form::radio('leave_type', '1', true, ['id' => 'radio1']) }}
 							<div class="state p-success">
 								{{ Form::label('radio1', 'Cuti Penuh', ['class' => 'form-check-label']) }}
 							</div>
 						</div>
-						<div class="pretty p-default p-curve form-check">
+						<div class="pretty p-default p-curve form-check" id="appendleavehalf">
 							{{ Form::radio('leave_type', '0', NULL, ['id' => 'radio2']) }}
 							<div class="state p-success">
 								{{ Form::label('radio2', 'Cuti Separuh', ['class' => 'form-check-label']) }}
@@ -166,21 +166,55 @@ if($lev->id != 5 && $lev->id != 6) {
 						</div>
 					</div>
 
-					<div class="row col-sm-10 offset-sm-2"  id="leave_period">
-						<div class="pretty p-default p-curve form-check">
-							{{ Form::radio('leave_half', '1', true, ['id' => 'am']) }}
-							<div class="state p-primary">
-								{{ Form::label('am', 'Pagi time', ['class' => 'form-check-label']) }}
-							</div>
-						</div>
-						<div class="pretty p-default p-curve form-check">
-							{{ Form::radio('leave_half', '0', true, ['id' => 'pm']) }}
-							<div class="state p-primary">
-								{{ Form::label('pm', 'Petang time', ['class' => 'form-check-label']) }}
-							</div>
-						</div>
+					<div class="form-group row col-sm-10 offset-sm-2 {{ $errors->has('leave_half') ? 'has-error' : '' }}"  id="wrappertest">
 					</div>
+				</div>
+<?php
+$usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
 
+$userloc = \Auth::user()->belongtostaff->location_id;
+// echo $userloc.'<-- location_id<br />';
+
+$userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
+
+if( empty($usergroup->department_id) && $usergroup->category_id == 1 ) {
+	$rt = \App\Model\Position::where('division_id', $usergroup->division_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
+} else {
+	$rt = \App\Model\Position::where('department_id', $usergroup->department_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
+}
+
+
+
+
+foreach ($rt->get() as $key) {
+	// echo $key->position.' <-- position id<br />';
+	$ft = \App\Model\StaffPosition::where('position_id', $key->id)->get();
+	foreach($ft as $val) {
+		//must checking on same location, active user, almost same level.
+		if (\Auth::user()->belongtostaff->id != $val->belongtostaff->id && \Auth::user()->belongtostaff->location_id == $val->belongtostaff->location_id && $val->belongtostaff->active == 1 ) {
+			// echo $val->belongtostaff->name.' <-- name staff<br />';
+			$sel[$val->belongtostaff->id] = $val->belongtostaff->name;
+		}
+	}
+}
+
+?>
+
+@if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
+				<div class="form-group row {{ $errors->has('staff_id') ? 'has-error' : '' }}">
+					{{ Form::label('to', 'Backup Person : ', ['class' => 'col-sm-2 col-form-label']) }}
+					<div class="col-sm-10">
+						{{ Form::select('staff_id', $sel, NULL, ['class' => 'form-control', 'id' => 'to', 'autocomplete' => 'off']) }}
+					</div>
+				</div>
+@endif
+
+				<div class="form-group row {{ $errors->has('akuan') ? 'has-error' : '' }}">
+					{{ Form::label('akuan2', 'Pengesahan : ', ['class' => 'col-sm-2 col-form-label']) }}
+					<div class="col-sm-10 form-check">
+						{{ Form::checkbox('akuan', 1, @$value, ['class' => 'form-check-input', 'id' => 'akuan1']) }}
+						<label for="akuan1" class="form-check-label lead p-3 mb-2 bg-warning text-dark">Dengan ini saya mengesahkan bahawa segala butiran dan maklumat yang diisi adalah <strong>BETUL</strong> dan <strong>DISEMAK</strong> terdahulu sebelum hantar.</label>
+					</div>
 				</div>
 
 			</div>

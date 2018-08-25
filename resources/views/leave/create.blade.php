@@ -87,6 +87,31 @@ $('#leave_id').on('change', function() {
 CKEDITOR.replace( 'reason' );
 
 /////////////////////////////////////////////////////////////////////////////////////////
+// radio
+$('#appendleavehalf :radio').change(function() {
+	if (this.checked) {
+		$('#wrappertest').append(
+			'<div class="pretty p-default p-curve form-check removetest">' +
+				'{{ Form::radio('leave_half', '1', true, ['id' => 'am']) }}' +
+				'<div class="state p-primary">' +
+					'{{ Form::label('am', 'Pagi time', ['class' => 'form-check-label']) }}' +
+				'</div>' +
+			'</div>' +
+			'<div class="pretty p-default p-curve form-check removetest">' +
+				'{{ Form::radio('leave_half', '0', NULL, ['id' => 'pm']) }}' +
+				'<div class="state p-primary">' +
+					'{{ Form::label('pm', 'Petang time', ['class' => 'form-check-label']) }}' +
+				'</div>' +
+			'</div>'
+		);
+	}
+});
+
+$('#removeleavehalf :radio').change(function() {
+	if (this.checked) {
+		$('.removetest').remove();
+	}
+});
 
 /////////////////////////////////////////////////////////////////////////////////////////
 

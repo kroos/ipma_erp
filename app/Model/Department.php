@@ -6,7 +6,7 @@ namespace App\Model;
 
 class Department extends Model
 {
-    // protected $table = 'departments';
+    protected $table = 'departments';
 
     public function belongtodivision() {
     	return $this->belongsTo('App\Model\Division', 'division_id');
