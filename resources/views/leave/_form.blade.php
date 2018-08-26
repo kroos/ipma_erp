@@ -150,32 +150,7 @@ if($lev->id != 5 && $lev->id != 6) {
 				</div>
 
 				<div class="form-group row {{ $errors->has('leave_type') ? 'has-error' : '' }}" id="wrapperday">
-					{{ Form::label('leave_type', 'Jenis Cuti : ', ['class' => 'col-sm-2 col-form-label removehalfleave']) }}
-					<div class="col-sm-10 removehalfleave" id="halfleave">
-						<div class="pretty p-default p-curve form-check removehalfleave" id="removeleavehalf">
-							{{ Form::radio('leave_type', '1', true, ['id' => 'radio1', 'class' => ' removehalfleave']) }}
-							<div class="state p-success removehalfleave">
-								{{ Form::label('radio1', 'Cuti Penuh', ['class' => 'form-check-label removehalfleave']) }}
-							</div>
-						</div>
-						<div class="pretty p-default p-curve form-check removehalfleave" id="appendleavehalf">
-							{{ Form::radio('leave_type', '0', NULL, ['id' => 'radio2', 'class' => ' removehalfleave']) }}
-							<div class="state p-success removehalfleave">
-								{{ Form::label('radio2', 'Cuti Separuh', ['class' => 'form-check-label removehalfleave']) }}
-							</div>
-						</div>
-					</div>
-					<div class="form-group row col-sm-10 offset-sm-2 {{ $errors->has('leave_half') ? 'has-error' : '' }} removehalfleave"  id="wrappertest">
-					</div>
 				</div>
-
-
-
-
-
-
-
-
 <?php
 $usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
 
@@ -184,14 +159,12 @@ $userloc = \Auth::user()->belongtostaff->location_id;
 
 $userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
 
+// justify for those who doesnt have department
 if( empty($usergroup->department_id) && $usergroup->category_id == 1 ) {
 	$rt = \App\Model\Position::where('division_id', $usergroup->division_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
 } else {
 	$rt = \App\Model\Position::where('department_id', $usergroup->department_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
 }
-
-
-
 
 foreach ($rt->get() as $key) {
 	// echo $key->position.' <-- position id<br />';
@@ -223,12 +196,6 @@ foreach ($rt->get() as $key) {
 				</div>
 
 			</div>
-
-
-
-
-
-
 
 			<div class="form-group row">
 				<div class="col-sm-10 offset-sm-2">

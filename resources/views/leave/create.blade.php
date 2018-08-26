@@ -106,7 +106,7 @@ $('#to').datetimepicker({
 						'<div class="pretty p-default p-curve form-check removehalfleave" id="appendleavehalf">' +
 							'{{ Form::radio('leave_type', '0', NULL, ['id' => 'radio2', 'class' => ' removehalfleave']) }}' +
 							'<div class="state p-success removehalfleave">' +
-								'{{ Form::label('radio2', 'Cuti Separuh', ['class' => 'form-check-label removehalfleave']) }}' +
+								'{{ Form::label('radio2', 'Cuti Separuh Hari', ['class' => 'form-check-label removehalfleave']) }}' +
 							'</div>' +
 						'</div>' +
 					'</div>' +
@@ -142,19 +142,39 @@ $('#leave_id').on('change', function() {
 /////////////////////////////////////////////////////////////////////////////////////////
 // radio
 $(document).on('change', '#appendleavehalf :radio', function () {
-//$('#appendleavehalf :radio').change(function() {
 	if (this.checked) {
+		var daynow = moment($('#from').val(), 'YYYY-MM-DD').format('dddd');
+		var datenow =$('#from').val();
+
+		var data1 = $.ajax({
+			url: "{{ route('workinghour.workingtime') }}",
+			type: "POST",
+			data: {date: datenow, _token: '{!! csrf_token() !!}'},
+			dataType: 'json',
+			global: false,
+			async:false,
+			success: function (response) {
+				// you will get response from your php page (what you echo or print)
+				return response;
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				console.log(textStatus, errorThrown);
+			}
+		}).responseText;
+
+var obj = jQuery.parseJSON( data1 );
+
 		$('#wrappertest').append(
 			'<div class="pretty p-default p-curve form-check removetest">' +
-				'{{ Form::radio('leave_half', '1', true, ['id' => 'am']) }}' +
+				'<input type="radio" name="leave_half" value="1" id="am" checked="checked">' +
 				'<div class="state p-primary">' +
-					'{{ Form::label('am', 'Pagi time', ['class' => 'form-check-label']) }}' +
+					'<label for="am" class="form-check-label">Pagi ' + obj.start_am + ' -> ' + obj.end_am + '</label> ' +
 				'</div>' +
 			'</div>' +
 			'<div class="pretty p-default p-curve form-check removetest">' +
-				'{{ Form::radio('leave_half', '0', NULL, ['id' => 'pm']) }}' +
+				'<input type="radio" name="leave_half" value="0" id="pm">' +
 				'<div class="state p-primary">' +
-					'{{ Form::label('pm', 'Petang time', ['class' => 'form-check-label']) }}' +
+					'<label for="pm" class="form-check-label">Petang ' + obj.start_pm + ' -> ' + obj.end_pm + '</label> ' +
 				'</div>' +
 			'</div>'
 		);

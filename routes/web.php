@@ -226,6 +226,14 @@ Route::resource('staffAnnualMCLeave', 'Administrative\HumanResource\StaffAnnualM
 // StaffLeave Controller
 Route::resource('staffLeave', 'Profile\StaffLeaveController');
 
+############################################################################
+// WorkingHour Ajax Controller
+Route::post('/workinghour', [
+		'as' => 'workinghour.workingtime',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@workingtime'
+	]);
+
+############################################################################
 
 
 
