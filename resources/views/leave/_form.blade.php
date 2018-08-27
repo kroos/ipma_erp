@@ -123,78 +123,21 @@ if($lev->id != 5 && $lev->id != 6) {
 				</div>
 			</div>
 
-
-
-			<div id="wrapper">
-
-				<!-- annual leave -->
-				<div class="form-group row {{ $errors->has('reason') ? 'has-error' : '' }}">
-					{{ Form::label( 'reason', 'Sebab Cuti : ', ['class' => 'col-sm-2 col-form-label'] ) }}
-					<div class="col-sm-10">
-						{{ Form::textarea('reason', @$value, ['class' => 'form-control', 'id' => 'reason', 'placeholder' => 'Sebab Cuti', 'autocomplete' => 'off']) }}
-					</div>
+			<div class="form-group row {{ $errors->has('reason') ? 'has-error' : '' }}">
+				{{ Form::label( 'reason', 'Sebab Cuti : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+				<div class="col-sm-10">
+					{{ Form::textarea('reason', @$value, ['class' => 'form-control', 'id' => 'reason', 'placeholder' => 'Sebab Cuti', 'autocomplete' => 'off']) }}
 				</div>
+			</div>
 
-				<div class="form-group row {{ $errors->has('date_time_start') ? 'has-error' : '' }}">
-					{{ Form::label('from', 'From : ', ['class' => 'col-sm-2 col-form-label']) }}
-					<div class="col-sm-10">
-						{{ Form::text('date_time_start', @$value, ['class' => 'form-control', 'id' => 'from', 'placeholder' => 'From : ', 'autocomplete' => 'off']) }}
-					</div>
+			<div id="wrapper"></div>
+
+			<div class="form-group row {{ $errors->has('akuan') ? 'has-error' : '' }}">
+				{{ Form::label('akuan2', 'Pengesahan : ', ['class' => 'col-sm-2 col-form-label']) }}
+				<div class="col-sm-10 form-check ">
+					{{ Form::checkbox('akuan', 1, @$value, ['class' => 'form-check-input bg-warning rounded', 'id' => 'akuan1']) }}
+					<label for="akuan1" class="form-check-label p-3 mb-2 bg-warning text-danger rounded">Dengan ini saya mengesahkan bahawa segala butiran dan maklumat yang diisi adalah <strong>BETUL</strong> dan <strong>DISEMAK</strong> terdahulu sebelum hantar.</label>
 				</div>
-
-				<div class="form-group row {{ $errors->has('date_time_end') ? 'has-error' : '' }}">
-					{{ Form::label('to', 'To : ', ['class' => 'col-sm-2 col-form-label']) }}
-					<div class="col-sm-10">
-						{{ Form::text('date_time_end', @$value, ['class' => 'form-control', 'id' => 'to', 'placeholder' => 'To : ', 'autocomplete' => 'off']) }}
-					</div>
-				</div>
-
-				<div class="form-group row {{ $errors->has('leave_type') ? 'has-error' : '' }}" id="wrapperday">
-				</div>
-<?php
-$usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
-
-$userloc = \Auth::user()->belongtostaff->location_id;
-// echo $userloc.'<-- location_id<br />';
-
-$userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
-
-// justify for those who doesnt have department
-if( empty($usergroup->department_id) && $usergroup->category_id == 1 ) {
-	$rt = \App\Model\Position::where('division_id', $usergroup->division_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
-} else {
-	$rt = \App\Model\Position::where('department_id', $usergroup->department_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
-}
-
-foreach ($rt->get() as $key) {
-	// echo $key->position.' <-- position id<br />';
-	$ft = \App\Model\StaffPosition::where('position_id', $key->id)->get();
-	foreach($ft as $val) {
-		//must checking on same location, active user, almost same level.
-		if (\Auth::user()->belongtostaff->id != $val->belongtostaff->id && \Auth::user()->belongtostaff->location_id == $val->belongtostaff->location_id && $val->belongtostaff->active == 1 ) {
-			// echo $val->belongtostaff->name.' <-- name staff<br />';
-			$sel[$val->belongtostaff->id] = $val->belongtostaff->name;
-		}
-	}
-}
-?>
-@if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
-				<div class="form-group row {{ $errors->has('staff_id') ? 'has-error' : '' }}">
-					{{ Form::label('backupperson', 'Backup Person : ', ['class' => 'col-sm-2 col-form-label']) }}
-					<div class="col-sm-10">
-						{{ Form::select('staff_id', $sel, NULL, ['class' => 'form-control', 'id' => 'backupperson', 'placeholder' => 'Please Choose', 'autocomplete' => 'off']) }}
-					</div>
-				</div>
-@endif
-
-				<div class="form-group row {{ $errors->has('akuan') ? 'has-error' : '' }}">
-					{{ Form::label('akuan2', 'Pengesahan : ', ['class' => 'col-sm-2 col-form-label']) }}
-					<div class="col-sm-10 form-check">
-						{{ Form::checkbox('akuan', 1, @$value, ['class' => 'form-check-input', 'id' => 'akuan1']) }}
-						<label for="akuan1" class="form-check-label lead p-3 mb-2 bg-warning text-dark rounded">Dengan ini saya mengesahkan bahawa segala butiran dan maklumat yang diisi adalah <strong>BETUL</strong> dan <strong>DISEMAK</strong> terdahulu sebelum hantar.</label>
-					</div>
-				</div>
-
 			</div>
 
 			<div class="form-group row">
