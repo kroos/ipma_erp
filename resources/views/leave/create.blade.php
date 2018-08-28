@@ -14,7 +14,7 @@
 			</dd>
 		</dl>
 
-{!! Form::open(['route' => ['staffLeave.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
+{!! Form::open(['route' => ['staffLeave.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true,  'data-toggle' => 'validator']) !!}
 	@include('leave._form')
 {{ Form::close() }}
 		
@@ -341,8 +341,8 @@ foreach ($rt->get() as $key) {
 $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave_balance', '<>', 0)->get();
 ?>
 				'<div class="form-group row {{ $errors->has('staff_leave_replacement_id') ? 'has-error' : '' }}">' +
-					'{{ Form::label('replacement_id', 'Please Choose Your Replacement Leave : ', ['class' => 'col-sm-2 col-form-label']) }}' +
-					'<div class="col-sm-10 srli">' +
+					'{{ Form::label('', 'Please Choose Your Replacement Leave : ', ['class' => 'col-sm-2 col-form-label']) }}' +
+					'<div class="col-sm-10 nrl">' +
 						'<p>Total Non Replacement Leave = {{ $oi->sum('leave_balance') }} days</p>' +
 <?php
 $i=0;
@@ -356,9 +356,10 @@ function my($string) {
 ?>
 @foreach( $oi as $po )
 <?php $i++; ?>
-						'<div class="form-check nrl">' +
-							'<input type="radio" name="staff_leave_replacement_id" value="{{ $po->id }}" id="{{ 'idslri'.$i }}" class="form-check-input" data-nrlbalance="{{ $po->leave_balance }}">' +
-							'<label class="form-check-label" for="{{ 'idslri'.$i }}">{{ 'On '.my($po->date_leave).', your leave balance = '.$po->leave_balance }} day</label>' +
+						'<div class="form-check">' +
+							'<label class="form-check-label" for="{{ 'idslri'.$i }}">' +
+								'<input type="radio" name="staff_leave_replacement_id" value="{{ $po->id }}" id="{{ 'idslri'.$i }}" class="form-check-input" data-nrlbalance="{{ $po->leave_balance }}" required>' +
+							'{{ 'On '.my($po->date_leave).', your leave balance = '.$po->leave_balance }} day</label>' +
 						'</div>' +
 @endforeach
 					'</div>' +
@@ -403,7 +404,7 @@ function my($string) {
 		// more option
 		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_start"]'));
 		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_end"]'));
-		$('#form').bootstrapValidator('addField', $('.nrl').find('[name="staff_leave_replacement_id"]'));
+		$('#form').bootstrapValidator('addField', $('.nrl').find('input[type=radio][name="staff_leave_replacement_id"]'));
 
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// enable datetime for the 1st one
@@ -483,39 +484,6 @@ function my($string) {
 		});
 		
 		/////////////////////////////////////////////////////////////////////////////////////////
-		// checking for half day click but select for 1 full day
-		$('input[type=radio][name=staff_leave_replacement_id]').change(function() {
-			// console.log( $('input[type=radio][name=staff_leave_replacement_id]:checked').data('nrlbalance') );
-			var nrlbal = $('input[type=radio][name=staff_leave_replacement_id]:checked').data('nrlbalance');
-
-			if (nrlbal == 0.5) {
-				$('#radio2').prop('checked', true);
-				// checking so there is no double
-				if( $('.removetest').length == 0 ) {
-					$('#wrappertest').append(
-						'<div class="pretty p-default p-curve form-check removetest">' +
-							'<input type="radio" name="leave_half" value="1" id="am" checked="checked">' +
-							'<div class="state p-primary">' +
-								'<label for="am" class="form-check-label">' + moment(obj.start_am, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_am, 'HH:mm:ss').format('h:mm a') + '</label> ' +
-							'</div>' +
-						'</div>' +
-						'<div class="pretty p-default p-curve form-check removetest">' +
-							'<input type="radio" name="leave_half" value="0" id="pm">' +
-							'<div class="state p-primary">' +
-								'<label for="pm" class="form-check-label">' + moment(obj.start_pm, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_pm, 'HH:mm:ss').format('h:mm a') + '</label> ' +
-							'</div>' +
-						'</div>'
-					);
-				}
-			} else {
-				if( nrlbal != 0.5 ) {
-					$('#radio1').prop('checked', true);
-					$('.removetest').remove();
-				}
-			}
-		});
-
-		/////////////////////////////////////////////////////////////////////////////////////////
 		// enable radio
 		$(document).on('change', '#appendleavehalf :radio', function () {
 			if (this.checked) {
@@ -564,7 +532,69 @@ function my($string) {
 		//$(document).on('change', '#removeleavehalf :radio', function () {
 		$('#removeleavehalf :radio').change(function() {
 			if (this.checked) {
+				if( $('input[type=radio][name=staff_leave_replacement_id]:checked').data('nrlbalance') == 0.5 ) {
+					$('input[type=radio][name=staff_leave_replacement_id]').prop('checked', false);
+				}
 				$('.removetest').remove();
+			}
+		});
+
+		/////////////////////////////////////////////////////////////////////////////////////////
+		// checking for half day click but select for 1 full day
+		$('input[type=radio][name=staff_leave_replacement_id]').change(function() {
+
+			$('#form').bootstrapValidator('revalidateField', 'staff_leave_replacement_id');
+
+			var nrlbal = $('input[type=radio][name=staff_leave_replacement_id]:checked').data('nrlbalance');
+			if (nrlbal == 0.5) {
+				$('#radio2').prop('checked', true);
+				// checking so there is no double
+
+				var daynow = moment($('#from').val(), 'YYYY-MM-DD').format('dddd');
+				var datenow =$('#from').val();
+		
+				var data1 = $.ajax({
+					url: "{{ route('workinghour.workingtime') }}",
+					type: "POST",
+					data: {date: datenow, _token: '{!! csrf_token() !!}'},
+					dataType: 'json',
+					global: false,
+					async:false,
+					success: function (response) {
+						// you will get response from your php page (what you echo or print)
+						return response;
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						console.log(textStatus, errorThrown);
+					}
+				}).responseText;
+				
+				// convert data1 into json
+				var obj = jQuery.parseJSON( data1 );
+
+				// checking so there is no double
+				if( $('.removetest').length == 0 ) {
+					$('#wrappertest').append(
+						'<div class="pretty p-default p-curve form-check removetest">' +
+							'<input type="radio" name="leave_half" value="1" id="am" checked="checked">' +
+							'<div class="state p-primary">' +
+								'<label for="am" class="form-check-label">' + moment(obj.start_am, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_am, 'HH:mm:ss').format('h:mm a') + '</label> ' +
+							'</div>' +
+						'</div>' +
+						'<div class="pretty p-default p-curve form-check removetest">' +
+							'<input type="radio" name="leave_half" value="0" id="pm">' +
+							'<div class="state p-primary">' +
+								'<label for="pm" class="form-check-label">' + moment(obj.start_pm, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_pm, 'HH:mm:ss').format('h:mm a') + '</label> ' +
+							'</div>' +
+						'</div>'
+					);
+				}
+
+			} else {
+				if( nrlbal != 0.5 ) {
+					$('#radio1').prop('checked', true);
+					$('.removetest').remove();
+				}
 			}
 		});
 
@@ -848,7 +878,7 @@ $(document).on('keyup', '#reason', function () {
 /////////////////////////////////////////////////////////////////////////////////////////
 //select2
 $('#leave_id').select2({
-	placeholder: 'Please Choose'
+	placeholder: 'Please choose'
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -919,24 +949,25 @@ $(document).ready(function() {
 				}
 			},
 			staff_leave_replacement_id: {
+			 	group: '.nrl',
 				validators: {
 					notEmpty: {
-						message: 'Please select 1 option'
+						message: 'Please select 1 option',
 					},
 				}
 			},
 			staff_id: {
 				validators: {
 					notEmpty: {
-						message: 'Please Choose'
+						message: 'Please choose'
 					}
 				}
 			},
 			document: {
 				validators: {
 					file: {
-						extension: 'jpeg,jpg,png,bmp,pdf,doc',
-						type: 'image/jpeg,image/png,image/bmp,application/pdf,application/msword',
+						extension: 'jpeg, jpg, png, bmp, pdf, doc',
+						type: 'image/jpeg, image/png, image/bmp, application/pdf, application/msword',
 						maxSize: 2097152,	// 2048 * 1024,
 						message: 'The selected file is not valid. Please use jpeg, jpg, png, bmp, pdf or doc and the file is below than 3MB. '
 					},
