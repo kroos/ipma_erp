@@ -50,7 +50,7 @@ class StaffLeaveController extends Controller
 	* @param  \Illuminate\Http\Request  $request
 	* @return \Illuminate\Http\Response
 	*/
-	public function store(Request $request)
+	public function store(StaffLeaveRequest $request)
 	{
 		// https://try-carbon.herokuapp.com/?hide-output-gutter&output-left-padding=10&theme=tomorrow_night&border=none&radius=4&v-padding=15&input=%24mutable%20%3D%20Carbon%3A%3Anow()%3B%0A%24immutable%20%3D%20CarbonImmutable%3A%3Anow()%3B%0A%24modifiedMutable%20%3D%20%24mutable-%3Eadd(1%2C%20%27day%27)%3B%0A%24modifiedImmutable%20%3D%20CarbonImmutable%3A%3Anow()-%3Eadd(1%2C%20%27day%27)%3B%0A%0Avar_dump(%24modifiedMutable%20%3D%3D%3D%20%24mutable)%3B%20%20%20%20%20%20%20%20%20%20%20%20%20%2F%2F%20bool(true)%0Avar_dump(%24mutable-%3EisoFormat(%27dddd%20D%27))%3B%20%20%20%20%20%20%20%20%20%20%20%20%20%2F%2F%20string(11)%20%22Saturday%2025%22%0Avar_dump(%24modifiedMutable-%3EisoFormat(%27dddd%20D%27))%3B%20%20%20%20%20%2F%2F%20string(11)%20%22Saturday%2025%22%0A%2F%2F%20So%20it%20means%20%24mutable%20and%20%24modifiedMutable%20are%20the%20same%20object%0A%2F%2F%20both%20set%20to%20now%20%2B%201%20day.%0Avar_dump(%24modifiedImmutable%20%3D%3D%3D%20%24immutable)%3B%20%20%20%20%20%20%20%20%20%2F%2F%20bool(false)%0Avar_dump(%24immutable-%3EisoFormat(%27dddd%20D%27))%3B%20%20%20%20%20%20%20%20%20%20%20%2F%2F%20string(9)%20%22Friday%2024%22%0Avar_dump(%24modifiedImmutable-%3EisoFormat(%27dddd%20D%27))%3B%20%20%20%2F%2F%20string(11)%20%22Saturday%2025%22%0A%2F%2F%20While%20%24immutable%20is%20still%20set%20to%20now%20and%20cannot%20be%20changed%20and%0A%2F%2F%20%24modifiedImmutable%20is%20a%20new%20instance%20created%20from%20%24immutable%0A%2F%2F%20set%20to%20now%20%2B%201%20day.%0A%0A%24mutable%20%3D%20CarbonImmutable%3A%3Anow()-%3EtoMutable()%3B%0Avar_dump(%24mutable-%3EisMutable())%3B%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%2F%2F%20bool(true)%0Avar_dump(%24mutable-%3EisImmutable())%3B%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%2F%2F%20bool(false)%0A%24immutable%20%3D%20Carbon%3A%3Anow()-%3EtoImmutable()%3B%0Avar_dump(%24immutable-%3EisMutable())%3B%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%2F%2F%20bool(false)%0Avar_dump(%24immutable-%3EisImmutable())%3B%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%2F%2F%20bool(true)%0A&token=live-editor-0
 		// $fridays = [];
@@ -62,7 +62,7 @@ class StaffLeaveController extends Controller
 		// }
 		// echo count($fridays);
 
-		dd(request());
+		dd($request->all());
 	}
 
 	/**
