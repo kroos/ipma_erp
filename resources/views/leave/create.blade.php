@@ -356,10 +356,10 @@ function my($string) {
 ?>
 @foreach( $oi as $po )
 <?php $i++; ?>
+//tukar jadi select
 						'<div class="form-check">' +
-							'<label class="form-check-label" for="{{ 'idslri'.$i }}">' +
-								'<input type="radio" name="staff_leave_replacement_id" value="{{ $po->id }}" id="{{ 'idslri'.$i }}" class="form-check-input" data-nrlbalance="{{ $po->leave_balance }}" required>' +
-							'{{ 'On '.my($po->date_leave).', your leave balance = '.$po->leave_balance }} day</label>' +
+								'<input type="radio" name="staff_leave_replacement_id" value="{{ $po->id }}" id="{{ 'idslri'.$i }}" class="form-check-input" data-nrlbalance="{{ $po->leave_balance }}" >' +
+							'<label class="form-check-label" for="{{ 'idslri'.$i }}">{{ 'On '.my($po->date_leave).', your leave balance = '.$po->leave_balance }} day</label>' +
 						'</div>' +
 @endforeach
 					'</div>' +
