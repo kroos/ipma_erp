@@ -11,6 +11,7 @@
 			<dt class="col-sm-3"><h5 class="text-danger">Perhatian :</h5></dt>
 			<dd class="col-sm-9">
 				<p class="lead">Permohonan Cuti Mestilah Sekurang-kurangnya <span class="font-weight-bold">TIGA (3)</span> Hari Lebih Awal dari Tarikh Bercuti Bagi "Annual Leave (Cuti Tahunan)" dan juga "Cuti Tanpa Gaji (Unpaid Leave)".</p>
+				<p class="lead">Time-Off akan dikira sebagai <strong>Cuti</strong> sekiranya tempoh keluar <strong>Melebihi Dari 2jam</strong>.</p>
 			</dd>
 		</dl>
 
@@ -105,8 +106,6 @@ foreach ($rt->get() as $key) {
 					'</div>' +
 				'</div>' +
 @endif
-
-
 			'</div>'
 			);
 		/////////////////////////////////////////////////////////////////////////////////////////
@@ -287,6 +286,14 @@ foreach ($rt->get() as $key) {
 					'</div>' +
 				'</div>' +
 
+				'<div class="form-group row {{ $errors->has('akuan') ? 'has-error' : '' }}">' +
+					'{{ Form::label('suppdoc', 'Surat Sokongan : ', ['class' => 'col-sm-2 col-form-label']) }}' +
+					'<div class="col-sm-10 form-check suppdoc">' +
+						'{{ Form::checkbox('documentsupport', 1, @$value, ['class' => 'form-check-input bg-warning rounded', 'id' => 'suppdoc']) }}' +
+						'<label for="suppdoc" class="form-check-label p-3 mb-2 bg-warning text-danger rounded">Sila Pastikan anda menghantar <strong>Surat Sokongan</strong> dalam tempoh <strong>3 Hari</strong> selepas tarikh cuti.</label>' +
+					'</div>' +
+				'</div>' +
+
 			'</div>'
 		);
 
@@ -294,6 +301,7 @@ foreach ($rt->get() as $key) {
 		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_start"]'));
 		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_end"]'));
 		$('#form').bootstrapValidator('addField', $('.supportdoc').find('[name="document"]'));
+		$('#form').bootstrapValidator('addField', $('.suppdoc').find('[name="documentsupport"]'));
 
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// enable datetime for the 1st one
@@ -341,27 +349,15 @@ foreach ($rt->get() as $key) {
 $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave_balance', '<>', 0)->get();
 ?>
 				'<div class="form-group row {{ $errors->has('staff_leave_replacement_id') ? 'has-error' : '' }}">' +
-					'{{ Form::label('', 'Please Choose Your Replacement Leave : ', ['class' => 'col-sm-2 col-form-label']) }}' +
+					'{{ Form::label('nrla', 'Please Choose Your Replacement Leave : ', ['class' => 'col-sm-2 col-form-label']) }}' +
 					'<div class="col-sm-10 nrl">' +
 						'<p>Total Non Replacement Leave = {{ $oi->sum('leave_balance') }} days</p>' +
-<?php
-$i=0;
-function my($string) {
-	if (empty($string))	{
-		$string = '1900-01-01';		
-	}
-	$rt = \Carbon\Carbon::createFromFormat('Y-m-d', $string);
-	return date('D, d F Y', mktime(0, 0, 0, $rt->month, $rt->day, $rt->year));
-}
-?>
+						'<select name="staff_leave_replacement_id" id="nrla" class="form-control">' +
+							'<option value="">Please select</option>' +
 @foreach( $oi as $po )
-<?php $i++; ?>
-//tukar jadi select
-						'<div class="form-check">' +
-								'<input type="radio" name="staff_leave_replacement_id" value="{{ $po->id }}" id="{{ 'idslri'.$i }}" class="form-check-input" data-nrlbalance="{{ $po->leave_balance }}" >' +
-							'<label class="form-check-label" for="{{ 'idslri'.$i }}">{{ 'On '.my($po->date_leave).', your leave balance = '.$po->leave_balance }} day</label>' +
-						'</div>' +
+							'<option value="{{ $po->id }}" data-nrlbalance="{{ $po->leave_balance }}">On ' + moment( '{{ $po->date_leave }}', 'YYYY-MM-DD' ).format('ddd Do MMM YYYY') + ', your leave balance = {{ $po->leave_balance }} day</option>' +
 @endforeach
+						'</select>' +
 					'</div>' +
 				'</div>' +
 
@@ -404,7 +400,11 @@ function my($string) {
 		// more option
 		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_start"]'));
 		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_end"]'));
-		$('#form').bootstrapValidator('addField', $('.nrl').find('input[type=radio][name="staff_leave_replacement_id"]'));
+		$('#form').bootstrapValidator('addField', $('.nrl').find('[name="staff_leave_replacement_id"]'));
+
+		/////////////////////////////////////////////////////////////////////////////////////////
+		// enable select2
+		$('#nrla').select2({ placeholder: 'Please select'});
 
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// enable datetime for the 1st one
@@ -532,8 +532,13 @@ function my($string) {
 		//$(document).on('change', '#removeleavehalf :radio', function () {
 		$('#removeleavehalf :radio').change(function() {
 			if (this.checked) {
-				if( $('input[type=radio][name=staff_leave_replacement_id]:checked').data('nrlbalance') == 0.5 ) {
-					$('input[type=radio][name=staff_leave_replacement_id]').prop('checked', false);
+
+				// console.log( $('#nrla option:selected').data('nrlbalance') );
+				if( $('#nrla option:selected').data('nrlbalance') == 0.5 ) {
+
+					// especially for select 2, if no select2, remove change()
+					$('#nrla option:selected').prop('selected', false).change();
+					// $('#nrla').val('').change();
 				}
 				$('.removetest').remove();
 			}
@@ -541,11 +546,14 @@ function my($string) {
 
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// checking for half day click but select for 1 full day
-		$('input[type=radio][name=staff_leave_replacement_id]').change(function() {
+		$('#nrla').change(function() {
+
+			selectedOption = $('option:selected', this);
 
 			$('#form').bootstrapValidator('revalidateField', 'staff_leave_replacement_id');
 
-			var nrlbal = $('input[type=radio][name=staff_leave_replacement_id]:checked').data('nrlbalance');
+			var nrlbal = selectedOption.data('nrlbalance');
+
 			if (nrlbal == 0.5) {
 				$('#radio2').prop('checked', true);
 				// checking so there is no double
@@ -607,11 +615,98 @@ function my($string) {
 		$('#wrapper').append(
 			'<div id="remove">' +
 				<!-- maternity leave -->
+				'<div class="form-group row {{ $errors->has('date_time_start') ? 'has-error' : '' }}">' +
+					'{{ Form::label('from', 'From : ', ['class' => 'col-sm-2 col-form-label']) }}' +
+					'<div class="col-sm-10 datetime">' +
+						'{{ Form::text('date_time_start', @$value, ['class' => 'form-control', 'id' => 'from', 'placeholder' => 'From : ', 'autocomplete' => 'off']) }}' +
+					'</div>' +
+				'</div>' +
 
+				'<div class="form-group row {{ $errors->has('date_time_end') ? 'has-error' : '' }}">' +
+					'{{ Form::label('to', 'To : ', ['class' => 'col-sm-2 col-form-label']) }}' +
+					'<div class="col-sm-10 datetime">' +
+						'{{ Form::text('date_time_end', @$value, ['class' => 'form-control', 'id' => 'to', 'placeholder' => 'To : ', 'autocomplete' => 'off']) }}' +
+					'</div>' +
+				'</div>' +
+
+<?php
+$usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
+$userloc = \Auth::user()->belongtostaff->location_id;
+// echo $userloc.'<-- location_id<br />';
+
+$userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
+
+// justify for those who doesnt have department
+if( empty($usergroup->department_id) && $usergroup->category_id == 1 ) {
+	$rt = \App\Model\Position::where('division_id', $usergroup->division_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
+} else {
+	$rt = \App\Model\Position::where('department_id', $usergroup->department_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
+}
+
+foreach ($rt->get() as $key) {
+	// echo $key->position.' <-- position id<br />';
+	$ft = \App\Model\StaffPosition::where('position_id', $key->id)->get();
+	foreach($ft as $val) {
+		//must checking on same location, active user, almost same level.
+		if (\Auth::user()->belongtostaff->id != $val->belongtostaff->id && \Auth::user()->belongtostaff->location_id == $val->belongtostaff->location_id && $val->belongtostaff->active == 1 ) {
+			// echo $val->belongtostaff->name.' <-- name staff<br />';
+			$sel[$val->belongtostaff->id] = $val->belongtostaff->name;
+		}
+	}
+}
+?>
+@if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
+				'<div class="form-group row {{ $errors->has('staff_id') ? 'has-error' : '' }}">' +
+					'{{ Form::label('backupperson', 'Backup Person : ', ['class' => 'col-sm-2 col-form-label']) }}' +
+					'<div class="col-sm-10 backup">' +
+						'{{ Form::select('staff_id', $sel, NULL, ['class' => 'form-control', 'id' => 'backupperson', 'placeholder' => 'Please Choose', 'autocomplete' => 'off']) }}' +
+					'</div>' +
+				'</div>' +
+@endif
 			'</div>'
 		);
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// more option
+		//add bootstrapvalidator
+		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_start"]'));
+		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_end"]'));
+@if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
+		$('#form').bootstrapValidator('addField', $('.backup').find('[name="staff_id"]'));
+@endif
+
+		/////////////////////////////////////////////////////////////////////////////////////////
+		//enable select 2 for backup
+		$('#backupperson').select2({
+			placeholder: 'Please Choose'
+		});
+
+		/////////////////////////////////////////////////////////////////////////////////////////
+		// enable datetime for the 1st one
+		$('#from').datetimepicker({
+			format:'YYYY-MM-DD',
+			daysOfWeekDisabled: [0],
+		})
+		.on('dp.change dp.show dp.update', function(e) {
+			$('#form').bootstrapValidator('revalidateField', 'date_time_start');
+			var minDate = $('#from').val();
+			$('#to').datetimepicker('minDate', moment( minDate, 'YYYY-MM-DD').add(60, 'days').format('YYYY-MM-DD') );
+
+			$('#to').val( moment( minDate, 'YYYY-MM-DD').add(60, 'days').format('YYYY-MM-DD') );
+		});
+		
+		$('#to').datetimepicker({
+			format:'YYYY-MM-DD',
+			daysOfWeekDisabled: [0],
+		})
+		.on('dp.change dp.show dp.update', function(e) {
+			$('#form').bootstrapValidator('revalidateField', 'date_time_end');
+			var maxDate = $('#to').val();
+
+			$('#from').datetimepicker('maxDate', moment( maxDate, 'YYYY-MM-DD').subtract(60, 'days').format('YYYY-MM-DD'));
+			$('#from').val( moment( maxDate, 'YYYY-MM-DD').subtract(60, 'days').format('YYYY-MM-DD') );
+		});
+		
+		/////////////////////////////////////////////////////////////////////////////////////////
 	}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -653,6 +748,7 @@ function my($string) {
 					'</div>' +
 					'<div class="form-group row col-sm-10 offset-sm-2 {{ $errors->has('leave_half') ? 'has-error' : '' }} removehalfleave"  id="wrappertest">' +
 					'</div>' +
+
 				'</div>' +
 <?php
 $usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
@@ -684,14 +780,30 @@ foreach ($rt->get() as $key) {
 				'<div id="rembackup">' +
 				'</div>' +
 @endif
+
+				'<div class="form-group row {{ $errors->has('document') ? 'has-error' : '' }}">' +
+					'{{ Form::label( 'doc', 'Supporting Document : ', ['class' => 'col-sm-2 col-form-label'] ) }}' +
+					'<div class="col-sm-10 supportdoc">' +
+						'{{ Form::file( 'document', ['class' => 'form-control form-control-file', 'id' => 'doc', 'placeholder' => 'Supporting Document']) }}' +
+					'</div>' +
+				'</div>' +
+
+				'<div class="form-group row {{ $errors->has('akuan') ? 'has-error' : '' }}">' +
+					'{{ Form::label('suppdoc', 'Surat Sokongan : ', ['class' => 'col-sm-2 col-form-label']) }}' +
+					'<div class="col-sm-10 form-check suppdoc">' +
+						'{{ Form::checkbox('documentsupport', 1, @$value, ['class' => 'form-check-input bg-warning rounded', 'id' => 'suppdoc']) }}' +
+						'<label for="suppdoc" class="form-check-label p-3 mb-2 bg-warning text-danger rounded">Sila Pastikan anda menghantar <strong>Surat Sokongan</strong> dalam tempoh <strong>3 Hari</strong> selepas tarikh cuti.</label>' +
+					'</div>' +
+				'</div>' +
+
 			'</div>'
 		);
 		/////////////////////////////////////////////////////////////////////////////////////////
-		// more option
-
 		//add bootstrapvalidator
 		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_start"]'));
 		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_end"]'));
+		$('#form').bootstrapValidator('addField', $('.supportdoc').find('[name="document"]'));
+		$('#form').bootstrapValidator('addField', $('.suppdoc').find('[name="documentsupport"]'));
 
 		/////////////////////////////////////////////////////////////////////////////////////////
 		//enable select 2 for backup
@@ -738,25 +850,29 @@ foreach ($rt->get() as $key) {
 
 			// enable backup if date from is greater than today.
 			//cari date now dulu
+
 			if( $('#from').val() >= moment().add(1, 'days').format('YYYY-MM-DD') ) {
-			console.log( moment().add(1, 'days').format('YYYY-MM-DD') );
-				//if( $('#rembackup').length == 0 ) {
-					$('#rembackup').append(
-						'<div class="form-group row {{ $errors->has('staff_id') ? 'has-error' : '' }}">' +
-							'{{ Form::label('backupperson', 'Backup Person : ', ['class' => 'col-sm-2 col-form-label']) }}' +
-							'<div class="col-sm-10 backup">' +
-								'{{ Form::select('staff_id', $sel, NULL, ['class' => 'form-control', 'id' => 'backupperson', 'placeholder' => 'Please Choose', 'autocomplete' => 'off']) }}' +
-							'</div>' +
-						'</div>'
-					);
-				//}
+
+			// console.log( moment().add(1, 'days').format('YYYY-MM-DD') );
+			// console.log($( '#rembackup').children().length + ' <= rembackup length' );
+
+			if( $('#rembackup').children().length == 0 ) {
+				$('#rembackup').append(
+					'<div class="form-group row {{ $errors->has('staff_id') ? 'has-error' : '' }}">' +
+						'{{ Form::label('backupperson', 'Backup Person : ', ['class' => 'col-sm-2 col-form-label']) }}' +
+						'<div class="col-sm-10 backup">' +
+							'{{ Form::select('staff_id', $sel, NULL, ['class' => 'form-control', 'id' => 'backupperson', 'placeholder' => 'Please Choose', 'autocomplete' => 'off']) }}' +
+						'</div>' +
+					'</div>'
+				);
+			}
+
 @if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
-		$('#form').bootstrapValidator('addField', $('.backup').find('[name="staff_id"]'));
+				$('#form').bootstrapValidator('addField', $('.backup').find('[name="staff_id"]'));
 @endif
-				$('#backupperson').select2({
-					placeholder: 'Please Choose'
-				});
+				$('#backupperson').select2({ placeholder: 'Please Choose' });
 			} else {
+				$('#form').bootstrapValidator('removeField', $('.backup').find('[name="staff_id"]') );
 				$('#rembackup').children().remove();
 			}
 		});
@@ -860,10 +976,125 @@ foreach ($rt->get() as $key) {
 		$('#wrapper').append(
 			'<div id="remove">' +
 				<!-- time off -->
+				'<div class="form-group row {{ $errors->has('date_time_start') ? 'has-error' : '' }}">' +
+					'{{ Form::label('from', 'Date : ', ['class' => 'col-sm-2 col-form-label']) }}' +
+					'<div class="col-sm-10 datetime">' +
+						'{{ Form::text('date_time_start', @$value, ['class' => 'form-control', 'id' => 'from', 'placeholder' => 'From : ', 'autocomplete' => 'off']) }}' +
+					'</div>' +
+				'</div>' +
+
+				'<div class="form-group row {{ $errors->has('date_time_end') ? 'has-error' : '' }}">' +
+					'{{ Form::label('to', 'Time : ', ['class' => 'col-sm-2 col-form-label']) }}' +
+					'<div class="col-sm-10">' +
+						'<div class="container">' +
+							'<div class="row time">' +
+									'{{ Form::text('time_start', @$value, ['class' => 'form-control col-6', 'id' => 'start', 'placeholder' => 'From : ', 'autocomplete' => 'off']) }}' +
+									'{{ Form::text('time_end', @$value, ['class' => 'form-control col-6', 'id' => 'end', 'placeholder' => 'To : ', 'autocomplete' => 'off']) }}' +
+							'</div>' +
+						'</div>' +
+					'</div>' +
+				'</div>' +
+
+
+<?php
+$usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
+$userloc = \Auth::user()->belongtostaff->location_id;
+// echo $userloc.'<-- location_id<br />';
+
+$userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
+
+// justify for those who doesnt have department
+if( empty($usergroup->department_id) && $usergroup->category_id == 1 ) {
+	$rt = \App\Model\Position::where('division_id', $usergroup->division_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
+} else {
+	$rt = \App\Model\Position::where('department_id', $usergroup->department_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
+}
+
+foreach ($rt->get() as $key) {
+	// echo $key->position.' <-- position id<br />';
+	$ft = \App\Model\StaffPosition::where('position_id', $key->id)->get();
+	foreach($ft as $val) {
+		//must checking on same location, active user, almost same level.
+		if (\Auth::user()->belongtostaff->id != $val->belongtostaff->id && \Auth::user()->belongtostaff->location_id == $val->belongtostaff->location_id && $val->belongtostaff->active == 1 ) {
+			// echo $val->belongtostaff->name.' <-- name staff<br />';
+			$sel[$val->belongtostaff->id] = $val->belongtostaff->name;
+		}
+	}
+}
+?>
+@if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
+				'<div class="form-group row {{ $errors->has('staff_id') ? 'has-error' : '' }}">' +
+					'{{ Form::label('backupperson', 'Backup Person : ', ['class' => 'col-sm-2 col-form-label']) }}' +
+					'<div class="col-sm-10 backup">' +
+						'{{ Form::select('staff_id', $sel, NULL, ['class' => 'form-control', 'id' => 'backupperson', 'placeholder' => 'Please Choose', 'autocomplete' => 'off']) }}' +
+					'</div>' +
+				'</div>' +
+@endif
+				'<div class="form-group row {{ $errors->has('document') ? 'has-error' : '' }}">' +
+					'{{ Form::label( 'doc', 'Supporting Document : ', ['class' => 'col-sm-2 col-form-label'] ) }}' +
+					'<div class="col-sm-10 supportdoc">' +
+						'{{ Form::file( 'document', ['class' => 'form-control form-control-file', 'id' => 'doc', 'placeholder' => 'Supporting Document']) }}' +
+					'</div>' +
+				'</div>' +
+
+				'<div class="form-group row {{ $errors->has('akuan') ? 'has-error' : '' }}">' +
+					'{{ Form::label('suppdoc', 'Surat Sokongan : ', ['class' => 'col-sm-2 col-form-label']) }}' +
+					'<div class="col-sm-10 form-check suppdoc">' +
+						'{{ Form::checkbox('documentsupport', 1, @$value, ['class' => 'form-check-input bg-warning rounded', 'id' => 'suppdoc']) }}' +
+						'<label for="suppdoc" class="form-check-label p-3 mb-2 bg-warning text-danger rounded">Sila Pastikan anda menghantar <strong>Surat Sokongan</strong> dalam tempoh <strong>3 Hari</strong> selepas tarikh cuti.</label>' +
+					'</div>' +
+				'</div>' +
+
 			'</div>'
 		);
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// more option
+		//add bootstrapvalidator
+		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_start"]'));
+
+		$('#form').bootstrapValidator('addField', $('.time').find('[name="time_start"]'));
+		$('#form').bootstrapValidator('addField', $('.time').find('[name="time_end"]'));
+
+@if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
+		$('#form').bootstrapValidator('addField', $('.backup').find('[name="staff_id"]'));
+@endif
+		$('#form').bootstrapValidator('addField', $('.supportdoc').find('[name="document"]'));
+		$('#form').bootstrapValidator('addField', $('.suppdoc').find('[name="documentsupport"]'));
+
+		/////////////////////////////////////////////////////////////////////////////////////////
+		//enable select 2 for backup
+		$('#backupperson').select2({ placeholder: 'Please Choose' });
+
+		/////////////////////////////////////////////////////////////////////////////////////////
+		// enable datetime for the 1st one
+		$('#from').datetimepicker({
+			format:'YYYY-MM-DD',
+			daysOfWeekDisabled: [0],
+		})
+		.on('dp.change dp.show dp.update', function(e) {
+			$('#form').bootstrapValidator('revalidateField', 'date_time_start');
+		});
+
+		/////////////////////////////////////////////////////////////////////////////////////////
+		// time start
+		$('#start').datetimepicker({
+			format: 'h:mm A',
+		})
+		.on('dp.change dp.show dp.update', function(e){
+			$('#form').bootstrapValidator('revalidateField', 'time_start');
+		});
+
+		$('#end').datetimepicker({
+			format: 'h:mm A',
+		})
+		.on('dp.change dp.show dp.update', function(e){
+			$('#form').bootstrapValidator('revalidateField', 'time_end');
+		});
+
+		/////////////////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////////////////////////
 	}
 
 });
@@ -883,6 +1114,7 @@ $('#leave_id').select2({
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //enable ckeditor
+// its working, i just disable it
 // $(document).ready(function() {
 // 	var editor = CKEDITOR.replace( 'reason', {});
 // 	// editor is object of your CKEDITOR
@@ -949,7 +1181,7 @@ $(document).ready(function() {
 				}
 			},
 			staff_leave_replacement_id: {
-			 	group: '.nrl',
+			 	// group: '.nrl',
 				validators: {
 					notEmpty: {
 						message: 'Please select 1 option',
@@ -966,10 +1198,18 @@ $(document).ready(function() {
 			document: {
 				validators: {
 					file: {
-						extension: 'jpeg, jpg, png, bmp, pdf, doc',
-						type: 'image/jpeg, image/png, image/bmp, application/pdf, application/msword',
+						extension: 'jpeg,jpg,png,bmp,pdf,doc',											// no space
+						type: 'image/jpeg,image/png,image/bmp,application/pdf,application/msword',		// no space
 						maxSize: 2097152,	// 2048 * 1024,
 						message: 'The selected file is not valid. Please use jpeg, jpg, png, bmp, pdf or doc and the file is below than 3MB. '
+					},
+				}
+			},
+			//container: '.suppdoc',
+			documentsupport: {
+				validators: {
+					notEmpty: {
+						message: 'Please click this as an aknowledgement.'
 					},
 				}
 			},
@@ -977,6 +1217,28 @@ $(document).ready(function() {
 				validators: {
 					notEmpty: {
 						message: 'Please click this as an acknowledgement'
+					}
+				}
+			},
+			time_start: {
+				validators: {
+					notEmpty: {
+						message: 'Please insert time',
+					},
+					regexp: {
+						regexp: /^([1-5]|[8-9]|1[0-2]):([0-5][0-9])\s([A|P]M|[a|p]m)$/i,
+						message: 'The value is not a valid time',
+					}
+				}
+			},
+			time_end: {
+				validators: {
+					notEmpty: {
+						message: 'Please insert time',
+					},
+					regexp: {
+						regexp: /^([1-5]|[8-9]|1[0-2]):([0-5][0-9])\s([A|P]M|[a|p]m)$/i,
+						message: 'The value is not a valid time',
 					}
 				}
 			},
@@ -988,7 +1250,7 @@ $(document).ready(function() {
 		.on('change', function() {
 			// Revalidate the bio field
 		$('#form').bootstrapValidator('revalidateField', 'reason');
-		//console.log($('#reason').val());
+		// console.log($('#reason').val());
 	})
 	;
 });

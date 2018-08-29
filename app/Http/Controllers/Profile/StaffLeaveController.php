@@ -62,7 +62,7 @@ class StaffLeaveController extends Controller
 		// }
 		// echo count($fridays);
 
-		dd($request->all());
+		dd( $request->all() );
 	}
 
 	/**

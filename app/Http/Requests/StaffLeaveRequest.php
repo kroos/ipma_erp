@@ -30,14 +30,16 @@ class StaffLeaveRequest extends FormRequest
             'akuan' => 'required',
 
             // sometimes it needs..
-            
+            'staff_leave_replacement_id' => 'sometimes|required|integer',
        ];
     }
 
-    // public function messages()
-    // {
-    //     return [
-    //         'staff.*.id_card_passport.alpha_num' => 'ID Kad or Passport number can be consists of alphabet and/or digits.',
-    //     ];
-    // }
+    public function messages()
+    {
+        return [
+            'leave_id.required' => 'Please choose your leave type',
+            'akuan.required' => 'Please tick as your acknowledgement',
+            'staff_leave_replacement_id.required' => 'Please select your replacement leave',
+        ];
+    }
 }
