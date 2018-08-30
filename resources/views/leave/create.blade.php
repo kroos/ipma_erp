@@ -24,6 +24,39 @@
 @endsection
 
 @section('js')
+
+<?php
+$usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
+$userloc = \Auth::user()->belongtostaff->location_id;
+// echo $userloc.'<-- location_id<br />';
+
+$userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
+
+// justify for those who doesnt have department
+if( empty($usergroup->department_id) && $usergroup->category_id == 1 ) {
+	$rt = \App\Model\Position::where('division_id', $usergroup->division_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
+} else {
+	$rt = \App\Model\Position::where('department_id', $usergroup->department_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
+}
+
+foreach ($rt->get() as $key) {
+	// echo $key->position.' <-- position id<br />';
+	$ft = \App\Model\StaffPosition::where('position_id', $key->id)->get();
+	foreach($ft as $val) {
+		//must checking on same location, active user, almost same level.
+		if (\Auth::user()->belongtostaff->id != $val->belongtostaff->id && \Auth::user()->belongtostaff->location_id == $val->belongtostaff->location_id && $val->belongtostaff->active == 1 ) {
+			// echo $val->belongtostaff->name.' <-- name staff<br />';
+			$sel[$val->belongtostaff->id] = $val->belongtostaff->name;
+		}
+	}
+}
+if (empty($sel)) {
+	$sel = array();
+}
+// dd($sel);
+?>
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $('#leave_id').on('change', function() {
 	$selection = $(this).find(':selected');
@@ -33,6 +66,15 @@ $('#leave_id').on('change', function() {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// annnual leave
 	if ($selection.val() == '1' || $selection.val() == '3') {
+
+		$('#form').bootstrapValidator('removeField', $('.datetime').find('[name="date_time_start"]'));
+		$('#form').bootstrapValidator('removeField', $('.datetime').find('[name="date_time_end"]'));
+		$('#form').bootstrapValidator('removeField', $('.time').find('[name="time_start"]'));
+		$('#form').bootstrapValidator('removeField', $('.time').find('[name="time_end"]'));
+		$('#form').bootstrapValidator('removeField', $('.backup').find('[name="staff_id"]'));
+		$('#form').bootstrapValidator('removeField', $('.supportdoc').find('[name="document"]'));
+		$('#form').bootstrapValidator('removeField', $('.suppdoc').find('[name="documentsupport"]'));
+
 		$('#remove').remove();
 		$('#wrapper').append(
 
@@ -72,32 +114,7 @@ $('#leave_id').on('change', function() {
 					'<div class="form-group row col-sm-10 offset-sm-2 {{ $errors->has('leave_half') ? 'has-error' : '' }} removehalfleave"  id="wrappertest">' +
 					'</div>' +
 				'</div>' +
-<?php
-$usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
-$userloc = \Auth::user()->belongtostaff->location_id;
-// echo $userloc.'<-- location_id<br />';
 
-$userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
-
-// justify for those who doesnt have department
-if( empty($usergroup->department_id) && $usergroup->category_id == 1 ) {
-	$rt = \App\Model\Position::where('division_id', $usergroup->division_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
-} else {
-	$rt = \App\Model\Position::where('department_id', $usergroup->department_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
-}
-
-foreach ($rt->get() as $key) {
-	// echo $key->position.' <-- position id<br />';
-	$ft = \App\Model\StaffPosition::where('position_id', $key->id)->get();
-	foreach($ft as $val) {
-		//must checking on same location, active user, almost same level.
-		if (\Auth::user()->belongtostaff->id != $val->belongtostaff->id && \Auth::user()->belongtostaff->location_id == $val->belongtostaff->location_id && $val->belongtostaff->active == 1 ) {
-			// echo $val->belongtostaff->name.' <-- name staff<br />';
-			$sel[$val->belongtostaff->id] = $val->belongtostaff->name;
-		}
-	}
-}
-?>
 @if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
 				'<div class="form-group row {{ $errors->has('staff_id') ? 'has-error' : '' }}">' +
 					'{{ Form::label('backupperson', 'Backup Person : ', ['class' => 'col-sm-2 col-form-label']) }}' +
@@ -260,6 +277,15 @@ foreach ($rt->get() as $key) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if ($selection.val() == '2') {
+
+		$('#form').bootstrapValidator('removeField', $('.datetime').find('[name="date_time_start"]'));
+		$('#form').bootstrapValidator('removeField', $('.datetime').find('[name="date_time_end"]'));
+		$('#form').bootstrapValidator('removeField', $('.time').find('[name="time_start"]'));
+		$('#form').bootstrapValidator('removeField', $('.time').find('[name="time_end"]'));
+		$('#form').bootstrapValidator('removeField', $('.backup').find('[name="staff_id"]'));
+		$('#form').bootstrapValidator('removeField', $('.supportdoc').find('[name="document"]'));
+		$('#form').bootstrapValidator('removeField', $('.suppdoc').find('[name="documentsupport"]'));
+
 		$('#remove').remove();
 		$('#wrapper').append(
 			'<div id="remove">' +
@@ -341,6 +367,15 @@ foreach ($rt->get() as $key) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if ($selection.val() == '4') {
+
+		$('#form').bootstrapValidator('removeField', $('.datetime').find('[name="date_time_start"]'));
+		$('#form').bootstrapValidator('removeField', $('.datetime').find('[name="date_time_end"]'));
+		$('#form').bootstrapValidator('removeField', $('.time').find('[name="time_start"]'));
+		$('#form').bootstrapValidator('removeField', $('.time').find('[name="time_end"]'));
+		$('#form').bootstrapValidator('removeField', $('.backup').find('[name="staff_id"]'));
+		$('#form').bootstrapValidator('removeField', $('.supportdoc').find('[name="document"]'));
+		$('#form').bootstrapValidator('removeField', $('.suppdoc').find('[name="documentsupport"]'));
+
 		$('#remove').remove();
 		$('#wrapper').append(
 			'<div id="remove">' +
@@ -355,7 +390,7 @@ $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave
 						'<select name="staff_leave_replacement_id" id="nrla" class="form-control">' +
 							'<option value="">Please select</option>' +
 @foreach( $oi as $po )
-							'<option value="{{ $po->id }}" data-nrlbalance="{{ $po->leave_balance }}">On ' + moment( '{{ $po->date_leave }}', 'YYYY-MM-DD' ).format('ddd Do MMM YYYY') + ', your leave balance = {{ $po->leave_balance }} day</option>' +
+							'<option value="{{ $po->id }}" data-nrlbalance="{{ $po->leave_balance }}">On ' + moment( '{{ $po->working_date }}', 'YYYY-MM-DD' ).format('ddd Do MMM YYYY') + ', your leave balance = {{ $po->leave_balance }} day</option>' +
 @endforeach
 						'</select>' +
 					'</div>' +
@@ -611,6 +646,15 @@ $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if ($selection.val() == '7') {
+
+		$('#form').bootstrapValidator('removeField', $('.datetime').find('[name="date_time_start"]'));
+		$('#form').bootstrapValidator('removeField', $('.datetime').find('[name="date_time_end"]'));
+		$('#form').bootstrapValidator('removeField', $('.time').find('[name="time_start"]'));
+		$('#form').bootstrapValidator('removeField', $('.time').find('[name="time_end"]'));
+		$('#form').bootstrapValidator('removeField', $('.backup').find('[name="staff_id"]'));
+		$('#form').bootstrapValidator('removeField', $('.supportdoc').find('[name="document"]'));
+		$('#form').bootstrapValidator('removeField', $('.suppdoc').find('[name="documentsupport"]'));
+
 		$('#remove').remove();
 		$('#wrapper').append(
 			'<div id="remove">' +
@@ -628,33 +672,6 @@ $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave
 						'{{ Form::text('date_time_end', @$value, ['class' => 'form-control', 'id' => 'to', 'placeholder' => 'To : ', 'autocomplete' => 'off']) }}' +
 					'</div>' +
 				'</div>' +
-
-<?php
-$usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
-$userloc = \Auth::user()->belongtostaff->location_id;
-// echo $userloc.'<-- location_id<br />';
-
-$userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
-
-// justify for those who doesnt have department
-if( empty($usergroup->department_id) && $usergroup->category_id == 1 ) {
-	$rt = \App\Model\Position::where('division_id', $usergroup->division_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
-} else {
-	$rt = \App\Model\Position::where('department_id', $usergroup->department_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
-}
-
-foreach ($rt->get() as $key) {
-	// echo $key->position.' <-- position id<br />';
-	$ft = \App\Model\StaffPosition::where('position_id', $key->id)->get();
-	foreach($ft as $val) {
-		//must checking on same location, active user, almost same level.
-		if (\Auth::user()->belongtostaff->id != $val->belongtostaff->id && \Auth::user()->belongtostaff->location_id == $val->belongtostaff->location_id && $val->belongtostaff->active == 1 ) {
-			// echo $val->belongtostaff->name.' <-- name staff<br />';
-			$sel[$val->belongtostaff->id] = $val->belongtostaff->name;
-		}
-	}
-}
-?>
 @if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
 				'<div class="form-group row {{ $errors->has('staff_id') ? 'has-error' : '' }}">' +
 					'{{ Form::label('backupperson', 'Backup Person : ', ['class' => 'col-sm-2 col-form-label']) }}' +
@@ -711,6 +728,15 @@ foreach ($rt->get() as $key) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if ($selection.val() == '8') {
+
+		$('#form').bootstrapValidator('removeField', $('.datetime').find('[name="date_time_start"]'));
+		$('#form').bootstrapValidator('removeField', $('.datetime').find('[name="date_time_end"]'));
+		$('#form').bootstrapValidator('removeField', $('.time').find('[name="time_start"]'));
+		$('#form').bootstrapValidator('removeField', $('.time').find('[name="time_end"]'));
+		$('#form').bootstrapValidator('removeField', $('.backup').find('[name="staff_id"]'));
+		$('#form').bootstrapValidator('removeField', $('.supportdoc').find('[name="document"]'));
+		$('#form').bootstrapValidator('removeField', $('.suppdoc').find('[name="documentsupport"]'));
+
 		$('#remove').remove();
 		$('#wrapper').append(
 			'<div id="remove">' +
@@ -750,32 +776,6 @@ foreach ($rt->get() as $key) {
 					'</div>' +
 
 				'</div>' +
-<?php
-$usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
-$userloc = \Auth::user()->belongtostaff->location_id;
-// echo $userloc.'<-- location_id<br />';
-
-$userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
-
-// justify for those who doesnt have department
-if( empty($usergroup->department_id) && $usergroup->category_id == 1 ) {
-	$rt = \App\Model\Position::where('division_id', $usergroup->division_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
-} else {
-	$rt = \App\Model\Position::where('department_id', $usergroup->department_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
-}
-
-foreach ($rt->get() as $key) {
-	// echo $key->position.' <-- position id<br />';
-	$ft = \App\Model\StaffPosition::where('position_id', $key->id)->get();
-	foreach($ft as $val) {
-		//must checking on same location, active user, almost same level.
-		if (\Auth::user()->belongtostaff->id != $val->belongtostaff->id && \Auth::user()->belongtostaff->location_id == $val->belongtostaff->location_id && $val->belongtostaff->active == 1 ) {
-			// echo $val->belongtostaff->name.' <-- name staff<br />';
-			$sel[$val->belongtostaff->id] = $val->belongtostaff->name;
-		}
-	}
-}
-?>
 @if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
 				'<div id="rembackup">' +
 				'</div>' +
@@ -972,6 +972,15 @@ foreach ($rt->get() as $key) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	if ($selection.val() == '9') {
+
+		$('#form').bootstrapValidator('removeField', $('.datetime').find('[name="date_time_start"]'));
+		$('#form').bootstrapValidator('removeField', $('.datetime').find('[name="date_time_end"]'));
+		$('#form').bootstrapValidator('removeField', $('.time').find('[name="time_start"]'));
+		$('#form').bootstrapValidator('removeField', $('.time').find('[name="time_end"]'));
+		$('#form').bootstrapValidator('removeField', $('.backup').find('[name="staff_id"]'));
+		$('#form').bootstrapValidator('removeField', $('.supportdoc').find('[name="document"]'));
+		$('#form').bootstrapValidator('removeField', $('.suppdoc').find('[name="documentsupport"]'));
+
 		$('#remove').remove();
 		$('#wrapper').append(
 			'<div id="remove">' +
@@ -994,34 +1003,6 @@ foreach ($rt->get() as $key) {
 						'</div>' +
 					'</div>' +
 				'</div>' +
-
-
-<?php
-$usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
-$userloc = \Auth::user()->belongtostaff->location_id;
-// echo $userloc.'<-- location_id<br />';
-
-$userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
-
-// justify for those who doesnt have department
-if( empty($usergroup->department_id) && $usergroup->category_id == 1 ) {
-	$rt = \App\Model\Position::where('division_id', $usergroup->division_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
-} else {
-	$rt = \App\Model\Position::where('department_id', $usergroup->department_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
-}
-
-foreach ($rt->get() as $key) {
-	// echo $key->position.' <-- position id<br />';
-	$ft = \App\Model\StaffPosition::where('position_id', $key->id)->get();
-	foreach($ft as $val) {
-		//must checking on same location, active user, almost same level.
-		if (\Auth::user()->belongtostaff->id != $val->belongtostaff->id && \Auth::user()->belongtostaff->location_id == $val->belongtostaff->location_id && $val->belongtostaff->active == 1 ) {
-			// echo $val->belongtostaff->name.' <-- name staff<br />';
-			$sel[$val->belongtostaff->id] = $val->belongtostaff->name;
-		}
-	}
-}
-?>
 @if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
 				'<div class="form-group row {{ $errors->has('staff_id') ? 'has-error' : '' }}">' +
 					'{{ Form::label('backupperson', 'Backup Person : ', ['class' => 'col-sm-2 col-form-label']) }}' +
@@ -1051,13 +1032,9 @@ foreach ($rt->get() as $key) {
 		// more option
 		//add bootstrapvalidator
 		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_start"]'));
-
 		$('#form').bootstrapValidator('addField', $('.time').find('[name="time_start"]'));
 		$('#form').bootstrapValidator('addField', $('.time').find('[name="time_end"]'));
-
-@if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
 		$('#form').bootstrapValidator('addField', $('.backup').find('[name="staff_id"]'));
-@endif
 		$('#form').bootstrapValidator('addField', $('.supportdoc').find('[name="document"]'));
 		$('#form').bootstrapValidator('addField', $('.suppdoc').find('[name="documentsupport"]'));
 
