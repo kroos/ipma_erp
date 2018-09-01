@@ -141,16 +141,4 @@ class StreamedResponse extends Response
     {
         return false;
     }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return $this
-     */
-    public function setNotModified()
-    {
-        $this->setCallback(function () {});
-
-        return parent::setNotModified();
-    }
 }

@@ -81,7 +81,7 @@ class ArrayInput extends Input
 
         foreach ($this->parameters as $k => $v) {
             if ($onlyParams && ('--' === $k || (is_int($k) && '--' === $v))) {
-                return $default;
+                return false;
             }
 
             if (is_int($k)) {

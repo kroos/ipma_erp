@@ -541,10 +541,6 @@ class CliDumper extends AbstractDumper
             return false;
         }
 
-        if ('Hyper' === getenv('TERM_PROGRAM')) {
-            return true;
-        }
-
         if (DIRECTORY_SEPARATOR === '\\') {
             return (function_exists('sapi_windows_vt100_support')
                 && @sapi_windows_vt100_support($stream))
@@ -579,8 +575,7 @@ class CliDumper extends AbstractDumper
     {
         $result = 183 <= getenv('ANSICON_VER')
             || 'ON' === getenv('ConEmuANSI')
-            || 'xterm' === getenv('TERM')
-            || 'Hyper' === getenv('TERM_PROGRAM');
+            || 'xterm' === getenv('TERM');
 
         if (!$result && PHP_VERSION_ID >= 70200) {
             $version = sprintf(

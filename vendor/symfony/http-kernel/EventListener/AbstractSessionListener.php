@@ -62,7 +62,7 @@ abstract class AbstractSessionListener implements EventSubscriberInterface
         }
 
         $session = $session ?? ($this->container && $this->container->has('initialized_session') ? $this->container->get('initialized_session') : null);
-        $this->sessionUsageStack[] = $session instanceof Session ? $session->getUsageIndex() : 0;
+        $this->sessionUsageStack[] = $session instanceof Session ? $session->getUsageIndex() : null;
     }
 
     public function onKernelResponse(FilterResponseEvent $event)

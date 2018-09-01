@@ -21,6 +21,10 @@
         "nunomaduro/collision": "^2.0",
         "phpunit/phpunit": "^7.0"
     },
+    "require": {
+        "nesbot/carbon": "2.0.0-beta.4 as 1.25.0",
+        "kylekatarnls/laravel-carbon-2": "^1.0.0"
+    },
     "autoload": {
         "classmap": [
             "database/seeds",

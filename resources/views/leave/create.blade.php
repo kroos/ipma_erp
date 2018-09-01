@@ -186,6 +186,17 @@ $('#leave_id').on('change', function() {
 			format:'YYYY-MM-DD',
 			daysOfWeekDisabled: [0],
 			minDate: moment().add(3, 'days').format('YYYY-MM-DD'),
+			disabledDates:[
+<?php
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+// foreach ($nodate as $nda) {
+// 	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+// 	foreach ($period as $key) {
+// 		echo 'moment("'.$key->format('Y-m-d').'", "YYYY-MM-DD"),';
+// 	}
+// }
+?>
+							],
 		})
 		.on('dp.change dp.show dp.update', function(e) {
 			$('#form').bootstrapValidator('revalidateField', 'date_time_end');

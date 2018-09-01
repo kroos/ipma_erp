@@ -491,18 +491,6 @@ class PhpMatcherDumperTest extends TestCase
 
         return $this->matcherClass;
     }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Symfony\Component\Routing\Route cannot contain objects
-     */
-    public function testGenerateDumperMatcherWithObject()
-    {
-        $routeCollection = new RouteCollection();
-        $routeCollection->add('_', new Route('/', array(new \stdClass())));
-        $dumper = new PhpMatcherDumper($routeCollection);
-        $dumper->dump();
-    }
 }
 
 abstract class RedirectableUrlMatcherStub extends UrlMatcher implements RedirectableUrlMatcherInterface

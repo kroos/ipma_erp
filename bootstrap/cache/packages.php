@@ -1,16 +1,16 @@
 <?php return array (
-  'cviebrock/eloquent-sluggable' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Cviebrock\\EloquentSluggable\\ServiceProvider',
-    ),
-  ),
   'crabbly/fpdf-laravel' => 
   array (
     'providers' => 
     array (
       0 => 'Crabbly\\FPDF\\FpdfServiceProvider',
+    ),
+  ),
+  'cviebrock/eloquent-sluggable' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Cviebrock\\EloquentSluggable\\ServiceProvider',
     ),
   ),
   'fideloper/proxy' => 

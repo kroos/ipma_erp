@@ -301,7 +301,7 @@ class ArgvInput extends Input
         while (0 < count($tokens)) {
             $token = array_shift($tokens);
             if ($onlyParams && '--' === $token) {
-                return $default;
+                return false;
             }
 
             foreach ($values as $value) {
