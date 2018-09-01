@@ -52,17 +52,79 @@ class StaffLeaveController extends Controller
 	*/
 	public function store(StaffLeaveRequest $request)
 	{
-		// https://try-carbon.herokuapp.com/?hide-output-gutter&output-left-padding=10&theme=tomorrow_night&border=none&radius=4&v-padding=15&input=%24mutable%20%3D%20Carbon%3A%3Anow()%3B%0A%24immutable%20%3D%20CarbonImmutable%3A%3Anow()%3B%0A%24modifiedMutable%20%3D%20%24mutable-%3Eadd(1%2C%20%27day%27)%3B%0A%24modifiedImmutable%20%3D%20CarbonImmutable%3A%3Anow()-%3Eadd(1%2C%20%27day%27)%3B%0A%0Avar_dump(%24modifiedMutable%20%3D%3D%3D%20%24mutable)%3B%20%20%20%20%20%20%20%20%20%20%20%20%20%2F%2F%20bool(true)%0Avar_dump(%24mutable-%3EisoFormat(%27dddd%20D%27))%3B%20%20%20%20%20%20%20%20%20%20%20%20%20%2F%2F%20string(11)%20%22Saturday%2025%22%0Avar_dump(%24modifiedMutable-%3EisoFormat(%27dddd%20D%27))%3B%20%20%20%20%20%2F%2F%20string(11)%20%22Saturday%2025%22%0A%2F%2F%20So%20it%20means%20%24mutable%20and%20%24modifiedMutable%20are%20the%20same%20object%0A%2F%2F%20both%20set%20to%20now%20%2B%201%20day.%0Avar_dump(%24modifiedImmutable%20%3D%3D%3D%20%24immutable)%3B%20%20%20%20%20%20%20%20%20%2F%2F%20bool(false)%0Avar_dump(%24immutable-%3EisoFormat(%27dddd%20D%27))%3B%20%20%20%20%20%20%20%20%20%20%20%2F%2F%20string(9)%20%22Friday%2024%22%0Avar_dump(%24modifiedImmutable-%3EisoFormat(%27dddd%20D%27))%3B%20%20%20%2F%2F%20string(11)%20%22Saturday%2025%22%0A%2F%2F%20While%20%24immutable%20is%20still%20set%20to%20now%20and%20cannot%20be%20changed%20and%0A%2F%2F%20%24modifiedImmutable%20is%20a%20new%20instance%20created%20from%20%24immutable%0A%2F%2F%20set%20to%20now%20%2B%201%20day.%0A%0A%24mutable%20%3D%20CarbonImmutable%3A%3Anow()-%3EtoMutable()%3B%0Avar_dump(%24mutable-%3EisMutable())%3B%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%2F%2F%20bool(true)%0Avar_dump(%24mutable-%3EisImmutable())%3B%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%2F%2F%20bool(false)%0A%24immutable%20%3D%20Carbon%3A%3Anow()-%3EtoImmutable()%3B%0Avar_dump(%24immutable-%3EisMutable())%3B%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%2F%2F%20bool(false)%0Avar_dump(%24immutable-%3EisImmutable())%3B%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%2F%2F%20bool(true)%0A&token=live-editor-0
 		// $fridays = [];
-		// $startDate = Carbon::parse('2018-08-01')->next(Carbon::SUNDAY); // Get the first friday.
+		// $startDate = Carbon::parse('2018-08-01')->next(Carbon::SUNDAY); // Get the first sunday.
 		// $endDate = Carbon::parse('2018-08-31');
-		
+
 		// for ($date = $startDate; $date->lte($endDate); $date->addWeek()) {
 		//     $fridays[] = $date->format('Y-m-d');
 		// }
 		// echo count($fridays);
 
-		dd( $request->all() );
+		// dd( $request->all() );
+
+		// $nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+		// foreach ($nodate as $nda) {
+		// 	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+		// 	foreach ($period as $key) {
+		// 		echo $key->format('Y-m-d');
+		// 	}
+		// }
+
+		// in time off, there only date_time_start so...
+		if( empty( $request->date_time_end ) ) {
+			$request->date_time_end = $request->date_time_start;
+		}
+
+		$period = \Carbon\CarbonPeriod::create($request->date_time_start, '1 days', $request->date_time_end);
+		foreach ($period as $key) {
+			// echo $key->format('Y-m-d');
+			$kik = StaffLeave:: where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw('? BETWEEN DATE(date_time_start) AND DATE(staff_leaves.date_time_end)', [$key->format('Y-m-d')])->get();
+			if( $kik->count() > 0 ) {
+				Session::flash('flash_message', 'Tarikh permohonan cuti ('.\Carbon\Carbon::parse($request->date_time_start)->format('D, j F Y').' hingga '.\Carbon\Carbon::parse($request->date_time_end)->format('D, j F Y').') sudah diisi, sila ambil tarikh yang lain');
+				return redirect()->back();
+			}
+		}
+
+		// walau apa cuti sekalipon, mai kita check cuti bertindih dulu..
+
+
+
+		// 		$request->reason
+		// 		$request->date_time_start
+		// 		$request->date_time_end
+		// 		$request->leave_type
+		// 		$request->leave_half
+		// 		$request->staff_id
+		// 		$request->time_start
+		// 		$request->time_end
+		// 		$request->file('document')
+		// 		$request->documentsupport
+		// 		$request->akuan
+
+		// first, we must check $reaquest->leave_type. if $request->leave_type == 1? full day(1) : half day(2)
+
+		// if ( $request->leave_id == 1 || $request->leave_id == 3 ) {
+			// insert semua apa yg ada
+			// StaffLeave::create( array_add( $request->except(['_method', '_token']), 'staff_id', auth()->user()->belongtostaff->id) );
+			// Session::flash('flash_message', 'Data successfully inserted!');
+			// return redirect()->back();
+		// }
+
+		// if ( $request->leave_id == 2 ) {
+		// }
+
+		// if ( $request->leave_id == 4 ) {
+		// }
+
+		// if ( $request->leave_id == 7 ) {
+		// }
+
+		// if ( $request->leave_id == 8 ) {
+		// }
+
+		// if ( $request->leave_id == 9 ) {
+		// }
 	}
 
 	/**

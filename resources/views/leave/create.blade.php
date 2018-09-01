@@ -149,6 +149,29 @@ $('#leave_id').on('change', function() {
 			// useCurrent: true,
 			daysOfWeekDisabled: [0],
 			minDate: moment().add(3, 'days').format('YYYY-MM-DD'),
+			disabledDates:[
+<?php
+// block holiday
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+
+// block cuti sendiri
+
+
+
+
+
+
+
+
+
+?>
+							],
 		})
 		.on('dp.change dp.show dp.update', function(e) {
 			$('#form').bootstrapValidator('revalidateField', 'date_time_start');
@@ -189,12 +212,12 @@ $('#leave_id').on('change', function() {
 			disabledDates:[
 <?php
 $nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
-// foreach ($nodate as $nda) {
-// 	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
-// 	foreach ($period as $key) {
-// 		echo 'moment("'.$key->format('Y-m-d').'", "YYYY-MM-DD"),';
-// 	}
-// }
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
 ?>
 							],
 		})
@@ -346,6 +369,17 @@ $nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
 			format:'YYYY-MM-DD',
 			useCurrent: true,
 			daysOfWeekDisabled: [0],
+			disabledDates:[
+<?php
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+?>
+							],
 		})
 		.on('dp.change dp.show dp.update', function(e) {
 			$('#form').bootstrapValidator('revalidateField', 'date_time_start');
@@ -357,6 +391,17 @@ $nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
 			format:'YYYY-MM-DD',
 			useCurrent: true,
 			daysOfWeekDisabled: [0],
+			disabledDates:[
+<?php
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+?>
+							],
 		})
 		.on('dp.change dp.show dp.update', function(e) {
 			$('#form').bootstrapValidator('revalidateField', 'date_time_end');
@@ -458,6 +503,17 @@ $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave
 			format:'YYYY-MM-DD',
 			// useCurrent: true,
 			daysOfWeekDisabled: [0],
+			disabledDates:[
+<?php
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+?>
+							],
 		})
 		.on('dp.change dp.show dp.update', function(e) {
 			$('#form').bootstrapValidator('revalidateField', 'date_time_start');
@@ -495,6 +551,17 @@ $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave
 		$('#to').datetimepicker({
 			format:'YYYY-MM-DD',
 			daysOfWeekDisabled: [0],
+			disabledDates:[
+<?php
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+?>
+							],
 		})
 		.on('dp.change dp.show dp.update', function(e) {
 			$('#form').bootstrapValidator('revalidateField', 'date_time_end');
@@ -713,6 +780,17 @@ $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave
 		$('#from').datetimepicker({
 			format:'YYYY-MM-DD',
 			daysOfWeekDisabled: [0],
+			disabledDates:[
+<?php
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+?>
+							],
 		})
 		.on('dp.change dp.show dp.update', function(e) {
 			$('#form').bootstrapValidator('revalidateField', 'date_time_start');
@@ -725,6 +803,17 @@ $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave
 		$('#to').datetimepicker({
 			format:'YYYY-MM-DD',
 			daysOfWeekDisabled: [0],
+			disabledDates:[
+<?php
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+?>
+							],
 		})
 		.on('dp.change dp.show dp.update', function(e) {
 			$('#form').bootstrapValidator('revalidateField', 'date_time_end');
@@ -827,6 +916,17 @@ $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave
 		$('#from').datetimepicker({
 			format:'YYYY-MM-DD',
 			daysOfWeekDisabled: [0],
+			disabledDates:[
+<?php
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+?>
+							],
 		})
 		.on('dp.change dp.show dp.update', function(e) {
 			$('#form').bootstrapValidator('revalidateField', 'date_time_start');
@@ -891,6 +991,17 @@ $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave
 		$('#to').datetimepicker({
 			format:'YYYY-MM-DD',
 			daysOfWeekDisabled: [0],
+			disabledDates:[
+<?php
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+?>
+							],
 		})
 		.on('dp.change dp.show dp.update', function(e) {
 			$('#form').bootstrapValidator('revalidateField', 'date_time_end');
@@ -1058,6 +1169,17 @@ $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave
 		$('#from').datetimepicker({
 			format:'YYYY-MM-DD',
 			daysOfWeekDisabled: [0],
+			disabledDates:[
+<?php
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+?>
+							],
 		})
 		.on('dp.change dp.show dp.update', function(e) {
 			$('#form').bootstrapValidator('revalidateField', 'date_time_start');

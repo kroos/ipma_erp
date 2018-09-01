@@ -9,23 +9,37 @@
 				{{ Form::label( 'leave_id', 'Pilih Cuti : ', ['class' => 'col-sm-2 col-form-label'] ) }}
 				<div class="col-sm-10">
 <?php
-$er = App\Model\Leave::all();
-
 // checking for annual leave, mc, nrl and maternity
-$ty = \Auth::user()->belongtostaff;
 
 // hati-hati dgn yg ni sbb melibatkan masa
 $leaveALMC = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->where('year', date('Y'))->first();
 
-$oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave_balance', '<>', 0)->get();
-?>
+$oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave_balance', '<>', 0)->whereYear('working_date', date('Y'))->get();
 
+$ty = \Auth::user()->belongtostaff;
+if($ty->gender_id == 1) {
+	if($oi->sum('leave_balance') < 0 ) {
+		$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 7)->get();
+	 } // else {
+		// $er = App\Model\Leave::where()->where()
+	// }
+} else {
+	if($ty->gender_id == 2) {
+		if($oi->sum('leave_balance') < 0 ) {
+			$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->get();
+		 } // else {
+			// $er = App\Model\Leave::where()->where()
+		// }
+	}
+}
+
+// dd($oi->sum('leave_balance'));
+?>
 					<select name="leave_id" id="leave_id" class="form-control" autocomplete="off">
 						<option value="">Leave Type</option>
 
 @foreach($er as $lev)
 <?php
-if($lev->id != 5 && $lev->id != 6) {
 	// geng pempuan, ada maternity leave
 	if( $ty->gender_id == 2 ) {
 		// kalau ada annual balance
@@ -48,10 +62,10 @@ if($lev->id != 5 && $lev->id != 6) {
 			// annual balance dah habis dan remove annual leave
 			if( $leaveALMC->annual_leave_balance < 1 && $lev->id != 1 ) {
 				if($leaveALMC->medical_leave_balance > 0) {
-					if($oi->sum('leave_balance') > 0 ) {
+					if($oi->count() > 0 ) {
 						echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
 					} else {
-						if($oi->sum('leave_balance') < 1 && $lev->id != 4 ) {
+						if($oi->count() < 1 && $lev->id != 4 ) {
 							echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
 						}
 					}
@@ -74,7 +88,7 @@ if($lev->id != 5 && $lev->id != 6) {
 		// geng laki, takdak maternity leave
 		if($ty->gender_id == 1 && $lev->id != 7) {
 
-			// ada annual abalance so ada annual leave
+			// ada annual abalance so ada annual leave buang UPL (3)
 			if( $leaveALMC->annual_leave_balance > 0 && $lev->id != 3) {
 
 				// bila medical balance ada, jgn exclude MC leave
@@ -84,7 +98,7 @@ if($lev->id != 5 && $lev->id != 6) {
 					if( $oi->sum('leave_balance') > 0 ) {
 						echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
 					} else {
-						if($oi->sum('leave_balance') < 1 && $lev->id != 4 ) {
+						if($oi->count() < 1 && $lev->id != 4 ) {
 							echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
 						}
 					}
@@ -103,20 +117,20 @@ if($lev->id != 5 && $lev->id != 6) {
 						echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
 					} else {
 						if( $leaveALMC->medical_leave_balance < 1 && $lev->id != 2 ) {
-						// ada cuti ganti
-						if( $oi->sum('leave_balance') > 0 ) {
-							echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
-						} else {
-							if($oi->sum('leave_balance') < 1 && $lev->id != 4 ) {
+							// ada cuti ganti
+							if( $oi->sum('leave_balance') < 1 && $lev->id != 4 ) {
 								echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
+							} else {
+								if( $oi->sum('leave_balance') > 0 ) {
+									echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
+								}
 							}
-						}						}
+						}
 					}
 				}
 			}
 		}
 	}
-}
 ?>
 @endforeach
 					</select>

@@ -9,21 +9,21 @@
  * file that was distributed with this source code.
  */
 
-return array(
-    'year' => '1 aasta|:count aastat',
-    'y' => '1 aasta|:count aastat',
-    'month' => '1 kuu|:count kuud',
-    'm' => '1 kuu|:count kuud',
-    'week' => '1 nädal|:count nädalat',
-    'w' => '1 nädal|:count nädalat',
-    'day' => '1 päev|:count päeva',
-    'd' => '1 päev|:count päeva',
-    'hour' => '1 tund|:count tundi',
-    'h' => '1 tund|:count tundi',
-    'minute' => '1 minut|:count minutit',
-    'min' => '1 minut|:count minutit',
-    'second' => '1 sekund|:count sekundit',
-    's' => '1 sekund|:count sekundit',
+return [
+    'year' => ':count aasta|:count aastat',
+    'y' => ':count aasta|:count aastat',
+    'month' => ':count kuu|:count kuud',
+    'm' => ':count kuu|:count kuud',
+    'week' => ':count nädal|:count nädalat',
+    'w' => ':count nädal|:count nädalat',
+    'day' => ':count päev|:count päeva',
+    'd' => ':count päev|:count päeva',
+    'hour' => ':count tund|:count tundi',
+    'h' => ':count tund|:count tundi',
+    'minute' => ':count minut|:count minutit',
+    'min' => ':count minut|:count minutit',
+    'second' => ':count sekund|:count sekundit',
+    's' => ':count sekund|:count sekundit',
     'ago' => ':time tagasi',
     'from_now' => ':time pärast',
     'after' => ':time pärast',
@@ -35,4 +35,6 @@ return array(
     'hour_from_now' => ':count tunni',
     'minute_from_now' => ':count minuti',
     'second_from_now' => ':count sekundi',
-);
+    'first_day_of_week' => 1,
+    'day_of_first_week_of_year' => 4,
+];

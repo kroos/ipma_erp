@@ -12,7 +12,9 @@
         "intervention/image": "^2.4",
         "laravel/framework": "5.6.*",
         "laravel/tinker": "^1.0",
-        "laravelcollective/html": "^5.6"
+        "laravelcollective/html": "^5.6",
+        "nesbot/carbon": "2.0.0-beta.4 as 1.25.0",
+        "kylekatarnls/laravel-carbon-2": "^1.0.0"
     },
     "require-dev": {
         "filp/whoops": "^2.0",
@@ -20,10 +22,6 @@
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^2.0",
         "phpunit/phpunit": "^7.0"
-    },
-    "require": {
-        "nesbot/carbon": "2.0.0-beta.4 as 1.25.0",
-        "kylekatarnls/laravel-carbon-2": "^1.0.0"
     },
     "autoload": {
         "classmap": [

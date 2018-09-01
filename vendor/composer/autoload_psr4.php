@@ -52,6 +52,6 @@ return array(
     'Crabbly\\FPDF\\' => array($vendorDir . '/crabbly/fpdf-laravel/src'),
     'Collective\\Html\\' => array($vendorDir . '/laravelcollective/html/src'),
     'Cocur\\Slugify\\' => array($vendorDir . '/cocur/slugify/src'),
-    'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
     'App\\' => array($baseDir . '/app'),
+    '' => array($vendorDir . '/nesbot/carbon/src'),
 );

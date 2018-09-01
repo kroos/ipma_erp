@@ -18,7 +18,6 @@ $leaveALMC = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->where('y
 			<dd class="col-sm-9">
 				<p>Sebelum anda boleh mengisi borang permohonan cuti, sila isikan dahulu butiran mengenai anda <a href="{{ route('staff.edit', \Auth::user()->belongtostaff->id ) }}" class="font-weight-bold" >disini</a>.</p>
 				<p>Sebaik sahaja anda selesai melengkapkan maklumat mengenai diri anda, anda dibenarkan untuk memohon cuti melaui pautan dibawah <span class="font-weight-bold">"Leave Application"</span></p>
-				<p>Time-Off akan dikira sebagai <strong>Cuti</strong> sekiranya tempoh keluar <strong>Melebihi Dari 2jam</strong>.</p>
 			</dd>
 
 			<dt class="col-sm-3"><h5>Annual Leave :</h5></dt>
@@ -166,13 +165,12 @@ $arr = str_split( date('Y'), 2 );
 @endif
 
 	</div>
-	<div class="card-footer">
+	<div class="card-footer justify-content-center">
 <?php
 $w = \Auth::user()->belongtostaff->gender_id;
 $r = \Auth::user()->belongtostaff->mobile;
 ?>
-
-		<p><a href="{{ ( empty($w) && empty($r) )?route('staff.edit', \Auth::user()->belongtostaff->id):route('staffLeave.create') }}" class="btn btn-primary">{{ ( empty($w) && empty($r) )?'Butiran Diri':'Leave Application' }}</a></p>
+		<a href="{{ ( empty($w) && empty($r) )?route('staff.edit', \Auth::user()->belongtostaff->id):route('staffLeave.create') }}" class="btn btn-primary">{{ ( empty($w) && empty($r) )?'Butiran Diri':'Leave Application' }}</a>
 	</div>
 </div>
 @endsection

@@ -1,6 +1,7 @@
 # Carbon
 
 [![Latest Stable Version](https://poser.pugx.org/nesbot/carbon/v/stable.png)](https://packagist.org/packages/nesbot/carbon)
+[![Latest Beta Version](https://img.shields.io/packagist/vpre/nesbot/carbon.svg)](https://packagist.org/packages/nesbot/carbon)
 [![Total Downloads](https://poser.pugx.org/nesbot/carbon/downloads.png)](https://packagist.org/packages/nesbot/carbon)
 [![Build Status](https://travis-ci.org/briannesbitt/Carbon.svg?branch=master)](https://travis-ci.org/briannesbitt/Carbon)
 [![StyleCI](https://styleci.io/repos/5724990/shield?style=flat)](https://styleci.io/repos/5724990)
@@ -17,7 +18,7 @@ printf("Right now is %s", Carbon::now()->toDateTimeString());
 printf("Right now in Vancouver is %s", Carbon::now('America/Vancouver'));  //implicit __toString()
 $tomorrow = Carbon::now()->addDay();
 $lastWeek = Carbon::now()->subWeek();
-$nextSummerOlympics = Carbon::createFromDate(2012)->addYears(4);
+$nextSummerOlympics = Carbon::createFromDate(2016)->addYears(4);
 
 $officialDate = Carbon::now()->toRfc2822String();
 
@@ -25,13 +26,13 @@ $howOldAmI = Carbon::createFromDate(1975, 5, 21)->age;
 
 $noonTodayLondonTime = Carbon::createFromTime(12, 0, 0, 'Europe/London');
 
-$worldWillEnd = Carbon::createFromDate(2012, 12, 21, 'GMT');
+$internetWillBlowUpOn = Carbon::create(2038, 01, 19, 3, 14, 7, 'GMT');
 
-// Don't really want to die so mock now
+// Don't really want this to happen so mock now
 Carbon::setTestNow(Carbon::createFromDate(2000, 1, 1));
 
 // comparisons are always done in UTC
-if (Carbon::now()->gte($worldWillEnd)) {
+if (Carbon::now()->gte($internetWillBlowUpOn)) {
     die();
 }
 
@@ -60,7 +61,7 @@ $ composer require nesbot/carbon
 ```json
 {
     "require": {
-        "nesbot/carbon": "~1.21"
+        "nesbot/carbon": "^1.33"
     }
 }
 ```
