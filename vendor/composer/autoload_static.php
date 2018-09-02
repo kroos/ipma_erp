@@ -18,8 +18,8 @@ class ComposerStaticInitc719c4b5c7bbffa5a0eaad0ab08b6467
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
-        'fe3b74234e1140ee7cfd9cc2d4c2e566' => __DIR__ . '/..' . '/kylekatarnls/laravel-carbon-2/src/Carbon.php',
         'f18cc91337d49233e5754e93f3ed9ec3' => __DIR__ . '/..' . '/laravelcollective/html/src/helpers.php',
+        'fe3b74234e1140ee7cfd9cc2d4c2e566' => __DIR__ . '/..' . '/kylekatarnls/laravel-carbon-2/src/Carbon.php',
     );
 
     public static $prefixLengthsPsr4 = array (

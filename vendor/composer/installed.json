@@ -1007,49 +1007,6 @@
         ]
     },
     {
-        "name": "kylekatarnls/laravel-carbon-2",
-        "version": "1.0.0",
-        "version_normalized": "1.0.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/kylekatarnls/laravel-carbon-2.git",
-            "reference": "0b68e0454d8e17b31cc42038dda8b7faef8055b3"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/kylekatarnls/laravel-carbon-2/zipball/0b68e0454d8e17b31cc42038dda8b7faef8055b3",
-            "reference": "0b68e0454d8e17b31cc42038dda8b7faef8055b3",
-            "shasum": ""
-        },
-        "require": {
-            "nesbot/carbon": "^2.0.0-beta.2"
-        },
-        "time": "2018-08-17T09:41:47+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "src/Carbon.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "kylekatarnls",
-                "homepage": "https://github.com/kylekatarnls"
-            }
-        ],
-        "description": "Carbon 2 adapter for Laravel",
-        "homepage": "http://carbon.nesbot.com",
-        "keywords": [
-            "carbon",
-            "laravel"
-        ]
-    },
-    {
         "name": "laravel/framework",
         "version": "v5.6.28",
         "version_normalized": "5.6.28.0",
@@ -4603,6 +4560,49 @@
             "assert",
             "check",
             "validate"
+        ]
+    },
+    {
+        "name": "kylekatarnls/laravel-carbon-2",
+        "version": "1.0.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/kylekatarnls/laravel-carbon-2.git",
+            "reference": "0b68e0454d8e17b31cc42038dda8b7faef8055b3"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/kylekatarnls/laravel-carbon-2/zipball/0b68e0454d8e17b31cc42038dda8b7faef8055b3",
+            "reference": "0b68e0454d8e17b31cc42038dda8b7faef8055b3",
+            "shasum": ""
+        },
+        "require": {
+            "nesbot/carbon": "^2.0.0-beta.2"
+        },
+        "time": "2018-08-17T09:41:47+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "src/Carbon.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "kylekatarnls",
+                "homepage": "https://github.com/kylekatarnls"
+            }
+        ],
+        "description": "Carbon 2 adapter for Laravel",
+        "homepage": "http://carbon.nesbot.com",
+        "keywords": [
+            "carbon",
+            "laravel"
         ]
     }
 ]

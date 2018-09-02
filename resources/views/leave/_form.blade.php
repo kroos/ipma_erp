@@ -10,128 +10,120 @@
 				<div class="col-sm-10">
 <?php
 // checking for annual leave, mc, nrl and maternity
-
 // hati-hati dgn yg ni sbb melibatkan masa
 $leaveALMC = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->where('year', date('Y'))->first();
-
 $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave_balance', '<>', 0)->whereYear('working_date', date('Y'))->get();
-
 $ty = \Auth::user()->belongtostaff;
+// dd($oi->sum('leave_balance'));
+
+// geng laki
 if($ty->gender_id == 1) {
-	if($oi->sum('leave_balance') < 0 ) {
-		$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 7)->get();
-	 } // else {
-		// $er = App\Model\Leave::where()->where()
-	// }
+	// geng laki | no nrl
+	if($oi->sum('leave_balance') < 1 ) {
+		// geng laki | no nrl | no al 
+		if( $leaveALMC->annual_leave_balance < 1 ) {
+			if ($leaveALMC->medical_leave_balance < 1) {
+	
+				// laki | no nrl | no al | no mc
+				$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+			} else {
+
+				// laki | no nrl | no al | with mc
+				$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 4)->where('id', '<>', 1)->get();
+			}
+		} else {
+			if ($leaveALMC->medical_leave_balance < 1) {
+
+				// laki | no nrl | with al | no mc
+				$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+			} else {
+
+				// laki | no nrl | with al | with mc
+				$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->get();
+			}
+		}
+	} else {
+		if( $leaveALMC->annual_leave_balance < 1 ) {
+			if ($leaveALMC->medical_leave_balance < 1) {
+
+				// laki | with nrl | no al | no mc
+				$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+			} else {
+
+				// laki | with nrl | no al | no mc
+				$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 1)->get();
+			}
+		} else {
+			if ($leaveALMC->medical_leave_balance < 1) {
+
+				// laki | with nrl | with al | no mc
+				$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+			} else {
+
+				// laki | with nrl | with al | with mc
+				$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->get();
+			}
+		}
+	}
 } else {
+
+	// geng pempuan
 	if($ty->gender_id == 2) {
-		if($oi->sum('leave_balance') < 0 ) {
-			$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->get();
-		 } // else {
-			// $er = App\Model\Leave::where()->where()
-		// }
+		// pempuan | no nrl
+		if($oi->sum('leave_balance') < 1 ) {
+			if( $leaveALMC->annual_leave_balance < 1 ) {
+				if ($leaveALMC->medical_leave_balance < 1) {
+
+					// pempuan | no nrl | no al | no mc
+					$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+				} else {
+
+					// pempuan | no nrl | no al | with mc
+					$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 1)->get();
+				}
+			} else {
+				if ($leaveALMC->medical_leave_balance < 1) {
+
+					// pempuan | no nrl | with al | no mc
+					$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+				} else {
+
+					// pempuan | no nrl | with al | with mc
+					$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 3)->get();
+				}
+			}
+		} else {
+		// pempuan | with nrl
+			if( $leaveALMC->annual_leave_balance < 1 ) {
+				if ($leaveALMC->medical_leave_balance < 1) {
+
+					// pempuan | with nrl | no al | no mc
+					$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+				} else {
+
+					// pempuan | with nrl | no al | with mc
+					$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 1)->get();
+				}
+			} else {
+				if ($leaveALMC->medical_leave_balance < 1) {
+
+					// pempuan | with nrl | with al | no mc
+					$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+				} else {
+
+					// pempuan | with nrl | with al | with mc
+					$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 3)->get();
+				}
+			}
+		}
 	}
 }
-
-// dd($oi->sum('leave_balance'));
 ?>
 					<select name="leave_id" id="leave_id" class="form-control" autocomplete="off">
 						<option value="">Leave Type</option>
 
 @foreach($er as $lev)
-<?php
-	// geng pempuan, ada maternity leave
-	if( $ty->gender_id == 2 ) {
-		// kalau ada annual balance
-		if($leaveALMC->annual_leave_balance > 0 && $lev->id != 3) {
-			if($leaveALMC->medical_leave_balance > 0) {
-				if($oi->sum('leave_balance') > 0 ) {
-					echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
-				} else {
-					if($oi->sum('leave_balance') < 1 && $lev->id != 4 ) {
-						echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
-					}
-				}
-			} else {
-				if($leaveALMC->medical_leave_balance < 1 && $lev->id != 2 ) {
-					echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
-				}
-			}
-		} else {
-
-			// annual balance dah habis dan remove annual leave
-			if( $leaveALMC->annual_leave_balance < 1 && $lev->id != 1 ) {
-				if($leaveALMC->medical_leave_balance > 0) {
-					if($oi->count() > 0 ) {
-						echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
-					} else {
-						if($oi->count() < 1 && $lev->id != 4 ) {
-							echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
-						}
-					}
-				} else {
-					if($leaveALMC->medical_leave_balance < 1 && $lev->id != 2 ) {
-						if($oi->sum('leave_balance') > 0 ) {
-							echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
-						} else {
-							if($oi->sum('leave_balance') < 1 && $lev->id != 4 ) {
-								echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
-							}
-						}
-					}
-				}
-			}
-		}
-
-	} else {
-
-		// geng laki, takdak maternity leave
-		if($ty->gender_id == 1 && $lev->id != 7) {
-
-			// ada annual abalance so ada annual leave buang UPL (3)
-			if( $leaveALMC->annual_leave_balance > 0 && $lev->id != 3) {
-
-				// bila medical balance ada, jgn exclude MC leave
-				if( $leaveALMC->medical_leave_balance > 0 ) {
-
-					// ada cuti ganti
-					if( $oi->sum('leave_balance') > 0 ) {
-						echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
-					} else {
-						if($oi->count() < 1 && $lev->id != 4 ) {
-							echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
-						}
-					}
-				} else {
-					if( $leaveALMC->medical_leave_balance < 1 && $lev->id != 2 ) {
-						echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
-					}
-				}
-			} else {
-
-				//exclude annual leave bila anuual balance habis
-				if($leaveALMC->annual_leave_balance < 1 && $lev->id != 1) {
-
-					// bila medical balance ada, jgn exclude MC leave
-					if( $leaveALMC->medical_leave_balance > 0 ) {
-						echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
-					} else {
-						if( $leaveALMC->medical_leave_balance < 1 && $lev->id != 2 ) {
-							// ada cuti ganti
-							if( $oi->sum('leave_balance') < 1 && $lev->id != 4 ) {
-								echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
-							} else {
-								if( $oi->sum('leave_balance') > 0 ) {
-									echo '<option value="'.$lev->id.'">'.$lev->leave.'</option>';
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-?>
+						<option value="{{ $lev->id }}">{{ $lev->leave }}</option>
 @endforeach
 					</select>
 				</div>
