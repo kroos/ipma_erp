@@ -58,6 +58,32 @@ if (empty($sel)) {
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+$('#date').datetimepicker({
+			format:'YYYY-MM-DD',
+}).on('dp.change dp.show dp.update', function(e) {
+	var dateleave = $('#date').val();
+	console.log(dateleave);
+	$.ajax({
+		url: "{{ route('workinghour.leaveType') }}",
+		type: "POST",
+		data: {
+				date: dateleave,
+				_token: '{!! csrf_token() !!}'
+			},
+		dataType: 'json',
+		global: false,
+		async:false,
+		success: function (response) {
+			// you will get response from your php page (what you echo or print)
+			return response;
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.log(textStatus, errorThrown);
+		}
+	})
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $('#leave_id').on('change', function() {
 	$selection = $(this).find(':selected');
 	// $('#opt_value').val($selection.val());
@@ -277,7 +303,7 @@ foreach ($nodate as $nda) {
 				}).responseText;
 				
 				// convert data1 into json
-				var obj = jQuery.parseJSON( data1 );
+				var obj = $.parseJSON( data1 );
 
 				// checking so there is no double
 				if( $('.removetest').length == 0 ) {

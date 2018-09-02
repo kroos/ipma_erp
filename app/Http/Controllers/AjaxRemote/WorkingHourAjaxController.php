@@ -50,4 +50,135 @@ class WorkingHourAjaxController extends Controller
 			'end_pm' => $time->first()->time_end_pm,
 		]);
 	}
+
+	public function leaveType(Request $request)
+	{
+		$year = \Carbon\Carbon::parse($request->date)->year;
+
+		echo $year;
+
+		// checking for annual leave, mc, nrl and maternity
+		// hati-hati dgn yg ni sbb melibatkan masa
+		$leaveALMC = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->where('year', date('Y'))->first();
+		$oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave_balance', '<>', 0)->whereYear('working_date', date('Y'))->get();
+		$ty = \Auth::user()->belongtostaff;
+		// dd($oi->sum('leave_balance'));
+		
+		// geng laki
+		if($ty->gender_id == 1) {
+			// geng laki | no nrl
+			if($oi->sum('leave_balance') < 1 ) {
+				// geng laki | no nrl | no al 
+				if( $leaveALMC->annual_leave_balance < 1 ) {
+					if ($leaveALMC->medical_leave_balance < 1) {
+			
+						// laki | no nrl | no al | no mc
+						$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+					} else {
+		
+						// laki | no nrl | no al | with mc
+						$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 4)->where('id', '<>', 1)->get();
+					}
+				} else {
+					if ($leaveALMC->medical_leave_balance < 1) {
+		
+						// laki | no nrl | with al | no mc
+						$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+					} else {
+		
+						// laki | no nrl | with al | with mc
+						$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->get();
+					}
+				}
+			} else {
+				if( $leaveALMC->annual_leave_balance < 1 ) {
+					if ($leaveALMC->medical_leave_balance < 1) {
+		
+						// laki | with nrl | no al | no mc
+						$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+					} else {
+		
+						// laki | with nrl | no al | no mc
+						$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 1)->get();
+					}
+				} else {
+					if ($leaveALMC->medical_leave_balance < 1) {
+		
+						// laki | with nrl | with al | no mc
+						$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+					} else {
+		
+						// laki | with nrl | with al | with mc
+						$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->get();
+					}
+				}
+			}
+		} else {
+		
+			// geng pempuan
+			if($ty->gender_id == 2) {
+				// pempuan | no nrl
+				if($oi->sum('leave_balance') < 1 ) {
+					if( $leaveALMC->annual_leave_balance < 1 ) {
+						if ($leaveALMC->medical_leave_balance < 1) {
+		
+							// pempuan | no nrl | no al | no mc
+							$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+						} else {
+		
+							// pempuan | no nrl | no al | with mc
+							$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 1)->get();
+						}
+					} else {
+						if ($leaveALMC->medical_leave_balance < 1) {
+		
+							// pempuan | no nrl | with al | no mc
+							$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+						} else {
+		
+							// pempuan | no nrl | with al | with mc
+							$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 3)->get();
+						}
+					}
+				} else {
+				// pempuan | with nrl
+					if( $leaveALMC->annual_leave_balance < 1 ) {
+						if ($leaveALMC->medical_leave_balance < 1) {
+		
+							// pempuan | with nrl | no al | no mc
+							$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+						} else {
+		
+							// pempuan | with nrl | no al | with mc
+							$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 1)->get();
+						}
+					} else {
+						if ($leaveALMC->medical_leave_balance < 1) {
+		
+							// pempuan | with nrl | with al | no mc
+							$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+						} else {
+		
+							// pempuan | with nrl | with al | with mc
+							$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 3)->get();
+						}
+					}
+				}
+			}
+		}
+
+
+
+
+
+
+
+
+
+
+
+		return response()->json([
+			'date' => $request->date
+		]);
+	}
 }

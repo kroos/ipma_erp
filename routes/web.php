@@ -234,6 +234,13 @@ Route::post('/workinghour', [
 	]);
 
 ############################################################################
+// leaveType Ajax Controller
+Route::post('/leaveType', [
+		'as' => 'workinghour.leaveType',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@leaveType'
+	]);
+
+############################################################################
 
 
 
