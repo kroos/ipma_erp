@@ -1245,7 +1245,14 @@ $(document).on('keyup', '#reason', function () {
 /////////////////////////////////////////////////////////////////////////////////////////
 //select2
 $('#leave_id').select2({
-	placeholder: 'Please choose'
+	placeholder: 'Please choose',
+	ajax: {
+		url: '{{ route('workinghour.leaveType') }}',
+		data: { '_token': '{!! csrf_token() !!}' },
+		type: 'POST',
+		dataType: 'json',
+	},
+	allowClear: true,
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////

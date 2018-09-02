@@ -5,6 +5,8 @@ namespace App\Http\Controllers\AjaxRemote;
 use App\Http\Controllers\Controller;
 
 use App\Model\WorkingHour;
+// use App\Model\Leave;
+
 use Illuminate\Http\Request;
 
 class WorkingHourAjaxController extends Controller
@@ -55,7 +57,7 @@ class WorkingHourAjaxController extends Controller
 	{
 		$year = \Carbon\Carbon::parse($request->date)->year;
 
-		echo $year;
+		// echo $year;
 
 		// checking for annual leave, mc, nrl and maternity
 		// hati-hati dgn yg ni sbb melibatkan masa
@@ -73,21 +75,21 @@ class WorkingHourAjaxController extends Controller
 					if ($leaveALMC->medical_leave_balance < 1) {
 			
 						// laki | no nrl | no al | no mc
-						$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 2)->get();
 					} else {
 		
 						// laki | no nrl | no al | with mc
-						$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 4)->where('id', '<>', 1)->get();
+						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 4)->where('id', '<>', 1)->get();
 					}
 				} else {
 					if ($leaveALMC->medical_leave_balance < 1) {
 		
 						// laki | no nrl | with al | no mc
-						$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 2)->get();
 					} else {
 		
 						// laki | no nrl | with al | with mc
-						$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->get();
+						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->get();
 					}
 				}
 			} else {
@@ -95,21 +97,21 @@ class WorkingHourAjaxController extends Controller
 					if ($leaveALMC->medical_leave_balance < 1) {
 		
 						// laki | with nrl | no al | no mc
-						$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 1)->where('id', '<>', 2)->get();
 					} else {
 		
 						// laki | with nrl | no al | no mc
-						$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 1)->get();
+						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 1)->get();
 					}
 				} else {
 					if ($leaveALMC->medical_leave_balance < 1) {
 		
 						// laki | with nrl | with al | no mc
-						$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 2)->get();
 					} else {
 		
 						// laki | with nrl | with al | with mc
-						$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->get();
+						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->get();
 					}
 				}
 			}
@@ -123,21 +125,21 @@ class WorkingHourAjaxController extends Controller
 						if ($leaveALMC->medical_leave_balance < 1) {
 		
 							// pempuan | no nrl | no al | no mc
-							$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 2)->get();
 						} else {
 		
 							// pempuan | no nrl | no al | with mc
-							$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 1)->get();
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 1)->get();
 						}
 					} else {
 						if ($leaveALMC->medical_leave_balance < 1) {
 		
 							// pempuan | no nrl | with al | no mc
-							$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 3)->where('id', '<>', 2)->get();
 						} else {
 		
 							// pempuan | no nrl | with al | with mc
-							$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 3)->get();
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 3)->get();
 						}
 					}
 				} else {
@@ -146,39 +148,37 @@ class WorkingHourAjaxController extends Controller
 						if ($leaveALMC->medical_leave_balance < 1) {
 		
 							// pempuan | with nrl | no al | no mc
-							$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 1)->where('id', '<>', 2)->get();
 						} else {
 		
 							// pempuan | with nrl | no al | with mc
-							$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 1)->get();
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 1)->get();
 						}
 					} else {
 						if ($leaveALMC->medical_leave_balance < 1) {
 		
 							// pempuan | with nrl | with al | no mc
-							$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 3)->where('id', '<>', 2)->get();
 						} else {
 		
 							// pempuan | with nrl | with al | with mc
-							$er = App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 3)->get();
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 3)->get();
 						}
 					}
 				}
 			}
 		}
 
+		// https://select2.org/data-sources/formats
+		foreach ($er as $key) {
+			$cuti['results'][] = [
+					'id' => $key->id,
+					'text' => $key->leave,
+					'created_at' => $key->created_at,
+			];
+			$cuti['pagination'] = ['more' => true];
+		}
 
-
-
-
-
-
-
-
-
-
-		return response()->json([
-			'date' => $request->date
-		]);
+		return response()->json( $cuti );
 	}
 }
