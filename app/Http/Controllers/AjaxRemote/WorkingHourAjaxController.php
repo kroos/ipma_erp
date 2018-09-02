@@ -176,7 +176,7 @@ class WorkingHourAjaxController extends Controller
 					'text' => $key->leave,
 					'created_at' => $key->created_at,
 			];
-			$cuti['pagination'] = ['more' => true];
+			// $cuti['pagination'] = ['more' => true];
 		}
 
 		return response()->json( $cuti );
