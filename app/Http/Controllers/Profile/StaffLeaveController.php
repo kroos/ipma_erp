@@ -82,142 +82,12 @@ class StaffLeaveController extends Controller
 			}
 		}
 
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// in time off, there only date_time_start so...
 		if( empty( $request->date_time_end ) ) {
 			$request->date_time_end = $request->date_time_start;
 		}
 
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// must check date range if there is any, got few case i.e 
-		// 1. oldyear -> currentYear
-		// 2. currentYear -> currentYear
-		// 3. curretnYear -> newYear
-
-		// $date1 = $request->date_time_start;
-		// $date2 = $request->date_time_end;
-
-		$date1 = '2017-12-29';
-		$date2 = '2019-01-02';
-		// cari tahun dulu
-		function split_date($start_date,$end_date){
-		
-		    while($start_date < $end_date){
-		        $end = date("Y-m-d", strtotime("Last day of December", strtotime($start_date)));
-		        if($end_date<$end){
-		            $end = $end_date;
-		        }
-		        $dates[] =array('start'=>$start_date,'end'=>$end);
-		
-		        $start_date =date("Y-m-d", strtotime("+1 day", strtotime($end)));
-		
-		    }
-		    return $dates; 
-		}
-		$dates = split_date($date1, $date2);
-		// print_r($dates);
-
-		foreach ($dates as $key => $val) {
-			$period = \Carbon\CarbonPeriod::create($val['start'], '1 days', $val['end']);
-
-			// buat projek kat sini? fuck dot man..
-			echo $period->count().' coutn<br />';
-
-			$nodays = \App\Model\HolidayCalendar::where('date_start', '>=', $val['start'] )->where( 'date_end', '<=', $val['end'] )->get();
-			// echo $nodays.' json for the whole year<br />';
-			foreach ($nodays as $uy) {
-				$perC = \Carbon\CarbonPeriod::create($uy->date_start, '1 days', $uy->date_end);
-				echo $perC->count().' hari cuti dari '.$val['start'].' <=> '.$val['end'].'<br />';
-			}
-
-			$ahad = \Carbon\Carbon::parse(  )->dayOfWeek;
-
-
-
-
-
-
-		}
-
-
-
-
-
-
-
-
-
-
-
-
-		// buang cuti umum dulu, take note : public holiday got sunday
-//		$sun = [];
-//		$nodays = \App\Model\HolidayCalendar::where('date_start', '>=', $request->date_time_start )->where( 'date_end', '<=', $request->date_time_end )->get();
-//		foreach ($nodays as $keycuti) {
-//			$periodC = \Carbon\CarbonPeriod::create($keycuti->date_start, '1 days', $keycuti->date_end);
-//			foreach ($periodC as $val) {
-//				$ahad = \Carbon\Carbon::parse( $val->format('Y-m-d') )->dayOfWeek;
-//				if($ahad != 0 ) {
-//					echo $val->format('Y-m-d').' cuti<br />';
-//					$sun[] = $val->format('Y-m-d');
-//				}
-//			}
-//		}
-//		echo count($sun).' cuti umum tanpa ahad<br />';
-
-//		// berapa hari cuti
-//		$periodY = \Carbon\CarbonPeriod::create($request->date_time_start, '1 days', $request->date_time_end);
-//		echo count($periodY).' = bilangan hari cuti<br />';
-//		$cuti = [];
-//		foreach ($periodY as $key) {
-//			// sunday is working
-//			$rty = \Carbon\Carbon::parse( $key->format('Y-m-d') )->dayOfWeek;
-//			if( $rty != 0 ) {
-//				echo $key->format('Y-m-d').' slps tolak ahad<br />';
-//				$cuti[] = $key->format('Y-m-d');
-//			}
-//		}
-
-//		echo count($cuti).' bilangan cuti slps ditolak ahad.<br />';
-
-
-
-//		$date1 = '22-12-2013';
-//		$date2 = "04-01-2014";
-//		function split_date($d1, $d2)
-//		{
-//			$start_year = substr($d1, -4);
-//			$end_year = substr($d2, -4);
-
-//			if($end_year > $start_year)
-//			{
-//				$d1 .= ' ['.date('d-m-Y',strtotime("31-12-".$start_year)).'] <br />';
-//				$d2 = '['.date('d-m-Y',strtotime("01-01-".$start_year."+1 years")).'] ' . $d2;
-//			}
-//			return $d1 . $d2;
-//		}
-
-//		echo split_date($date1, $date2);
-
-		// // buang cuti umum
-		// $cuti = [];
-		// $nodate5 = \App\Model\HolidayCalendar::where('date_start', '>=', $request->date_time_start)->where( 'date_end', '<=', $request->date_time_end )->get();
-		// foreach ($nodate5 as $nda) {
-		// 	$periodH = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
-		// 	foreach ($periodH as $key) {
-		// 		// echo $key->format('Y-m-d').' tarikh cuti umum<br />';
-
-		// 		// cari dan buang hari ahad
-		// 		$rty = \Carbon\Carbon::parse( $key->format('Y-m-d') )->dayOfWeek;
-		// 		if( $rty != 0 ){
-		// 			$cuti[] = $key->format('Y-m-d');
-		// 			echo $key->format('Y-m-d').' ambil tarih ni dari cuti umum<br />';
-		// 		}
-		// 	}
-		// }
-		// echo count($cuti).' bilangan cuti umum exclude hari ahad<br />';
-
-		// $hari = count($periodY) - count($sunday) - count($cuti);
-		// echo 'bilangan cuti sebenar hanyalah = '.$hari.'<br />';
 
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -243,36 +113,154 @@ class StaffLeaveController extends Controller
 			}
 		}
 
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		if ( $request->leave_id == 1 || $request->leave_id == 3 ) {
-			// insert semua apa yg ada
-			// StaffLeave::create( array_add( $request->except(['_method', '_token']), 'staff_id', auth()->user()->belongtostaff->id) );
-			// $takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
-			// 	'leave_id' => $request->leave_id,
-			// 	'reason' => $request->reason,
-			// 	'date_time_start' => $date_time_start,
-			// 	'date_time_end' => $date_time_end,
-			// 	'al_balance' => 1,
-			// 	'active' => 1,
-			// ]);
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// must check date range if there is any, got few case i.e 
+		// 1. oldyear -> currentYear
+		// 2. currentYear -> currentYear
+		// 3. curretnYear -> newYear
 
-			// Session::flash('flash_message', 'Data successfully inserted!');
-			// return redirect()->back();
+		// $date1 = $request->date_time_start;
+		// $date2 = $request->date_time_end;
+
+		$date1 = '2018-09-07';
+		$date2 = '2018-09-20';
+		// cari tahun dulu
+		$gtotal = 0;
+		function split_date($start_date,$end_date){
+		
+		    while($start_date < $end_date){
+		        $end = date("Y-m-d", strtotime("Last day of December", strtotime($start_date)));
+		        if($end_date<$end){
+		            $end = $end_date;
+		        }
+		        $dates[] =array('start'=>$start_date,'end'=>$end);
+		
+		        $start_date =date("Y-m-d", strtotime("+1 day", strtotime($end)));
+		
+		    }
+		    return $dates; 
 		}
 
+		$dates = split_date($date1, $date2);
+		// print_r($dates);
+
+		foreach ($dates as $key => $val) {
+			$period = \Carbon\CarbonPeriod::create($val['start'], '1 days', $val['end']);
+
+			// count all date
+			echo $period->count().' total hari<br />';
+
+			// kira cuti tanpa ahad
+			$cuti = [];
+			$nodays = \App\Model\HolidayCalendar::where('date_start', '>=', $val['start'] )->where( 'date_end', '<=', $val['end'] )->get();
+			// echo $nodays.' json for the whole year<br />';
+			foreach ($nodays as $uy) {
+				// take cuti date from database
+				$perC = \Carbon\CarbonPeriod::create($uy->date_start, '1 days', $uy->date_end);
+				// echo $perC->count().' hari cuti dari '.$val['start'].' <=> '.$val['end'].'<br />';
+				foreach ($perC as $aha) {
+					$adaahaddlmni = \Carbon\Carbon::parse( $aha, 'Y-m-d' )->dayOfWeek;
+					if($adaahaddlmni != 0) {
+						// echo $aha.' no ahad in cuti<br />';
+						$cuti[] = $aha;
+					}
+				}
+			}
+			echo count($cuti).' bilangan hari cuti tanpa ahad<br />';
+
+			// substract all sundays
+			$sundi = [];
+			foreach ($period as $op) {
+				$sund = \Carbon\Carbon::parse( $op )->dayOfWeek;
+				if($sund != 0) {
+					// echo $op.' bukan hari ahad<br />';
+					$sundi[] = $op;
+				}
+			}
+			echo count($sundi).' bilangan bukan hari ahad dalam range<br />';
+
+			$haricuti = count($sundi) - count($cuti);
+
+			echo $haricuti.' applied leave for partial year<br />';
+			$gtotal += $haricuti;
+
+			// must check 2 things. 1. annual leave 2. mc leave
+			$dt = \Carbon\Carbon::parse($val['start']);
+			echo $dt->year.' year<br />';
+			// $almc = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->where('year', $dt->year)->firstOrFail();
+			$almc = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->where('year', $dt->year)->first();
+			if(!empty($almc)) {
+				echo $almc->annual_leave_balance.' al<br />';
+				echo $almc->medical_leave_balance.' mc<br />';
+			}
+			echo '///////////////////////////////////////////////////////////////<br>';
+
+			$leave_no = \App\Model\StaffLeave::whereYear('created_at', $dt->year)->first();
+			if(empty($leave_no)) {
+				$leave_no = 0;
+			} else {
+				$leave_no = $leave_no->max('leave_no');
+			}
+			echo $leave_no.' leave_no<br />';
+			// before insert, check leave no.
+			$leave_no = $leave_no + 1;
+			echo $leave_no.' after add 1<br />';
+
+			if ( $request->leave_id == 1 ) {
+				// annual Leave
+				$albal = $almc->annual_leave_balance;
+				//capture al balance b4 subtract
+
+				// got 2 case, it can turn into upl once al is done.
+				$albal1 = $albal - $haricuti;
+				echo $albal1.' al - total cuti<br />';
+				if( $albal1 < 0 ) {
+					// negative value, so blocked
+
+				}
+
+
+
+				// $takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
+				//	'leave_no' => $leave_no,
+				// 	'leave_id' => $request->leave_id,
+				// 	'reason' => $request->reason,
+				// 	'date_time_start' => $date_time_start,
+				// 	'date_time_end' => $date_time_end,
+				// 	'al_balance' => 1,
+				// 	'active' => 1,
+				// ]);
+
+				// Session::flash('flash_message', 'Data successfully inserted!');
+				// return redirect()->back();
+			}
+		}
+		echo $gtotal.' grandtotal all leave day<br />';
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		// if ( $request->leave_id == 2 ) {
+				// mc leave
+		// }
+
+		// if( $request->leave_id == 3 ) {
+		// 	UPL leave
 		// }
 
 		// if ( $request->leave_id == 4 ) {
+				// NRL leave
 		// }
 
 		// if ( $request->leave_id == 7 ) {
+				// ML leave
 		// }
 
 		// if ( $request->leave_id == 8 ) {
+				// EL leave
 		// }
 
 		// if ( $request->leave_id == 9 ) {
+				// TL
 		// }
 	}
 
