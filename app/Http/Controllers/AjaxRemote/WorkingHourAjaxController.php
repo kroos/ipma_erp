@@ -42,8 +42,7 @@ class WorkingHourAjaxController extends Controller
 				}
 			}
 		}
- 
-// echo $time->toSql();
+ 		// echo $time->toSql();
 
 		return response()->json([
 			'start_am' => $time->first()->time_start_am,

@@ -26,6 +26,7 @@
 @section('js')
 
 <?php
+// use for backup in append html and ajax.
 $usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
 $userloc = \Auth::user()->belongtostaff->location_id;
 // echo $userloc.'<-- location_id<br />';
@@ -185,17 +186,14 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
-
 // block cuti sendiri
-
-
-
-
-
-
-
-
-
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
+foreach ($nodate1 as $key) {
+		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
+		foreach ($period1 as $key1) {
+			echo 'moment("'.$key1->format('Y-m-d').'"),';
+		}
+	}
 ?>
 							],
 		})
@@ -244,6 +242,16 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
+foreach ($nodate1 as $key) {
+		// echo $key->date_time_start.' datetime start';
+		// echo $key->date_time_end.' datetime end';
+		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
+		foreach ($period1 as $key1) {
+			echo 'moment("'.$key1->format('Y-m-d').'"),';
+		}
+	}
 ?>
 							],
 		})
@@ -309,13 +317,13 @@ foreach ($nodate as $nda) {
 				if( $('.removetest').length == 0 ) {
 					$('#wrappertest').append(
 						'<div class="pretty p-default p-curve form-check removetest">' +
-							'<input type="radio" name="leave_half" value="1" id="am" checked="checked">' +
+							'<input type="radio" name="leave_half" value="' + obj.start_am + '/' + obj.end_am + '" id="am" checked="checked">' +
 							'<div class="state p-primary">' +
 								'<label for="am" class="form-check-label">' + moment(obj.start_am, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_am, 'HH:mm:ss').format('h:mm a') + '</label> ' +
 							'</div>' +
 						'</div>' +
 						'<div class="pretty p-default p-curve form-check removetest">' +
-							'<input type="radio" name="leave_half" value="0" id="pm">' +
+							'<input type="radio" name="leave_half" value="' + obj.start_pm + '/' + obj.end_pm + '" id="pm">' +
 							'<div class="state p-primary">' +
 								'<label for="pm" class="form-check-label">' + moment(obj.start_pm, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_pm, 'HH:mm:ss').format('h:mm a') + '</label> ' +
 							'</div>' +
@@ -404,6 +412,16 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
+foreach ($nodate1 as $key) {
+		// echo $key->date_time_start.' datetime start';
+		// echo $key->date_time_end.' datetime end';
+		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
+		foreach ($period1 as $key1) {
+			echo 'moment("'.$key1->format('Y-m-d').'"),';
+		}
+	}
 ?>
 							],
 		})
@@ -426,6 +444,16 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
+foreach ($nodate1 as $key) {
+		// echo $key->date_time_start.' datetime start';
+		// echo $key->date_time_end.' datetime end';
+		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
+		foreach ($period1 as $key1) {
+			echo 'moment("'.$key1->format('Y-m-d').'"),';
+		}
+	}
 ?>
 							],
 		})
@@ -538,6 +566,16 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
+foreach ($nodate1 as $key) {
+		// echo $key->date_time_start.' datetime start';
+		// echo $key->date_time_end.' datetime end';
+		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
+		foreach ($period1 as $key1) {
+			echo 'moment("'.$key1->format('Y-m-d').'"),';
+		}
+	}
 ?>
 							],
 		})
@@ -586,6 +624,16 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
+foreach ($nodate1 as $key) {
+		// echo $key->date_time_start.' datetime start';
+		// echo $key->date_time_end.' datetime end';
+		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
+		foreach ($period1 as $key1) {
+			echo 'moment("'.$key1->format('Y-m-d').'"),';
+		}
+	}
 ?>
 							],
 		})
@@ -652,13 +700,13 @@ foreach ($nodate as $nda) {
 				if( $('.removetest').length == 0 ) {
 					$('#wrappertest').append(
 						'<div class="pretty p-default p-curve form-check removetest">' +
-							'<input type="radio" name="leave_half" value="1" id="am" checked="checked">' +
+							'<input type="radio" name="leave_half" value="' + obj.start_am + '/' + obj.end_am + '" id="am" checked="checked">' +
 							'<div class="state p-primary">' +
 								'<label for="am" class="form-check-label">' + moment(obj.start_am, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_am, 'HH:mm:ss').format('h:mm a') + '</label> ' +
 							'</div>' +
 						'</div>' +
 						'<div class="pretty p-default p-curve form-check removetest">' +
-							'<input type="radio" name="leave_half" value="0" id="pm">' +
+							'<input type="radio" name="leave_half" value="' + obj.start_pm + '/' + obj.end_pm + '" id="pm">' +
 							'<div class="state p-primary">' +
 								'<label for="pm" class="form-check-label">' + moment(obj.start_pm, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_pm, 'HH:mm:ss').format('h:mm a') + '</label> ' +
 							'</div>' +
@@ -723,13 +771,13 @@ foreach ($nodate as $nda) {
 				if( $('.removetest').length == 0 ) {
 					$('#wrappertest').append(
 						'<div class="pretty p-default p-curve form-check removetest">' +
-							'<input type="radio" name="leave_half" value="1" id="am" checked="checked">' +
+							'<input type="radio" name="leave_half" value="' + obj.start_am + '/' + obj.end_am + '" id="am" checked="checked">' +
 							'<div class="state p-primary">' +
 								'<label for="am" class="form-check-label">' + moment(obj.start_am, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_am, 'HH:mm:ss').format('h:mm a') + '</label> ' +
 							'</div>' +
 						'</div>' +
 						'<div class="pretty p-default p-curve form-check removetest">' +
-							'<input type="radio" name="leave_half" value="0" id="pm">' +
+							'<input type="radio" name="leave_half" value="' + obj.start_pm + '/' + obj.end_pm + '" id="pm">' +
 							'<div class="state p-primary">' +
 								'<label for="pm" class="form-check-label">' + moment(obj.start_pm, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_pm, 'HH:mm:ss').format('h:mm a') + '</label> ' +
 							'</div>' +
@@ -815,6 +863,16 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
+foreach ($nodate1 as $key) {
+		// echo $key->date_time_start.' datetime start';
+		// echo $key->date_time_end.' datetime end';
+		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
+		foreach ($period1 as $key1) {
+			echo 'moment("'.$key1->format('Y-m-d').'"),';
+		}
+	}
 ?>
 							],
 		})
@@ -838,6 +896,16 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
+foreach ($nodate1 as $key) {
+		// echo $key->date_time_start.' datetime start';
+		// echo $key->date_time_end.' datetime end';
+		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
+		foreach ($period1 as $key1) {
+			echo 'moment("'.$key1->format('Y-m-d').'"),';
+		}
+	}
 ?>
 							],
 		})
@@ -951,6 +1019,16 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
+foreach ($nodate1 as $key) {
+		// echo $key->date_time_start.' datetime start';
+		// echo $key->date_time_end.' datetime end';
+		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
+		foreach ($period1 as $key1) {
+			echo 'moment("'.$key1->format('Y-m-d').'"),';
+		}
+	}
 ?>
 							],
 		})
@@ -1026,6 +1104,16 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
+foreach ($nodate1 as $key) {
+		// echo $key->date_time_start.' datetime start';
+		// echo $key->date_time_end.' datetime end';
+		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
+		foreach ($period1 as $key1) {
+			echo 'moment("'.$key1->format('Y-m-d').'"),';
+		}
+	}
 ?>
 							],
 		})
@@ -1091,13 +1179,13 @@ foreach ($nodate as $nda) {
 				if( $('.removetest').length == 0 ) {
 					$('#wrappertest').append(
 						'<div class="pretty p-default p-curve form-check removetest">' +
-							'<input type="radio" name="leave_half" value="1" id="am" checked="checked">' +
+							'<input type="radio" name="leave_half" value="' + obj.start_am + '/' + obj.end_am + '" id="am" checked="checked">' +
 							'<div class="state p-primary">' +
 								'<label for="am" class="form-check-label">' + moment(obj.start_am, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_am, 'HH:mm:ss').format('h:mm a') + '</label> ' +
 							'</div>' +
 						'</div>' +
 						'<div class="pretty p-default p-curve form-check removetest">' +
-							'<input type="radio" name="leave_half" value="0" id="pm">' +
+							'<input type="radio" name="leave_half" value="' + obj.start_pm + '/' + obj.end_pm + '" id="pm">' +
 							'<div class="state p-primary">' +
 								'<label for="pm" class="form-check-label">' + moment(obj.start_pm, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_pm, 'HH:mm:ss').format('h:mm a') + '</label> ' +
 							'</div>' +
@@ -1204,6 +1292,16 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
+foreach ($nodate1 as $key) {
+		// echo $key->date_time_start.' datetime start';
+		// echo $key->date_time_end.' datetime end';
+		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
+		foreach ($period1 as $key1) {
+			echo 'moment("'.$key1->format('Y-m-d').'"),';
+		}
+	}
 ?>
 							],
 		})
