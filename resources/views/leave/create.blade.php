@@ -192,6 +192,16 @@ $('#leave_id').on('change', function() {
 			minDate: moment().add(3, 'days').format('YYYY-MM-DD'),
 			disabledDates:[
 <?php
+// block holiday tgk dlm disable date in datetimepicker
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
 foreach ($nodate1 as $key) {
 		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
 		foreach ($period1 as $key1) {
@@ -239,6 +249,16 @@ foreach ($nodate1 as $key) {
 			minDate: moment().add(3, 'days').format('YYYY-MM-DD'),
 			disabledDates:[
 <?php
+// block holiday tgk dlm disable date in datetimepicker
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
 foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
@@ -400,6 +420,16 @@ foreach ($nodate1 as $key) {
 			daysOfWeekDisabled: [0],
 			disabledDates:[
 <?php
+// block holiday tgk dlm disable date in datetimepicker
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
 foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
@@ -423,6 +453,16 @@ foreach ($nodate1 as $key) {
 			daysOfWeekDisabled: [0],
 			disabledDates:[
 <?php
+// block holiday tgk dlm disable date in datetimepicker
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
 foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
@@ -536,6 +576,16 @@ $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave
 			daysOfWeekDisabled: [0],
 			disabledDates:[
 <?php
+// block holiday tgk dlm disable date in datetimepicker
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
 foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
@@ -585,6 +635,16 @@ foreach ($nodate1 as $key) {
 			daysOfWeekDisabled: [0],
 			disabledDates:[
 <?php
+// block holiday tgk dlm disable date in datetimepicker
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
 foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
@@ -815,6 +875,16 @@ foreach ($nodate1 as $key) {
 			daysOfWeekDisabled: [0],
 			disabledDates:[
 <?php
+// block holiday tgk dlm disable date in datetimepicker
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
 foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
@@ -839,6 +909,16 @@ foreach ($nodate1 as $key) {
 			daysOfWeekDisabled: [0],
 			disabledDates:[
 <?php
+// block holiday tgk dlm disable date in datetimepicker
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
 foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
@@ -953,6 +1033,16 @@ foreach ($nodate1 as $key) {
 			daysOfWeekDisabled: [0],
 			disabledDates:[
 <?php
+// block holiday tgk dlm disable date in datetimepicker
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
 foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
@@ -1029,6 +1119,16 @@ foreach ($nodate1 as $key) {
 			daysOfWeekDisabled: [0],
 			disabledDates:[
 <?php
+// block holiday tgk dlm disable date in datetimepicker
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
 foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
@@ -1208,6 +1308,16 @@ foreach ($nodate1 as $key) {
 			daysOfWeekDisabled: [0],
 			disabledDates:[
 <?php
+// block holiday tgk dlm disable date in datetimepicker
+$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+// block cuti sendiri
+$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
 foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';

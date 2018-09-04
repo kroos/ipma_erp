@@ -241,9 +241,9 @@ class StaffLeaveController extends Controller
 				$pos = \App\Model\Position::find( 36 )->hasmanystaffposition()->get();
 				// dd ( $pos );
 				foreach($pos as $po) {
-					$po.' name<br />';
+					echo $po->belongtostaff->name.' supervisor name<br />';
+					echo $po->belongtostaff->id.' supervisor staff id<br />';
 				}
-
 			}
 
 
@@ -291,7 +291,7 @@ class StaffLeaveController extends Controller
 				// 	);
 				// }
 
-				// cari HOD dgn HR..
+				// insert data for HOD dgn HR..
 
 
 
