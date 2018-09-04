@@ -8,6 +8,11 @@ class Position extends Model
 {
     protected $table = 'positions';
 
+    public function hasmanystaffposition()
+    {
+        return $this->hasMany('App\Model\StaffPosition', 'position_id');
+    }
+
 // https://laravel.com/docs/5.6/eloquent-relationships#many-to-many
     public function belongtomanystaff()
     {

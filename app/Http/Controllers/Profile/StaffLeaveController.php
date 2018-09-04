@@ -119,21 +119,23 @@ class StaffLeaveController extends Controller
 		// 2. currentYear -> currentYear
 		// 3. curretnYear -> newYear
 
-		// $date1 = $request->date_time_start;
-		// $date2 = $request->date_time_end;
+		$date1 = $request->date_time_start;
+		$date2 = $request->date_time_end;
 
-		$date1 = '2018-09-07';
-		$date2 = '2018-09-20';
+		// debug
+		// $date1 = '2017-12-29';
+		// $date2 = '2019-01-02';
+
 		// cari tahun dulu
 		$gtotal = 0;
-		function split_date($start_date,$end_date){
+		function split_date($start_date, $end_date){
 		
 		    while($start_date < $end_date){
 		        $end = date("Y-m-d", strtotime("Last day of December", strtotime($start_date)));
 		        if($end_date<$end){
 		            $end = $end_date;
 		        }
-		        $dates[] =array('start'=>$start_date,'end'=>$end);
+		        $dates[] =array('start'=>$start_date, 'end'=>$end);
 		
 		        $start_date =date("Y-m-d", strtotime("+1 day", strtotime($end)));
 		
@@ -150,7 +152,7 @@ class StaffLeaveController extends Controller
 			// count all date
 			echo $period->count().' total hari<br />';
 
-			// kira cuti tanpa ahad
+			// kira cuti ahad
 			$cuti = [];
 			$nodays = \App\Model\HolidayCalendar::where('date_start', '>=', $val['start'] )->where( 'date_end', '<=', $val['end'] )->get();
 			// echo $nodays.' json for the whole year<br />';
@@ -166,7 +168,7 @@ class StaffLeaveController extends Controller
 					}
 				}
 			}
-			echo count($cuti).' bilangan hari cuti tanpa ahad<br />';
+			echo count($cuti).' bilangan hari cuti ahad<br />';
 
 			// substract all sundays
 			$sundi = [];
@@ -177,22 +179,33 @@ class StaffLeaveController extends Controller
 					$sundi[] = $op;
 				}
 			}
-			echo count($sundi).' bilangan bukan hari ahad dalam range<br />';
+			echo count($sundi).' bilangan hari bukan hari ahad dalam range<br />';
 
 			$haricuti = count($sundi) - count($cuti);
 
-			echo $haricuti.' applied leave for partial year<br />';
+			echo $haricuti.' applied leave for this year<br />';
 			$gtotal += $haricuti;
 
 			// must check 2 things. 1. annual leave 2. mc leave
 			$dt = \Carbon\Carbon::parse($val['start']);
 			echo $dt->year.' year<br />';
-			// $almc = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->where('year', $dt->year)->firstOrFail();
-			$almc = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->where('year', $dt->year)->first();
-			if(!empty($almc)) {
-				echo $almc->annual_leave_balance.' al<br />';
-				echo $almc->medical_leave_balance.' mc<br />';
-			}
+
+			// dont use create cos it will insert data even there is a data
+			// firstOrNew will create only if there is no data..
+			$almc = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->where('year', $dt->year)->firstOrNew(
+				// 1st part for where
+				['year' => $dt->year],
+				// 2nd part for insert parameter
+				[
+					'annual_leave_balance' => 0,
+					'remarks' => 'auto insert data due to no data at all'
+				]
+			);
+			// must call save() in this method
+			$almc->save();
+			echo $almc->annual_leave_balance.' cuti al<br />';
+			echo $almc->medical_leave_balance.' cuti mc<br />';
+
 			echo '///////////////////////////////////////////////////////////////<br>';
 
 			$leave_no = \App\Model\StaffLeave::whereYear('created_at', $dt->year)->first();
@@ -206,34 +219,87 @@ class StaffLeaveController extends Controller
 			$leave_no = $leave_no + 1;
 			echo $leave_no.' after add 1<br />';
 
-			if ( $request->leave_id == 1 ) {
-				// annual Leave
-				$albal = $almc->annual_leave_balance;
-				//capture al balance b4 subtract
 
-				// got 2 case, it can turn into upl once al is done.
-				$albal1 = $albal - $haricuti;
-				echo $albal1.' al - total cuti<br />';
-				if( $albal1 < 0 ) {
-					// negative value, so blocked
 
+			// find supervisor or HOD (group 2, 3 & 4)
+			$usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
+			$userloc = \Auth::user()->belongtostaff->location_id;
+			echo $userloc.' <-- location_id<br />';
+
+			// justify for those who doesnt have department
+			// perjalanan naik keatas.. :-P
+
+			echo $usergroup->position.' <--- position<br />';
+			echo $usergroup->category_id.' <--- category<br />';
+			echo $usergroup->division_id.' <--- division<br />';
+			echo $usergroup->department_id.' <--- department<br />';
+			echo $usergroup->group_id.' <--- group<br />';
+
+			// all geng production will be approved by supervisor based on location.
+			// https://stackoverflow.com/questions/30704908/laravel-saving-a-belongstomany-relationship
+			if( $usergroup->group_id >= 5 && $usergroup->category_id == 2 ) {
+				$pos = \App\Model\Position::find( 36 )->hasmanystaffposition()->get();
+				// dd ( $pos );
+				foreach($pos as $po) {
+					$po.' name<br />';
 				}
 
+			}
 
+
+
+
+
+
+
+			if ( $request->leave_id == 1 ) {
+				// annual Leave
+
+				// check al for that particular year
+				$annual = $almc->annual_leave_balance;
+
+				$albal1 = $annual - $haricuti;
+				echo $albal1.' = al - total cuti<br />';
+				if( $albal1 < 0 ) {
+					// negative value, so blocked
+					// Session::flash('flash_message', 'Sorry, we cant process your leave. You doesn\'t have anymore Annual Leave from the date '.\Carbon\Carbon::parse($val['start'])->format('D, j F Y').' to '.\Carbon\Carbon::parse($val['end'])->format('D, j F Y').'. Please change your leave type. If you think its happen by mistake, please reach Human Resource Department.' );
+					// return redirect()->back();
+				}
 
 				// $takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
-				//	'leave_no' => $leave_no,
+				// 	'leave_no' => $leave_no,
 				// 	'leave_id' => $request->leave_id,
 				// 	'reason' => $request->reason,
 				// 	'date_time_start' => $date_time_start,
 				// 	'date_time_end' => $date_time_end,
-				// 	'al_balance' => 1,
+				// 	'al_balance' => $almc->annual_leave_balance,
 				// 	'active' => 1,
 				// ]);
+
+				// update at StaffAnnualMCLeave for al balance
+				// $updal = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->updateOrCreate(
+				// 		// where part
+				// 		['year' => $dt->year],
+				// 		// insert or update parameter
+				// 		['annual_leave_balance' => $albal1]
+				// );
+
+				// insert backup if there is any
+				// if($request->staff_id) {
+				// 	$takeLeave->hasonestaffleavebackup()->create(
+				// 		['staff_id' => $request->staff_id]
+				// 	);
+				// }
+
+				// cari HOD dgn HR..
+
+
 
 				// Session::flash('flash_message', 'Data successfully inserted!');
 				// return redirect()->back();
 			}
+			echo '///////////////////////////////////////////////////////////////';
+			echo 'bawah sekali dah ni...<br />';
 		}
 		echo $gtotal.' grandtotal all leave day<br />';
 

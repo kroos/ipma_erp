@@ -66,6 +66,11 @@ class Staff extends Model
         return $this->hasMany('App\Model\StaffLeaveReplacement', 'staff_id');
     }
 
+    public function hasmanystaffposition()
+    {
+        return $this->hasMany('\App\Model\StaffPosition', 'staff_id');
+    }
+
 // https://laravel.com/docs/5.6/eloquent-relationships#many-to-many
     public function belongtomanyposition()
     {
