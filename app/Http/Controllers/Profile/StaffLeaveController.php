@@ -119,8 +119,10 @@ class StaffLeaveController extends Controller
 		// 2. currentYear -> currentYear
 		// 3. curretnYear -> newYear
 
-		$date1 = $request->date_time_start;
-		$date2 = $request->date_time_end;
+		$date1 = \Carbon\Carbon::parse($request->date_time_start)->format('Y-m-d');
+		$date2 = \Carbon\Carbon::parse($request->date_time_end)->format('Y-m-d');
+
+		// dd($date2);
 
 		// debug
 		// $date1 = '2017-12-29';
@@ -128,19 +130,17 @@ class StaffLeaveController extends Controller
 
 		// cari tahun dulu
 		$gtotal = 0;
+
 		function split_date($start_date, $end_date){
-		
-		    while($start_date < $end_date){
-		        $end = date("Y-m-d", strtotime("Last day of December", strtotime($start_date)));
-		        if($end_date<$end){
-		            $end = $end_date;
-		        }
-		        $dates[] =array('start'=>$start_date, 'end'=>$end);
-		
-		        $start_date =date("Y-m-d", strtotime("+1 day", strtotime($end)));
-		
-		    }
-		    return $dates; 
+			while($start_date <= $end_date){
+				$end = date("Y-m-d", strtotime("Last day of December", strtotime($start_date)));
+				if($end_date<=$end){
+					$end = $end_date;
+				}
+				$dates[] =array('start'=>$start_date, 'end'=>$end);
+				$start_date =date("Y-m-d", strtotime("+1 day", strtotime($end)));
+			}
+			return $dates;
 		}
 
 		$dates = split_date($date1, $date2);
@@ -246,8 +246,14 @@ class StaffLeaveController extends Controller
 				}
 			}
 
+			// special for PA, no HOD n HOD him/herself also directors
+			if ( ($usergroup->id >= 4 && $usergroup->id <= 6) || $usergroup->group_id == 2 || $usergroup == 1 ) {
+			}
 
+			// if u r already a HOD, then no need also larrr
+			if() {
 
+			}
 
 
 
