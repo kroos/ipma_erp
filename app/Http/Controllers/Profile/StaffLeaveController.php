@@ -88,8 +88,6 @@ class StaffLeaveController extends Controller
 			$request->date_time_end = $request->date_time_start;
 		}
 
-
-
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// we must check $request->leave_type. if $request->leave_type == 1? full day(1) : half day(2)
 		// leave_type = 1 means no leave_half
@@ -98,8 +96,8 @@ class StaffLeaveController extends Controller
 			$time_start = ' 00:00:00';
 			$time_end = ' 23:59:59';
 
-			$date_time_start = $request->date_time_start.$time_start;
-			$date_time_end = $request->date_time_end.$time_end;
+			$date_time_start = $request->date_time_start.' '.$time_start;
+			$date_time_end = $request->date_time_end.' '.$time_end;
 
 		} else {
 			if($request->leave_type == 2) {
@@ -108,8 +106,8 @@ class StaffLeaveController extends Controller
 				$time_start = $time[0];
 				$time_end = $time[1];
 
-				$date_time_start = $request->date_time_start.$time_start;
-				$date_time_end = $request->date_time_end.$time_end;
+				$date_time_start = $request->date_time_start.' '.$time_start;
+				$date_time_end = $request->date_time_end.' '.$time_end;
 			}
 		}
 
@@ -181,7 +179,11 @@ class StaffLeaveController extends Controller
 			}
 			echo count($sundi).' bilangan hari bukan hari ahad dalam range<br />';
 
-			$haricuti = count($sundi) - count($cuti);
+			if($request->leave_type == 2) {
+				$haricuti = 0.5;
+			} else {
+				$haricuti = count($sundi) - count($cuti);
+			}
 
 			echo $haricuti.' applied leave for this year<br />';
 			$gtotal += $haricuti;
@@ -220,7 +222,7 @@ class StaffLeaveController extends Controller
 			echo $leave_no.' after add 1<br />';
 
 
-
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			// find supervisor or HOD (group 2, 3 & 4)
 			$usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
 			$userloc = \Auth::user()->belongtostaff->location_id;
@@ -229,6 +231,7 @@ class StaffLeaveController extends Controller
 			// justify for those who doesnt have department
 			// perjalanan naik keatas.. :-P
 
+			echo $usergroup->id.' <--- id position<br />';
 			echo $usergroup->position.' <--- position<br />';
 			echo $usergroup->category_id.' <--- category<br />';
 			echo $usergroup->division_id.' <--- division<br />';
@@ -236,27 +239,58 @@ class StaffLeaveController extends Controller
 			echo $usergroup->group_id.' <--- group<br />';
 
 			// all geng production will be approved by supervisor based on location.
-			// https://stackoverflow.com/questions/30704908/laravel-saving-a-belongstomany-relationship
+			// production member will approved by their supervisor.
 			if( $usergroup->group_id >= 5 && $usergroup->category_id == 2 ) {
 				$pos = \App\Model\Position::find( 36 )->hasmanystaffposition()->get();
 				// dd ( $pos );
 				foreach($pos as $po) {
-					echo $po->belongtostaff->name.' supervisor name<br />';
-					echo $po->belongtostaff->id.' supervisor staff id<br />';
+					if( ( $userloc == $po->belongtostaff->location_id ) && $po->belongtostaff->active == 1 ) {
+						echo $po->belongtostaff->name.' supervisor name<br />';
+						echo $po->belongtostaff->id.' supervisor staff id<br />';
+						$HOD = $po->belongtostaff->id;
+					}
 				}
 			}
 
 			// special for PA, no HOD n HOD him/herself also directors
-			if ( ($usergroup->id >= 4 && $usergroup->id <= 6) || $usergroup->group_id == 2 || $usergroup == 1 ) {
+			if ( ($usergroup->id >= 4 && $usergroup->id <= 6) || $usergroup->group_id == 2 || $usergroup->group_id == 1 ) {
+				echo ' directors, HOD, PA<br />';
+				$HOD = NULL;
 			}
 
-			// if u r already a HOD, then no need also larrr
-			if() {
-
+			// and now, normal user that belongs to office category, supervisor and assistant HOD
+			// we got a lot of user that we skipped from HOD
+			if (
+				( $usergroup->group_id == 7 && $usergroup->category_id == 1 && ( $usergroup->id < 4 || $usergroup->id > 6 ) && $usergroup->id != 13 && $usergroup->id != 16 && $usergroup->id != 73 && $usergroup->id != 77 ) ||
+				( $usergroup->group_id == 3 && $usergroup->category_id == 1 ) ||
+				( $usergroup->group_id == 4 && $usergroup->category_id == 1 ) 
+			) {
+				// find department HOD
+				// dd( \App\Model\Position::where( [[ 'department_id', $usergroup->department_id ],[ 'group_id', 2 ]] )->get() );
+				$hood = \App\Model\Position::where( [[ 'department_id', $usergroup->department_id ],[ 'group_id', 2 ]] )->get();
+				foreach ($hood as $meek) {
+					$hee = $meek->hasmanystaffposition()->get();
+					foreach($hee as $moo) {
+						echo $moo->belongtostaff->name.' this is your HOD<br />';
+						$HOD = $moo->belongtostaff->id;
+					}
+				}
 			}
 
+			//insert data for HR executives
+			$HR = \App\Model\Position::find( 12 )->hasmanystaffposition()->get();
+			foreach($HR as $HRE) {
+				if( $HRE->belongtostaff->active == 1 ) {
+					echo $HRE->belongtostaff->name.' hr name<br />';
+					echo $HRE->belongtostaff->id.' hr id<br />';
+					$hret = $HRE->belongtostaff->id;
+				}
+			}
+			// debug
+			// die();
 
-
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 			if ( $request->leave_id == 1 ) {
 				// annual Leave
@@ -268,72 +302,157 @@ class StaffLeaveController extends Controller
 				echo $albal1.' = al - total cuti<br />';
 				if( $albal1 < 0 ) {
 					// negative value, so blocked
-					// Session::flash('flash_message', 'Sorry, we cant process your leave. You doesn\'t have anymore Annual Leave from the date '.\Carbon\Carbon::parse($val['start'])->format('D, j F Y').' to '.\Carbon\Carbon::parse($val['end'])->format('D, j F Y').'. Please change your leave type. If you think its happen by mistake, please reach Human Resource Department.' );
+					Session::flash('flash_message', 'Sorry, we cant process your leave. You doesn\'t have anymore Annual Leave from the date '.\Carbon\Carbon::parse($val['start'])->format('D, j F Y').' to '.\Carbon\Carbon::parse($val['end'])->format('D, j F Y').'. Please change your leave type. If you think its happen by mistake, please reach Human Resource Department.' );
 					// return redirect()->back();
 				}
 
-				// $takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
-				// 	'leave_no' => $leave_no,
-				// 	'leave_id' => $request->leave_id,
-				// 	'reason' => $request->reason,
-				// 	'date_time_start' => $date_time_start,
-				// 	'date_time_end' => $date_time_end,
-				// 	'al_balance' => $almc->annual_leave_balance,
-				// 	'active' => 1,
-				// ]);
+				// insert into staff_leaves table
+				$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
+					'leave_no' => $leave_no,
+					'leave_id' => $request->leave_id,
+					'half_day' => $request->leave_type,
+					'reason' => $request->reason,
+					'date_time_start' => $date_time_start,
+					'date_time_end' => $date_time_end,
+					'al_balance' => $almc->annual_leave_balance,
+					'active' => 1,
+				]);
 
 				// update at StaffAnnualMCLeave for al balance
-				// $updal = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->updateOrCreate(
-				// 		// where part
-				// 		['year' => $dt->year],
-				// 		// insert or update parameter
-				// 		['annual_leave_balance' => $albal1]
-				// );
+				$updal = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->updateOrCreate(
+						// where part
+						['year' => $dt->year],
+						// insert or update parameter
+						['annual_leave_balance' => $albal1]
+				);
 
 				// insert backup if there is any
-				// if($request->staff_id) {
-				// 	$takeLeave->hasonestaffleavebackup()->create(
-				// 		['staff_id' => $request->staff_id]
-				// 	);
-				// }
-
-				// insert data for HOD dgn HR..
-
-
-
-				// Session::flash('flash_message', 'Data successfully inserted!');
-				// return redirect()->back();
+				if($request->staff_id) {
+					$takeLeave->hasonestaffleavebackup()->create(
+						['staff_id' => $request->staff_id]
+					);
+				}
+				// insert data for HOD if there is any..
+				if(!empty($HOD)) {
+					$takeLeave->hasmanystaffapproval()->create([
+						'staff_id' => $HOD,
+					]);
+				}
+				// insert hr approve
+				if( !empty($hret) ) {
+					$takeLeave->hasmanystaffapproval()->create([
+						'staff_id' => $hret,
+						'hr' => 1,
+					]);
+				}
 			}
+
+			if ( $request->leave_id == 2 ) {
+				// mc leave
+
+				// check al for that particular year
+				$medical = $almc->medical_leave_balance;
+
+				$albal1 = $medical - $haricuti;
+				echo $albal1.' = mc - total cuti<br />';
+				if( $albal1 < 0 ) {
+					// negative value, so blocked
+					Session::flash('flash_message', 'Sorry, we cant process your leave. You doesn\'t have anymore Medical Leave from the date '.\Carbon\Carbon::parse($val['start'])->format('D, j F Y').' to '.\Carbon\Carbon::parse($val['end'])->format('D, j F Y').'. Please change your leave type. If you think its happen by mistake, please reach Human Resource Department.' );
+					// return redirect()->back();
+				}
+
+				// insert into staff_leaves table
+				$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
+					'leave_no' => $leave_no,
+					'leave_id' => $request->leave_id,
+					'half_day' => $request->leave_type,
+					'reason' => $request->reason,
+					'date_time_start' => $date_time_start,
+					'date_time_end' => $date_time_end,
+					'mc_balance' => $medical,
+					'active' => 1,
+				]);
+
+				// update at StaffAnnualMCLeave for al balance
+				$updal = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->updateOrCreate(
+						// where part
+						['year' => $dt->year],
+						// insert or update parameter
+						['medical_leave_balance' => $s]
+				);
+
+				// insert data for HOD if there is any..
+				if(!empty($HOD)) {
+					$takeLeave->hasmanystaffapproval()->create([
+						'staff_id' => $HOD,
+					]);
+				}
+				// insert hr approve
+				if( !empty($hret) ) {
+					$takeLeave->hasmanystaffapproval()->create([
+						'staff_id' => $hret,
+						'hr' => 1,
+					]);
+				}
+			}
+
+			if( $request->leave_id == 3 ) {
+			// 	UPL leave
+
+				// insert into staff_leaves table
+				$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
+					'leave_no' => $leave_no,
+					'leave_id' => $request->leave_id,
+					'half_day' => $request->leave_type,
+					'reason' => $request->reason,
+					'date_time_start' => $date_time_start,
+					'date_time_end' => $date_time_end,
+					'active' => 1,
+				]);
+
+				// insert backup if there is any
+				if($request->staff_id) {
+					$takeLeave->hasonestaffleavebackup()->create(
+						['staff_id' => $request->staff_id]
+					);
+				}
+				// insert data for HOD if there is any..
+				if(!empty($HOD)) {
+					$takeLeave->hasmanystaffapproval()->create([
+						'staff_id' => $HOD,
+					]);
+				}
+				// insert hr approve
+				if( !empty($hret) ) {
+					$takeLeave->hasmanystaffapproval()->create([
+						'staff_id' => $hret,
+						'hr' => 1,
+					]);
+				}
+			}
+
+			// if ( $request->leave_id == 4 ) {
+					// NRL leave
+			// }
+
+			// if ( $request->leave_id == 7 ) {
+					// ML leave
+			// }
+
+			// if ( $request->leave_id == 8 ) {
+					// EL leave
+			// }
+
+			// if ( $request->leave_id == 9 ) {
+					// TL
+			// }
 			echo '///////////////////////////////////////////////////////////////';
 			echo 'bawah sekali dah ni...<br />';
 		}
 		echo $gtotal.' grandtotal all leave day<br />';
-
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		// if ( $request->leave_id == 2 ) {
-				// mc leave
-		// }
-
-		// if( $request->leave_id == 3 ) {
-		// 	UPL leave
-		// }
-
-		// if ( $request->leave_id == 4 ) {
-				// NRL leave
-		// }
-
-		// if ( $request->leave_id == 7 ) {
-				// ML leave
-		// }
-
-		// if ( $request->leave_id == 8 ) {
-				// EL leave
-		// }
-
-		// if ( $request->leave_id == 9 ) {
-				// TL
-		// }
+		Session::flash('flash_message', 'Data successfully inserted.');
+		return redirect()->route('staffLeave.index');
 	}
 
 	/**

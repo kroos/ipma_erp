@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header"><h1>Staff Leaves Record</h1></div>
+	<div class="card-header"><h1>Leaves Record</h1></div>
 	<div class="card-body table-responsive">
 		@include('layouts.info')
 		@include('layouts.errorform')
@@ -63,26 +63,11 @@ $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave
 @endif
 		</dl>
 
-
-
-
-
-
-
-
 <?php
 // dd(\Carbon\Carbon::now()->copy()->startOfYear());
-// dd(\Auth::user()->belongtostaff->id);
-$lea = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where( 'created_at', '>=', \Carbon\Carbon::now()->copy()->startOfYear() )->get();
+$starty = \Carbon\Carbon::now()->copy()->startOfYear();
+$lea = \Auth::user()->belongtostaff->hasmanystaffleave()->where('created_at', '>=', $starty)->get();
 // dd($lea);
-
-function my($string) {
-	if (empty($string))	{
-		$string = '1900-01-01';		
-	}
-	$rt = \Carbon\Carbon::createFromFormat('Y-m-d', $string);
-	return date('D, d F Y', mktime(0, 0, 0, $rt->month, $rt->day, $rt->year));
-}
 ?>
 @if( $lea->count() > 0 )
 		<table class="table table-hover" id="leaves">
@@ -103,6 +88,7 @@ $userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
 					<th colspan="2">Backup Person</th>
 @endif
 					<th rowspan="2">Approval & Remarks</th>
+					<th rowspan="2">Leave Status</th>
 				</tr>
 				<tr>
 					<th>From</th>
@@ -118,6 +104,39 @@ $userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
 <?php
 $arr = str_split( date('Y'), 2 );
 // echo $arr[1].'<br />';
+// dd( $leav->half_day );
+
+if ( ($leav->leave_id == 9) || ($leav->leave_id != 9 && $leav->half_day == 2) ) {
+	$dts = \Carbon\Carbon::parse($leav->date_time_start)->format('D, j F Y g:i a');
+	$dte = \Carbon\Carbon::parse($leav->date_time_end)->format('D, j F Y g:i a');
+	if( ($leav->leave_id != 9 && $leav->half_day == 2) ) {
+		$dper = 'Half Day';
+	} else {
+		$dper = \Carbon\Carbon::parse($leav->date_time_start)->diff(\Carbon\Carbon::parse($leav->date_time_end))->format('%h hours %i minutes');
+	}
+} else {
+	$dts = \Carbon\Carbon::parse($leav->date_time_start)->format('D, j F Y ');
+	$dte = \Carbon\Carbon::parse($leav->date_time_end)->format('D, j F Y ');
+	$dper = \Carbon\Carbon::parse($leav->date_time_start)->diff(\Carbon\Carbon::parse($leav->date_time_end)->addDay())->format('%d day/s');
+}
+
+// dd($leav->hasonestaffleavebackup);
+// backup value
+if( !empty($leav->hasonestaffleavebackup) ) {
+	$officer = $leav->hasonestaffleavebackup->belongtostaff->name;
+	if( $leav->hasonestaffleavebackup->acknowledge === NULL ) {
+		$stat = 'Pending';
+	}
+	if($leav->hasonestaffleavebackup->acknowledge === 1) {
+		$stat = 'Approve';
+	}
+	if($leav->hasonestaffleavebackup->acknowledge === 0) {
+		$stat = 'Reject';
+	}
+} else {
+	$officer = '';
+	$stat = '';
+}
 ?>
 						<a href="{{ route('staffLeave.show', $leav->id) }}" alt="Details" title="Details">HR9-{{ str_pad( $leav->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}</a>
 							<br />
@@ -129,18 +148,12 @@ $arr = str_split( date('Y'), 2 );
 					<td>{{ \Carbon\Carbon::parse($leav->created_at)->format('D, j F Y') }}</td>
 					<td>{{ $leav->belongtoleave->leave }}</td>
 					<td>{{ $leav->reason }}</td>
-					<td>
-						{{ ($leav->leave_id != 8)?\Carbon\Carbon::parse($leav->date_time_start)->format('D, j F Y '):\Carbon\Carbon::parse($leav->date_time_start)->format('D, j F Y g:i a') }}
-					</td>
-					<td>
-						{{ ($leav->leave_id != 8 )?\Carbon\Carbon::parse($leav->date_time_end)->format('D, j F Y'):\Carbon\Carbon::parse($leav->date_time_end)->format('D, j F Y g:i a') }}
-					</td>
-					<td>
-						{{ ($leav->leave_id != 8 )?\Carbon\Carbon::parse($leav->date_time_start)->diff(\Carbon\Carbon::parse($leav->date_time_end)->addDay())->format('%d day/s'):\Carbon\Carbon::parse($leav->date_time_start)->diff(\Carbon\Carbon::parse($leav->date_time_end))->format('%h hours %i minutes') }}
-					</td>
+					<td>{{ $dts }}</td>
+					<td>{{ $dte }}</td>
+					<td>{{ $dper	}}</td>
 @if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
-					<td>{{ (empty($leav->hasonestaffleavebackup))?'':$leav->hasonestaffleavebackup->belongtostaff->name }}</td>
-					<td>{{ (empty($leav->hasonestaffleavebackup))?'':($leav->hasonestaffleavebackup->acknowledge != 0)?'Accept':'Pending' }}</td>
+					<td>{{ $officer }}</td>
+					<td>{{ $stat }}</td>
 @endif
 					<td>
 						<table class="table table-hover">
@@ -148,13 +161,14 @@ $arr = str_split( date('Y'), 2 );
 @foreach( $leav->hasmanystaffapproval()->get() as $appr )
 								<tr>
 									<td>{{ $appr->belongtostaff->name }}</td>
-									<td>{{ ( !isset($appr->approval) )?'Pending':(($appr->approval == 1)?'Approve':'Reject') }}</td>
+									<td>{{ ( !isset($appr->approval) )?'Pending':(($appr->approval === 1)?'Approve':'Reject') }}</td>
 									<td>{{ $appr->notes_by_approval }}</td>
 								</tr>
 @endforeach
 							</tbody>
 						</table>
 					</td>
+					<td>{{ ( $leav->active == 1 )?'Active':'Cancel' }}</td>
 				</tr>
 @endforeach
 			</tbody>
