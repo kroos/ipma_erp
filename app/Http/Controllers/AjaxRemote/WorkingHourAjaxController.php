@@ -19,7 +19,6 @@ class WorkingHourAjaxController extends Controller
 	public function workingtime(Request $request)
 	{
 		$userposition = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
-
 		$dt = \Carbon\Carbon::parse($request->date);
 
 		// echo $userposition->id; // 60
@@ -55,8 +54,6 @@ class WorkingHourAjaxController extends Controller
 	public function leaveType(Request $request)
 	{
 		$year = \Carbon\Carbon::parse($request->date)->year;
-
-		// echo $year;
 
 		// checking for annual leave, mc, nrl and maternity
 		// hati-hati dgn yg ni sbb melibatkan masa
@@ -177,7 +174,52 @@ class WorkingHourAjaxController extends Controller
 			];
 			// $cuti['pagination'] = ['more' => true];
 		}
-
 		return response()->json( $cuti );
 	}
+
+	public function blockholidays()
+	{
+		$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+		foreach ($nodate as $nda) {
+			$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+			foreach ($period as $key) {
+				// echo 'moment("'.$key->format('Y-m-d').'"),';
+				$holiday[] = $key->format('Y-m-d');
+			}
+		}
+		// block cuti sendiri
+		$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
+		foreach ($nodate1 as $key) {
+			$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
+			foreach ($period1 as $key1) {
+				// echo 'moment("'.$key1->format('Y-m-d').'"),';
+				$holiday[] = $key1->format('Y-m-d');
+			}
+		}
+		// $allcuti = array_push($holiday, $cutim);
+		return response()->json( $holiday );
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

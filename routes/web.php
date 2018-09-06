@@ -240,7 +240,17 @@ Route::post('/leaveType', [
 		'uses' => 'AjaxRemote\WorkingHourAjaxController@leaveType'
 	]);
 
-############################################################################
+
+
+
+
+
+
+
+
+
+
+
 
 
 

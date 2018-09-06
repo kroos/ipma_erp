@@ -53,7 +53,7 @@ $leaveALMC = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->where('y
 			</dd>
 @endif
 			<dt class="col-sm-3"><h5>Unpaid Leave Utilize :</h5></dt>
-			<dd class="col-sm-9">{{ \Auth::user()->belongtostaff->hasmanystaffleave()->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [5, 6])->get()->count() }} days</dd>
+			<dd class="col-sm-9">{{ \Auth::user()->belongtostaff->hasmanystaffleave()->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [3, 6])->get()->sum('period') }} days</dd>
 <?php
 $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave_balance', '<>', 0)->get();
 ?>
@@ -117,7 +117,9 @@ if ( ($leav->leave_id == 9) || ($leav->leave_id != 9 && $leav->half_day == 2) ) 
 } else {
 	$dts = \Carbon\Carbon::parse($leav->date_time_start)->format('D, j F Y ');
 	$dte = \Carbon\Carbon::parse($leav->date_time_end)->format('D, j F Y ');
-	$dper = \Carbon\Carbon::parse($leav->date_time_start)->diff(\Carbon\Carbon::parse($leav->date_time_end)->addDay())->format('%d day/s');
+	// cant count like this cos it doesnt subtract sunday and public holiday
+	// $dper = \Carbon\Carbon::parse($leav->date_time_start)->diff(\Carbon\Carbon::parse($leav->date_time_end)->addDay())->format('%d day/s');
+	$dper = $leav->period.' day/s';
 }
 
 // dd($leav->hasonestaffleavebackup);

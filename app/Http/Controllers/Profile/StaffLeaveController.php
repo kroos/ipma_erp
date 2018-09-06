@@ -286,6 +286,29 @@ class StaffLeaveController extends Controller
 					$hret = $HRE->belongtostaff->id;
 				}
 			}
+
+			// store supporting document if any
+			if($request->hasFile('document')) {
+				$filename = $request->file('document')->store('public/images/profiles');
+
+				$ass1 = explode('/', $filename);
+				$ass2 = array_except($ass1, ['0']);
+				$image = implode('/', $ass2);
+				// dd($image);
+
+				// jpeg,jpg,png,bmp,pdf,doc
+				if( $request->document->extension() == 'jpeg' || $request->document->extension() == 'jpg' || $request->document->extension() == 'png' || $request->document->extension() == 'bmp' ) {
+					$imag = Image::make(storage_path('app/'.$filename));
+					// resize the image to a height of 400 and constrain aspect ratio (auto width)
+					$imag->resize(null, 400, function ($constraint) {
+					    $constraint->aspectRatio();
+					});
+					$imag->save();
+				}
+			} else {
+				$image = NULL;
+			}
+
 			// debug
 			// die();
 
@@ -303,7 +326,7 @@ class StaffLeaveController extends Controller
 				if( $albal1 < 0 ) {
 					// negative value, so blocked
 					Session::flash('flash_message', 'Sorry, we cant process your leave. You doesn\'t have anymore Annual Leave from the date '.\Carbon\Carbon::parse($val['start'])->format('D, j F Y').' to '.\Carbon\Carbon::parse($val['end'])->format('D, j F Y').'. Please change your leave type. If you think its happen by mistake, please reach Human Resource Department.' );
-					// return redirect()->back();
+					return redirect()->back();
 				}
 
 				// insert into staff_leaves table
@@ -314,6 +337,8 @@ class StaffLeaveController extends Controller
 					'reason' => $request->reason,
 					'date_time_start' => $date_time_start,
 					'date_time_end' => $date_time_end,
+					'period' => $haricuti,
+					'document' => $image,
 					'al_balance' => $almc->annual_leave_balance,
 					'active' => 1,
 				]);
@@ -358,7 +383,7 @@ class StaffLeaveController extends Controller
 				if( $albal1 < 0 ) {
 					// negative value, so blocked
 					Session::flash('flash_message', 'Sorry, we cant process your leave. You doesn\'t have anymore Medical Leave from the date '.\Carbon\Carbon::parse($val['start'])->format('D, j F Y').' to '.\Carbon\Carbon::parse($val['end'])->format('D, j F Y').'. Please change your leave type. If you think its happen by mistake, please reach Human Resource Department.' );
-					// return redirect()->back();
+					return redirect()->back();
 				}
 
 				// insert into staff_leaves table
@@ -369,7 +394,9 @@ class StaffLeaveController extends Controller
 					'reason' => $request->reason,
 					'date_time_start' => $date_time_start,
 					'date_time_end' => $date_time_end,
-					'mc_balance' => $medical,
+					'period' => $haricuti,
+					'document' => $image,
+					'al_balance' => $almc->annual_leave_balance,
 					'active' => 1,
 				]);
 
@@ -397,7 +424,7 @@ class StaffLeaveController extends Controller
 			}
 
 			if( $request->leave_id == 3 ) {
-			// 	UPL leave
+				// 	UPL leave
 
 				// insert into staff_leaves table
 				$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
@@ -407,6 +434,9 @@ class StaffLeaveController extends Controller
 					'reason' => $request->reason,
 					'date_time_start' => $date_time_start,
 					'date_time_end' => $date_time_end,
+					'period' => $haricuti,
+					'document' => $image,
+					'al_balance' => $almc->annual_leave_balance,
 					'active' => 1,
 				]);
 
@@ -431,9 +461,37 @@ class StaffLeaveController extends Controller
 				}
 			}
 
-			// if ( $request->leave_id == 4 ) {
-					// NRL leave
-			// }
+			if ( $request->leave_id == 4 ) {
+				// NRL leave
+
+				// upacara tolak cuti ganti.
+				$gant = \App\Model\StaffLeaveReplacement::find($request->staff_leave_replacement_id)->leave_balance;
+				echo $gant.' balance replacement<br />';
+
+				$balancegant = $gant - $haricuti;
+				echo $balancegant.' balance<br />';
+				// insert into staff_leaves table
+
+				$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
+					'leave_no' => $leave_no,
+					'leave_id' => $request->leave_id,
+					'half_day' => $request->leave_type,
+					'reason' => $request->reason,
+					'date_time_start' => $date_time_start,
+					'date_time_end' => $date_time_end,
+					'period' => $haricuti,
+					'document' => $image,
+					'al_balance' => $almc->annual_leave_balance,
+					'active' => 1,
+				]);
+
+				// update staff leave replacement
+				$takeLeave->hasmanystaffleavereplacement()->update(
+					['id', $request->staff_leave_replacement_id, 'leave_utilize' => $haricuti, 'leave_balance' => $balancegant ]
+				);
+
+				die();
+			}
 
 			// if ( $request->leave_id == 7 ) {
 					// ML leave
