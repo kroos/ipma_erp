@@ -396,7 +396,7 @@ class StaffLeaveController extends Controller
 					'date_time_end' => $date_time_end,
 					'period' => $haricuti,
 					'document' => $image,
-					'al_balance' => $almc->annual_leave_balance,
+					'mc_balance' => $almc->medical_leave_balance,
 					'active' => 1,
 				]);
 
@@ -436,7 +436,6 @@ class StaffLeaveController extends Controller
 					'date_time_end' => $date_time_end,
 					'period' => $haricuti,
 					'document' => $image,
-					'al_balance' => $almc->annual_leave_balance,
 					'active' => 1,
 				]);
 
@@ -481,16 +480,23 @@ class StaffLeaveController extends Controller
 					'date_time_end' => $date_time_end,
 					'period' => $haricuti,
 					'document' => $image,
-					'al_balance' => $almc->annual_leave_balance,
 					'active' => 1,
 				]);
 
+				echo $request->staff_leave_replacement_id.' id staff_leave_replacement<br />';
+				echo $takeLeave->getinsertID().' id<br />';
 				// update staff leave replacement
-				$takeLeave->hasmanystaffleavereplacement()->update(
-					['id', $request->staff_leave_replacement_id, 'leave_utilize' => $haricuti, 'leave_balance' => $balancegant ]
-				);
+				// $upl = $takeLeave->hasmanystaffleavereplacement()->where('id', $request->staff_leave_replacement_id)->get();
 
-				die();
+				// ->update( [ 'leave_utilize' => $haricuti, 'leave_balance' => $balancegant ] );
+die();
+				$upl = \App\Model\StaffLeaveReplacement::find($request->staff_leave_replacement_id);
+				$upl->leave_utilize = $haricuti;
+				$upl->leave_balance = $balancegant;
+				$upl->save();
+
+				dd($upl);
+
 			}
 
 			// if ( $request->leave_id == 7 ) {
