@@ -58,7 +58,7 @@ if (empty($sel)) {
 // block holiday tgk dlm disable date in datetimepicker
 $nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
 // block cuti sendiri
-$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
+$nodate1 = \Auth::user()->belongtostaff->hasmanystaffleave()->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
 ?>
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $('#leave_id').on('change', function() {
@@ -140,11 +140,14 @@ $('#leave_id').on('change', function() {
 		/////////////////////////////////////////////////////////////////////////////////////////
 		//enable select 2 for backup
 		$('#backupperson').select2({
-			placeholder: 'Please Choose'
+			placeholder: 'Please Choose',
+			width: '100%',
 		});
 
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// enable datetime for the 1st one
+		// $('#datetimepicker').data("DateTimePicker").OPTION()
+		// $('#datetimepicker').data('DateTimePicker').daysOfWeekDisabled([1, 2]);
 		$('#from').datetimepicker({
 			format:'YYYY-MM-DD',
 			// format:'LT',
@@ -522,7 +525,8 @@ $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave
 
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// enable select2
-		$('#nrla').select2({ placeholder: 'Please select'});
+		$('#nrla').select2({ placeholder: 'Please select', 	width: '100%',
+		});
 
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// enable datetime for the 1st one
@@ -817,7 +821,8 @@ foreach ($nodate1 as $key) {
 		/////////////////////////////////////////////////////////////////////////////////////////
 		//enable select 2 for backup
 		$('#backupperson').select2({
-			placeholder: 'Please Choose'
+			placeholder: 'Please Choose',
+			width: '100%',
 		});
 
 		/////////////////////////////////////////////////////////////////////////////////////////
@@ -849,9 +854,9 @@ foreach ($nodate1 as $key) {
 		.on('dp.change dp.show dp.update', function(e) {
 			$('#form').bootstrapValidator('revalidateField', 'date_time_start');
 			var minDate = $('#from').val();
-			$('#to').datetimepicker('minDate', moment( minDate, 'YYYY-MM-DD').add(60, 'days').format('YYYY-MM-DD') );
+			$('#to').datetimepicker('minDate', moment( minDate, 'YYYY-MM-DD').add(59, 'days').format('YYYY-MM-DD') );
 
-			$('#to').val( moment( minDate, 'YYYY-MM-DD').add(60, 'days').format('YYYY-MM-DD') );
+			$('#to').val( moment( minDate, 'YYYY-MM-DD').add(59, 'days').format('YYYY-MM-DD') );
 		});
 		
 		$('#to').datetimepicker({
@@ -882,8 +887,8 @@ foreach ($nodate1 as $key) {
 			$('#form').bootstrapValidator('revalidateField', 'date_time_end');
 			var maxDate = $('#to').val();
 
-			$('#from').datetimepicker('maxDate', moment( maxDate, 'YYYY-MM-DD').subtract(60, 'days').format('YYYY-MM-DD'));
-			$('#from').val( moment( maxDate, 'YYYY-MM-DD').subtract(60, 'days').format('YYYY-MM-DD') );
+			$('#from').datetimepicker('maxDate', moment( maxDate, 'YYYY-MM-DD').subtract(59, 'days').format('YYYY-MM-DD'));
+			$('#from').val( moment( maxDate, 'YYYY-MM-DD').subtract(59, 'days').format('YYYY-MM-DD') );
 		});
 		
 		/////////////////////////////////////////////////////////////////////////////////////////
@@ -971,7 +976,8 @@ foreach ($nodate1 as $key) {
 		/////////////////////////////////////////////////////////////////////////////////////////
 		//enable select 2 for backup
 		$('#backupperson').select2({
-			placeholder: 'Please Choose'
+			placeholder: 'Please Choose',
+			width: '100%',
 		});
 
 		/////////////////////////////////////////////////////////////////////////////////////////
@@ -1053,7 +1059,8 @@ foreach ($nodate1 as $key) {
 @if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
 				$('#form').bootstrapValidator('addField', $('.backup').find('[name="staff_id"]'));
 @endif
-				$('#backupperson').select2({ placeholder: 'Please Choose' });
+				$('#backupperson').select2({ placeholder: 'Please Choose', width: '100%',
+				});
 			} else {
 				$('#form').bootstrapValidator('removeField', $('.backup').find('[name="staff_id"]') );
 				$('#rembackup').children().remove();
@@ -1244,7 +1251,7 @@ foreach ($nodate1 as $key) {
 
 		/////////////////////////////////////////////////////////////////////////////////////////
 		//enable select 2 for backup
-		$('#backupperson').select2({ placeholder: 'Please Choose' });
+		$('#backupperson').select2({ placeholder: 'Please Choose', width: '100%' });
 
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// enable datetime for the 1st one
@@ -1321,6 +1328,7 @@ $('#leave_id').select2({
 	},
 	allowClear: true,
 	closeOnSelect: true,
+	width: '100%',
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////

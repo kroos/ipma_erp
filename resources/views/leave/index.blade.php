@@ -177,7 +177,7 @@ if( !empty($leav->hasonestaffleavebackup) ) {
 		</table>
 
 @else
-		<p class="card-text text-justify text-lead">Sorry, no record for your leave. Click on "Apply Leave" to apply a leave.</p>
+		<p class="card-text text-justify text-lead">Sorry, no record for your leave. Click on "Leave Application" to apply a leave.</p>
 @endif
 
 	</div>

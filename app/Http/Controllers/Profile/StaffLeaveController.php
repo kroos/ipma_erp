@@ -12,6 +12,11 @@ use Illuminate\Http\Request;
 // load validation
 use App\Http\Requests\StaffLeaveRequest;
 
+// for manipulating image
+// http://image.intervention.io/
+// use Intervention\Image\Facades\Image as Image;       <-- ajaran sesat depa... hareeyyyyy!!
+use Intervention\Image\ImageManagerStatic as Image;
+
 use Session;
 
 
@@ -78,7 +83,7 @@ class StaffLeaveController extends Controller
 			if( $kik->count() > 0 ) {
 				// block kalau ada bertindih cuti yg dah sedia ada
 				Session::flash('flash_message', 'Tarikh permohonan cuti ('.\Carbon\Carbon::parse($request->date_time_start)->format('D, j F Y').' hingga '.\Carbon\Carbon::parse($request->date_time_end)->format('D, j F Y').') sudah diisi. Sila ambil tarikh yang lain.');
-				return redirect()->back();
+				return redirect()->back()->withInput();
 			}
 		}
 
@@ -135,8 +140,8 @@ class StaffLeaveController extends Controller
 				if($end_date<=$end){
 					$end = $end_date;
 				}
-				$dates[] =array('start'=>$start_date, 'end'=>$end);
-				$start_date =date("Y-m-d", strtotime("+1 day", strtotime($end)));
+				$dates[] = array('start'=>$start_date, 'end'=>$end);
+				$start_date = date("Y-m-d", strtotime("+1 day", strtotime($end)));
 			}
 			return $dates;
 		}
@@ -207,6 +212,7 @@ class StaffLeaveController extends Controller
 			$almc->save();
 			echo $almc->annual_leave_balance.' cuti al<br />';
 			echo $almc->medical_leave_balance.' cuti mc<br />';
+			echo $almc->maternity_leave_balance.' cuti maternity<br />';
 
 			echo '///////////////////////////////////////////////////////////////<br>';
 
@@ -309,9 +315,6 @@ class StaffLeaveController extends Controller
 				$image = NULL;
 			}
 
-			// debug
-			// die();
-
 			/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -326,7 +329,7 @@ class StaffLeaveController extends Controller
 				if( $albal1 < 0 ) {
 					// negative value, so blocked
 					Session::flash('flash_message', 'Sorry, we cant process your leave. You doesn\'t have anymore Annual Leave from the date '.\Carbon\Carbon::parse($val['start'])->format('D, j F Y').' to '.\Carbon\Carbon::parse($val['end'])->format('D, j F Y').'. Please change your leave type. If you think its happen by mistake, please reach Human Resource Department.' );
-					return redirect()->back();
+					return redirect()->back()->withInput();
 				}
 
 				// insert into staff_leaves table
@@ -383,7 +386,7 @@ class StaffLeaveController extends Controller
 				if( $albal1 < 0 ) {
 					// negative value, so blocked
 					Session::flash('flash_message', 'Sorry, we cant process your leave. You doesn\'t have anymore Medical Leave from the date '.\Carbon\Carbon::parse($val['start'])->format('D, j F Y').' to '.\Carbon\Carbon::parse($val['end'])->format('D, j F Y').'. Please change your leave type. If you think its happen by mistake, please reach Human Resource Department.' );
-					return redirect()->back();
+					return redirect()->back()->withInput();
 				}
 
 				// insert into staff_leaves table
@@ -484,28 +487,254 @@ class StaffLeaveController extends Controller
 				]);
 
 				echo $request->staff_leave_replacement_id.' id staff_leave_replacement<br />';
-				echo $takeLeave->getinsertID().' id<br />';
-				// update staff leave replacement
-				// $upl = $takeLeave->hasmanystaffleavereplacement()->where('id', $request->staff_leave_replacement_id)->get();
+				echo $takeLeave->id.' insert id from $takeleave<br />';
+				// update staff leave replacement => somehow this method doesnt work
+				// $upl = $takeLeave->hasmanystaffleavereplacement()->where('id', $request->staff_leave_replacement_id)->update( [
+				// 	'leave_utilize' => $haricuti,
+				// 	'leave_balance' => $balancegant
+				// 	] );
 
-				// ->update( [ 'leave_utilize' => $haricuti, 'leave_balance' => $balancegant ] );
-die();
-				$upl = \App\Model\StaffLeaveReplacement::find($request->staff_leave_replacement_id);
-				$upl->leave_utilize = $haricuti;
-				$upl->leave_balance = $balancegant;
-				$upl->save();
+				$upl = \App\Model\StaffLeaveReplacement::where('id', $request->staff_leave_replacement_id)->update([
+					'staff_leave_id' => $takeLeave->id,
+					'leave_utilize' => $haricuti,
+					'leave_balance' => $balancegant,
+				]);
 
-				dd($upl);
+				// insert backup if there is any
+				if($request->staff_id) {
+					$takeLeave->hasonestaffleavebackup()->create(
+						['staff_id' => $request->staff_id]
+					);
+				}
+				// insert data for HOD if there is any..
+				if(!empty($HOD)) {
+					$takeLeave->hasmanystaffapproval()->create([
+						'staff_id' => $HOD,
+					]);
+				}
+				// insert hr approve
+				if( !empty($hret) ) {
+					$takeLeave->hasmanystaffapproval()->create([
+						'staff_id' => $hret,
+						'hr' => 1,
+					]);
+				}
 
 			}
 
-			// if ( $request->leave_id == 7 ) {
-					// ML leave
-			// }
+			if ( $request->leave_id == 7 ) {
+				// ML leave (maternity) check ml for that particular year
+				$mlbal = $period->count() - $almc->maternity_leave_balance;
+				// insert into staff_leaves table
+				$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
+					'leave_no' => $leave_no,
+					'leave_id' => $request->leave_id,
+					'half_day' => $request->leave_type,
+					'reason' => $request->reason,
+					'date_time_start' => $date_time_start,
+					'date_time_end' => $date_time_end,
+					'period' => $period->count(),
+					'document' => $image,
+					'active' => 1,
+				]);
 
-			// if ( $request->leave_id == 8 ) {
-					// EL leave
-			// }
+				// update at StaffAnnualMCLeave for al balance
+				$updal = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->updateOrCreate(
+						// where part
+						['year' => $dt->year],
+						// insert or update parameter
+						['maternity_leave_balance' => $mlbal]
+				);
+
+				// insert backup if there is any
+				if($request->staff_id) {
+					$takeLeave->hasonestaffleavebackup()->create(
+						['staff_id' => $request->staff_id]
+					);
+				}
+
+				// insert data for HOD if there is any..
+				if(!empty($HOD)) {
+					$takeLeave->hasmanystaffapproval()->create([
+						'staff_id' => $HOD,
+					]);
+				}
+				// insert hr approve
+				if( !empty($hret) ) {
+					$takeLeave->hasmanystaffapproval()->create([
+						'staff_id' => $hret,
+						'hr' => 1,
+					]);
+				}
+			}
+
+			if ( $request->leave_id == 8 ) { // EL leave = cari al dulu kalau lebih 3 hari, reject
+
+				// check al for that particular year
+				$annual = $almc->annual_leave_balance;
+				$albal1 = $annual - $haricuti;
+
+				echo $date_time_start.' from<br />';
+				$now = \Carbon\Carbon::now();
+
+				if ( $now->gte($date_time_start) ) { // date before today
+					print 'tarikh yg dipilih dah lepas<br />';
+					if ($annual > 0) { // checking annual leave
+						if( $albal1 < 0 ) { // negative value, so blocked
+							Session::flash('flash_message', 'Sorry, we cant process your leave. Your Annual Leave ('.$annual.' days) is not enough to cover your emergency leave from '.\Carbon\Carbon::parse($val['start'])->format('D, j F Y').' to '.\Carbon\Carbon::parse($val['end'])->format('D, j F Y').' ('.$haricuti.' days).' );
+							return redirect()->back()->withInput();
+						} else { // annual leave enough, so EL-AL
+							$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
+								'leave_no' => $leave_no,
+								'leave_id' => 5,
+								'half_day' => $request->leave_type,
+								'reason' => $request->reason,
+								'date_time_start' => $date_time_start,
+								'date_time_end' => $date_time_end,
+								'period' => $haricuti,
+								'document' => $image,
+								'al_balance' => $almc->annual_leave_balance,
+								'active' => 1,
+							]);
+
+							$updal = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->updateOrCreate( // update at StaffAnnualMCLeave for al balance
+									// where part
+									['year' => $dt->year],
+									// insert or update parameter
+									['annual_leave_balance' => $albal1]
+							);
+							
+							if(!empty($HOD)) { // insert data for HOD if there is any..
+								$takeLeave->hasmanystaffapproval()->create([
+									'staff_id' => $HOD,
+								]);
+							}
+
+							if( !empty($hret) ) { // insert hr approve
+								$takeLeave->hasmanystaffapproval()->create([
+									'staff_id' => $hret,
+									'hr' => 1,
+								]);
+							}
+						}
+					} else { // pakai EL-UPL
+
+						$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([ // insert into staff_leaves table
+							'leave_no' => $leave_no,
+							'leave_id' => 6,
+							'half_day' => $request->leave_type,
+							'reason' => $request->reason,
+							'date_time_start' => $date_time_start,
+							'date_time_end' => $date_time_end,
+							'period' => $haricuti,
+							'document' => $image,
+							'active' => 1,
+						]);
+
+						if($request->staff_id) { // insert backup if there is any
+							$takeLeave->hasonestaffleavebackup()->create(
+								['staff_id' => $request->staff_id]
+							);
+						}
+
+						if(!empty($HOD)) { // insert data for HOD if there is any..
+							$takeLeave->hasmanystaffapproval()->create([
+								'staff_id' => $HOD,
+							]);
+						}
+
+						if( !empty($hret) ) { // insert hr approve
+
+							$takeLeave->hasmanystaffapproval()->create([
+								'staff_id' => $hret,
+								'hr' => 1,
+							]);
+						}
+					}
+				} else { // date after today, gotta check if its 3 days after.
+					print 'tarikh yg dipilih adalah tarikh akan datang<br />';
+					echo $now->diffInDays($date_time_start).' diff in days<br />';
+ 					if ( $now->diffInDays($date_time_start) < 3 ) { // dalam masa 3 hari
+
+						if ($annual > 0) { // checking annual leave
+							if( $albal1 < 0 ) { // negative value, so blocked
+								Session::flash('flash_message', 'Sorry, we cant process your leave. Your Annual Leave ('.$annual.' days) is not enough to cover your emergency leave from '.\Carbon\Carbon::parse($val['start'])->format('D, j F Y').' to '.\Carbon\Carbon::parse($val['end'])->format('D, j F Y').' ('.$haricuti.' days).' );
+								return redirect()->back()->withInput();
+							} else { // annual leave enough, so EL-AL
+								$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
+									'leave_no' => $leave_no,
+									'leave_id' => 5,
+									'half_day' => $request->leave_type,
+									'reason' => $request->reason,
+									'date_time_start' => $date_time_start,
+									'date_time_end' => $date_time_end,
+									'period' => $haricuti,
+									'document' => $image,
+									'al_balance' => $almc->annual_leave_balance,
+									'active' => 1,
+								]);
+
+								$updal = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->updateOrCreate( // update at StaffAnnualMCLeave for al balance
+										// where part
+										['year' => $dt->year],
+										// insert or update parameter
+										['annual_leave_balance' => $albal1]
+								);
+								
+								if(!empty($HOD)) { // insert data for HOD if there is any..
+									$takeLeave->hasmanystaffapproval()->create([
+										'staff_id' => $HOD,
+									]);
+								}
+
+								if( !empty($hret) ) { // insert hr approve
+									$takeLeave->hasmanystaffapproval()->create([
+										'staff_id' => $hret,
+										'hr' => 1,
+									]);
+								}
+							}
+						} else { // pakai EL-UPL
+
+							$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([ // insert into staff_leaves table
+								'leave_no' => $leave_no,
+								'leave_id' => 6,
+								'half_day' => $request->leave_type,
+								'reason' => $request->reason,
+								'date_time_start' => $date_time_start,
+								'date_time_end' => $date_time_end,
+								'period' => $haricuti,
+								'document' => $image,
+								'active' => 1,
+							]);
+
+							if($request->staff_id) { // insert backup if there is any
+								$takeLeave->hasonestaffleavebackup()->create(
+									['staff_id' => $request->staff_id]
+								);
+							}
+
+							if(!empty($HOD)) { // insert data for HOD if there is any..
+								$takeLeave->hasmanystaffapproval()->create([
+									'staff_id' => $HOD,
+								]);
+							}
+
+							if( !empty($hret) ) { // insert hr approve
+
+								$takeLeave->hasmanystaffapproval()->create([
+									'staff_id' => $hret,
+									'hr' => 1,
+								]);
+							}
+						}
+
+ 					} else { // greater than or equal 3 days.
+						Session::flash('flash_message', 'Sorry, we cant process your leave. Your Leave Application date ( from '.\Carbon\Carbon::parse($val['start'])->format('D, j F Y').' to '.\Carbon\Carbon::parse($val['end'])->format('D, j F Y').' ) is '.$now->diffInDays($date_time_start).' days  from today. Please use Annual or Unpaid Leave option which is appropriate.' );
+						return redirect()->back()->withInput();
+ 					}
+				}
+			}
 
 			// if ( $request->leave_id == 9 ) {
 					// TL
