@@ -112,7 +112,10 @@ if ( ($leav->leave_id == 9) || ($leav->leave_id != 9 && $leav->half_day == 2) ) 
 	if( ($leav->leave_id != 9 && $leav->half_day == 2) ) {
 		$dper = 'Half Day';
 	} else {
-		$dper = \Carbon\Carbon::parse($leav->date_time_start)->diff(\Carbon\Carbon::parse($leav->date_time_end))->format('%h hours %i minutes');
+		$i = $leav->period;
+				$hour = floor($i/60);
+				$minute = ($i % 60);
+		$dper = $hour.' hours '.$minute.' minutes';
 	}
 } else {
 	$dts = \Carbon\Carbon::parse($leav->date_time_start)->format('D, j F Y ');

@@ -743,8 +743,8 @@ class StaffLeaveController extends Controller
 
 				$tim1 = \Carbon\Carbon::create($request->date_time_start.' '.$request->time_start, 'Y-m-d h:m A');
 				$tim2 = \Carbon\Carbon::create($request->date_time_start.' '.$request->time_end, 'Y-m-d h:m A');
-				echo $tim1.' time start<br />';
-				echo $tim2.' time end<br />';
+				echo $tim1.' date time start<br />';
+				echo $tim2.' date time end<br />';
 
 				var_dump($tim1->gte($tim2));
 
@@ -856,8 +856,8 @@ class StaffLeaveController extends Controller
 								'leave_id' => 5,
 								'half_day' => 2,
 								'reason' => $request->reason,
-								'date_time_start' => $date_time_start,
-								'date_time_end' => $date_time_end,
+								'date_time_start' => $tim1,
+								'date_time_end' => $tim2,
 								'period' => 0.5,
 								'document' => $image,
 								'active' => 1,
@@ -876,8 +876,8 @@ class StaffLeaveController extends Controller
 								'leave_id' => 6,
 								'half_day' => 2,
 								'reason' => $request->reason,
-								'date_time_start' => $date_time_start,
-								'date_time_end' => $date_time_end,
+								'date_time_start' => $tim1,
+								'date_time_end' => $tim2,
 								'period' => 0.5,
 								'document' => $image,
 								'active' => 1,
@@ -893,8 +893,8 @@ class StaffLeaveController extends Controller
 								'leave_id' => 1,
 								'half_day' => 2,
 								'reason' => $request->reason,
-								'date_time_start' => $date_time_start,
-								'date_time_end' => $date_time_end,
+								'date_time_start' => $tim1,
+								'date_time_end' => $tim2,
 								'period' => 0.5,
 								'document' => $image,
 								'active' => 1,
@@ -914,8 +914,8 @@ class StaffLeaveController extends Controller
 								'leave_id' => 3,
 								'half_day' => 2,
 								'reason' => $request->reason,
-								'date_time_start' => $date_time_start,
-								'date_time_end' => $date_time_end,
+								'date_time_start' => $tim1,
+								'date_time_end' => $tim2,
 								'period' => 0.5,
 								'document' => $image,
 								'active' => 1,
@@ -929,8 +929,8 @@ class StaffLeaveController extends Controller
 						'leave_no' => $leave_no,
 						'leave_id' => $request->leave_id,
 						'reason' => $request->reason,
-						'date_time_start' => $date_time_start,
-						'date_time_end' => $date_time_end,
+						'date_time_start' => $tim1,
+						'date_time_end' => $tim2,
 						'period' => $i,	
 						'document' => $image,
 						'active' => 1,
