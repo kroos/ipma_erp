@@ -76,21 +76,22 @@ class StaffLeaveController extends Controller
 		// 		$request->akuan
 
 		// yg ni yg pertama : (kalau bertindih, tendang dulu.) walau apa cuti sekalipon, mai kita check cuti bertindih dulu..
+		// declare start date and end date_time_start
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// in time off, there only date_time_start so...
+		if( empty( $request->date_time_end ) ) {
+			$request->date_time_end = $request->date_time_start;
+		}
+
 		$period = \Carbon\CarbonPeriod::create($request->date_time_start, '1 days', $request->date_time_end);
 		foreach ($period as $key) {
-			// echo $key->format('Y-m-d');
-			$kik = StaffLeave:: where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw('? BETWEEN DATE(date_time_start) AND DATE(staff_leaves.date_time_end)', [$key->format('Y-m-d')])->get();
+			// echo $key->format('Y-m-d').' date loop from $request->date_time_start<br />';
+			$kik = \Auth::user()->belongtostaff->hasmanystaffleave()->where('active', 1)->whereRaw('? BETWEEN DATE(date_time_start) AND DATE(staff_leaves.date_time_end)', [$key->format('Y-m-d')])->get();
 			if( $kik->count() > 0 ) {
 				// block kalau ada bertindih cuti yg dah sedia ada
 				Session::flash('flash_message', 'Tarikh permohonan cuti ('.\Carbon\Carbon::parse($request->date_time_start)->format('D, j F Y').' hingga '.\Carbon\Carbon::parse($request->date_time_end)->format('D, j F Y').') sudah diisi. Sila ambil tarikh yang lain.');
 				return redirect()->back()->withInput();
 			}
-		}
-
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// in time off, there only date_time_start so...
-		if( empty( $request->date_time_end ) ) {
-			$request->date_time_end = $request->date_time_start;
 		}
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -315,11 +316,11 @@ class StaffLeaveController extends Controller
 				$image = NULL;
 			}
 
+			echo '/////////////////////////////////////////////////////////////////////////////////////////////////////////////'.'<br />';
 			/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-			if ( $request->leave_id == 1 ) {
-				// annual Leave
+			if ( $request->leave_id == 1 ) { // annual Leave
 
 				// check al for that particular year
 				$annual = $almc->annual_leave_balance;
@@ -375,8 +376,7 @@ class StaffLeaveController extends Controller
 				}
 			}
 
-			if ( $request->leave_id == 2 ) {
-				// mc leave
+			if ( $request->leave_id == 2 ) { // mc leave
 
 				// check al for that particular year
 				$medical = $almc->medical_leave_balance;
@@ -426,8 +426,7 @@ class StaffLeaveController extends Controller
 				}
 			}
 
-			if( $request->leave_id == 3 ) {
-				// 	UPL leave
+			if( $request->leave_id == 3 ) { // 	UPL leave
 
 				// insert into staff_leaves table
 				$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
@@ -463,8 +462,7 @@ class StaffLeaveController extends Controller
 				}
 			}
 
-			if ( $request->leave_id == 4 ) {
-				// NRL leave
+			if ( $request->leave_id == 4 ) { // NRL leave
 
 				// upacara tolak cuti ganti.
 				$gant = \App\Model\StaffLeaveReplacement::find($request->staff_leave_replacement_id)->leave_balance;
@@ -519,11 +517,9 @@ class StaffLeaveController extends Controller
 						'hr' => 1,
 					]);
 				}
-
 			}
 
-			if ( $request->leave_id == 7 ) {
-				// ML leave (maternity) check ml for that particular year
+			if ( $request->leave_id == 7 ) { // ML leave (maternity) check ml for that particular year
 				$mlbal = $period->count() - $almc->maternity_leave_balance;
 				// insert into staff_leaves table
 				$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
@@ -578,7 +574,7 @@ class StaffLeaveController extends Controller
 				$now = \Carbon\Carbon::now();
 
 				if ( $now->gte($date_time_start) ) { // date before today
-					print 'tarikh yg dipilih dah lepas<br />';
+					echo 'tarikh yg dipilih dah lepas<br />';
 					if ($annual > 0) { // checking annual leave
 						if( $albal1 < 0 ) { // negative value, so blocked
 							Session::flash('flash_message', 'Sorry, we cant process your leave. Your Annual Leave ('.$annual.' days) is not enough to cover your emergency leave from '.\Carbon\Carbon::parse($val['start'])->format('D, j F Y').' to '.\Carbon\Carbon::parse($val['end'])->format('D, j F Y').' ('.$haricuti.' days).' );
@@ -736,9 +732,232 @@ class StaffLeaveController extends Controller
 				}
 			}
 
-			// if ( $request->leave_id == 9 ) {
-					// TL
-			// }
+			if ( $request->leave_id == 9 ) { // TL leave
+
+				// nak kena cari period
+				// we have a few case
+				// 1. time start is before time end.
+				// 2. time_start = time_end
+				// 3. time between recess
+				// 4. time within office hour
+
+				$tim1 = \Carbon\Carbon::create($request->date_time_start.' '.$request->time_start, 'Y-m-d h:m A');
+				$tim2 = \Carbon\Carbon::create($request->date_time_start.' '.$request->time_end, 'Y-m-d h:m A');
+				echo $tim1.' time start<br />';
+				echo $tim2.' time end<br />';
+
+				var_dump($tim1->gte($tim2));
+
+				if ( $tim1->gte($tim2) ) { // time start less than time end
+					Session::flash('flash_message', 'Masa bagi permohonon Time Off tidak dapat diproses ('.\Carbon\Carbon::parse($request->date_time_start.' '.$request->time_start)->format('D, j F Y h:i A').' hingga '.\Carbon\Carbon::parse($request->date_time_start.' '.$request->time_end)->format('D, j F Y h:i A').') . Sila ambil masa yang lain.');
+					return redirect()->back()->withInput();
+				}
+
+				// period time
+				$userposition = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
+				$dt = \Carbon\Carbon::parse($request->date_time_start);
+
+				if( $userposition->id == 72 && $dt->dayOfWeek != 5 ) {	// checking for friday
+
+					$time = \App\Model\WorkingHour::where('year', $dt->year)->where('category', 8);
+				} else {
+
+					if ( $userposition->id == 72 && $dt->dayOfWeek == 5 ) {	// checking for friday
+
+						$time = \App\Model\WorkingHour::where('year', $dt->year)->where('category', 8);
+					} else {
+
+						if( $userposition->id != 72 && $dt->dayOfWeek != 5 ) {	// checking for friday
+							// normal
+							$time = \App\Model\WorkingHour::where('year', $dt->year)->whereRaw('"'.$request->date_time_start.'" BETWEEN working_hours.effective_date_start AND working_hours.effective_date_end' )->limit(1);
+						} else {
+							if( $userposition->id != 72 && $dt->dayOfWeek == 5 ) {	// checking for friday
+								$time = \App\Model\WorkingHour::where('year', $dt->year)->where('category', 3)->whereRaw('"'.$request->date_time_start.'" BETWEEN working_hours.effective_date_start AND working_hours.effective_date_end' )->limit(1);
+							}
+						}
+					}
+				}
+
+				$times = \Carbon\Carbon::parse($request->date_time_start.' '.$request->time_start)->format('H:i:s');
+				$timee = \Carbon\Carbon::parse($request->date_time_start.' '.$request->time_end)->format('H:i:s');
+				$timep = \Carbon\CarbonPeriod::create($request->date_time_start.' '.$times, '1 minutes', $request->date_time_start.' '.$timee, \Carbon\CarbonPeriod::EXCLUDE_START_DATE);
+				echo $times.' time start<br />';
+				echo $timee.' time end<br />';
+
+				echo $timep->count().' tempoh minit masa keluar sblm tolak recess<br />';
+
+				echo 'start_am => '.$time->first()->time_start_am.' time start am<br />';
+				echo 'end_am => '.$time->first()->time_end_am.' time end am<br />';
+				echo 'start_pm => '.$time->first()->time_start_pm.' time start pm<br />';
+				echo 'end_pm => '.$time->first()->time_end_pm.' time end pm<br />';
+
+				$timefull = \Carbon\CarbonPeriod::create($request->date_time_start.' '.$time->first()->time_start_am, '1 minutes', $request->date_time_start.' '.$time->first()->time_end_pm, \Carbon\CarbonPeriod::EXCLUDE_START_DATE);
+				$timeamwh = \Carbon\CarbonPeriod::create($request->date_time_start.' '.$time->first()->time_start_am, '1 minutes', $request->date_time_start.' '.$time->first()->time_end_am, \Carbon\CarbonPeriod::EXCLUDE_START_DATE);
+				$timepmwh = \Carbon\CarbonPeriod::create($request->date_time_start.' '.$time->first()->time_start_pm, '1 minutes', $request->date_time_start.' '.$time->first()->time_end_pm, \Carbon\CarbonPeriod::EXCLUDE_START_DATE);
+
+				echo $timefull->count().' time full<br />';
+				echo $timeamwh->count().' timeamwh<br />';
+				echo $timepmwh->count().' timepmwh<br />';
+
+				// foreach($timep as $tpout) {
+				// 	echo $tpout.' time off<br />';
+				// }
+
+				foreach($timefull as $tf) {
+					// echo $tf.' minutes for time full<br />';
+					foreach ($timeamwh as $tamwh) {
+						if ($tf == $tamwh) {
+							// echo $tamwh.' minutes for am working hours<br />';
+							$timecomb[] = $tamwh;
+						}
+					}
+					foreach ($timepmwh as $tpmwh) {
+						if($tf == $tpmwh) {
+							// echo $tpmwh.' minutes for pm working hours<br />';
+							$timecomb[] = $tpmwh;
+						}
+					}
+				}
+
+				$i = 1;
+				// we already have all the working minutes synch, so..
+				foreach ($timecomb as $key) {
+					// echo $key.' working minutes combin<br />';
+					foreach($timep as $tpout) {
+						if($tpout == $key) {
+							$i++; // satu saja.. jgn 2 sekali
+							// echo $tpout.' time off<br />';
+							// echo $i++.' minutes<br />';
+						}
+					}
+				}
+
+				// convert minuts to hour and minutes
+				$hour = floor($i/60);
+				$minute = ($i % 60);
+				echo $hour.' jam '.$minute.' minit<br />';
+
+				if($i > 240) { // if $i more than 240 minutes (4 hours), set as half day leave. gotta check it as normal AL/UPL or EL-AL/UPL
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+					// check al for that particular year
+					$annual = $almc->annual_leave_balance;
+					echo $annual.' annual leave<br />';
+					$albal1 = $annual - 0.5;
+
+					$now = \Carbon\Carbon::now();
+					echo $now->diffInDays($date_time_start).' diff in days<br />';
+
+					if ( $now->diffInDays($date_time_start) < 3 ) { // geng EL
+
+						if($annual > 0) { // AL > 0, so EL-AL
+							// insert into staff_leaves table
+							$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
+								'leave_no' => $leave_no,
+								'leave_id' => 5,
+								'half_day' => 2,
+								'reason' => $request->reason,
+								'date_time_start' => $date_time_start,
+								'date_time_end' => $date_time_end,
+								'period' => 0.5,
+								'document' => $image,
+								'active' => 1,
+							]);
+
+							$updal = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->updateOrCreate( // update at StaffAnnualMCLeave for al balance
+									// where part
+									['year' => $dt->year],
+									// insert or update parameter
+									['annual_leave_balance' => $albal1]
+							);
+						} else {
+							// insert into staff_leaves table
+							$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
+								'leave_no' => $leave_no,
+								'leave_id' => 6,
+								'half_day' => 2,
+								'reason' => $request->reason,
+								'date_time_start' => $date_time_start,
+								'date_time_end' => $date_time_end,
+								'period' => 0.5,
+								'document' => $image,
+								'active' => 1,
+							]);
+						}
+					} else { // check AL atau UPL
+
+						if($annual > 0) { // AL
+
+							// insert into staff_leaves table
+							$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
+								'leave_no' => $leave_no,
+								'leave_id' => 1,
+								'half_day' => 2,
+								'reason' => $request->reason,
+								'date_time_start' => $date_time_start,
+								'date_time_end' => $date_time_end,
+								'period' => 0.5,
+								'document' => $image,
+								'active' => 1,
+							]);
+
+							$updal = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->updateOrCreate( // update at StaffAnnualMCLeave for al balance
+									// where part
+									['year' => $dt->year],
+									// insert or update parameter
+									['annual_leave_balance' => $albal1]
+							);
+						} else { // UPL
+
+							// insert into staff_leaves table
+							$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
+								'leave_no' => $leave_no,
+								'leave_id' => 3,
+								'half_day' => 2,
+								'reason' => $request->reason,
+								'date_time_start' => $date_time_start,
+								'date_time_end' => $date_time_end,
+								'period' => 0.5,
+								'document' => $image,
+								'active' => 1,
+							]);
+						}
+					}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				} else {
+					// insert into staff_leaves table
+					$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
+						'leave_no' => $leave_no,
+						'leave_id' => $request->leave_id,
+						'reason' => $request->reason,
+						'date_time_start' => $date_time_start,
+						'date_time_end' => $date_time_end,
+						'period' => $i,	
+						'document' => $image,
+						'active' => 1,
+					]);
+				}
+die();
+				// insert backup if there is any
+				if($request->staff_id) {
+					$takeLeave->hasonestaffleavebackup()->create(
+						['staff_id' => $request->staff_id]
+					);
+				}
+				// insert data for HOD if there is any..
+				if(!empty($HOD)) {
+					$takeLeave->hasmanystaffapproval()->create([
+						'staff_id' => $HOD,
+					]);
+				}
+				// insert hr approve
+				if( !empty($hret) ) {
+					$takeLeave->hasmanystaffapproval()->create([
+						'staff_id' => $hret,
+						'hr' => 1,
+					]);
+				}
+
+			}
 			echo '///////////////////////////////////////////////////////////////';
 			echo 'bawah sekali dah ni...<br />';
 		}
