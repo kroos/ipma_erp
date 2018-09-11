@@ -827,8 +827,8 @@ class StaffLeaveController extends Controller
 					// echo $key.' working minutes combin<br />';
 					foreach($timep as $tpout) {
 						if($tpout == $key) {
-							$i++; // satu saja.. jgn 2 sekali
-							// echo $tpout.' time off<br />';
+							$timing = $i++; // satu saja.. jgn 2 sekali
+							echo $tpout.' time off<br />';
 							// echo $i++.' minutes<br />';
 						}
 					}
@@ -839,7 +839,7 @@ class StaffLeaveController extends Controller
 				$minute = ($i % 60);
 				echo $hour.' jam '.$minute.' minit<br />';
 
-				if($i > 240) { // if $i more than 240 minutes (4 hours), set as half day leave. gotta check it as normal AL/UPL or EL-AL/UPL
+				if($i > 180) { // if $i more than 180 minutes (3 hours), set as half day leave. gotta check it as normal AL/UPL or EL-AL/UPL
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 					// check al for that particular year
 					$annual = $almc->annual_leave_balance;
@@ -935,12 +935,12 @@ class StaffLeaveController extends Controller
 						'reason' => $request->reason,
 						'date_time_start' => $tim1,
 						'date_time_end' => $tim2,
-						'period' => $i,	
+						'period' => $timing,	
 						'document' => $image,
 						'active' => 1,
 					]);
 				}
-die();
+
 				// insert backup if there is any
 				if($request->staff_id) {
 					$takeLeave->hasonestaffleavebackup()->create(

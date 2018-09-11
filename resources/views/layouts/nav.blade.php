@@ -32,21 +32,40 @@ $div = App\Model\Division::all();
 					" href="{{ route("$divs->route.index") }}">{{ $divs->division }}</a>
 				</li>
 @endforeach
+
+<?php
+// find for staff backup
+$sb = \Auth::user()->belongtostaff->hasmanystaffleavebackup()->whereNull('acknowledge')->get();
+$tsb = $sb->count();
+
+// ada yg kena tambah lagi, contoh utk HOD and HR alert.
+?>
 				<li class="nav-item dropdown">
 					<a id="navbarDropdown" class="btn btn-sm
 					
 						btn-info text-white
 
 					nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-						{{ Auth::user()->belongtostaff->name }} <span class="caret"></span>
+						{{ Auth::user()->belongtostaff->name }}
+@if( $tsb > 0 )
+						<span class="badge badge-danger">{{ $tsb }}</span>
+@endif
+						<span class="caret"></span>
 					</a>
 
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 						<a class="dropdown-item" href="{{ route('staff.show', Auth::user()->staff_id ) }}">{{ __('Profile') }}</a>
 
-						<a class="
-							text-danger
-						dropdown-item" href="{{ route('staffLeave.index') }}">{{ __('Staff Leave Record') }}</a>
+						<a class="dropdown-item" href="{{ route('staffLeave.index') }}">
+							{{ __('Leave Record') }}
+						</a>
+
+						<a class="dropdown-item" href="{{ route('staffLeaveBackup.index') }}">
+							Leave Backup
+@if($tsb > 0)
+							<span class="badge badge-danger">{{ $tsb }}</span>
+@endif
+						</a>
 
 						<a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
 							{{ __('Logout') }}
