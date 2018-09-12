@@ -337,6 +337,7 @@
 	$('#simple-select2').select2({
 		// theme: 'bootstrap4',
 		placeholder: "Select an option",
+		width: 100%,
 		// allowClear: true
 	});
 
@@ -344,13 +345,16 @@
 		// theme: 'bootstrap4',
 		// containerCssClass: ':all:',
 		placeholder: "Select an option",
+		width: 100%,
 		// allowClear: true
 	});
 
+/////////////////////////////////////////////////////////////////////////////////////////
 	$('#dtpicker').datetimepicker({
 		// format: 'dddd, YYYY-MM-DD h:mm A'
 		format: 'YYYY-MM-DD'
 	});
 
+/////////////////////////////////////////////////////////////////////////////////////////
 	$( "#accordion" ).accordion();
 @endsection

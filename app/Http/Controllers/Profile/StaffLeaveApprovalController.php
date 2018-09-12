@@ -6,21 +6,21 @@ namespace App\Http\Controllers\Profile;
 use App\Http\Controllers\Controller;
 
 // load model
-use App\Model\StaffLeaveBackup;
+use App\Model\StaffLeaveApproval;
 
 use Illuminate\Http\Request;
 
 // load validation
-use App\Http\Requests\StaffLeaveBackupRequest;
+// use App\Http\Requests\StaffLeaveApprovalRequest;
 
 // for manipulating image
 // http://image.intervention.io/
 // use Intervention\Image\Facades\Image as Image;       <-- ajaran sesat depa... hareeyyyyy!!
-use Intervention\Image\ImageManagerStatic as Image;
+// use Intervention\Image\ImageManagerStatic as Image;
 
 use Session;
 
-class StaffLeaveBackupController extends Controller
+class StaffLeaveApprovalController extends Controller
 {
 	function __construct()
 	{
@@ -30,30 +30,30 @@ class StaffLeaveBackupController extends Controller
 	
 	public function index()
 	{
-		return view('staffLeaveBackup.index');
+		return view('staffLeaveApproval.index');
 	}
 
 	public function create()
 	{
 	}
 
-	public function store(StaffLeaveBackupRequest $request)
+	public function store(Request $request)
 	{
 	}
 
-	public function show(StaffLeaveBackup $staffLeaveBackup)
+	public function show(StaffLeaveApproval $staffLeaveApproval)
 	{
 	}
 
-	public function edit(StaffLeaveBackup $staffLeaveBackup)
+	public function edit(StaffLeaveApproval $staffLeaveApproval)
 	{
 	}
 
-	public function update(StaffLeaveBackupRequest $request, StaffLeaveBackup $staffLeaveBackup)
+	public function update(Request $request, StaffLeaveApproval $staffLeaveApproval)
 	{
 		// dd($request->all() );
 		$n = \Auth::user()->belongtostaff->hasmanystaffleavebackup()->where('id', $request->id)->update([
-			'acknowledge' => 1
+			'approval' => 1
 		]);
 		return response()->json([
 			'status' => 'success',
@@ -61,7 +61,7 @@ class StaffLeaveBackupController extends Controller
 		]);
 	}
 
-	public function destroy(StaffLeaveBackup $staffLeaveBackup)
+	public function destroy(StaffLeaveApproval $staffLeaveApproval)
 	{
 	}
 }

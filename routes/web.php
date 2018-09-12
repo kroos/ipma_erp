@@ -246,6 +246,10 @@ Route::post('/leaveType', [
 Route::resource('staffLeaveBackup', 'Profile\StaffLeaveBackupController');
 
 ############################################################################
+// StaffLeaveApproval Controller
+Route::resource('staffLeaveApproval', 'Profile\StaffLeaveApprovalController');
+
+############################################################################
 
 
 

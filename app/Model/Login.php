@@ -168,7 +168,7 @@ class Login extends Authenticatable
 	{
 		$rt = \Auth::user()->belongtostaff->belongtomanyposition()->get();
 		foreach ($rt as $lok) {
-			// some user got no depatment and they are in a higher status, so let them pass all the department
+			// some user got no department and they are in a higher status, so let them pass all the department
 			if(empty($lok->belongtodepartment)) {
 				return true;
 			} else {
@@ -177,7 +177,8 @@ class Login extends Authenticatable
 				} else {
 					// check to see if its an administrtor
 					if ($lok->pivot->main == 1) {
-						if($lok->group_id == 1 || $lok->group_id == 2) {
+						// if($lok->group_id == 1 || $lok->group_id == 2) {
+						if($lok->group_id == 1) {
 							return true;
 						}
 					}

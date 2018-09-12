@@ -39,6 +39,14 @@ $sb = \Auth::user()->belongtostaff->hasmanystaffleavebackup()->whereNull('acknow
 $tsb = $sb->count();
 
 // ada yg kena tambah lagi, contoh utk HOD and HR alert.
+$shod = \Auth::user()->belongtostaff->hasmanystaffleaveapproval()->whereNull('hr')->whereNull('approval')->get();
+$tshod = $shod->count();
+
+// hr boss
+$shr = \Auth::user()->belongtostaff->hasmanystaffleaveapproval()->where('hr', 1)->whereNull('approval')->get();
+$tshr = $shr->count();
+
+$allleaves = $tsb + $tshod + $tshr;
 ?>
 				<li class="nav-item dropdown">
 					<a id="navbarDropdown" class="btn btn-sm
@@ -47,8 +55,8 @@ $tsb = $sb->count();
 
 					nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
 						{{ Auth::user()->belongtostaff->name }}
-@if( $tsb > 0 )
-						<span class="badge badge-danger">{{ $tsb }}</span>
+@if( $allleaves > 0 )
+						<span class="badge badge-danger">{{ $allleaves }}</span>
 @endif
 						<span class="caret"></span>
 					</a>
@@ -60,13 +68,38 @@ $tsb = $sb->count();
 							{{ __('Leave Record') }}
 						</a>
 
+<!-- not all have backup -->
+<?php
+// for backup
+$usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
+$userloc = \Auth::user()->belongtostaff->location_id;
+// echo $userloc.'<-- location_id<br />';
+$userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
+?>
+@if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
 						<a class="dropdown-item" href="{{ route('staffLeaveBackup.index') }}">
 							Leave Backup
 @if($tsb > 0)
 							<span class="badge badge-danger">{{ $tsb }}</span>
 @endif
 						</a>
-
+@endif
+@if( $usergroup->group_id == 2 || $usergroup->group_id == 4 )
+						<a class="dropdown-item" href="{{ route('staffLeaveApproval.index') }}">
+							Leave Approval
+@if($tshod > 0)
+							<span class="badge badge-danger">{{ $tshod }}</span>
+@endif
+						</a>
+@endif
+@if( $usergroup->id == 12 )
+						<a class="dropdown-item" href="{{ route('staffLeaveApproval.index') }}">
+							HR Leave Approval
+@if($tshr > 0)
+							<span class="badge badge-danger">{{ $tshr }}</span>
+@endif
+						</a>
+@endif
 						<a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
 							{{ __('Logout') }}
 						</a>
