@@ -93,8 +93,10 @@ $userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
 				<tr>
 					<th>From</th>
 					<th>To</th>
+@if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
 					<th>Name</th>
 					<th>Status</th>
+@endif
 				</tr>
 			</thead>
 			<tbody>
@@ -146,9 +148,7 @@ if( !empty($leav->hasonestaffleavebackup) ) {
 						<a href="{{ route('staffLeave.show', $leav->id) }}" alt="Details" title="Details">HR9-{{ str_pad( $leav->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}</a>
 							<br />
 						<a href="{{ __('route') }}" alt="Print PDF" title="Print PDF"><i class="far fa-file-pdf"></i></a>
-							<br />
 						<a href="{{ __('route') }}" alt="Cancel" title="Cancel"><i class="fas fa-ban"></i></a>
-							<br />
 					</td>
 					<td>{{ \Carbon\Carbon::parse($leav->created_at)->format('D, j F Y') }}</td>
 					<td>{{ $leav->belongtoleave->leave }}</td>

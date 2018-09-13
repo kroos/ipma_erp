@@ -51,14 +51,9 @@ class StaffLeaveApprovalController extends Controller
 
 	public function update(Request $request, StaffLeaveApproval $staffLeaveApproval)
 	{
-		// dd($request->all() );
-		$n = \Auth::user()->belongtostaff->hasmanystaffleavebackup()->where('id', $request->id)->update([
-			'approval' => 1
-		]);
-		return response()->json([
-			'status' => 'success',
-			'message' => 'The applicant appreciate it very much. Thank you.'
-		]);
+		echo $staffLeaveApproval;
+		dd($request->all() );
+
 	}
 
 	public function destroy(StaffLeaveApproval $staffLeaveApproval)

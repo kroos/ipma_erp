@@ -14,6 +14,8 @@ class StaffAnnualMCLeave extends Model
 
 	protected $table = 'staff_annual_mc_maternity_leaves';
 
+
+	// salah ea pulok dohhhhhh
     public function belomgtostaff()
     {
         return $this->belongsTo('App\Model\Staff', 'staff_id');

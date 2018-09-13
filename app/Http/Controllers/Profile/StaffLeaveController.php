@@ -408,7 +408,7 @@ class StaffLeaveController extends Controller
 						// where part
 						['year' => $dt->year],
 						// insert or update parameter
-						['medical_leave_balance' => $s]
+						['medical_leave_balance' => $albal1]
 				);
 
 				// insert data for HOD if there is any..
