@@ -127,7 +127,7 @@ class StaffProfileController extends Controller
                     ]);
             }
         } else {
-            SalesTax::where(['id_sales' => $sales->id])->delete();
+            \App\Model\StaffDrivingLicense::where(['staff_id' => $staff->id])->delete();
         }
 
         Session::flash('flash_message', 'Data successfully edited!');

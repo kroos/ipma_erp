@@ -173,7 +173,20 @@ if( !empty($leav->hasonestaffleavebackup) ) {
 							</tbody>
 						</table>
 					</td>
-					<td>{{ ( $leav->active == 1 )?'Active':'Cancel' }}</td>
+<?php
+switch ($leav->active) {
+	case '1':
+		$status1 = 'Active';
+		break;
+	case '2':
+		$status1 = 'Close';
+		break;
+	case '3':
+		$status1 = 'Cancelled';
+		break;
+}
+?>
+					<td>{{ $status1 }}</td>
 				</tr>
 @endforeach
 			</tbody>

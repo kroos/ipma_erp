@@ -8,10 +8,11 @@
 		@include('layouts.errorform')
 
 		<dl class="row">
-			<dt class="col-sm-3"><h5 class="text-danger">Perhatian :</h5></dt>
+			<dt class="col-sm-3"><h5 class="text-danger text-r">Perhatian :</h5></dt>
 			<dd class="col-sm-9">
 				<p class="lead">Permohonan Cuti Mestilah Sekurang-kurangnya <span class="font-weight-bold">TIGA (3)</span> Hari Lebih Awal dari Tarikh Bercuti Bagi "Annual Leave (Cuti Tahunan)" dan juga "Cuti Tanpa Gaji (Unpaid Leave)".</p>
 				<p class="lead">Time-Off akan dikira sebagai <strong>Cuti</strong> sekiranya tempoh keluar <strong>Melebihi Dari 2jam</strong>.</p>
+				<p class="lead">Permohonan Cuti Sakit (Medical Leave) atau Unpaid Medical Leave (MC-UPL) hanya akan dikira sah dan layak jika sijil sakit dikeluarkan oleh hospital/klinik kerajaan atau klinik panel yang <strong>BERDAFTAR</strong> sahaja.</p>
 			</dd>
 		</dl>
 
@@ -1181,8 +1182,7 @@ foreach ($nodate1 as $key) {
 	}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	if ($selection.val() == '9') {
-	// time off
+	if ($selection.val() == '9') { // time off
 
 		$('#form').bootstrapValidator('removeField', $('.datetime').find('[name="date_time_start"]'));
 		$('#form').bootstrapValidator('removeField', $('.datetime').find('[name="date_time_end"]'));
@@ -1305,6 +1305,127 @@ foreach ($nodate1 as $key) {
 		/////////////////////////////////////////////////////////////////////////////////////////
 		/////////////////////////////////////////////////////////////////////////////////////////
 		/////////////////////////////////////////////////////////////////////////////////////////
+	}
+
+	if ($selection.val() == '11') {
+
+		$('#form').bootstrapValidator('removeField', $('.datetime').find('[name="date_time_start"]'));
+		$('#form').bootstrapValidator('removeField', $('.datetime').find('[name="date_time_end"]'));
+		$('#form').bootstrapValidator('removeField', $('.time').find('[name="time_start"]'));
+		$('#form').bootstrapValidator('removeField', $('.time').find('[name="time_end"]'));
+		$('#form').bootstrapValidator('removeField', $('.backup').find('[name="staff_id"]'));
+		$('#form').bootstrapValidator('removeField', $('.supportdoc').find('[name="document"]'));
+		$('#form').bootstrapValidator('removeField', $('.suppdoc').find('[name="documentsupport"]'));
+
+		$('#remove').remove();
+		$('#wrapper').append(
+			'<div id="remove">' +
+				<!-- mc leave -->
+				'<div class="form-group row {{ $errors->has('date_time_start') ? 'has-error' : '' }}">' +
+					'{{ Form::label('from', 'From : ', ['class' => 'col-sm-2 col-form-label']) }}' +
+					'<div class="col-sm-10 datetime">' +
+						'{{ Form::text('date_time_start', @$value, ['class' => 'form-control', 'id' => 'from', 'placeholder' => 'From : ', 'autocomplete' => 'off']) }}' +
+					'</div>' +
+				'</div>' +
+
+				'<div class="form-group row {{ $errors->has('date_time_end') ? 'has-error' : '' }}">' +
+					'{{ Form::label('to', 'To : ', ['class' => 'col-sm-2 col-form-label']) }}' +
+					'<div class="col-sm-10 datetime">' +
+						'{{ Form::text('date_time_end', @$value, ['class' => 'form-control', 'id' => 'to', 'placeholder' => 'To : ', 'autocomplete' => 'off']) }}' +
+					'</div>' +
+				'</div>' +
+
+
+				'<div class="form-group row {{ $errors->has('document') ? 'has-error' : '' }}">' +
+					'{{ Form::label( 'doc', 'Supporting Document : ', ['class' => 'col-sm-2 col-form-label'] ) }}' +
+					'<div class="col-sm-10 supportdoc">' +
+						'{{ Form::file( 'document', ['class' => 'form-control form-control-file', 'id' => 'doc', 'placeholder' => 'Supporting Document']) }}' +
+					'</div>' +
+				'</div>' +
+
+				'<div class="form-group row {{ $errors->has('akuan') ? 'has-error' : '' }}">' +
+					'{{ Form::label('suppdoc', 'Surat Sokongan : ', ['class' => 'col-sm-2 col-form-label']) }}' +
+					'<div class="col-sm-10 form-check suppdoc">' +
+						'{{ Form::checkbox('documentsupport', 1, @$value, ['class' => 'form-check-input bg-warning rounded', 'id' => 'suppdoc']) }}' +
+						'<label for="suppdoc" class="form-check-label p-3 mb-2 bg-warning text-danger rounded">Sila Pastikan anda menghantar <strong>Surat Sokongan</strong> dalam tempoh <strong>3 Hari</strong> selepas tarikh cuti.</label>' +
+					'</div>' +
+				'</div>' +
+
+			'</div>'
+		);
+
+		//add bootstrapvalidator
+		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_start"]'));
+		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_end"]'));
+		$('#form').bootstrapValidator('addField', $('.supportdoc').find('[name="document"]'));
+		$('#form').bootstrapValidator('addField', $('.suppdoc').find('[name="documentsupport"]'));
+
+		/////////////////////////////////////////////////////////////////////////////////////////
+		// enable datetime for the 1st one
+		$('#from').datetimepicker({
+			format:'YYYY-MM-DD',
+			useCurrent: true,
+			daysOfWeekDisabled: [0],
+			disabledDates:[
+<?php
+// block holiday tgk dlm disable date in datetimepicker
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+// block cuti sendiri
+foreach ($nodate1 as $key) {
+		// echo $key->date_time_start.' datetime start';
+		// echo $key->date_time_end.' datetime end';
+		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
+		foreach ($period1 as $key1) {
+			echo 'moment("'.$key1->format('Y-m-d').'"),';
+		}
+	}
+?>
+							],
+		})
+		.on('dp.change dp.show dp.update', function(e) {
+			$('#form').bootstrapValidator('revalidateField', 'date_time_start');
+			var minDate = $('#from').val();
+			$('#to').datetimepicker('minDate', minDate);
+		});
+		
+		$('#to').datetimepicker({
+			format:'YYYY-MM-DD',
+			useCurrent: true,
+			daysOfWeekDisabled: [0],
+			disabledDates:[
+<?php
+// block holiday tgk dlm disable date in datetimepicker
+foreach ($nodate as $nda) {
+	$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+	foreach ($period as $key) {
+		echo 'moment("'.$key->format('Y-m-d').'"),';
+	}
+}
+// block cuti sendiri
+foreach ($nodate1 as $key) {
+		// echo $key->date_time_start.' datetime start';
+		// echo $key->date_time_end.' datetime end';
+		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
+		foreach ($period1 as $key1) {
+			echo 'moment("'.$key1->format('Y-m-d').'"),';
+		}
+	}
+?>
+							],
+		})
+		.on('dp.change dp.show dp.update', function(e) {
+			$('#form').bootstrapValidator('revalidateField', 'date_time_end');
+			var maxDate = $('#to').val();
+			$('#from').datetimepicker('maxDate', maxDate);
+		});
+
+		/////////////////////////////////////////////////////////////////////////////////////////
+
 	}
 
 });

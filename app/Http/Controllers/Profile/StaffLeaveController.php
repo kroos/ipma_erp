@@ -962,6 +962,43 @@ class StaffLeaveController extends Controller
 				}
 
 			}
+
+			if( $request->leave_id == 11 ) { // 	MC-UPL leave
+
+				// insert into staff_leaves table
+				$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
+					'leave_no' => $leave_no,
+					'leave_id' => $request->leave_id,
+					'half_day' => $request->leave_type,
+					'reason' => $request->reason,
+					'date_time_start' => $date_time_start,
+					'date_time_end' => $date_time_end,
+					'period' => $haricuti,
+					'document' => $image,
+					'active' => 1,
+				]);
+
+				// insert backup if there is any
+				if($request->staff_id) {
+					$takeLeave->hasonestaffleavebackup()->create(
+						['staff_id' => $request->staff_id]
+					);
+				}
+				// insert data for HOD if there is any..
+				if(!empty($HOD)) {
+					$takeLeave->hasmanystaffapproval()->create([
+						'staff_id' => $HOD,
+					]);
+				}
+				// insert hr approve
+				if( !empty($hret) ) {
+					$takeLeave->hasmanystaffapproval()->create([
+						'staff_id' => $hret,
+						'hr' => 1,
+					]);
+				}
+			}
+
 			echo '///////////////////////////////////////////////////////////////';
 			echo 'bawah sekali dah ni...<br />';
 		}
