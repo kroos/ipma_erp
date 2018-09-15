@@ -1,20 +1,12 @@
 <?php
 
 // load model
-use App\Sales;
-use App\SalesItems;
-use App\SlipPostage;
-use App\Customers;
-use App\Product;
-use App\ProductCategory;
-use App\ProductImage;
-use App\Payments;
-use App\SlipNumbers;
-use App\SalesTax;
-use App\SalesCustomers;
-use App\Preferences;
-use App\Taxes;
-use App\Banks;
+use \App\Model\Staff;
+use \App\Model\StaffLeave;
+use \App\Model\StaffAnnualMCLeave;
+use \App\Model\StaffLeaveBackup;
+use \App\Model\StaffLeaveReplacement;
+use \App\Model\StaffLeaveApproval;
 
 use Crabbly\FPDF\FPDF as Fpdf;
 use Carbon\Carbon;
@@ -22,45 +14,30 @@ use Carbon\Carbon;
 
 function my($string)
 {
-	$rt = Carbon::createFromFormat('Y-m-d', $string);
-	return date('d F Y', mktime(0, 0, 0, $rt->month, $rt->day, $rt->year));
+	$rt = Carbon::parse($string);
+	return $rt->format('D, j F Y');
 }
-
-
-// load image
-function base64ToImage($base64_string, $output_file)
-{
-	$ext = explode('/', $output_file);
-	$filename = storage_path().'/uploads/pdfimages/'.mt_rand().'.'.$ext[1];
-	file_put_contents($filename, base64_decode($base64_string));
-	return $filename;
-}
-
-// echo Request::segment(2);
 
 class PDF extends Fpdf
 {
 	// Page header
 	function Header()
 	{
-		// invoice number
-		$lo1 = Preferences::find(1);
-		
 		// Logo
-		$this->Image(base64ToImage($lo1->company_logo_image, $lo1->company_logo_mime),50,9,30);
+		$this->Image(asset('images/logo2.png'),50,9,30);
 		// Arial bold 15
 		$this->SetFont('arial','B',15);
 		// Move to the right
 		// $this->Cell(80);
 		// Title
 		$this->SetTextColor(128);
-		$this->Cell(0, 5, $lo1->company_name, 0, 1, 'C');
-		$this->SetFont('arial','',6);
-		$this->Cell(0, 5, $lo1->company_registration, 0, 1, 'C');
+		$this->Cell(0, 5, 'IPMA Industry', 0, 1, 'C');
+		$this->SetFont('arial','asd',6);
+		$this->Cell(0, 5, 'ntah', 0, 1, 'C');
 		$this->SetFont('arial','B',8);
-		$this->Cell(0, 5, $lo1->company_tagline, 0, 1, 'C');
+		$this->Cell(0, 5, 'company tagline', 0, 1, 'C');
 		$this->SetFont('arial','',7);
-		$this->Cell(0, 5, 'Phone : '.$lo1->company_fixed_line.'  Mobile : '.$lo1->company_mobile.' Email : '.strtolower($lo1->company_email), 0, 1, 'C');
+		$this->Cell(0, 5, 'Phone : '.'+604 917 8799 / 917 1799'.' Email : ipma@ipmaindustry.com'), 0, 1, 'C');
 		// Line break
 		$this->Ln(5);
 	}
@@ -77,7 +54,7 @@ class PDF extends Fpdf
 		// Position at 3.0 cm from bottom
 		$this->SetY(-23);
 		$this->SetFont('arial','I',6);
-		$this->Cell(0, 5, $lo2->company_address.' '.$lo2->company_postcode, 0, 1, 'C');
+		$this->Cell(0, 5, 'Lot 1266, Bandar DarulAman Industrial Park, 06000, Jitra, Kedah Darul Aman', 0, 1, 'C');
 		// Arial italic 5
 		$this->SetFont('Arial','I',5);
 		// Page number
@@ -85,19 +62,12 @@ class PDF extends Fpdf
 	}
 }
 
-	// dd($sales);
-
-// invoice number
-$lo = Preferences::find(1);
-
-
-
 // Instanciation of inherited class
-$pdf = new PDF('P','mm', 'A4');
+$pdf = new PDF('P','mm', 'A5');
 $pdf->AliasNbPages();
 $pdf->AddPage();
 
-$pdf->SetTitle('Invoice ');
+$pdf->SetTitle('Borang Permohonan Cuti '.$staffLeave->id);
 
 // echo $pdf->GetPageWidth();		// 210.00155555556
 // echo $pdf->GetPageHeight();		// 297.00008333333
@@ -121,16 +91,6 @@ $pdf->SetRightMargin(105);
 $pdf->SetFont('Arial','B',10);
 $pdf->MultiCell(0, 5, 'Invoice to : ', 0, 'L');
 
-$sacust = SalesCustomers::where(['id_sales' => $sales->id])->get();
-foreach ($sacust as $key) {
-	$cust = Customers::findOrFail($key->id_customer);
-	$pdf->MultiCell(0, 5, $cust->client, 0, 'L');
-	$pdf->SetFont('Arial','',8);
-	$pdf->MultiCell(0, 5, 'Address : '.ucwords(strtolower($cust->client_address)).' '.$cust->client_poskod, 0, 'L');
-	$pdf->MultiCell(0, 5, 'Phone : '.$cust->client_phone, 0, 'L');
-	$pdf->MultiCell(0, 5, 'Email : '.$cust->client_email, 0, 'L');
-}
-
 
 $pdf->SetFont('Arial','B',10);
 // tracking number column
@@ -146,10 +106,8 @@ $pdf->SetFont('Arial','',8);
 $pdf->SetRightMargin(10);
 $pdf->SetLeftMargin(155);
 $pdf->SetY(47);
-$pdf->MultiCell(0, 5, my(Sales::find($sales->id)->date_sale), 0, 'R');
-foreach ( SlipNumbers::where(['id_sales' => $sales->id])->get() AS $key ) {
-	$pdf->MultiCell(0, 5, $key->tracking_number, 0, 'R');
-}
+$pdf->MultiCell(0, 5, '', 0, 'R');
+$pdf->MultiCell(0, 5, '$key->tracking_number', 0, 'R');
 
 $pdf->Ln(30);
 
@@ -187,40 +145,25 @@ $pdf->Cell(30, 7, 'Image', 1, 1, 'C');
 
 // list of product
 $pdf->SetFont('Arial','',8);
-$lipro = SalesItems::where(['id_sales' => $sales->id])->get();
-$gt = 0;
-foreach ($lipro as $ke) {
-	$pdf->Cell(70, 27, App\Product::findOrFail($ke->id_product)->product, 1, 0, 'C');
-	$pdf->Cell(30, 27, number_format($ke->retail, 2), 1, 0, 'C');
-	$pdf->Cell(30, 27, $ke->quantity, 1, 0, 'C');
-	$pdf->Cell(30, 27, number_format(($ke->retail * $ke->quantity), 2), 1, 0, 'C');
-	$gt += $ke->retail * $ke->quantity;
+	$pdf->Cell(70, 27, 'App\Product::findOrFail($ke->id_product)->product', 1, 0, 'C');
+	$pdf->Cell(30, 27, 'number_format($ke->retail, 2)', 1, 0, 'C');
+	$pdf->Cell(30, 27, '$ke->quantity', 1, 0, 'C');
+	$pdf->Cell(30, 27, 'number_format(($ke->retail * $ke->quantity)', 2), 1, 0, 'C');
 
-	$img = ProductImage::where(['id_product' => $ke->id_product])->get();
-	foreach ($img as $imu) {
-		$pdf->Cell(30, 27, $pdf->Image(base64ToImage($imu->image, $imu->mime), $pdf->GetX()+1, $pdf->GetY()+0), 1, 2, 'C');
-	}
+		$pdf->Cell(30, 27, '$pdf->Image(base64ToImage($imu->image, $imu->mime)', $pdf->GetX()+1, $pdf->GetY()+0), 1, 2, 'C');
 	$pdf->Cell(0, 0, '', 0, 1, 'C');
-}
+
 // list of taxes
-$taxes = SalesTax::where(['id_sales' => $sales->id])->get();
-$rp = 0;
-if ($taxes->count() > 0) {
-	foreach ($taxes as $tx) {
-		$txd = Taxes::find($tx->id_tax);
 		$pdf->Cell(70, 7, 'Taxes : ', 1, 0, 'C');
-		$pdf->Cell(30, 7, $txd->tax, 1, 0, 'C');
-		$pdf->Cell(30, 7, $txd->amount.'%', 1, 0, 'C');
-		$pdf->Cell(30, 7, number_format( ($txd->amount / 100) * $gt , 2), 1, 0, 'C');
-		$rp += ($txd->amount / 100) * $gt;
+		$pdf->Cell(30, 7, '$txd->tax', 1, 0, 'C');
+		$pdf->Cell(30, 7, '$txd->amount'.'%', 1, 0, 'C');
+		$pdf->Cell(30, 7, 'number_format( ($txd->amount / 100) * $gt' , 2), 1, 0, 'C');
 		$pdf->Cell(30, 7, '', 1, 1, 'C');
-	}
-}
 
 // footer
 $pdf->SetFont('Arial','B',10);
 $pdf->Cell(130, 7, 'Grand Total', 1, 0, 'C');
-$pdf->Cell(30, 7, number_format($gt + $rp, 2), 1, 0, 'C');
+$pdf->Cell(30, 7, 'number_format($gt + $rp, 2)', 1, 0, 'C');
 $pdf->Cell(30, 7, '', 1, 1, 'C');
 $pdf->Ln(5);
 
@@ -239,34 +182,21 @@ $pdf->SetFont('Arial','B',10);
 $pdf->SetTextColor(0, 0, 0);
 $pdf->Ln(5);
 
-$lipay = Payments::where(['id_sales' => $sales->id])->get();
-$py = 0;
-
-if ($lipay->count() > 0) {
 
 	// header
 	$pdf->Cell(130, 7, 'Bank', 1, 0, 'C');
 	$pdf->Cell(30, 7, 'Date Payment', 1, 0, 'C');
 	$pdf->Cell(30, 7, 'Amount', 1, 1, 'C');
 	
-	// list of payment
-	$pdf->SetFont('Arial','',8);
-	foreach ($lipay as $k) {
-		$pdf->Cell(130, 7, Banks::findOrFail($k->id_bank)->bank, 1, 0, 'C');
-		$pdf->Cell(30, 7, my($k->date_payment), 1, 0, 'C');
-		$pdf->Cell(30, 7, number_format($k->amount, 2), 1, 1, 'C');
-		$py += $k->amount;
+		$pdf->Cell(130, 7, 'Banks::findOrFail($k->id_bank)->bank', 1, 0, 'C');
+		$pdf->Cell(30, 7, 'my($k->date_payment)', 1, 0, 'C');
+		$pdf->Cell(30, 7, 'number_format($k->amount, 2)', 1, 1, 'C');
 	
-	}
 	
 	// footer
 	$pdf->SetFont('Arial','B',10);
 	$pdf->Cell(160, 7, 'Grand Total', 1, 0, 'C');
-	$pdf->Cell(30, 7, number_format($py, 2), 1, 1, 'C');
-} else {
-	$pdf->SetFont('Arial','',8);
-	$pdf->Cell(0, 7, 'Sorry, no payment yet.', 0, 1, 'C');
-}
+	$pdf->Cell(30, 7, 'number_format($py, 2)', 1, 1, 'C');
 $pdf->Ln(5);
 
 

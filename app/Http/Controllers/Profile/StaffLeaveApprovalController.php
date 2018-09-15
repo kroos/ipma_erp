@@ -230,9 +230,7 @@ class StaffLeaveApprovalController extends Controller
 						$n->hasmanystaffapproval()->where('id', $staffLeaveApproval->id)->update( $request->except(['_method', '_token']) );
 						// HR part.. x payah kot nak update kat sini..
 						// $n->hasmanystaffapproval()->where('id', '<>',  $staffLeaveApproval->id)->update( $request->except(['_method', '_token', 'approval']) );
-die();
 					}
-die();
 				} else { // date dah LEPAS.. HOD hanya approve atau reject tapi tak boleh deduct leave
 
 					echo ' dah lepas<br />';
@@ -241,6 +239,8 @@ die();
 				}
 			}
 		} else { // this is hr cos its 1
+			
+die();
 		}
 		Session::flash('flash_message', 'Data successfully edited!');
 		return redirect( route('staffLeaveApproval.index') );

@@ -22,8 +22,8 @@ class PrintPDFLeavesController extends Controller
 		$this->middleware('auth');
 	}
 
-	public function index()
+	public function show(StaffLeave $staffLeave)
 	{
-		return view('production.index');
+		echo view('pdfleave.index', compact(['staffLeave']) );
 	}
 }
