@@ -87,7 +87,8 @@ $userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
 @if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
 					<th colspan="2">Backup Person</th>
 @endif
-					<th rowspan="2">Approval & Remarks</th>
+					<th rowspan="2">Approval, Remarks and Updated At</th>
+					<th rowspan="2">Remarks</th>
 					<th rowspan="2">Leave Status</th>
 				</tr>
 				<tr>
@@ -168,25 +169,14 @@ if( !empty($leav->hasonestaffleavebackup) ) {
 									<td>{{ $appr->belongtostaff->name }}</td>
 									<td>{{ ( !isset($appr->approval) )?'Pending':(($appr->approval === 1)?'Approve':'Reject') }}</td>
 									<td>{{ $appr->notes_by_approval }}</td>
+									<td>{{ \Carbon\Carbon::parse($appr->updated_at)->format('D, j F Y g:i A') }}</td>
 								</tr>
 @endforeach
 							</tbody>
 						</table>
 					</td>
-<?php
-switch ($leav->active) {
-	case '1':
-		$status1 = 'Active';
-		break;
-	case '2':
-		$status1 = 'Close';
-		break;
-	case '3':
-		$status1 = 'Cancelled';
-		break;
-}
-?>
-					<td>{{ $status1 }}</td>
+					<td>{{ $leav->remarks }}</td>
+					<td>{{ $leav->belongtoleavestatus->status }}</td>
 				</tr>
 @endforeach
 			</tbody>

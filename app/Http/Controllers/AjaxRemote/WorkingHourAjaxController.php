@@ -96,8 +96,8 @@ class WorkingHourAjaxController extends Controller
 						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 1)->where('id', '<>', 2)->get();
 					} else {
 		
-						// laki | with nrl | no al | no mc
-						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 1)->get();
+						// laki | with nrl | no al | with mc
+						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 1)->where('id', '<>', 11)->get();
 					}
 				} else {
 					if ($leaveALMC->medical_leave_balance < 1) {

@@ -8,9 +8,9 @@ class LeaveStatus extends Model
 {
     protected $table = 'leave_statuses';
 
-    public function hasonestaffleave()
+    public function hasmanystaffleave()
     {
-    	return $this->belongsTo('App\Model\StaffLeave');
+    	return $this->belongsTo('App\Model\StaffLeave', 'active');
     }
 
 }

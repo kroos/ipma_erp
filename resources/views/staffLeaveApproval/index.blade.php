@@ -73,7 +73,7 @@ if ( ($y->belongtostaffleave->leave_id == 9) || ($y->belongtostaffleave->leave_i
 }
 ?>
 				<tr>
-					<td>HR9-{{ str_pad( $y->belongtostaffleave->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }} {{ $y->id }}</td>
+					<td>HR9-{{ str_pad( $y->belongtostaffleave->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}</td>
 					<td>{{ $y->belongtostaffleave->belongtostaff->name }}</td>
 					<td>{{ \Carbon\Carbon::parse($y->belongtostaffleave->created_at)->format('D, j F Y') }}</td>
 					<td>{{ $y->belongtostaffleave->belongtoleave->leave }}</td>
