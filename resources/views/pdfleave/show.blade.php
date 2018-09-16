@@ -18,7 +18,7 @@ $arr = str_split( $dts, 2 );
 function my($string)
 {
 	$rt = Carbon::parse($string);
-	return $rt->format('D, j F Y');
+	return $rt->format('D, j M Y');
 }
 
 class PDF extends Fpdf
@@ -27,19 +27,17 @@ class PDF extends Fpdf
 	function Header()
 	{
 		// Logo
-		$this->Image('images/logo2.png',30,9,20);
+		$this->Image('images/logo2.png',50,9,20);
 		// Arial bold 15
 		$this->SetFont('Arial','B',15);
 		// Move to the right
 		// $this->Cell(80);
 		// Title
 		$this->SetTextColor(128);
-		$this->Cell(0, 5, 'IPMA Industry', 0, 1, 'C');
-		$this->SetFont('arial','B',6);
-		$this->Cell(0, 5, 'ntah', 0, 1, 'C');
-		$this->SetFont('arial','B',8);
-		$this->Cell(0, 5, 'company tagline', 0, 1, 'C');
-		$this->SetFont('arial','',7);
+		$this->Cell(0, 5, 'IPMA Industry Sdn Bhd', 0, 1, 'C');
+		$this->SetFont('arial','B',10);
+		$this->Cell(0, 5, 'Borang Permohonan Cuti', 0, 1, 'C');
+		$this->SetFont('arial',NULL,7);
 		$this->Cell(0, 5, 'Phone : +604 917 8799 / 917 1799 Email : ipma@ipmaindustry.com', 0, 1, 'C');
 		// Line break
 		$this->Ln(5);
@@ -63,44 +61,31 @@ class PDF extends Fpdf
 }
 
 // Instanciation of inherited class
-	$pdf = new Pdf('P','mm', 'A5');
+	$pdf = new Pdf('L','mm', 'A5');
 	$pdf->AliasNbPages();
 	$pdf->AddPage();
+	$pdf->SetTitle('Staff Leave Form '.$staffLeave->belongtostaff->name.' HR9-'.str_pad( $staffLeave->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1]);
+	
+	// $pdf->Cell(0, 5, $pdf->GetPageHeight(), 0, 1, 'C'); // 148
+	// $pdf->Cell(0, 5, $pdf->GetPageWidth(), 0, 0, 'C'); // 210
 
-	$pdf->SetTitle('Staff Leave Form '.$staffLeave->belongtostaff->name.' HR9-');
-//	
-//	// echo $pdf->GetPageWidth();		// 210.00155555556
-//	// echo $pdf->GetPageHeight();		// 297.00008333333
-//	
-//	$pdf->SetFont('Arial','B',15);
-//	$pdf->SetTextColor(145, 0, 181);
-//	$pdf->SetFillColor(200,220,255);
-//	$pdf->Cell(0, 7, 'Invoice Number : '.$sales->id, 1, 1, 'C', true);
-//	
-//	// reset font
-//	$pdf->SetFont('Arial','B',10);
-//	$pdf->SetTextColor(0, 0, 0);
-	// $pdf->SetFillColor(200,220,255);
-//	
-//	// $pdf->Cell(95, 5, 'test', 0, 0, 'C');
-//	// $pdf->Cell(95, 5, 'Invoice to : ', 0, 1, 'C');
-//	$pdf->Ln(5);
-//	
-//	// customer section
-//	$pdf->SetRightMargin(105);
-//	$pdf->SetFont('Arial','B',10);
-//	$pdf->MultiCell(0, 5, 'Invoice to : ', 0, 'L');
-//	
-//	
-//	$pdf->SetFont('Arial','B',10);
-//	// tracking number column
-//	$pdf->SetRightMargin(55);
-//	$pdf->SetLeftMargin(105);
-//	$pdf->SetY(47);
-//	$pdf->MultiCell(0, 5, 'Invoice Date : ', 0, 'R');
-//	$pdf->MultiCell(0, 5, 'Tracking/Receipt Number : ', 0, 'R');
-//	
-//	
+	// customer section
+	$pdf->SetRightMargin(105);
+	$pdf->SetFont('Arial',NULL,8);
+	$pdf->MultiCell(0, 4, 'No Pekerja : '.$staffLeave->belongtostaff->hasmanylogin()->where('active', 1)->first()->username, 0, 'L');
+	$pdf->MultiCell(0, 4, 'Nama : '.$staffLeave->belongtostaff->name, 0, 'L');
+	$pdf->MultiCell(0, 4, 'Tarikh Bercuti : '.my($staffLeave->date_time_start).' - '.my($staffLeave->date_time_end), 0, 'L');
+	$pdf->MultiCell(0, 4, 'Sebab : '.ucwords(strtolower($staffLeave->reason)), 0, 'L');
+
+	// $pdf->SetFont('Arial',NULL,8);
+	$pdf->SetRightMargin(10);
+	$pdf->SetLeftMargin(105);
+	$pdf->SetY(30);
+	$pdf->MultiCell(0, 4, 'Tarikh Pohon : '.my($staffLeave->created_at), 0, 'R');
+	$pdf->MultiCell(0, 4, 'Ref No : HR9-'.str_pad( $staffLeave->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1], 0, 'R');
+	$pdf->MultiCell(0, 4, 'Masa : '.$staffLeave->period, 0, 'R');
+	$pdf->MultiCell(0, 4, 'Tempoh Hari : '.$staffLeave->period, 0, 'R');
+
 //	$pdf->SetFont('Arial','',8);
 //	// tracking number list
 //	$pdf->SetRightMargin(10);
@@ -166,11 +151,7 @@ class PDF extends Fpdf
 //	$pdf->Cell(30, 7, 'number_format($gt + $rp, 2)', 1, 0, 'C');
 //	$pdf->Cell(30, 7, '', 1, 1, 'C');
 //	$pdf->Ln(5);
-//	
-//	
-//	
-//	
-//	
+
 //	// payment section item
 //	$pdf->SetFont('Arial','B',15);
 //	$pdf->SetTextColor(145, 0, 181);

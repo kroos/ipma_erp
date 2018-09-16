@@ -108,7 +108,6 @@ $userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
 $dts = \Carbon\Carbon::parse($leav->created_at)->format('Y');
 $arr = str_split( $dts, 2 );
 // echo $arr[1].'<br />';
-// dd( $leav->half_day );
 
 if ( ($leav->leave_id == 9) || ($leav->leave_id != 9 && $leav->half_day == 2) ) {
 	$dts = \Carbon\Carbon::parse($leav->date_time_start)->format('D, j F Y g:i a');
