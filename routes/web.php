@@ -251,7 +251,7 @@ Route::resource('staffLeaveApproval', 'Profile\StaffLeaveApprovalController');
 
 ############################################################################
 // PrintPDFLeaves Controller
-Route::get('printpdfleaves/{printpdfleaves}', [
+Route::get('printpdfleaves/{staffLeave}', [
 		'as' => 'printpdfleave.show',
 		'uses' => 'PDFController\PrintPDFLeavesController@show'
 	]);

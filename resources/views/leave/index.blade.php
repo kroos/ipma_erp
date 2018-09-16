@@ -70,7 +70,7 @@ $lea = \Auth::user()->belongtostaff->hasmanystaffleave()->where('created_at', '>
 // dd($lea);
 ?>
 @if( $lea->count() > 0 )
-		<table class="table table-hover" id="leaves">
+		<table class="table table-hover table-sm" id="leaves">
 			<thead>
 				<tr>
 					<th rowspan="2">ID</th>
@@ -105,7 +105,8 @@ $userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
 				<tr>
 					<td>
 <?php
-$arr = str_split( date('Y'), 2 );
+$dts = \Carbon\Carbon::parse($leav->created_at)->format('Y');
+$arr = str_split( $dts, 2 );
 // echo $arr[1].'<br />';
 // dd( $leav->half_day );
 

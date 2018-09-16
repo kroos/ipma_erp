@@ -177,27 +177,40 @@ class WorkingHourAjaxController extends Controller
 		return response()->json( $cuti );
 	}
 
-	public function blockholidays()
+	public function blockholidaysandleave()
 	{
-		$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+		$holiday = array();
+		$nodate = \App\Model\HolidayCalendar::all();
 		foreach ($nodate as $nda) {
 			$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+			$i = 0;
 			foreach ($period as $key) {
 				// echo 'moment("'.$key->format('Y-m-d').'"),';
-				$holiday[] = $key->format('Y-m-d');
+				// $holiday[] = '"'.$key->format('Y-m-d').'"';
+				$holiday1['tanda'.$i++] = $key->format('Y-m-d');
 			}
 		}
 		// block cuti sendiri
-		$nodate1 = \App\Model\StaffLeave::where( 'staff_id', \Auth::user()->belongtostaff->id )->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
-		foreach ($nodate1 as $key) {
-			$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
-			foreach ($period1 as $key1) {
-				// echo 'moment("'.$key1->format('Y-m-d').'"),';
-				$holiday[] = $key1->format('Y-m-d');
+		$nodate1 = \Auth::user()->belongtostaff->hasmanystaffleave()->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
+		if(is_null($nodate1)) {
+				$p = 0;
+				$holiday2 = array();
+			foreach ($nodate1 as $key) {
+				$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
+				foreach ($period1 as $key1) {
+					$holiday2['tda'.$p++] = $key1->format('Y-m-d');
+				}
 			}
+		} else {
+			$holiday2['tda0'] = '2000-01-01';
 		}
-		// $allcuti = array_push($holiday, $cutim);
-		return response()->json( $holiday );
+		// $hnleave = "[moment('".implode("', 'YYYY-MM-DD'), moment('", $holiday)."', 'YYYY-MM-DD')";
+		// $hnleave = '["'.implode('", "', $holiday).'"]';
+		// $holiday = array_merge($holiday1, $holiday2);
+		$holiday = $holiday1 + $holiday2;
+		return response()->json($holiday);
+		// return response($holiday)->header('Content-Type', 'text/plain');
+		// print_r ($holiday2);
 	}
 
 
