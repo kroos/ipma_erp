@@ -123,8 +123,6 @@ if ( ($leav->leave_id == 9) || ($leav->leave_id != 9 && $leav->half_day == 2) ) 
 } else {
 	$dts = \Carbon\Carbon::parse($leav->date_time_start)->format('D, j F Y ');
 	$dte = \Carbon\Carbon::parse($leav->date_time_end)->format('D, j F Y ');
-	// cant count like this cos it doesnt subtract sunday and public holiday
-	// $dper = \Carbon\Carbon::parse($leav->date_time_start)->diff(\Carbon\Carbon::parse($leav->date_time_end)->addDay())->format('%d day/s');
 	$dper = $leav->period.' day/s';
 }
 

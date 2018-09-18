@@ -12,8 +12,61 @@ use App\Model\StaffLeaveApproval;
 use Crabbly\FPDF\FPDF as Fpdf;
 use Carbon\Carbon;
 
+// ref no
 $dts = Carbon::parse($staffLeave->created_at)->format('Y');
 $arr = str_split( $dts, 2 );
+
+// time leave based on day
+// $userposition = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
+$userposition = $staffLeave->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
+$dt = \Carbon\Carbon::parse($staffLeave->date_time_start);
+
+// echo $userposition->id; // 60
+// echo $dt->year; // 2019
+// echo $dt->dayOfWeek; // dayOfWeek returns a number between 0 (sunday) and 6 (saturday) // 5
+
+if( $userposition->id == 72 && $dt->dayOfWeek != 5 ) {	// checking for friday
+	$time = \App\Model\WorkingHour::where('year', $dt->year)->where('category', 8);
+} else {
+	if ( $userposition->id == 72 && $dt->dayOfWeek == 5 ) {	// checking for friday
+		$time = \App\Model\WorkingHour::where('year', $dt->year)->where('category', 8);
+	} else {
+		if( $userposition->id != 72 && $dt->dayOfWeek != 5 ) {	// checking for friday
+			// normal
+			$time = \App\Model\WorkingHour::where('year', $dt->year)->whereRaw('"'.$dt.'" BETWEEN working_hours.effective_date_start AND working_hours.effective_date_end' )->limit(1);
+		} else {
+			if( $userposition->id != 72 && $dt->dayOfWeek == 5 ) {	// checking for friday
+				$time = \App\Model\WorkingHour::where('year', $dt->year)->where('category', 3)->whereRaw('"'.$dt.'" BETWEEN working_hours.effective_date_start AND working_hours.effective_date_end' )->limit(1);
+			}
+		}
+	}
+}
+$start_am = Carbon::parse($time->first()->time_start_am)->format('g:i a');
+$end_am = Carbon::parse($time->first()->time_end_am)->format('g:i a');
+$start_pm = Carbon::parse($time->first()->time_start_pm)->format('g:i a');
+$end_pm = Carbon::parse($time->first()->time_end_pm)->format('g:i a');
+
+
+// date and time
+if ( ($staffLeave->leave_id == 9) || ($staffLeave->leave_id != 9 && $staffLeave->half_day == 2) ) {
+	$dts = \Carbon\Carbon::parse($staffLeave->date_time_start)->format('g:i a');
+	$dte = \Carbon\Carbon::parse($staffLeave->date_time_end)->format('g:i a');
+	if( ($staffLeave->leave_id != 9 && $staffLeave->half_day == 2) ) {
+		$dper = 'Half Day';
+	} else {
+		$i = $staffLeave->period;
+				$hour = floor($i/60);
+				$minute = ($i % 60);
+		$dper = $hour.' hours '.$minute.' minutes';
+	}
+} else {
+	$dts = $start_am;
+	$dte = $end_pm;
+	$dper = $staffLeave->period.' day/s';
+}
+
+// backup resolve
+$bakvalid = $staffLeave->hasonestaffleavebackup()->first();
 
 function my($string)
 {
@@ -30,17 +83,25 @@ class PDF extends Fpdf
 		$this->Image('images/logo2.png',50,9,20);
 		// Arial bold 15
 		$this->SetFont('Arial','B',15);
-		// Move to the right
-		// $this->Cell(80);
-		// Title
+
+		// set margin
+		$this->SetX(10);
+		$this->SetRightMargin(10);
+		$this->SetLeftMargin(10);
+
 		$this->SetTextColor(128);
 		$this->Cell(0, 5, 'IPMA Industry Sdn Bhd', 0, 1, 'C');
 		$this->SetFont('arial','B',10);
 		$this->Cell(0, 5, 'Borang Permohonan Cuti', 0, 1, 'C');
 		$this->SetFont('arial',NULL,7);
 		$this->Cell(0, 5, 'Phone : +604 917 8799 / 917 1799 Email : ipma@ipmaindustry.com', 0, 1, 'C');
+
+		// reset again for content
+		$this->SetX(10);
+		$this->SetRightMargin(10);
+		$this->SetLeftMargin(10);
 		// Line break
-		$this->Ln(5);
+		$this->Ln(1);
 	}
 	
 	// Page footer
@@ -50,13 +111,13 @@ class PDF extends Fpdf
 		$this->SetLeftMargin(10);
 		$this->SetTextColor(128);
 		// Position at 3.0 cm from bottom
-		$this->SetY(-23);
+		$this->SetY(-15);
 		$this->SetFont('Arial','I',6);
-		$this->Cell(0, 5, 'Lot 1266, Bandar DarulAman Industrial Park, 06000, Jitra, Kedah Darul Aman', 0, 1, 'C');
+		$this->Cell(0, 4, 'Lot 1266, Bandar DarulAman Industrial Park, 06000, Jitra, Kedah Darul Aman', 0, 1, 'C');
 		// Arial italic 5
 		$this->SetFont('Arial','I',5);
 		// Page number
-		$this->Cell(0,5,'Page '.$this->PageNo().'/{nb}',0,1,'C');
+		$this->Cell(0,4,'Page '.$this->PageNo().'/{nb}',0,1,'C');
 	}
 }
 
@@ -71,11 +132,11 @@ class PDF extends Fpdf
 
 	// customer section
 	$pdf->SetRightMargin(105);
-	$pdf->SetFont('Arial',NULL,8);
+	$pdf->SetFont('Arial',NULL,10);
 	$pdf->MultiCell(0, 4, 'No Pekerja : '.$staffLeave->belongtostaff->hasmanylogin()->where('active', 1)->first()->username, 0, 'L');
 	$pdf->MultiCell(0, 4, 'Nama : '.$staffLeave->belongtostaff->name, 0, 'L');
 	$pdf->MultiCell(0, 4, 'Tarikh Bercuti : '.my($staffLeave->date_time_start).' - '.my($staffLeave->date_time_end), 0, 'L');
-	$pdf->MultiCell(0, 4, 'Sebab : '.ucwords(strtolower($staffLeave->reason)), 0, 'L');
+	$pdf->MultiCell(0, 4, 'Telephone : '.$staffLeave->belongtostaff->mobile, 0, 'L');
 
 	// $pdf->SetFont('Arial',NULL,8);
 	$pdf->SetRightMargin(10);
@@ -83,120 +144,164 @@ class PDF extends Fpdf
 	$pdf->SetY(30);
 	$pdf->MultiCell(0, 4, 'Tarikh Pohon : '.my($staffLeave->created_at), 0, 'R');
 	$pdf->MultiCell(0, 4, 'Ref No : HR9-'.str_pad( $staffLeave->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1], 0, 'R');
-	$pdf->MultiCell(0, 4, 'Masa : '.$staffLeave->period, 0, 'R');
-	$pdf->MultiCell(0, 4, 'Tempoh Hari : '.$staffLeave->period, 0, 'R');
+	$pdf->MultiCell(0, 4, 'Masa : '.$dts.' - '.$dte, 0, 'R');
+	$pdf->MultiCell(0, 4, 'Tempoh Masa : '.$dper, 0, 'R');
 
-//	$pdf->SetFont('Arial','',8);
-//	// tracking number list
-//	$pdf->SetRightMargin(10);
-//	$pdf->SetLeftMargin(155);
-//	$pdf->SetY(47);
-//	$pdf->MultiCell(0, 5, '', 0, 'R');
-//	$pdf->MultiCell(0, 5, '$key->tracking_number', 0, 'R');
-//	
-//	$pdf->Ln(30);
-//	
-//	
-//	
-//	
-//	
-//	
-//	// reset margin
-//	$pdf->SetX(10);
-//	$pdf->SetRightMargin(10);
-//	$pdf->SetLeftMargin(10);
-//	
-//	
-//	
-//	
-//	
-//	// invoice section item
-//	$pdf->SetFont('Arial','B',15);
-//	$pdf->SetTextColor(145, 0, 181);
-//	$pdf->SetFillColor(200,220,255);
-//	$pdf->Cell(0, 7, 'Invoice Item', 1, 1, 'C', true);
-//	
-//	// reset font
-//	$pdf->SetFont('Arial','B',10);
-//	$pdf->SetTextColor(0, 0, 0);
-//	$pdf->Ln(5);
-//	
-//	// header
-//	$pdf->Cell(70, 7, 'Product', 1, 0, 'C');
-//	$pdf->Cell(30, 7, 'Retail (RM)', 1, 0, 'C');
-//	$pdf->Cell(30, 7, 'Quantity', 1, 0, 'C');
-//	$pdf->Cell(30, 7, 'Total retail (RM)', 1, 0, 'C');
-//	$pdf->Cell(30, 7, 'Image', 1, 1, 'C');
-//	
-//	// list of product
-//	$pdf->SetFont('Arial','',8);
-//		$pdf->Cell(70, 27, 'App\Product::findOrFail($ke->id_product)->product', 1, 0, 'C');
-//		$pdf->Cell(30, 27, 'number_format($ke->retail, 2)', 1, 0, 'C');
-//		$pdf->Cell(30, 27, '$ke->quantity', 1, 0, 'C');
-//		$pdf->Cell(30, 27, 'number_format(($ke->retail * $ke->quantity)', 2), 1, 0, 'C');
-//	
-//			$pdf->Cell(30, 27, '$pdf->Image(base64ToImage($imu->image, $imu->mime)', $pdf->GetX()+1, $pdf->GetY()+0), 1, 2, 'C');
-//		$pdf->Cell(0, 0, '', 0, 1, 'C');
-//	
-//	// list of taxes
-//			$pdf->Cell(70, 7, 'Taxes : ', 1, 0, 'C');
-//			$pdf->Cell(30, 7, '$txd->tax', 1, 0, 'C');
-//			$pdf->Cell(30, 7, '$txd->amount'.'%', 1, 0, 'C');
-//			$pdf->Cell(30, 7, 'number_format( ($txd->amount / 100) * $gt' , 2), 1, 0, 'C');
-//			$pdf->Cell(30, 7, '', 1, 1, 'C');
-//	
-//	// footer
-//	$pdf->SetFont('Arial','B',10);
-//	$pdf->Cell(130, 7, 'Grand Total', 1, 0, 'C');
-//	$pdf->Cell(30, 7, 'number_format($gt + $rp, 2)', 1, 0, 'C');
-//	$pdf->Cell(30, 7, '', 1, 1, 'C');
-//	$pdf->Ln(5);
+// more like line height
+	$pdf->Ln(1);
 
-//	// payment section item
-//	$pdf->SetFont('Arial','B',15);
-//	$pdf->SetTextColor(145, 0, 181);
-//	$pdf->SetFillColor(200,220,255);
-//	$pdf->Cell(0, 7, 'Payment', 1, 1, 'C', true);
-//	
-//	// reset font
-//	$pdf->SetFont('Arial','B',10);
-//	$pdf->SetTextColor(0, 0, 0);
-//	$pdf->Ln(5);
-//	
-//	
-//		// header
-//		$pdf->Cell(130, 7, 'Bank', 1, 0, 'C');
-//		$pdf->Cell(30, 7, 'Date Payment', 1, 0, 'C');
-//		$pdf->Cell(30, 7, 'Amount', 1, 1, 'C');
-//		
-//			$pdf->Cell(130, 7, 'Banks::findOrFail($k->id_bank)->bank', 1, 0, 'C');
-//			$pdf->Cell(30, 7, 'my($k->date_payment)', 1, 0, 'C');
-//			$pdf->Cell(30, 7, 'number_format($k->amount, 2)', 1, 1, 'C');
-//		
-//		
-//		// footer
-//		$pdf->SetFont('Arial','B',10);
-//		$pdf->Cell(160, 7, 'Grand Total', 1, 0, 'C');
-//		$pdf->Cell(30, 7, 'number_format($py, 2)', 1, 1, 'C');
-//	$pdf->Ln(5);
-//	
-//	
-//	
-//	// for ($i=0; $i < 100; $i++) { 
-//	// 	$pdf->Cell(0,5,'asd', 1,1,'C');
-//	// }
-//	
-//	
-//	$pdf->SetFont('Arial','',6);
-//	$pdf->SetY(-31);
-//	$pdf->Cell(0, 4, 'Invoice was created on a computer and is valid without the signature and seal.', 0,1,'L');
-//	$pdf->Cell(0, 4, 'NOTICE: A finance charge of 1.5% will be made on unpaid balances after 30 days from the date of the invoice.', 0,1,'L');
-//	
+// reset margin
+	$pdf->SetX(10);
+	$pdf->SetRightMargin(10);
+	$pdf->SetLeftMargin(10);
+
+// sebab
+	$pdf->MultiCell(0, 4, 'Sebab : '.ucwords(strtolower($staffLeave->reason)), 0, 'L');
+
+// jenis cuti
+	$pdf->Cell(0, 4, 'Jenis Cuti : '.$staffLeave->belongtoleave->leave, 0, 1, 'L');
+
+	$pdf->Ln(2);
+
+// check for backup
+if ( !is_null( $bakvalid ) ) :
+	if($bakvalid->acknowledge == 1){
+		$ack = 'Sudah Tandatangan';
+	} else {
+		$ack = '';
+	}
+
+	$pdf->Cell(0, 4, 'Semasa saya bercuti, penama dibawah akan menggantikan saya.', 0, 1, 'C');
+	$pdf->Cell(80, 4, 'Nama : ', 1, 0, 'C');
+	$pdf->Cell(50, 4, 'Tandatangan : ', 1, 0, 'C');
+	$pdf->Cell(60, 4, 'Tarikh : ', 1, 1, 'C');
+	// data
+	$pdf->Cell(80, 4, $bakvalid->belongtostaff->name, 1, 0, 'C');
+	$pdf->Cell(50, 4, $ack, 1, 0, 'C');
+	$pdf->Cell(60, 4, Carbon::parse($bakvalid->created_at)->format('D, j F Y g:i a'), 1, 1, 'C');
+endif;
+	$pdf->Ln(10);
+	$pdf->SetFont('Arial','IB',8);
+	$pdf->Cell(110, 4, '*PERMOHONAN CUTI MESTILAH SEKURANG-KURANGNYA', 0, 1, 'C');
+	$pdf->Cell(110, 4, 'TIGA (3) HARI LEBIH AWAL DARI TARIKH BERCUTI.', 0, 0, 'C');
+
+	$pdf->SetFont('Arial','U',7);
+	$pdf->Cell(80, 4, 'Tandatangan Pemohon', 0, 1, 'C');
+	$pdf->Ln();
+	$pdf->SetFont('Arial',NULL,7);
+	$pdf->Cell(0, 0, '****************************************************************************************************************************************************************************************************', 0, 1, 'C');
+
+	// font resaet
+	$pdf->SetFont('Arial','U',10);
+	$pdf->Cell(0, 4, 'UNTUK KEGUNAAN PEJABAT', 0, 1, 'C');
+	$pdf->Ln(1);
+	$pdf->SetFont('Arial',NULL,10);
+
+	// catatan only valid if this form is rejected. so..
+	// check the status this leave
+	$staffapproval = $staffLeave->hasmanystaffapproval();
+	if($staffLeave->active == 4) { //meaning that this leave is rejected.
+
+		// we need to find who is rejecting this leave.
+		// first, check the approval, consist of supervisor and HOD
+		$catatan = ucwords(strtolower($staffapproval->where('approval', 0)->whereNotNull('notes_by_approval')->first()->notes_by_approval));
+	} else {
+		$catatan = '';
+	}
+	$pdf->Cell(0, 4, 'Catatan : '.$catatan, 0, 1, 'L');
+	$pdf->Ln(1);
+
+	// get this approval not HR from group
+	$dept = $staffapproval->whereNull('hr')->first();
+	$deptapp = $staffapproval->whereNull('hr')->first();
+	$deptnotes = $staffapproval->whereNull('hr')->first();
+	if(!is_null($dept)) {
+		$dept = $staffapproval->whereNull('hr')->first()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first()->belongtogroup->group;
+	} else {
+		$dept = 'Head Of Department';
+	}
+
+	if(!is_null($deptapp)) {
+		$deptapp = $staffapproval->whereNull('hr')->first()->approval;
+	} else {
+		$deptapp = NULL;
+	}
+
+	if (!is_null($deptnotes)) {
+		$deptnotes = $staffapproval->whereNull('hr')->first()->notes_by_approval;
+	} else {
+		$deptnotes = NULL;
+	}
+
+	if(is_null($deptapp)) {
+		$sok = 'Disokong/Ditolak';
+	} else {
+		if($deptapp == 0) {
+			$sok = 'Ditolak';
+		} else {
+			$sok = 'Disokong';
+		}
+	}
+
+	// heran.. nak kena redeclare utk HR
+	$hr = $staffLeave->hasmanystaffapproval()->where('hr', 1)->first()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first()->belongtodepartment->department;
+	$hrapp = $staffLeave->hasmanystaffapproval()->where('hr', 1)->first()->approval;
+	$hrnotes = $staffLeave->hasmanystaffapproval()->where('hr', 1)->first()->notes_by_approval;
+	if(is_null($hrapp)) {
+		$hrsok = 'Diluluskan/Ditolak';
+	} else {
+		if($hrapp == 0) {
+			$hrsok = 'Ditolak';
+		} else {
+			$hrsok = 'Diluluskan';
+		}
+	}
+
+	// utk director
+	$dr = $staffLeave->hasmanystaffapproval()->where('hr', 2)->first();
+	$drapp = $staffLeave->hasmanystaffapproval()->where('hr', 1)->first()->approval;
+	$drnotes = $staffLeave->hasmanystaffapproval()->where('hr', 1)->first()->notes_by_approval;
+	if(is_null($drapp)) {
+		$drsok = 'Diluluskan/Ditolak';
+	} else {
+		if($drapp == 0) {
+			$drsok = 'Ditolak';
+		} else {
+			$drsok = 'Diluluskan';
+		}
+	}
+
+	if(!is_null($dr)) {
+		$dir = $dr->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first()->belongtogroup->group;
+	} else {
+		$dir = NULL;
+	}
+
+	// approval part
+	$pdf->Ln(10);
+	// $pdf->MultiCell(0, 4, $staffapproval->get(), 0, 'C');
+	$pdf->Cell(50, 4, $dept, 0, 0, 'C');
+	$pdf->Cell(70, 4, $hr, 0, 0, 'C');
+	$pdf->Cell(70, 4, 'Disemak Oleh '.$dir, 0, 1, 'C');
+	// data
+	$pdf->Cell(50, 4, $sok, 0, 0, 'C');
+	$pdf->Cell(70, 4, $hrsok, 0, 0, 'C');
+	$pdf->Cell(70, 4, $drsok, 0, 1, 'C');
+
+	$pdf->Cell(50, 4, $deptnotes, 0, 0, 'C');
+	$pdf->Cell(70, 4, $hrnotes, 0, 0, 'C');
+	$pdf->Cell(70, 4, $drnotes, 0, 1, 'C');
+
+
+	// bahagian last sekali untuk hr resources file hr9
+	$pdf->Cell(50, 4, NULL, 0, 0, 'C');
+	$pdf->Cell(70, 4, '(H/Resouces File) HR9', 0, 0, 'C');
+	$pdf->Cell(70, 4, NULL, 0, 1, 'C');
+
 	$filename = 'Staff Leave Form '.$staffLeave->belongtostaff->name.' HR9-'.str_pad( $staffLeave->leave_no, 5, "0", STR_PAD_LEFT ).'-'.$arr[1].'.pdf';
-//	
+
+	// use ob_get_clean() to make sure that the correct header is sent to the server so the correct pdf is being output
 	ob_get_clean();
 	$pdf->Output('I', $filename);		// <-- kalau nak bukak secara direct saja
 	// $pdf->Output('D', $filename);			// <-- semata mata 100% download
-//	// $pdf->Output('F', storage_path().'/uploads/pdf/'.$filename);			// <-- send through email
-//	
-?>
+	// $pdf->Output('F', storage_path().'/uploads/pdf/'.$filename);			// <-- send through email

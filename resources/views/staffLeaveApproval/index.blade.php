@@ -323,9 +323,6 @@ $now = \Carbon\Carbon::now();
 				</tr>
 			</thead>
 			<tbody>
-<?php
-// $stba = 
-?>
 @foreach( $shr as $y )
 				<tr>
 					<td>{{ $y->belongtostaffleave->belongtostaff->name }}</td>
