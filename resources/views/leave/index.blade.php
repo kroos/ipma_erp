@@ -146,8 +146,15 @@ if( !empty($leav->hasonestaffleavebackup) ) {
 ?>
 						<a href="{{ route('staffLeave.show', $leav->id) }}" alt="Details" title="Details">HR9-{{ str_pad( $leav->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}</a>
 							<br />
-						<a href="{{ route( 'printpdfleave.show', $leav->id ) }}" alt="Print PDF" title="Print PDF" target="_blank"><i class="far fa-file-pdf"></i></a>
-						<a href="{{ __('route') }}" alt="Cancel" title="Cancel"><i class="fas fa-ban"></i></a>
+						<a href="{{ route( 'printpdfleave.show', $leav->id ) }}" class="btn btn-primary" alt="Print PDF" title="Print PDF" target="_blank"><i class="far fa-file-pdf"></i></a>
+<?php
+ // only available if only now is before date_time_start and active is 1
+$dtsl = \Carbon\Carbon::parse( $leav->date_time_start );
+$dt = \Carbon\Carbon::now()->lte( $dtsl );
+?>
+@if( $leav->active == 1 && $dt == 1 )
+						<a href="{{ __('route') }}" class="btn btn-primary cancel_btn" id="cancel_btn_{{ $leav->id }}" data-id="{{ $leav->id }}" alt="Cancel" title="Cancel"><i class="fas fa-ban"></i></a>
+@endif
 					</td>
 					<td>{{ \Carbon\Carbon::parse($leav->created_at)->format('D, j F Y') }}</td>
 					<td>{{ $leav->belongtoleave->leave }}</td>
@@ -208,5 +215,65 @@ $('#leaves').DataTable({
 	"order": [[0, "desc" ]],	// sorting the 4th column descending
 	// responsive: true
 });
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// cancel leave
+$(document).on('click', '.cancel_btn', function(e){
+	var ackID = $(this).data('id');
+	SwalDelete(ackID);
+	e.preventDefault();
+});
+
+function SwalDelete(ackID){
+	swal({
+		title: 'Cancel Leave',
+		text: 'Are you sure to cancel this leave?',
+		type: 'info',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		cancelButtonText: 'Cancel',
+		confirmButtonText: 'Yes',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('staffLeave') }}' + '/' + ackID,
+					type: 'PATCH',
+					dataType: 'json',
+					data: {
+							id: ackID,
+							cancel: 1,
+							_token : $('meta[name=csrf-token]').attr('content')
+					},
+				})
+				.done(function(response){
+					swal('Accept', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					// $('#cancel_btn_' + ackID).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancel Action', 'Leave is still active.', 'info')
+		}
+	});
+}
+//auto refresh right after clicking OK button
+$(document).on('click', '.swal2-confirm', function(e){
+	window.location.reload(true);
+});
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
 @endsection
 

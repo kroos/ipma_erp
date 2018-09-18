@@ -68,12 +68,6 @@ if ( ($staffLeave->leave_id == 9) || ($staffLeave->leave_id != 9 && $staffLeave-
 // backup resolve
 $bakvalid = $staffLeave->hasonestaffleavebackup()->first();
 
-function my($string)
-{
-	$rt = Carbon::parse($string);
-	return $rt->format('D, j M Y');
-}
-
 class PDF extends Fpdf
 {
 	// Page header
@@ -130,19 +124,18 @@ class PDF extends Fpdf
 	// $pdf->Cell(0, 5, $pdf->GetPageHeight(), 0, 1, 'C'); // 148
 	// $pdf->Cell(0, 5, $pdf->GetPageWidth(), 0, 0, 'C'); // 210
 
-	// customer section
 	$pdf->SetRightMargin(105);
 	$pdf->SetFont('Arial',NULL,10);
 	$pdf->MultiCell(0, 4, 'No Pekerja : '.$staffLeave->belongtostaff->hasmanylogin()->where('active', 1)->first()->username, 0, 'L');
 	$pdf->MultiCell(0, 4, 'Nama : '.$staffLeave->belongtostaff->name, 0, 'L');
-	$pdf->MultiCell(0, 4, 'Tarikh Bercuti : '.my($staffLeave->date_time_start).' - '.my($staffLeave->date_time_end), 0, 'L');
+	$pdf->MultiCell(0, 4, 'Tarikh Bercuti : '.Carbon::parse($staffLeave->date_time_start)->format('D, j F Y').' - '.Carbon::parse($staffLeave->date_time_end)->format('D, j F Y'), 0, 'L');
 	$pdf->MultiCell(0, 4, 'Telephone : '.$staffLeave->belongtostaff->mobile, 0, 'L');
 
 	// $pdf->SetFont('Arial',NULL,8);
 	$pdf->SetRightMargin(10);
 	$pdf->SetLeftMargin(105);
 	$pdf->SetY(30);
-	$pdf->MultiCell(0, 4, 'Tarikh Pohon : '.my($staffLeave->created_at), 0, 'R');
+	$pdf->MultiCell(0, 4, 'Tarikh Pohon : '.Carbon::parse($staffLeave->created_at)->format('D, j F Y'), 0, 'R');
 	$pdf->MultiCell(0, 4, 'Ref No : HR9-'.str_pad( $staffLeave->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1], 0, 'R');
 	$pdf->MultiCell(0, 4, 'Masa : '.$dts.' - '.$dte, 0, 'R');
 	$pdf->MultiCell(0, 4, 'Tempoh Masa : '.$dper, 0, 'R');
@@ -166,9 +159,9 @@ class PDF extends Fpdf
 // check for backup
 if ( !is_null( $bakvalid ) ) :
 	if($bakvalid->acknowledge == 1){
-		$ack = 'Sudah Tandatangan';
+		$ack = 'Ditandatangani';
 	} else {
-		$ack = '';
+		$ack = NULL;
 	}
 
 	$pdf->Cell(0, 4, 'Semasa saya bercuti, penama dibawah akan menggantikan saya.', 0, 1, 'C');
@@ -176,11 +169,17 @@ if ( !is_null( $bakvalid ) ) :
 	$pdf->Cell(50, 4, 'Tandatangan : ', 1, 0, 'C');
 	$pdf->Cell(60, 4, 'Tarikh : ', 1, 1, 'C');
 	// data
-	$pdf->Cell(80, 4, $bakvalid->belongtostaff->name, 1, 0, 'C');
-	$pdf->Cell(50, 4, $ack, 1, 0, 'C');
-	$pdf->Cell(60, 4, Carbon::parse($bakvalid->created_at)->format('D, j F Y g:i a'), 1, 1, 'C');
+	$pdf->Cell(80, 4, $bakvalid->belongtostaff->name, 'LRB', 0, 'C');
+	$pdf->Cell(50, 4, $ack, 'LRB', 0, 'C');
+if (is_null($ack)) {
+	$de = NULL;
+} else {
+	$de = Carbon::parse($bakvalid->created_at)->format('D, j F Y g:i a');
+}
+
+	$pdf->Cell(60, 4, $de, 'LRB', 1, 'C');
 endif;
-	$pdf->Ln(10);
+	$pdf->Ln(5);
 	$pdf->SetFont('Arial','IB',8);
 	$pdf->Cell(110, 4, '*PERMOHONAN CUTI MESTILAH SEKURANG-KURANGNYA', 0, 1, 'C');
 	$pdf->Cell(110, 4, 'TIGA (3) HARI LEBIH AWAL DARI TARIKH BERCUTI.', 0, 0, 'C');
@@ -233,6 +232,12 @@ endif;
 		$deptnotes = NULL;
 	}
 
+	if (is_null($deptapp)) {
+		$dru = NULL;
+	} else {
+		$dru = Carbon::parse($staffapproval->whereNull('hr')->first()->updated_at)->format('D, j F Y g:i a');
+	}
+
 	if(is_null($deptapp)) {
 		$sok = 'Disokong/Ditolak';
 	} else {
@@ -259,22 +264,39 @@ endif;
 
 	// utk director
 	$dr = $staffLeave->hasmanystaffapproval()->where('hr', 2)->first();
-	$drapp = $staffLeave->hasmanystaffapproval()->where('hr', 1)->first()->approval;
-	$drnotes = $staffLeave->hasmanystaffapproval()->where('hr', 1)->first()->notes_by_approval;
-	if(is_null($drapp)) {
+
+	if (is_null($dr)) {
+		$drnotes = NULL;
+	} else {
+		$drnotes = $staffLeave->hasmanystaffapproval()->where('hr', 2)->first()->notes_by_approval;
+	}
+	
+
+	if(is_null($dr)) {
 		$drsok = 'Diluluskan/Ditolak';
 	} else {
-		if($drapp == 0) {
+		if($staffLeave->hasmanystaffapproval()->where('hr', 2)->first()->approval == 0) {
 			$drsok = 'Ditolak';
 		} else {
 			$drsok = 'Diluluskan';
 		}
+	}
+	if(is_null($dr)) {
+		$diru = NULL;
+	} else {
+		$diru = Carbon::parse($staffLeave->hasmanystaffapproval()->where('hr', 2)->first()->updated_at)->format('D, j F Y g:i a');
 	}
 
 	if(!is_null($dr)) {
 		$dir = $dr->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first()->belongtogroup->group;
 	} else {
 		$dir = NULL;
+	}
+
+	if(is_null($staffLeave->hasmanystaffapproval()->where('hr', 1)->first()->approval)) {
+		$hru = NULL;
+	} else {
+		$hru = Carbon::parse($staffLeave->hasmanystaffapproval()->where('hr', 1)->first()->updated_at)->format('D, j F Y g:i a');
 	}
 
 	// approval part
@@ -292,6 +314,9 @@ endif;
 	$pdf->Cell(70, 4, $hrnotes, 0, 0, 'C');
 	$pdf->Cell(70, 4, $drnotes, 0, 1, 'C');
 
+	$pdf->Cell(50, 4, $dru, 0, 0, 'C');
+	$pdf->Cell(70, 4, $hru, 0, 0, 'C');
+	$pdf->Cell(70, 4, $diru, 0, 1, 'C');
 
 	// bahagian last sekali untuk hr resources file hr9
 	$pdf->Cell(50, 4, NULL, 0, 0, 'C');

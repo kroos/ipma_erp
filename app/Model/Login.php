@@ -31,7 +31,19 @@ class Login extends Authenticatable
 	{
 		return $this->belongsTo('App\Model\Staff', 'staff_id');
 	}
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// all acl will be done here
 	// only main position is counted, else, deny access
