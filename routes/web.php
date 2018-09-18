@@ -242,6 +242,13 @@ Route::post('/leaveType', [
 	]);
 
 ############################################################################
+// blockholidaysandleave Ajax Controller
+Route::post('/blockholidaysandleave', [
+		'as' => 'workinghour.blockholidaysandleave',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@blockholidaysandleave'
+	]);
+
+############################################################################
 // StaffLeaveBackup Controller
 Route::resource('staffLeaveBackup', 'Profile\StaffLeaveBackupController');
 

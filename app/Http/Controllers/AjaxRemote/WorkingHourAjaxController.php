@@ -183,27 +183,23 @@ class WorkingHourAjaxController extends Controller
 		$nodate = \App\Model\HolidayCalendar::all();
 		foreach ($nodate as $nda) {
 			$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
-			$i = 0;
 			foreach ($period as $key) {
 				// echo 'moment("'.$key->format('Y-m-d').'"),';
 				// $holiday[] = '"'.$key->format('Y-m-d').'"';
-				$holiday1['tanda'.$i++] = $key->format('Y-m-d');
+				$holiday1[] = $key->format('Y-m-d');
 			}
 		}
 		// block cuti sendiri
 		$nodate1 = \Auth::user()->belongtostaff->hasmanystaffleave()->where('active', 1)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
 		if(is_null($nodate1)) {
-				$p = 0;
-				$holiday2 = array();
 			foreach ($nodate1 as $key) {
 				$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
 				foreach ($period1 as $key1) {
-					$holiday2['tda'.$p++] = $key1->format('Y-m-d');
+					$holiday2[] = $key1->format('Y-m-d');
 				}
 			}
-		} else {
-			$holiday2['tda0'] = '2000-01-01';
 		}
+		$holiday2 = array();
 		// $hnleave = "[moment('".implode("', 'YYYY-MM-DD'), moment('", $holiday)."', 'YYYY-MM-DD')";
 		// $hnleave = '["'.implode('", "', $holiday).'"]';
 		// $holiday = array_merge($holiday1, $holiday2);
