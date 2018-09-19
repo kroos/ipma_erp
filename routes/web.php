@@ -267,7 +267,7 @@ Route::get('printpdfleaves/{staffLeave}', [
 // same as above but dont have to be that much
 Route::resources([
    'leaveEditing' => 'LeaveEditingController',
-   'posts' => 'PostController'
+   'tcms' => 'TCMSController'
 ]);
 
 
