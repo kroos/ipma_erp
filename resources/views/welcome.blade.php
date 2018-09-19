@@ -337,7 +337,7 @@
 	$('#simple-select2').select2({
 		// theme: 'bootstrap4',
 		placeholder: "Select an option",
-		width: 100%,
+		width: '100%',
 		// allowClear: true
 	});
 
@@ -345,7 +345,7 @@
 		// theme: 'bootstrap4',
 		// containerCssClass: ':all:',
 		placeholder: "Select an option",
-		width: 100%,
+		width: '100%',
 		// allowClear: true
 	});
 
