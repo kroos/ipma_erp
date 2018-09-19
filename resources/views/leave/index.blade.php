@@ -148,7 +148,7 @@ if( !empty($leav->hasonestaffleavebackup) ) {
 	$stat = '';
 }
 ?>
-						<a href="{{ route('staffLeave.show', $leav->id) }}" alt="Details" title="Details">HR9-{{ str_pad( $leav->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}</a>
+						HR9-{{ str_pad( $leav->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}
 							<br />
 						<a href="{{ route( 'printpdfleave.show', $leav->id ) }}" class="btn btn-primary" alt="Print PDF" title="Print PDF" target="_blank"><i class="far fa-file-pdf"></i></a>
 <?php

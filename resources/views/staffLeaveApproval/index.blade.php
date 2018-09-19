@@ -491,17 +491,7 @@ if(is_null($hodsn)) {
 			$text2 = NULL;
 			break;
 	}
-	
-	///////////////////////////////////////////////////////////////////////////
-	// checking for before or after todays date approval. if its before, have the power to reject and deduct leave, else can approve or reject but not deduct leave.
-	// date on leave checking
-	
-	$dts1 = \Carbon\Carbon::parse( $ya->belongtostaffleave->date_time_start );
-	$dte1 = \Carbon\Carbon::parse( $ya->belongtostaffleave->date_time_end );
-	$now = \Carbon\Carbon::now();
-	
 	?>
-	@if( $now->lte( $dts1 ) )
 					<dl class="row">
 						<dt class="col-sm-6">{{ $text1 }}</dt>
 						<dd class="col-sm-6">{{ $leaveCount }}</dd>
@@ -510,9 +500,7 @@ if(is_null($hodsn)) {
 						<dt class="col-sm-6">{{ $text2 }}</dt>
 						<dd class="col-sm-6">{{ $leaverej }}</dd>
 					</dl>
-	@endif
 	{!! Form::model($ya, ['route' => ['staffLeaveApproval.update', $ya->id], 'method' => 'PATCH', 'id' => 'form'.$ya->id, 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) !!}
-	
 					<div class="container">
 						<div class="row justify-content-sm-center">
 							<div class="col-10 text-center">
