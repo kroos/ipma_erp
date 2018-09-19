@@ -70,7 +70,7 @@ $lea = \Auth::user()->belongtostaff->hasmanystaffleave()->where('created_at', '>
 // dd($lea);
 ?>
 @if( $lea->count() > 0 )
-		<table class="table table-hover table-sm" id="leaves">
+		<table class="table table-hover table-sm" id="leaves" style="font-size:12px">
 			<thead>
 				<tr>
 					<th rowspan="2">ID</th>
@@ -112,8 +112,12 @@ $arr = str_split( $dts, 2 );
 if ( ($leav->leave_id == 9) || ($leav->leave_id != 9 && $leav->half_day == 2) ) {
 	$dts = \Carbon\Carbon::parse($leav->date_time_start)->format('D, j F Y g:i a');
 	$dte = \Carbon\Carbon::parse($leav->date_time_end)->format('D, j F Y g:i a');
-	if( ($leav->leave_id != 9 && $leav->half_day == 2) ) {
-		$dper = 'Half Day';
+	if( ($leav->leave_id != 9 && $leav->half_day == 2 && $leav->active == 1) ) {
+		if ($leav->leave_id != 9 && $leav->half_day == 2 && $leav->active != 1) {
+			$dper = '0 Day';
+		} else {
+			$dper = 'Half Day';
+		}
 	} else {
 		$i = $leav->period;
 				$hour = floor($i/60);
@@ -197,7 +201,7 @@ $dt = \Carbon\Carbon::now()->lte( $dtsl );
 $w = \Auth::user()->belongtostaff->gender_id;
 $r = \Auth::user()->belongtostaff->mobile;
 ?>
-		<a href="{{ ( empty($w) && empty($r) )?route('staff.edit', \Auth::user()->belongtostaff->id):route('staffLeave.create') }}" class="btn btn-primary">{{ ( empty($w) && empty($r) )?'Butiran Diri':'Leave Application' }}</a>
+		<a href="{{ ( is_null($w) || is_null($r) )?route('staff.edit', \Auth::user()->belongtostaff->id):route('staffLeave.create') }}" class="btn btn-primary">{{ ( is_null($w) || is_null($r) )?'Butiran Diri':'Leave Application' }}</a>
 	</div>
 </div>
 @endsection

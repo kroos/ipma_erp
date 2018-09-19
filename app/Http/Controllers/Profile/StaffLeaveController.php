@@ -1044,11 +1044,13 @@ class StaffLeaveController extends Controller
 			// cari leave type dulu
 			$n = StaffLeave::find($request->id);
 			echo $n.' staff Leave model<br />';
-die();
 //////////////////////////////////////////////////////////////////////////////////////////////
 // copy paste from staffleaveapproval
 					// jom cari leave type, jenis yg boleh tolak shj : al, mc, el-al, el-mc, nrl, ml
 					echo $n->leave_id.' leave type<br />';
+
+					$dts = \Carbon\Carbon::parse( $n->date_time_start );
+					$now = \Carbon\Carbon::now();
 
 
 					if ( $n->leave_id == 1 || $n->leave_id == 5 ) { // leave deduct from AL or EL-AL
@@ -1074,33 +1076,23 @@ die();
 						// update the al balance
 						$n->belongtostaff->hasmanystaffannualmcleave()->where('year', $dts->format('Y'))->update([
 							'annual_leave_balance' => $addl,
-							'remarks' => 'Rejected By '.\Auth::user()->belongtostaff->name
+							'remarks' => 'Cancelled By '.\Auth::user()->belongtostaff->name
 						]);
 						// update period, status leave of the applicant. status close by HOD/supervisor
-						$n->update(['period' => 0, 'active' => 4, 'remarks' => 'Rejected By '.\Auth::user()->belongtostaff->name]);
-						// update status for all approval
-						$n->hasmanystaffapproval()->where('id', $staffLeaveApproval->id)->update( $request->except(['_method', '_token']) );
-						// HR part.. x payah kot nak update kat sini..
-						// $n->hasmanystaffapproval()->where('id', '<>',  $staffLeaveApproval->id)->update( $request->except(['_method', '_token', 'approval']) );
+						$n->update(['period' => 0, 'active' => 3, 'remarks' => 'Cancelled By '.\Auth::user()->belongtostaff->name]);
 					}
 
 					if( $n->leave_id == 2 || $n->leave_id == 11 ) { // leave deduct from MC or MC-UPL
-						echo 'leave deduct from MC<br />';
 
 						// sama lebih kurang AL mcm kat atas. so....
 						$addl = $n->period + $n->belongtostaff->hasmanystaffannualmcleave()->where('year', $dts->format('Y'))->first()->medical_leave_balance;
-
-						// update the al balance
+						// update the mc balance
 						$n->belongtostaff->hasmanystaffannualmcleave()->where('year', $dts->format('Y'))->update([
 							'medical_leave_balance' => $addl,
-							'remarks' => 'Rejected By '.\Auth::user()->belongtostaff->name
+							'remarks' => 'Cancelled By '.\Auth::user()->belongtostaff->name
 						]);
 						// update period, status leave of the applicant. status close by HOD/supervisor
-						$n->update(['period' => 0, 'active' => 4, 'remarks' => 'Rejected By '.\Auth::user()->belongtostaff->name]);
-						// update status for all approval
-						$n->hasmanystaffapproval()->where('id', $staffLeaveApproval->id)->update( $request->except(['_method', '_token']) );
-						// HR part.. x payah kot nak update kat sini..
-						// $n->hasmanystaffapproval()->where('id', '<>',  $staffLeaveApproval->id)->update( $request->except(['_method', '_token', 'approval']) );
+						$n->update(['period' => 0, 'active' => 3, 'remarks' => 'Cancelled By '.\Auth::user()->belongtostaff->name]);
 					}
 
 					if( $n->leave_id == 3 || $n->leave_id == 6 ) { // leave deduct from UPL or EL-UPL
@@ -1110,11 +1102,8 @@ die();
 						// we can ignore all the data in staffannualmcmaternity mode. just take care all the things in staff leaves only.
 						// make period 0 again, regardsless of the ttotal period and then update as al and mc.
 						// update period, status leave of the applicant. status close by HOD/supervisor
-						$n->update(['period' => 0, 'active' => 4, 'remarks' => 'Rejected By '.\Auth::user()->belongtostaff->name]);
+						$n->update(['period' => 0, 'active' => 3, 'remarks' => 'Cancelled By '.\Auth::user()->belongtostaff->name]);
 						// update status for all approval
-						$n->hasmanystaffapproval()->where('id', $staffLeaveApproval->id)->update( $request->except(['_method', '_token']) );
-						// HR part.. x payah kot nak update kat sini..
-						// $n->hasmanystaffapproval()->where('id', '<>',  $staffLeaveApproval->id)->update( $request->except(['_method', '_token', 'approval']) );
 					}
 
 					if( $n->leave_id == 4 ) { // leave deduct from NRL
@@ -1139,14 +1128,10 @@ die();
 							'staff_leave_id' => NULL,
 							'leave_balance' => $n->period,
 							'leave_utilize' => $addr,
-							'remarks' => 'Rejected by '.\Auth::user()->belongtostaff->name
+							'remarks' => 'Cancelled by '.\Auth::user()->belongtostaff->name
 						]);
 						// update di table staff leave pulokk staffleave
-						$n->update(['period' => 0, 'active' => 4, 'remarks' => 'Rejected By '.\Auth::user()->belongtostaff->name]);
-						// update status for all approval
-						$n->hasmanystaffapproval()->where('id', $staffLeaveApproval->id)->update( $request->except(['_method', '_token']) );
-						// HR part.. x payah kot nak update kat sini..
-						// $n->hasmanystaffapproval()->where('id', '<>',  $staffLeaveApproval->id)->update( $request->except(['_method', '_token', 'approval']) );
+						$n->update(['period' => 0, 'active' => 3, 'remarks' => 'Cancelled By '.\Auth::user()->belongtostaff->name]);
 					}
 
 					if( $n->leave_id == 7 ) { // leave deduct from ML
@@ -1174,11 +1159,7 @@ die();
 							'remarks' => 'Rejected By '.\Auth::user()->belongtostaff->name
 						]);
 						// update period, status leave of the applicant. status close by HOD/supervisor
-						$n->update(['period' => 0, 'active' => 4, 'remarks' => 'Rejected By '.\Auth::user()->belongtostaff->name]);
-						// update status for all approval
-						$n->hasmanystaffapproval()->where('id', $staffLeaveApproval->id)->update( $request->except(['_method', '_token']) );
-						// HR part.. x payah kot nak update kat sini..
-						// $n->hasmanystaffapproval()->where('id', '<>',  $staffLeaveApproval->id)->update( $request->except(['_method', '_token', 'approval']) );
+						$n->update(['period' => 0, 'active' => 3, 'remarks' => 'Cancelled By '.\Auth::user()->belongtostaff->name]);
 					}
 
 					if( $n->leave_id == 9 ) { // leave deduct from TF
@@ -1190,15 +1171,9 @@ die();
 						// we can ignore all the data in staffannualmcmaternity mode. just take care all the things in staff leaves only.
 						// make period 0 again, regardsless of the ttotal period and then update as al and mc.
 						// update period, status leave of the applicant. status close by HOD/supervisor
-						$n->update(['period' => 0, 'active' => 4, 'remarks' => 'Rejected By '.\Auth::user()->belongtostaff->name]);
-						// update status for all approval
-						$n->hasmanystaffapproval()->where('id', $staffLeaveApproval->id)->update( $request->except(['_method', '_token']) );
-						// HR part.. x payah kot nak update kat sini..
-						// $n->hasmanystaffapproval()->where('id', '<>',  $staffLeaveApproval->id)->update( $request->except(['_method', '_token', 'approval']) );
+						$n->update(['period' => 0, 'active' => 3, 'remarks' => 'Cancelled By '.\Auth::user()->belongtostaff->name]);
 					}
 //////////////////////////////////////////////////////////////////////////////////////////////
-			// \Auth::user()->belongtostaff->hasmanystaffleave()->where('id', $request->id)->update(['active' => 3]);
-			die();
 			return response()->json([
 				'status' => 'success',
 				'message' => 'Your leave has been cancelled.'

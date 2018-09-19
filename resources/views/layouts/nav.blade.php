@@ -40,11 +40,18 @@ $tsb = $sb->count();
 
 // ada yg kena tambah lagi, contoh utk HOD and HR alert.
 $shod = \Auth::user()->belongtostaff->hasmanystaffleaveapproval()->whereNull('hr')->whereNull('approval')->get();
-$tshod = $shod->count();
+// leave out all the non active leave.
+$tshod = 0;
+foreach($shod as $op) {
+	$tshod += $op->belongtostaffleave()->where('active', 1)->get()->count();
+}
 
 // hr boss
 $shr = \Auth::user()->belongtostaff->hasmanystaffleaveapproval()->where('hr', 1)->whereNull('approval')->get();
-$tshr = $shr->count();
+$tshr = 0;
+foreach ($shr as $po) {
+	$tshr += $po->belongtostaffleave()->where('active', 1)->get()->count();
+}
 
 $allleaves = $tsb + $tshod + $tshr;
 ?>

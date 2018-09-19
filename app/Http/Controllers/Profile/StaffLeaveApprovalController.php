@@ -74,7 +74,7 @@ class StaffLeaveApprovalController extends Controller
 
 				echo $n.' StaffLeave Model<br />'; // StaffLeave Model
 				echo $n->date_time_start.' date time start<br />';
-die();
+// die();
 
 				$dts = Carbon::parse( $n->date_time_start );
 				$now = Carbon::now();

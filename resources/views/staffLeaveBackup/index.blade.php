@@ -19,7 +19,7 @@ $stba = \Auth::user()->belongtostaff->hasmanystaffleavebackup()->whereNULL('ackn
 // dd($stba->count());
 ?>
 @if( $stba->count() > 0 )
-		<table class="table table-hover" id="backup">
+		<table class="table table-hover" id="backup" style="font-size:12px">
 			<thead>
 				<tr>
 					<th rowspan="2">Applicant</th>
