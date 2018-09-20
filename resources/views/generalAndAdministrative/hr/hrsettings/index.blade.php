@@ -47,6 +47,9 @@ use \Carbon\Carbon;
 			<table class="table table-hover" style="font-size:12px">
 				<thead>
 					<tr>
+						<th colspan="8">Normal Working Hours</th>
+					</tr>
+					<tr>
 						<th>Year</th>
 						<th>Time Start AM</th>
 						<th>Time End AM</th>
@@ -71,6 +74,21 @@ use \Carbon\Carbon;
 					</tr>
 @endforeach
 				</tbody>
+				<thead>
+					<tr>
+						<th colspan="8">Maintenance Working Hours</th>
+					</tr>
+					<tr>
+						<th>Year</th>
+						<th>Time Start AM</th>
+						<th>Time End AM</th>
+						<th>Time Start PM</th>
+						<th>Time End PM</th>
+						<th>Effective Date From</th>
+						<th>Effective Date To</th>
+						<th>Remarks</th>
+					</tr>
+				</thead>
 			</table>
 		</div>
 	</div>
