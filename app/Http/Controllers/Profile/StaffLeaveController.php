@@ -1041,37 +1041,38 @@ class StaffLeaveController extends Controller
 	{
 		//////////////////////////////////////////////////////////////////////////////////
 		if($request->cancel == 1) {
+			// all of the debugging echo need to be commented out if using ajax.
 			// cari leave type dulu
 			$n = StaffLeave::find($request->id);
-			echo $n.' staff Leave model<br />';
+			// echo $n.' staff Leave model<br />';
 //////////////////////////////////////////////////////////////////////////////////////////////
 // copy paste from staffleaveapproval
 					// jom cari leave type, jenis yg boleh tolak shj : al, mc, el-al, el-mc, nrl, ml
-					echo $n->leave_id.' leave type<br />';
+					// echo $n->leave_id.' leave type<br />';
 
 					$dts = \Carbon\Carbon::parse( $n->date_time_start );
 					$now = \Carbon\Carbon::now();
 
 
 					if ( $n->leave_id == 1 || $n->leave_id == 5 ) { // leave deduct from AL or EL-AL
-						echo 'leave deduct from AL<br />';
+						// echo 'leave deduct from AL<br />';
 
 						// cari al dari staffleave dan tambah balik masuk dalam staffanualmcmaternityleave
 
 						// cari period cuti
-						echo $n->period.' period cuti<br />';
+						// echo $n->period.' period cuti<br />';
 
 						// cari al dari applicant, year yg sama dgn date apply cuti.
-						echo $n->belongtostaff->hasmanystaffannualmcleave()->where('year', $dts->format('Y'))->first()->annual_leave_balance.' applicant annual leave balance<br />';
+						// echo $n->belongtostaff->hasmanystaffannualmcleave()->where('year', $dts->format('Y'))->first()->annual_leave_balance.' applicant annual leave balance<br />';
 
 						$addl = $n->period + $n->belongtostaff->hasmanystaffannualmcleave()->where('year', $dts->format('Y'))->first()->annual_leave_balance;
-						echo $addl.' masukkan dalam annual balance<br />';
+						// echo $addl.' masukkan dalam annual balance<br />';
 
 						// find all approval
-						echo $n->hasmanystaffapproval()->get().'find all approval<br />';
+						// echo $n->hasmanystaffapproval()->get().'find all approval<br />';
 
-						echo \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first()->position.' position <br />';
-						echo \Auth::user()->belongtostaff->name.' position <br />';
+						// echo \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first()->position.' position <br />';
+						// echo \Auth::user()->belongtostaff->name.' name <br />';
 
 						// update the al balance
 						$n->belongtostaff->hasmanystaffannualmcleave()->where('year', $dts->format('Y'))->update([
@@ -1096,7 +1097,7 @@ class StaffLeaveController extends Controller
 					}
 
 					if( $n->leave_id == 3 || $n->leave_id == 6 ) { // leave deduct from UPL or EL-UPL
-						echo 'leave deduct from UPL<br />';
+						// echo 'leave deduct from UPL<br />';
 
 						// process a bit different from al and mc
 						// we can ignore all the data in staffannualmcmaternity mode. just take care all the things in staff leaves only.
@@ -1107,21 +1108,21 @@ class StaffLeaveController extends Controller
 					}
 
 					if( $n->leave_id == 4 ) { // leave deduct from NRL
-						echo 'leave deduct from NRL<br />';
+						// echo 'leave deduct from NRL<br />';
 
 						// cari period cuti
-						echo $n->period.' period cuti<br />';
+						// echo $n->period.' period cuti<br />';
 
-						echo $n->hasmanystaffleavereplacement()->first().' staffleavereplacement model<br />';
+						// echo $n->hasmanystaffleavereplacement()->first().' staffleavereplacement model<br />';
 						// hati2 pasai ada 2 kes dgn period, full and half day
 						// kena update balik di staffleavereplacement model utk return back period.
 						// period campur balik dgn leave utilize (2 table berbeza)
-						echo $n->hasmanystaffleavereplacement()->first()->leave_utilize.' leave utilize<br />';
-						echo $n->hasmanystaffleavereplacement()->first()->leave_total.' leave total<br />';
+						// echo $n->hasmanystaffleavereplacement()->first()->leave_utilize.' leave utilize<br />';
+						// echo $n->hasmanystaffleavereplacement()->first()->leave_total.' leave total<br />';
 
 						// untuk update di column leave_balance
 						$addr = $n->hasmanystaffleavereplacement()->first()->leave_total - $n->period;
-						echo $addr.' untuk update kat column staff_leave_replacement.leave_utilize<br />';
+						// echo $addr.' untuk update kat column staff_leave_replacement.leave_utilize<br />';
 
 						// update di table staffleavereplcaement. remarks kata sapa reject
 						$n->hasmanystaffleavereplacement()->update([
@@ -1135,23 +1136,23 @@ class StaffLeaveController extends Controller
 					}
 
 					if( $n->leave_id == 7 ) { // leave deduct from ML
-						echo 'leave deduct from ML<br />';
+						// echo 'leave deduct from ML<br />';
 
 						// lebih kurang sama dengan al atau mc, maka..... :) copy paste
 						// cari period cuti
-						echo $n->period.' period cuti<br />';
+						// echo $n->period.' period cuti<br />';
 
 						// cari al dari applicant, year yg sama dgn date apply cuti.
-						echo $n->belongtostaff->hasmanystaffannualmcleave()->where('year', $dts->format('Y'))->first()->maternity_leave_balance.' applicant maternity leave balance<br />';
+						// echo $n->belongtostaff->hasmanystaffannualmcleave()->where('year', $dts->format('Y'))->first()->maternity_leave_balance.' applicant maternity leave balance<br />';
 
 						$addl = $n->period + $n->belongtostaff->hasmanystaffannualmcleave()->where('year', $dts->format('Y'))->first()->maternity_leave_balance;
-						echo $addl.' masukkan dalam annual balance<br />';
+						// echo $addl.' masukkan dalam annual balance<br />';
 
 						// find all approval
-						echo $n->hasmanystaffapproval()->get().'find all approval<br />';
+						// echo $n->hasmanystaffapproval()->get().'find all approval<br />';
 
-						echo \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first()->position.' position <br />';
-						echo \Auth::user()->belongtostaff->name.' position <br />';
+						// echo \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first()->position.' position <br />';
+						// echo \Auth::user()->belongtostaff->name.' position <br />';
 
 						// update the al balance
 						$n->belongtostaff->hasmanystaffannualmcleave()->where('year', $dts->format('Y'))->update([
@@ -1163,7 +1164,7 @@ class StaffLeaveController extends Controller
 					}
 
 					if( $n->leave_id == 9 ) { // leave deduct from TF
-						echo 'leave deduct from TF<br />';
+						// echo 'leave deduct from TF<br />';
 
 						// dekat dekat nak sama dgn UPL, maka... :P copy paste
 

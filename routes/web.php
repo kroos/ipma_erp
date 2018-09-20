@@ -265,9 +265,16 @@ Route::get('printpdfleaves/{staffLeave}', [
 
 ############################################################################
 // same as above but dont have to be that much
+// human resources management
 Route::resources([
-   'leaveEditing' => 'LeaveEditingController',
-   'tcms' => 'TCMSController'
+   'leaveEditing' => 'Administrative\HumanResource\LeaveEditing\LeaveEditingController',		// this is for page
+   'tcms' => 'Administrative\HumanResource\TCMS\TCMSController',		// this is for page
+   'staffManagement' => 'Administrative\HumanResource\StaffManagement\StaffManagementController',		// this is for page
+   'hrSettings' => 'Administrative\HumanResource\HRSettings\HRSettingsController',		// this is for page
+]);
+
+Route::resources([
+	'workingHours' => 'Administrative\HumanResource\HRSettings\WorkingHoursController',
 ]);
 
 

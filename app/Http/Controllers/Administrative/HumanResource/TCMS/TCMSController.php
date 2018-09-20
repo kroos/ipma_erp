@@ -1,88 +1,51 @@
 <?php
 
-namespace App\Http\Controllers\Administrative\HumanResource;
+namespace App\Http\Controllers\Administrative\HumanResource\TCMS;
 
+use App\Http\Controllers\Controller;
+
+// load model
 use App\Model\Leave;
+
 use Illuminate\Http\Request;
 
-class LeaveController extends Controller
+class TCMSController extends Controller
 {
 	function __construct()
 	{
 		$this->middleware('auth');
 	}
 
-	/**
-	* Display a listing of the resource.
-	*
-	* @return \Illuminate\Http\Response
-	*/
 	public function index()
 	{
-	//
+		return view('generalAndAdministrative.hr.tcms.index');
 	}
-	
-	/**
-	* Show the form for creating a new resource.
-	*
-	* @return \Illuminate\Http\Response
-	*/
+
 	public function create()
 	{
 	//
 	}
-	
-	/**
-	* Store a newly created resource in storage.
-	*
-	* @param  \Illuminate\Http\Request  $request
-	* @return \Illuminate\Http\Response
-	*/
+
 	public function store(Request $request)
 	{
 	//
 	}
-	
-	/**
-	* Display the specified resource.
-	*
-	* @param  \App\Leave  $leave
-	* @return \Illuminate\Http\Response
-	*/
+
 	public function show(Leave $leave)
 	{
 	//
 	}
-	
-	/**
-	* Show the form for editing the specified resource.
-	*
-	* @param  \App\Leave  $leave
-	* @return \Illuminate\Http\Response
-	*/
+
 	public function edit(Leave $leave)
 	{
 	//
 	}
-	
-	/**
-	* Update the specified resource in storage.
-	*
-	* @param  \Illuminate\Http\Request  $request
-	* @param  \App\Leave  $leave
-	* @return \Illuminate\Http\Response
-	*/
+
 	public function update(Request $request, Leave $leave)
 	{
 	//
 	}
-	
-	/**
-	* Remove the specified resource from storage.
-	*
-	* @param  \App\Leave  $leave
-	* @return \Illuminate\Http\Response
-	*/
+
 	public function destroy(Leave $leave)
 	{
 	//

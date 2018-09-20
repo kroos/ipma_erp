@@ -1,19 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Administrative\HumanResource\LeaveEditing;
+namespace App\Http\Controllers\Administrative\HumanResource\StaffManagement;
 
 use App\Http\Controllers\Controller;
 
-use App\Model\StaffLeave;
-use App\Model\StaffLeaveBackup;
-use App\Model\StaffLeaveApproval;
-use App\Model\StaffAnnualMCLeave;
-use App\Model\StaffLeaveReplacement;
-
+// load model
+use App\Model\Leave;
 
 use Illuminate\Http\Request;
 
-class LeaveEditingController extends Controller
+class StaffManagementController extends Controller
 {
 	function __construct()
 	{
@@ -22,7 +18,7 @@ class LeaveEditingController extends Controller
 
 	public function index()
 	{
-		return view('generalAndAdministrative.hr.leave.index');
+		return view('generalAndAdministrative.hr.staffmanagement.index');
 	}
 
 	public function create()

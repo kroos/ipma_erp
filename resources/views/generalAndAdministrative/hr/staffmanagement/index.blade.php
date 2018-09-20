@@ -21,10 +21,10 @@
 				<a class="nav-link " href="{{ route('hrSettings.index') }}">Settings</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="{{ route('staffManagement.index') }}">Staff Management</a>
+				<a class="nav-link active" href="{{ route('staffManagement.index') }}">Staff Management</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link active" href="{{ route('leaveEditing.index') }}">Leave</a>
+				<a class="nav-link" href="{{ route('leaveEditing.index') }}">Leave</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="{{ route('tcms.index') }}">TCMS</a>
@@ -32,7 +32,7 @@
 		</ul>
 
 		<div class="card">
-			<div class="card-header">Leaves Management</div>
+			<div class="card-header">Staff Management</div>
 			<div class="card-body"></div>
 		</div>
 

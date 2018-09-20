@@ -47,22 +47,28 @@ $start_pm = Carbon::parse($time->first()->time_start_pm)->format('g:i a');
 $end_pm = Carbon::parse($time->first()->time_end_pm)->format('g:i a');
 
 
-// date and time
+
+
 if ( ($staffLeave->leave_id == 9) || ($staffLeave->leave_id != 9 && $staffLeave->half_day == 2) ) {
 	$dts = \Carbon\Carbon::parse($staffLeave->date_time_start)->format('g:i a');
 	$dte = \Carbon\Carbon::parse($staffLeave->date_time_end)->format('g:i a');
-	if( ($staffLeave->leave_id != 9 && $staffLeave->half_day == 2) ) {
+
+	if( ($staffLeave->leave_id != 9 && $staffLeave->half_day == 2) && $staffLeave->active == 1 ) {
 		$dper = 'Half Day';
 	} else {
-		$i = $staffLeave->period;
-				$hour = floor($i/60);
-				$minute = ($i % 60);
-		$dper = $hour.' hours '.$minute.' minutes';
+		if(($staffLeave->leave_id != 9 && $staffLeave->half_day != 2) && $staffLeave->active == 1) {
+			$i = $staffLeave->period;
+					$hour = floor($i/60);
+					$minute = ($i % 60);
+			$dper = $hour.' hours '.$minute.' minutes';
+		} else {
+			$dper = '0 Day/s';
+		}
 	}
 } else {
 	$dts = $start_am;
 	$dte = $end_pm;
-	$dper = $staffLeave->period.' day/s';
+	$dper = $staffLeave->period.' Day/s';
 }
 
 // backup resolve
@@ -128,15 +134,15 @@ class PDF extends Fpdf
 	$pdf->SetFont('Arial',NULL,10);
 	$pdf->MultiCell(0, 4, 'No Pekerja : '.$staffLeave->belongtostaff->hasmanylogin()->where('active', 1)->first()->username, 0, 'L');
 	$pdf->MultiCell(0, 4, 'Nama : '.$staffLeave->belongtostaff->name, 0, 'L');
-	$pdf->MultiCell(0, 4, 'Tarikh Bercuti : '.Carbon::parse($staffLeave->date_time_start)->format('D, j F Y').' - '.Carbon::parse($staffLeave->date_time_end)->format('D, j F Y'), 0, 'L');
+	$pdf->MultiCell(0, 4, 'Tarikh Bercuti : '.Carbon::parse($staffLeave->date_time_start)->format('D, j M Y').' - '.Carbon::parse($staffLeave->date_time_end)->format('D, j M Y'), 0, 'L');
 	$pdf->MultiCell(0, 4, 'Telephone : '.$staffLeave->belongtostaff->mobile, 0, 'L');
 
 	// $pdf->SetFont('Arial',NULL,8);
 	$pdf->SetRightMargin(10);
 	$pdf->SetLeftMargin(105);
-	$pdf->SetY(30);
-	$pdf->MultiCell(0, 4, 'Tarikh Pohon : '.Carbon::parse($staffLeave->created_at)->format('D, j F Y'), 0, 'R');
+	$pdf->SetY(26);
 	$pdf->MultiCell(0, 4, 'Ref No : HR9-'.str_pad( $staffLeave->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1], 0, 'R');
+	$pdf->MultiCell(0, 4, 'Tarikh Pohon : '.Carbon::parse($staffLeave->created_at)->format('D, j M Y'), 0, 'R');
 	$pdf->MultiCell(0, 4, 'Masa : '.$dts.' - '.$dte, 0, 'R');
 	$pdf->MultiCell(0, 4, 'Tempoh Masa : '.$dper, 0, 'R');
 
@@ -174,7 +180,7 @@ if ( !is_null( $bakvalid ) ) :
 if (is_null($ack)) {
 	$de = NULL;
 } else {
-	$de = Carbon::parse($bakvalid->created_at)->format('D, j F Y g:i a');
+	$de = Carbon::parse($bakvalid->created_at)->format('D, j M Y g:i a');
 }
 
 	$pdf->Cell(60, 4, $de, 'LRB', 1, 'C');
@@ -235,7 +241,7 @@ endif;
 	if (is_null($deptapp)) {
 		$dru = NULL;
 	} else {
-		$dru = Carbon::parse($staffapproval->whereNull('hr')->first()->updated_at)->format('D, j F Y g:i a');
+		$dru = Carbon::parse($staffapproval->whereNull('hr')->first()->updated_at)->format('D, j M Y g:i a');
 	}
 
 	if(is_null($deptapp)) {
@@ -284,7 +290,7 @@ endif;
 	if(is_null($dr)) {
 		$diru = NULL;
 	} else {
-		$diru = Carbon::parse($staffLeave->hasmanystaffapproval()->where('hr', 2)->first()->updated_at)->format('D, j F Y g:i a');
+		$diru = Carbon::parse($staffLeave->hasmanystaffapproval()->where('hr', 2)->first()->updated_at)->format('D, j M Y g:i a');
 	}
 
 	if(!is_null($dr)) {
@@ -296,7 +302,7 @@ endif;
 	if(is_null($staffLeave->hasmanystaffapproval()->where('hr', 1)->first()->approval)) {
 		$hru = NULL;
 	} else {
-		$hru = Carbon::parse($staffLeave->hasmanystaffapproval()->where('hr', 1)->first()->updated_at)->format('D, j F Y g:i a');
+		$hru = Carbon::parse($staffLeave->hasmanystaffapproval()->where('hr', 1)->first()->updated_at)->format('D, j M Y g:i a');
 	}
 
 	// approval part

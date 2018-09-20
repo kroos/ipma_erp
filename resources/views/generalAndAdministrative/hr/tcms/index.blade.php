@@ -18,30 +18,23 @@
 
 		<ul class="nav nav-tabs">
 			<li class="nav-item">
-				<a class="nav-link active" href="{{ __('route()') }}">Active</a>
+				<a class="nav-link " href="{{ route('hrSettings.index') }}">Settings</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="#">Link</a>
+				<a class="nav-link" href="{{ route('staffManagement.index') }}">Staff Management</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link disabled" href="#">Disabled</a>
+				<a class="nav-link" href="{{ route('leaveEditing.index') }}">Leave</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link active" href="{{ route('tcms.index') }}">TCMS</a>
 			</li>
 		</ul>
 
-
-
-
-
-<!-- 			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ __('route()') }}" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-				<div class="dropdown-menu">
-					<a class="dropdown-item" href="#">Action</a>
-					<a class="dropdown-item" href="#">Another action</a>
-					<a class="dropdown-item" href="#">Something else here</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="#">Separated link</a>
-				</div>
-			</li> -->
+		<div class="card">
+			<div class="card-header">TCMS Management</div>
+			<div class="card-body"></div>
+		</div>
 
 
 
