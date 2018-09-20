@@ -61,7 +61,7 @@ use \Carbon\Carbon;
 					</tr>
 				</thead>
 				<tbody>
-@foreach(WorkingHour::where('maintenance', 0)->orderBy('year')->orderBy('effective_date_start')->get() as $t)
+@foreach(WorkingHour::where('maintenance', 0)->where('year', '>=', date('Y'))->orderBy('year')->orderBy('effective_date_start')->get() as $t)
 					<tr>
 						<td>{{ $t->year }}</td>
 						<td>{{ Carbon::parse($t->time_start_am)->format('g:i a') }}</td>
@@ -89,14 +89,24 @@ use \Carbon\Carbon;
 						<th>Remarks</th>
 					</tr>
 				</thead>
+				<tbody>
+@foreach(WorkingHour::where('maintenance', 1)->where('year', '>=', date('Y'))->orderBy('year')->orderBy('effective_date_start')->get() as $t)
+					<tr>
+						<td>{{ $t->year }}</td>
+						<td>{{ Carbon::parse($t->time_start_am)->format('g:i a') }}</td>
+						<td>{{ Carbon::parse($t->time_end_am)->format('g:i a') }}</td>
+						<td>{{ Carbon::parse($t->time_start_pm)->format('g:i a') }}</td>
+						<td>{{ Carbon::parse($t->time_end_pm)->format('g:i a') }}</td>
+						<td>{{ Carbon::parse($t->effective_date_start)->format('D, j M Y') }}</td>
+						<td>{{ Carbon::parse($t->effective_date_end)->format('D, j M Y') }}</td>
+						<td>{{ $t->remarks }}</td>
+					</tr>
+@endforeach
+				</tbody>
 			</table>
 		</div>
 	</div>
-	<!-- <p>&nbsp;</p> -->
-	<div class="card">
-		<div class="card-header">Working Hours ({{ \App\Model\Department::find(20)->department }})</div>
-		<div class="card-body"></div>
-	</div>
+
 
 	</div>
 </div>
