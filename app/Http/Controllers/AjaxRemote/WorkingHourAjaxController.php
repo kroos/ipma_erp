@@ -209,7 +209,43 @@ class WorkingHourAjaxController extends Controller
 		// print_r ($holiday2);
 	}
 
+	public function yearworkinghour1(Request $request)
+	{
+		$valid = TRUE;
 
+		$po = WorkingHour::groupBy('year')->select('year')->get();
+
+		foreach ($po as $k1) {
+			if($k1->year == \Carbon\Carbon::parse($request->effective_date_start)->format('Y')) {
+				$valid = FALSE;
+				// exit();
+			}
+		}
+
+		return response()->json([
+			'year1' => \Carbon\Carbon::parse($request->effective_date_start)->format('Y'),
+			'valid' => $valid
+		]);
+	}
+
+	public function yearworkinghour2(Request $request)
+	{
+		$valid = TRUE;
+
+		$po = WorkingHour::groupBy('year')->select('year')->get();
+
+		foreach ($po as $k2) {
+			if($k2->year == \Carbon\Carbon::parse($request->effective_date_end)->format('Y')) {
+				$valid = FALSE;
+				// exit();
+			}
+		}
+
+		return response()->json([
+			'year2' => \Carbon\Carbon::parse($request->effective_date_end)->format('Y'),
+			'valid' => $valid
+		]);
+	}
 
 
 

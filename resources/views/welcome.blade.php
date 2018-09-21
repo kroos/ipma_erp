@@ -3,7 +3,7 @@
 @section('content')
 <div class="card">
 	<div class="card-header">
-		<h1>Welcome To Sanitarium</h1>
+		<h1>Welcome To IPMA Industry Sdn Bhd</h1>
 	</div>
 	<div class="card-body">
 		<div class="container">

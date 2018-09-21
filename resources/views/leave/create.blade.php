@@ -239,6 +239,7 @@ $('#leave_id').on('change', function() {
 		});
 		
 		$('#to').datetimepicker({
+			useCurrent: false,
 			format:'YYYY-MM-DD',
 			daysOfWeekDisabled: [0],
 			minDate: moment().add(3, 'days').format('YYYY-MM-DD'),
@@ -439,6 +440,7 @@ foreach ($nodate1 as $key) {
 		});
 		
 		$('#to').datetimepicker({
+			useCurrent: false,
 			format:'YYYY-MM-DD',
 			useCurrent: true,
 			daysOfWeekDisabled: [0],
@@ -619,6 +621,7 @@ foreach ($nodate1 as $key) {
 		});
 		
 		$('#to').datetimepicker({
+			useCurrent: false,
 			format:'YYYY-MM-DD',
 			daysOfWeekDisabled: [0],
 			disabledDates:[
@@ -890,6 +893,7 @@ foreach ($nodate1 as $key) {
 		});
 		
 		$('#to').datetimepicker({
+			useCurrent: false,
 			format:'YYYY-MM-DD',
 			daysOfWeekDisabled: [0],
 			disabledDates:[
@@ -1098,6 +1102,7 @@ foreach ($nodate1 as $key) {
 		});
 		
 		$('#to').datetimepicker({
+			useCurrent: false,
 			format:'YYYY-MM-DD',
 			daysOfWeekDisabled: [0],
 			disabledDates:[
@@ -1423,6 +1428,7 @@ foreach ($nodate1 as $key) {
 		});
 		
 		$('#to').datetimepicker({
+			useCurrent: false,
 			format:'YYYY-MM-DD',
 			useCurrent: true,
 			daysOfWeekDisabled: [0],

@@ -7,6 +7,9 @@ use App\Model\HumanResource\HRSettings\WorkingHour;
 
 // penting sgt nihhh.. carbon niiii..
 use \Carbon\Carbon;
+
+$yp = WorkingHour::groupBy('year')->select('year')->get();
+// echo $yp.' year<br />';
 ?>
 <div class="card">
 	<div class="card-header"><h1>Human Resource Department</h1></div>
@@ -45,9 +48,10 @@ use \Carbon\Carbon;
 		<div class="card-header">Working Hours</div>
 		<div class="card-body">
 			<table class="table table-hover" style="font-size:12px">
+@foreach($yp as $tp)
 				<thead>
 					<tr>
-						<th colspan="8">Normal Working Hours</th>
+						<th class="text-center" colspan="8">Normal Working Hours ({{ $tp->year }})</th>
 					</tr>
 					<tr>
 						<th>Year</th>
@@ -61,7 +65,7 @@ use \Carbon\Carbon;
 					</tr>
 				</thead>
 				<tbody>
-@foreach(WorkingHour::where('maintenance', 0)->where('year', '>=', date('Y'))->orderBy('year')->orderBy('effective_date_start')->get() as $t)
+@foreach(WorkingHour::where('maintenance', 0)->where('year', $tp->year)->orderBy('year')->orderBy('effective_date_start')->get() as $t)
 					<tr>
 						<td>{{ $t->year }}</td>
 						<td>{{ Carbon::parse($t->time_start_am)->format('g:i a') }}</td>
@@ -76,7 +80,7 @@ use \Carbon\Carbon;
 				</tbody>
 				<thead>
 					<tr>
-						<th colspan="8">Maintenance Working Hours</th>
+						<th class="text-center" colspan="8">Maintenance Working Hours {{ $tp->year }}</th>
 					</tr>
 					<tr>
 						<th>Year</th>
@@ -90,7 +94,7 @@ use \Carbon\Carbon;
 					</tr>
 				</thead>
 				<tbody>
-@foreach(WorkingHour::where('maintenance', 1)->where('year', '>=', date('Y'))->orderBy('year')->orderBy('effective_date_start')->get() as $t)
+@foreach(WorkingHour::where('maintenance', 1)->where('year', $tp->year)->orderBy('year')->orderBy('effective_date_start')->get() as $t)
 					<tr>
 						<td>{{ $t->year }}</td>
 						<td>{{ Carbon::parse($t->time_start_am)->format('g:i a') }}</td>
@@ -103,24 +107,22 @@ use \Carbon\Carbon;
 					</tr>
 @endforeach
 				</tbody>
+@endforeach
 			</table>
+		</div>
+		<div class="card-footer">
+			<a href="{{ route('workingHours.create') }}" class="btn btn-primary">Add Working Hour</a>
 		</div>
 	</div>
 
+		<div class="card">
+			<div class="card-header">Public Holiday For {{ config('app.name') }}</div>
+			<div class="card-body"></div>
+			<div class="card-footer"></div>
+		</div>
 
 	</div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
 
 	</div>
 </div>

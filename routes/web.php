@@ -249,6 +249,20 @@ Route::post('/blockholidaysandleave', [
 	]);
 
 ############################################################################
+// yearworkinghour Ajax Controller
+Route::post('/yearworkinghour1', [
+		'as' => 'workinghour.yearworkinghour1',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@yearworkinghour1'
+	]);
+
+############################################################################
+// yearworkinghour Ajax Controller
+Route::post('/yearworkinghour2', [
+		'as' => 'workinghour.yearworkinghour2',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@yearworkinghour2'
+	]);
+
+############################################################################
 // StaffLeaveBackup Controller
 Route::resource('staffLeaveBackup', 'Profile\StaffLeaveBackupController');
 
