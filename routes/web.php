@@ -288,7 +288,8 @@ Route::resources([
 ]);
 
 Route::resources([
-	'workingHours' => 'Administrative\HumanResource\HRSettings\WorkingHoursController',
+	'workingHour' => 'Administrative\HumanResource\HRSettings\WorkingHourController',
+	'holidayCalendar' => 'Administrative\HumanResource\HRSettings\HolidayCalendarController',
 ]);
 
 

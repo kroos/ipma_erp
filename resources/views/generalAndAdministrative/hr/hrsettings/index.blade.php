@@ -4,12 +4,14 @@
 <?php
 // load model
 use App\Model\HumanResource\HRSettings\WorkingHour;
+use App\Model\HolidayCalendar;
 
 // penting sgt nihhh.. carbon niiii..
 use \Carbon\Carbon;
 
 $yp = WorkingHour::groupBy('year')->select('year')->get();
-// echo $yp.' year<br />';
+$yhc = HolidayCalendar::groupBy('yaer')->selectRaw('YEAR(date_start) as yaer')->get();
+// echo $yhc.' year<br />';
 ?>
 <div class="card">
 	<div class="card-header"><h1>Human Resource Department</h1></div>
@@ -62,6 +64,7 @@ $yp = WorkingHour::groupBy('year')->select('year')->get();
 						<th>Effective Date From</th>
 						<th>Effective Date To</th>
 						<th>Remarks</th>
+						<th>&nbsp;</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -75,6 +78,7 @@ $yp = WorkingHour::groupBy('year')->select('year')->get();
 						<td>{{ Carbon::parse($t->effective_date_start)->format('D, j M Y') }}</td>
 						<td>{{ Carbon::parse($t->effective_date_end)->format('D, j M Y') }}</td>
 						<td>{{ $t->remarks }}</td>
+						<td> <a class="btn btn-primary" href="{{ route('workingHour.edit', $t->id) }}"><i class="far fa-edit"></i></a> </td>
 					</tr>
 @endforeach
 				</tbody>
@@ -91,6 +95,7 @@ $yp = WorkingHour::groupBy('year')->select('year')->get();
 						<th>Effective Date From</th>
 						<th>Effective Date To</th>
 						<th>Remarks</th>
+						<th>&nbsp;</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -104,6 +109,7 @@ $yp = WorkingHour::groupBy('year')->select('year')->get();
 						<td>{{ Carbon::parse($t->effective_date_start)->format('D, j M Y') }}</td>
 						<td>{{ Carbon::parse($t->effective_date_end)->format('D, j M Y') }}</td>
 						<td>{{ $t->remarks }}</td>
+						<td> <a class="btn btn-primary" href="{{ route('workingHour.edit', $t->id) }}"><i class="far fa-edit"></i></a> </td>
 					</tr>
 @endforeach
 				</tbody>
@@ -111,14 +117,53 @@ $yp = WorkingHour::groupBy('year')->select('year')->get();
 			</table>
 		</div>
 		<div class="card-footer">
-			<a href="{{ route('workingHours.create') }}" class="btn btn-primary">Add Working Hour</a>
+			<a href="{{ route('workingHour.create') }}" class="btn btn-primary">Add Working Hour</a>
 		</div>
 	</div>
-
+		<br />
 		<div class="card">
 			<div class="card-header">Public Holiday For {{ config('app.name') }}</div>
-			<div class="card-body"></div>
-			<div class="card-footer"></div>
+			<div class="card-body">
+				<table class="table table-hover" style="font-size:12px">
+@foreach($yhc as $hi)
+@if($hi->yaer >= date('Y'))
+					<thead>
+						<tr>
+							<th class="text-center" colspan="4">Public Holiday ({{ $hi->yaer }})</th>
+						</tr>
+						<tr>
+							<th>From</th>
+							<th>To</th>
+							<th>Holiday</th>
+							<th>Period</th>
+							<th>&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+<?php
+$kj = HolidayCalendar::whereYear('date_start', $hi->yaer)->get();
+// echo $kj.' date based year<br />';
+?>
+@foreach( $kj as $ui )
+						<tr>
+							<td>{{ Carbon::parse($ui->date_start)->copy()->format('D, j F Y') }}</td>
+							<td>{{ Carbon::parse($ui->date_end)->copy()->format('D, j F Y') }}</td>
+							<td>{{ ucwords(strtolower($ui->holiday)) }}</td>
+							<td>{{ \Carbon\CarbonPeriod::create($ui->date_start, '1 day', $ui->date_end)->count().__(' Day/s') }}</td>
+							<td>
+								<a class="btn btn-primary" href="{{ route('holidayCalendar.edit', $ui->id) }}"><i class="far fa-edit"></i></a>
+								<a class="btn btn-primary" href="{{ route('holidayCalendar.destroy', $ui->id) }}"><i class="far fa-trash-alt"></i></a>
+							</td>
+						</tr>
+@endforeach
+					</tbody>
+@endif
+@endforeach
+				</table>
+			</div>
+			<div class="card-footer">
+				<a href="{{ route('holidayCalendar.create') }}" class="btn btn-primary">Add Public Holiday</a>
+			</div>
 		</div>
 
 	</div>

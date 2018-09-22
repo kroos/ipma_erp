@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AjaxRemote;
 use App\Http\Controllers\Controller;
 
 use App\Model\WorkingHour;
+use App\Model\StaffEmergencyPersonPhone;
 // use App\Model\Leave;
 
 use Illuminate\Http\Request;
@@ -246,6 +247,7 @@ class WorkingHourAjaxController extends Controller
 			'valid' => $valid
 		]);
 	}
+
 
 
 

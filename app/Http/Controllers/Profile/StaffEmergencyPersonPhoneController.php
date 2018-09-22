@@ -20,7 +20,7 @@ class StaffEmergencyPersonPhoneController extends Controller
     function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('useremergencyphone', ['except' => ['create', 'store']]);
+        // $this->middleware('useremergencyphone', ['except' => ['create', 'store']]);
     }
     
     /**

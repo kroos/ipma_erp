@@ -7,7 +7,7 @@
 		@include('layouts.info')
 		@include('layouts.errorform')
 
-{!! Form::open(['route' => ['workingHours.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
+{!! Form::open(['route' => ['workingHour.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
 	@include('workinghour._form')
 {{ Form::close() }}
 		
