@@ -10,14 +10,13 @@
 				</div>
 				<div class="card-body">
 
-					<div class="form-group row {{ $errors->has('image') ? ' has-error' : '' }}">
+<!-- 					<div class="form-group row {{ $errors->has('image') ? ' has-error' : '' }}">
 						{{ Form::label( 'image', 'Image : ', ['class' => 'col-sm-2 col-form-label'] ) }}
 						<div class="col-auto">
 							{{ Form::file( 'image', ['class' => 'form-control form-control-file', 'id' => 'image', 'placeholder' => 'Your Image']) }}
 						</div>
 					</div>
-
-
+ -->
 					<div class="row justify-content-center">
 						<div class="col-md-12">
 							<div class="card">

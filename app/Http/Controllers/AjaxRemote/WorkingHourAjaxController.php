@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 
 use App\Model\WorkingHour;
 use App\Model\StaffEmergencyPersonPhone;
-// use App\Model\Leave;
+use App\Model\HolidayCalendar;
 
 use Illuminate\Http\Request;
 
@@ -248,9 +248,33 @@ class WorkingHourAjaxController extends Controller
 		]);
 	}
 
+	public function hcaldstart(Request $request)
+	{
+		// echo $request->date_start;
+		$u = HolidayCalendar::all();
+		foreach($u as $p) {
+			echo $p->date_start;
+			echo $p->date_end;
+			$b = CarbonPeriod::create($p->date_start, '1 day')
+		}
+		return response()->json([
+			'valid' => false,
+		]);
+	}
 
-
-
+	public function hcaldend(Request $request)
+	{
+		// echo $request->date_end;
+		$u = HolidayCalendar::all();
+		foreach($u as $p) {
+			CarbonPeriod::create($p->date_start, '1 day');
+			echo $p->date_start;
+			echo $p->date_end;
+		}
+		return response()->json([
+			'valid' => false,
+		]);
+	}
 
 
 

@@ -27,7 +27,7 @@ class HolidayCalendarController extends Controller
 
 	public function create()
 	{
-		return view('workinghour.create');
+		return view('holidaycalendar.create');
 	}
 
 	public function store(Request $request)

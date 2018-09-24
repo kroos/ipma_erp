@@ -191,9 +191,9 @@ $('#form').bootstrapValidator({
 		},
 		cimb_account: {
 			validators: {
-				notEmpty: 	{
-					message: 'Sila masukkan nombor akaun CIMB anda. '
-				},
+//				notEmpty: 	{
+//					message: 'Sila masukkan nombor akaun CIMB anda. '
+//				},
 				stringLength: {
 					min: 10,
 					max: 10,

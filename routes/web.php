@@ -25,7 +25,71 @@ Route::get('/home', [
 
 ############################################################################
 // StaffProfile Controller
-Route::resource('staff', 'Profile\StaffProfileController');
+Route::resources([
+	'staff' => 'Profile\StaffProfileController',
+	'staffSpouse' => 'Profile\StaffSpouseController',
+	'staffSibling' => 'Profile\StaffSiblingController',
+	'staffChildren' => 'Profile\StaffChildrenController',
+	'staffEmergencyPerson' => 'Profile\StaffEmergencyPersonController',
+	'staffEmergencyPersonPhone' => 'Profile\StaffEmergencyPersonPhoneController',
+	'staffEducation' => 'Profile\StaffEducationController',
+	'staffAnnualMCLeave' => 'Administrative\HumanResource\StaffAnnualMCLeaveController',
+	'staffLeave' => 'Profile\StaffLeaveController',
+	'staffLeaveBackup' => 'Profile\StaffLeaveBackupController',
+	'staffLeaveApproval' => 'Profile\StaffLeaveApprovalController',
+	'workingHour' => 'Administrative\HumanResource\HRSettings\WorkingHourController',
+	'holidayCalendar' => 'Administrative\HumanResource\HRSettings\HolidayCalendarController',
+	
+]);
+
+############################################################################
+// Division Page Controller
+Route::resources([
+	'generalandadministrative' => 'Division\GeneralAndAdministrativeController',
+	'production' => 'Division\ProductionController',
+	'marketingandbusinessdevelopment' => 'Division\MarketingAndBusinessDevelopmentController'
+]);
+
+// Administrative page Controller
+Route::resources([
+	'account' => 'Administrative\AccountDepartmentController',
+	'purchasing' => 'Administrative\PurchasingDepartmentController',
+	'humanresource' => 'Administrative\HumanResourceDepartmentController',
+	'it' => 'Administrative\InformationTechnologyDepartmentController',
+]);
+
+// Production page controller
+Route::resources([
+	'cutting' => 'Production\CuttingDepartmentController',
+	'machining' => 'Production\MachiningDepartmentController',
+	'bending' => 'Production\BendingDepartmentController',
+	'welding' => 'Production\WeldingDepartmentController',
+	'painting' => 'Production\PaintingDepartmentController',
+	'automation' => 'Production\AutomationDepartmentController',
+	'qualitycontrol' => 'Production\QualityControlDepartmentController',
+	'assembly' => 'Production\AssemblyDepartmentController',
+	'delivery' => 'Production\DeliveryDepartmentController',
+	'maintenance' => 'Production\MaintenanceDepartmentController',
+	'inventory' => 'Production\InventoryDepartmentController',
+]);
+
+// SAles & Marketing Page Controller
+Route::resources([
+	'salesmarketing' => 'Sales\SalesMarketingDepartmentController',
+	'costing' => 'Sales\CostingDepartmentController',
+	'engineering' => 'Sales\EngineeringDepartmentController',
+	'custservice' => 'Sales\CustomerServiceDepartmentController',
+]);
+
+// human resources management
+Route::resources([
+   'leaveEditing' => 'Administrative\HumanResource\LeaveEditing\LeaveEditingController',		// this is for page
+   'tcms' => 'Administrative\HumanResource\TCMS\TCMSController',		// this is for page
+   'staffManagement' => 'Administrative\HumanResource\StaffManagement\StaffManagementController',		// this is for page
+   'hrSettings' => 'Administrative\HumanResource\HRSettings\HRSettingsController',		// this is for page
+]);
+
+############################################################################
 //remote
 Route::post('/staffSearch', [
 		'as' => 'staffSearch.search',
@@ -33,199 +97,11 @@ Route::post('/staffSearch', [
 	]);
 
 ############################################################################
-// StaffSpouse Controller
-Route::resource('staffSpouse', 'Profile\StaffSpouseController');
-
-############################################################################
-// StaffSpouse Controller
-Route::resource('staffSibling', 'Profile\StaffSiblingController');
-
-############################################################################
-// StaffChildren Controller
-Route::resource('staffChildren', 'Profile\StaffChildrenController');
-
-############################################################################
-// StaffEmergencyPerson Controller
-Route::resource('staffEmergencyPerson', 'Profile\StaffEmergencyPersonController');
-
-############################################################################
-// StaffEmergencyPersonPhone Controller
-Route::resource('staffEmergencyPersonPhone', 'Profile\StaffEmergencyPersonPhoneController');
-
-############################################################################
 //remote
 Route::post('/staffEmergencyPersonPhonesearch', [
 		'as' => 'staffEmergencyPersonPhone.search',
 		'uses' => 'Profile\StaffEmergencyPersonPhoneController@search'
 	]);
-
-############################################################################
-// StaffEducation Controller
-Route::resource('staffEducation', 'Profile\StaffEducationController');
-
-############################################################################
-// GeneralAndAdministrative Controller
-Route::get('/generalandadministrative', [
-		'as' => 'generalandadministrative.index',
-		'uses' => 'Division\GeneralAndAdministrativeController@index'
-	]);
-
-############################################################################
-// ProductionController Controller
-Route::get('/production', [
-		'as' => 'production.index',
-		'uses' => 'Division\ProductionController@index'
-	]);
-
-############################################################################
-// MarketingAndBusinessDevelopmentController Controller
-Route::get('/marketingandbusinessdevelopment', [
-		'as' => 'marketingandbusinessdevelopment.index',
-		'uses' => 'Division\MarketingAndBusinessDevelopmentController@index'
-	]);
-
-############################################################################
-// AccountDepartmentController Controller
-Route::get('/account', [
-		'as' => 'account.index',
-		'uses' => 'Administrative\AccountDepartmentController@index'
-	]);
-
-############################################################################
-// PurchasingDepartmentController Controller
-Route::get('/purchasing', [
-		'as' => 'purchasing.index',
-		'uses' => 'Administrative\PurchasingDepartmentController@index'
-	]);
-
-############################################################################
-// HumanResourceDepartmentController Controller
-Route::get('/humanresource', [
-		'as' => 'humanresource.index',
-		'uses' => 'Administrative\HumanResourceDepartmentController@index'
-	]);
-
-############################################################################
-// InformationTechnologyDepartmentController Controller
-Route::get('/it', [
-		'as' => 'it.index',
-		'uses' => 'Administrative\InformationTechnologyDepartmentController@index'
-	]);
-
-############################################################################
-// CuttingDepartmentController Controller
-Route::get('/cutting', [
-		'as' => 'cutting.index',
-		'uses' => 'Production\CuttingDepartmentController@index'
-	]);
-
-############################################################################
-// MachiningDepartmentController Controller
-Route::get('/machining', [
-		'as' => 'machining.index',
-		'uses' => 'Production\MachiningDepartmentController@index'
-	]);
-
-############################################################################
-// BendingDepartmentController Controller
-Route::get('/bending', [
-		'as' => 'bending.index',
-		'uses' => 'Production\BendingDepartmentController@index'
-	]);
-
-############################################################################
-// WeldingDepartmentController Controller
-Route::get('/welding', [
-		'as' => 'welding.index',
-		'uses' => 'Production\WeldingDepartmentController@index'
-	]);
-
-############################################################################
-// PaintingDepartmentController Controller
-Route::get('/painting', [
-		'as' => 'painting.index',
-		'uses' => 'Production\PaintingDepartmentController@index'
-	]);
-
-############################################################################
-// AutomationDepartmentController Controller
-Route::get('/automation', [
-		'as' => 'automation.index',
-		'uses' => 'Production\AutomationDepartmentController@index'
-	]);
-
-############################################################################
-// QualityControlDepartmentController Controller
-Route::get('/qualitycontrol', [
-		'as' => 'qualitycontrol.index',
-		'uses' => 'Production\QualityControlDepartmentController@index'
-	]);
-
-############################################################################
-// AssemblyDepartmentController Controller
-Route::get('/assembly', [
-		'as' => 'assembly.index',
-		'uses' => 'Production\AssemblyDepartmentController@index'
-	]);
-
-############################################################################
-// DeliveryDepartmentController Controller
-Route::get('/delivery', [
-		'as' => 'delivery.index',
-		'uses' => 'Production\DeliveryDepartmentController@index'
-	]);
-
-############################################################################
-// MaintenanceDepartmentController Controller
-Route::get('/maintenance', [
-		'as' => 'maintenance.index',
-		'uses' => 'Production\MaintenanceDepartmentController@index'
-	]);
-
-############################################################################
-// InventoryDepartmentController Controller
-Route::get('/inventory', [
-		'as' => 'inventory.index',
-		'uses' => 'Production\InventoryDepartmentController@index'
-	]);
-
-############################################################################
-// SalesMarketingDepartmentController Controller
-Route::get('/salesmarketing', [
-		'as' => 'salesmarketing.index',
-		'uses' => 'Sales\SalesMarketingDepartmentController@index'
-	]);
-
-############################################################################
-// CostingDepartmentController Controller
-Route::get('/costing', [
-		'as' => 'costing.index',
-		'uses' => 'Sales\CostingDepartmentController@index'
-	]);
-
-############################################################################
-// EngineeringDepartmentController Controller
-Route::get('/engineering', [
-		'as' => 'engineering.index',
-		'uses' => 'Sales\EngineeringDepartmentController@index'
-	]);
-
-############################################################################
-// CustomerServiceDepartmentController Controller
-Route::get('/custservice', [
-		'as' => 'custservice.index',
-		'uses' => 'Sales\CustomerServiceDepartmentController@index'
-	]);
-
-############################################################################
-// human resource dept
-// StaffAnnualMCLeave Controller
-Route::resource('staffAnnualMCLeave', 'Administrative\HumanResource\StaffAnnualMCLeaveController');
-
-############################################################################
-// human resource dept
-// StaffLeave Controller
-Route::resource('staffLeave', 'Profile\StaffLeaveController');
 
 ############################################################################
 // WorkingHour Ajax Controller
@@ -263,12 +139,18 @@ Route::post('/yearworkinghour2', [
 	]);
 
 ############################################################################
-// StaffLeaveBackup Controller
-Route::resource('staffLeaveBackup', 'Profile\StaffLeaveBackupController');
+// yearworkinghour Ajax Controller
+Route::post('/hcaldstart', [
+		'as' => 'workinghour.hcaldstart',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@hcaldstart'
+	]);
 
 ############################################################################
-// StaffLeaveApproval Controller
-Route::resource('staffLeaveApproval', 'Profile\StaffLeaveApprovalController');
+// yearworkinghour Ajax Controller
+Route::post('/hcaldend', [
+		'as' => 'workinghour.hcaldend',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@hcaldend'
+	]);
 
 ############################################################################
 // PrintPDFLeaves Controller
@@ -278,23 +160,10 @@ Route::get('printpdfleaves/{staffLeave}', [
 	]);
 
 ############################################################################
-// same as above but dont have to be that much
-// human resources management
-Route::resources([
-   'leaveEditing' => 'Administrative\HumanResource\LeaveEditing\LeaveEditingController',		// this is for page
-   'tcms' => 'Administrative\HumanResource\TCMS\TCMSController',		// this is for page
-   'staffManagement' => 'Administrative\HumanResource\StaffManagement\StaffManagementController',		// this is for page
-   'hrSettings' => 'Administrative\HumanResource\HRSettings\HRSettingsController',		// this is for page
+// Ajax Controller
+Route::apiResources([
+	'ajax' => 'API\AjaxController'
 ]);
-
-Route::resources([
-	'workingHour' => 'Administrative\HumanResource\HRSettings\WorkingHourController',
-	'holidayCalendar' => 'Administrative\HumanResource\HRSettings\HolidayCalendarController',
-]);
-
-
-
-
 
 
 

@@ -153,8 +153,8 @@ class WorkingHourController extends Controller
 				'remarks' => 'Maintenance - Half Day Leave'
 			],
 		]);
-        Session::flash('flash_message', 'Data successfully edited!');
-        return redirect( route('workingHour.index') );
+		Session::flash('flash_message', 'Data successfully edited!');
+		return redirect( route('workingHour.index') );
 	}
 
 	public function show(WorkingHour $workingHour)
@@ -169,7 +169,16 @@ class WorkingHourController extends Controller
 
 	public function update(Request $request, WorkingHour $workingHour)
 	{
-	//
+		$t = WorkingHour::where('id', $workingHour->id)->update([
+			'time_start_am' => Carbon::parse($request->time_start_am)->format('H:i:s'),
+			'time_end_am' => Carbon::parse($request->time_end_am)->format('H:i:s'),
+			'time_start_pm' => Carbon::parse($request->time_start_pm)->format('H:i:s'),
+			'time_end_pm' => Carbon::parse($request->time_end_pm)->format('H:i:s'),
+			'effective_date_start' => $request->effective_date_start,
+			'effective_date_end' => $request->effective_date_end,
+		]);
+		Session::flash('flash_message', 'Data successfully edited!');
+		return redirect( route('workingHour.index') );
 	}
 
 	public function destroy(WorkingHour $workingHour)

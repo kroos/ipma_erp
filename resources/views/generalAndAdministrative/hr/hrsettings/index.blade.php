@@ -48,7 +48,7 @@ $yhc = HolidayCalendar::groupBy('yaer')->selectRaw('YEAR(date_start) as yaer')->
 
 	<div class="card">
 		<div class="card-header">Working Hours</div>
-		<div class="card-body">
+		<div class="card-body table-responsive">
 			<table class="table table-hover" style="font-size:12px">
 @foreach($yp as $tp)
 				<thead>
@@ -117,13 +117,13 @@ $yhc = HolidayCalendar::groupBy('yaer')->selectRaw('YEAR(date_start) as yaer')->
 			</table>
 		</div>
 		<div class="card-footer">
-			<a href="{{ route('workingHour.create') }}" class="btn btn-primary">Add Working Hour</a>
+			 <a href="{{ route('workingHour.create') }}" class="btn btn-primary float-right">Add Working Hour</a>
 		</div>
 	</div>
 		<br />
 		<div class="card">
 			<div class="card-header">Public Holiday For {{ config('app.name') }}</div>
-			<div class="card-body">
+			<div class="card-body table-responsive">
 				<table class="table table-hover" style="font-size:12px">
 @foreach($yhc as $hi)
 @if($hi->yaer >= date('Y'))
@@ -162,7 +162,7 @@ $kj = HolidayCalendar::whereYear('date_start', $hi->yaer)->get();
 				</table>
 			</div>
 			<div class="card-footer">
-				<a href="{{ route('holidayCalendar.create') }}" class="btn btn-primary">Add Public Holiday</a>
+				<a href="{{ route('holidayCalendar.create') }}" class="btn btn-primary float-right">Add Public Holiday</a>
 			</div>
 		</div>
 

@@ -20,7 +20,6 @@
 									<h2 class="card-title">Butiran</h2>
 								</div>
 								<div class="card-body text-left table-responsive">
-
 <?php
 function my($string) {
 	if (empty($string))	{

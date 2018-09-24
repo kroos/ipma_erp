@@ -39,7 +39,7 @@ class StaffProfileRequest extends FormRequest
             'mobile' => 'required|numeric|unique:staffs,mobile,'.$this->staff['id'],
             'phone' => 'nullable|numeric',
             'dob' => 'required|date_format:Y-m-d',
-            'cimb_account' => 'required|digits:10||unique:staffs,cimb_account,'.$this->staff['id'],
+            'cimb_account' => 'nullable|digits:10||unique:staffs,cimb_account,'.$this->staff['id'],
             'epf_no' => 'nullable|alpha_num||unique:staffs,epf_no,'.$this->staff['id'],
             'income_tax_no' => 'nullable||unique:staffs,income_tax_no,'.$this->staff['id'],
         ];
