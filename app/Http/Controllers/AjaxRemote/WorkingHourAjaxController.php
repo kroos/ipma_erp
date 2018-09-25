@@ -290,6 +290,19 @@ class WorkingHourAjaxController extends Controller
 		]);
 	}
 
+	public function gender()
+	{
+		$er = App\Model\Gender::all();
+		// https://select2.org/data-sources/formats
+		foreach ($er as $key) {
+			$cuti['results'][] = [
+					'id' => $key->id,
+					'text' => $key->gender,
+			];
+			// $cuti['pagination'] = ['more' => true];
+		}
+		return response()->json( $cuti );
+	}
 
 
 

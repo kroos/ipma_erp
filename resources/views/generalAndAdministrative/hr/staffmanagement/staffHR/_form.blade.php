@@ -25,6 +25,20 @@
 			</div>
 		</div>
 
+		<div class="form-group row {{ $errors->has('password')?'has-error':'' }}">
+			{{ Form::label( 'uid', 'Gender : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+			<div class="col-sm-10">
+				<select name="gender_id" id="gid"></select>
+			</div>
+		</div>
+
+		<div class="form-group row {{ $errors->has('password')?'has-error':'' }}">
+			{{ Form::label( 'uid', 'Password : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+			<div class="col-sm-10">
+				{{ Form::text('password', @$value, ['class' => 'form-control', 'id' => 'uid', 'placeholder' => 'Password', 'autocomplete' => 'off']) }}
+			</div>
+		</div>
+
 		<div class="form-group row">
 			<div class="col-sm-10 offset-sm-2">
 				{!! Form::button('Save', ['class' => 'btn btn-primary btn-block', 'type' => 'submit']) !!}

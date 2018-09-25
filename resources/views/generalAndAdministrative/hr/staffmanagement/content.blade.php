@@ -70,7 +70,7 @@ if (!is_null($b->belongtomanyposition()->wherePivot('main', 1)->first() )) {
 					<td>{{ $f }}</td>
 					<td>{{ $g }}</td>
 					<td><i class="far fa-calendar-alt"></i></td>
-					<td></td>
+					<td><i class="fas fa-user-edit"></i></td>
 				</tr>
 @endforeach
 			</tbody>

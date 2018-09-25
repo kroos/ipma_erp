@@ -153,6 +153,13 @@ Route::post('/hcaldend', [
 	]);
 
 ############################################################################
+// yearworkinghour Ajax Controller
+Route::post('/gender', [
+		'as' => 'workinghour.gender',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@gender'
+	]);
+
+############################################################################
 // PrintPDFLeaves Controller
 Route::get('printpdfleaves/{staffLeave}', [
 		'as' => 'printpdfleave.show',
