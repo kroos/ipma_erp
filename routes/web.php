@@ -24,7 +24,6 @@ Route::get('/home', [
 	]);
 
 ############################################################################
-// StaffProfile Controller
 Route::resources([
 	'staff' => 'Profile\StaffProfileController',
 	'staffSpouse' => 'Profile\StaffSpouseController',
@@ -39,6 +38,7 @@ Route::resources([
 	'staffLeaveApproval' => 'Profile\StaffLeaveApprovalController',
 	'workingHour' => 'Administrative\HumanResource\HRSettings\WorkingHourController',
 	'holidayCalendar' => 'Administrative\HumanResource\HRSettings\HolidayCalendarController',
+	'staffHR' => 'Administrative\HumanResource\StaffManagement\StaffHRController',
 	
 ]);
 

@@ -33,18 +33,10 @@
 
 		<div class="card">
 			<div class="card-header">Staff Management</div>
-			<div class="card-body"></div>
+			<div class="card-body table-responsive">
+				@include('generalAndAdministrative.hr.staffmanagement.content')
+			</div>
 		</div>
-
-
-
-
-
-
-
-
-
-
 
 	</div>
 </div>
@@ -57,6 +49,13 @@ $("#username").keyup(function() {
 	uch(this);
 });
 
+/////////////////////////////////////////////////////////////////////////////////////////
+// table
+$('#staff').DataTable({
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	"order": [[0, "desc" ]],	// sorting the 4th column descending
+	// responsive: true
+});
 /////////////////////////////////////////////////////////////////////////////////////////
 @endsection
 
