@@ -141,7 +141,7 @@ $yhc = HolidayCalendar::groupBy('yaer')->selectRaw('YEAR(date_start) as yaer')->
 					</thead>
 					<tbody>
 <?php
-$kj = HolidayCalendar::whereYear('date_start', $hi->yaer)->get();
+$kj = HolidayCalendar::whereYear('date_start', $hi->yaer)->orderBy('date_start')->get();
 // echo $kj.' date based year<br />';
 ?>
 @foreach( $kj as $ui )
@@ -152,7 +152,7 @@ $kj = HolidayCalendar::whereYear('date_start', $hi->yaer)->get();
 							<td>{{ \Carbon\CarbonPeriod::create($ui->date_start, '1 day', $ui->date_end)->count().__(' Day/s') }}</td>
 							<td>
 								<a class="btn btn-primary" href="{{ route('holidayCalendar.edit', $ui->id) }}"><i class="far fa-edit"></i></a>
-								<a class="btn btn-primary" href="{{ route('holidayCalendar.destroy', $ui->id) }}"><i class="far fa-trash-alt"></i></a>
+								<button class="btn btn-primary delete_button" href="{{ route('holidayCalendar.destroy', $ui->id) }}" id="delete_product_{{ $ui->id }}" data-id="{{ $ui->id }}"><i class="far fa-trash-alt"></i></button>
 							</td>
 						</tr>
 @endforeach
@@ -179,6 +179,58 @@ $kj = HolidayCalendar::whereYear('date_start', $hi->yaer)->get();
 $("#username").keyup(function() {
 	uch(this);
 });
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row
+$(document).on('click', '.delete_button', function(e){
+	
+	var productId = $(this).data('id');
+	SwalDelete(productId);
+	e.preventDefault();
+});
+
+function SwalDelete(productId){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('holidayCalendar') }}' + '/' + productId,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: productId,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_product_' + productId).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////
 @endsection

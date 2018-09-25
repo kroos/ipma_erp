@@ -281,7 +281,7 @@
 	})
 
 /////////////////////////////////////////////////////////////////////////////////////////
-// ajac post delete row
+// ajax post delete row
 	// readProducts(); /* it will load products when document loads */
 
 	$(document).on('click', '.delete_button', function(e){
