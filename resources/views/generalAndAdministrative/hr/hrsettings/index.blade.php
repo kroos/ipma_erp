@@ -20,7 +20,7 @@ $yhc = HolidayCalendar::groupBy('yaer')->selectRaw('YEAR(date_start) as yaer')->
 		@include('layouts.errorform')
 
 		<ul class="nav nav-tabs">
-@foreach( App\Model\Division::find(1)->hasmanydepartment()->get() as $key)
+@foreach( App\Model\Division::find(1)->hasmanydepartment()->whereNotIn('id', [22, 23, 24])->get() as $key)
 			<li class="nav-item">
 				<a class="nav-link {{ ($key->id == 3)? 'active' : 'disabled' }}" href="{{ route("$key->route.index") }}">{{ $key->department }}</a>
 			</li>

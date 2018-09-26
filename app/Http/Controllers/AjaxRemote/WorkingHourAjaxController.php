@@ -292,20 +292,106 @@ class WorkingHourAjaxController extends Controller
 
 	public function gender()
 	{
-		$er = App\Model\Gender::all();
+		$er = \App\Model\Gender::all();
 		// https://select2.org/data-sources/formats
 		foreach ($er as $key) {
-			$cuti['results'][] = [
+			$gen['results'][] = [
 					'id' => $key->id,
 					'text' => $key->gender,
 			];
-			// $cuti['pagination'] = ['more' => true];
+			// $gen['pagination'] = ['more' => true];
 		}
-		return response()->json( $cuti );
+		return response()->json( $gen );
 	}
 
+	public function statusstaff()
+	{
+		$er = \App\Model\Status::where('id', '<>', 1)->get();
+		// https://select2.org/data-sources/formats
+		foreach ($er as $key) {
+			$stat['results'][] = [
+					'id' => $key->id,
+					'text' => $key->status,
+					'code' => $key->code,
+			];
+			// $stat['pagination'] = ['more' => true];
+		}
+		return response()->json( $stat );
+	}
 
+	public function location()
+	{
+		$loc = \App\Model\Location::all();
+		// https://select2.org/data-sources/formats
+		foreach ($loc as $key) {
+			$loc1['results'][] = [
+					'id' => $key->id,
+					'text' => $key->location,
+			];
+			// $loc1['pagination'] = ['more' => true];
+		}
+		return response()->json( $loc1 );
+	}
 
+	public function division()
+	{
+		$divs = \App\Model\Division::all();
+		// https://select2.org/data-sources/formats
+		foreach ($divs as $key) {
+			$div['results'][] = [
+				'id' => $key->id,
+				'text' => $key->division,
+			];
+			// $div['pagination'] = ['more' => true];
+		}
+		return response()->json( $div );
+	}
+
+	public function department(Request $request)
+	{
+		$depts = \App\Model\Department::where('division_id', $request->division_id)->get();
+		// https://select2.org/data-sources/formats
+		foreach ($depts as $key) {
+			// $dept['results'][] = [
+			// 		'id' => $key->id,
+			// 		'text' => $key->department,
+			// 		'division_id' => $key->division_id,
+			// ];
+			// $dept['pagination'] = ['more' => true];
+			$dept[$key->id] = $key->department;
+		}
+		return response()->json( $dept );
+	}
+
+	public function position(Request $request)
+	{
+		$poss = \App\Model\Position::where('department_id', $request->department_id)->get();
+		// https://select2.org/data-sources/formats
+		foreach ($poss as $key) {
+			// $pos['results'][] = [
+			// 		'id' => $key->id,
+			// 		'text' => $key->position,
+			// 		'department_id' => $key->department_id,
+			// ];
+			// $pos['pagination'] = ['more' => true];
+			$pos[$key->id] = $key->position;
+		}
+		return response()->json( $pos );
+	}
+
+	public function loginuser(Request $request)
+	{
+		$valid = true;
+		$log = \App\Model\Login::all();
+		foreach($log as $k) {
+			if($k->username == $request->username) {
+				$valid = false;
+			}
+		}
+		return response()->json([
+			'valid' => $valid,
+		]);
+	}
 
 
 

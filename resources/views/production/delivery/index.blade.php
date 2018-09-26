@@ -8,7 +8,7 @@
 		@include('layouts.errorform')
 
 		<ul class="nav nav-tabs">
-@foreach( App\Model\Division::find(2)->hasmanydepartment()->get() as $key)
+@foreach( App\Model\Division::find(2)->hasmanydepartment()->whereNotIn('id', [22, 23, 24])->get() as $key)
 			<li class="nav-item">
 				<a class="nav-link {{ ($key->id == 19)? 'active' : 'disabled' }}" href="{{ route("$key->route.index") }}">{{ $key->department }}</a>
 			</li>

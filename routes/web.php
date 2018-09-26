@@ -153,10 +153,52 @@ Route::post('/hcaldend', [
 	]);
 
 ############################################################################
-// yearworkinghour Ajax Controller
+// gender Ajax Controller
 Route::post('/gender', [
 		'as' => 'workinghour.gender',
 		'uses' => 'AjaxRemote\WorkingHourAjaxController@gender'
+	]);
+
+############################################################################
+// statusstaff Ajax Controller
+Route::post('/statusstaff', [
+		'as' => 'workinghour.statusstaff',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@statusstaff'
+	]);
+
+############################################################################
+// location Ajax Controller
+Route::post('/location', [
+		'as' => 'workinghour.location',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@location'
+	]);
+
+############################################################################
+// division Ajax Controller
+Route::post('/division', [
+		'as' => 'workinghour.division',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@division'
+	]);
+
+############################################################################
+// division Ajax Controller
+Route::get('/department', [
+		'as' => 'workinghour.department',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@department'
+	]);
+
+############################################################################
+// division Ajax Controller
+Route::get('/position', [
+		'as' => 'workinghour.position',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@position'
+	]);
+
+############################################################################
+// loginuser Ajax Controller
+Route::post('/loginuser', [
+		'as' => 'workinghour.loginuser',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@loginuser'
 	]);
 
 ############################################################################

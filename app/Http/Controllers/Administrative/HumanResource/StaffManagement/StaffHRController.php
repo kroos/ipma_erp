@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 
 // load model
 use App\Model\Staff;
+use App\Model\StaffAnnualMCLeave;
+use App\Model\Login;
+use App\Model\StaffPosition;
 
 use Illuminate\Http\Request;
 
@@ -39,6 +42,24 @@ class StaffHRController extends Controller
 	
 	public function store(Request $request)
 	{
+		print_r ($request->all());
+		// insert into 4 tables
+		// staff, login, staff_annual_MC_maternity_leaves, staff_positions
+// die();
+		$u = Staff::create( array_add($request->only(['name', 'status_id', 'gender_id', 'join_at', 'dob', 'location_id']), 'active', 1 ) );
+		$u->hasmanylogin()->create( array_add($request->only(['username', 'password']), 'active', 1) );
+		$u->hasmanystaffannualmcleave()->create([
+			'year' => date('Y'),
+			'annual_leave' => 0,
+			'annual_leave_adjustment' => 0,
+			'annual_leave_balance' => 0,
+			'medical_leave' => 0,
+			'medical_leave_adjustment' => 0,
+			'medical_leave_balance' => 0,
+			'maternity_leave' => 0,
+			'maternity_leave_balance' => 0
+		]);
+		$u->belongtomanyposition()->attach( $request->only(['position_id']), ['main' => 1] );
 	}
 	
 	public function show(Staff $staff)
