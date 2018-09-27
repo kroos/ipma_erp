@@ -417,16 +417,15 @@ $sib = \App\Model\StaffEducation::where('staff_id', $staff->id)->orderBy('from')
 @else
 										<p class="card-text text-justify">Sorry, no record for your educations. Please fill this form by clicking "Add Educations"</p>
 @endif
-								</div>
-								<div class="card-footer text-muted">
-									<p class="card-text text-center"><a href="{{ route('staffEducation.create') }}" class="btn btn-primary">Add Educations</a></p>
+									</div>
+									<div class="card-footer text-muted">
+										<p class="card-text text-center"><a href="{{ route('staffEducation.create') }}" class="btn btn-primary">Add Educations</a></p>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
 				</div>
-
 			</div>
 
 	</div>

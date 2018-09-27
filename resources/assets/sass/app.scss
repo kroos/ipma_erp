@@ -10,11 +10,11 @@
 @import '~select2/src/scss/core';
 @import '~select2-bootstrap4-theme/src/select2-bootstrap4';
 
-// font awesome 5
-@import "~fontawesome5-webfont/scss/fontawesome";
-@import "~fontawesome5-webfont/scss/fa-solid";
-@import "~fontawesome5-webfont/scss/fa-regular";
-@import "~fontawesome5-webfont/scss/fa-brands";
+// font fortawesome 5
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/regular";
+@import "~@fortawesome/fontawesome-free/scss/brands";
 
 // pc-bootstrap4-datetimepicker
 @import "~pc-bootstrap4-datetimepicker/src/sass/bootstrap-datetimepicker-build";

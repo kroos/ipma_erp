@@ -1,7 +1,5 @@
 <div class="card">
-	<div class="card-header">
-		<h2 class="card-title">Add Holiday Calendar</h2>
-	</div>
+	<div class="card-header">Add Holiday Calendar</div>
 	<div class="card-body">
 
 		<div class="row">

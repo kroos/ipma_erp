@@ -1,7 +1,5 @@
 <div class="card">
-	<div class="card-header">
-		<h2 class="card-title">Add Staff</h2>
-	</div>
+	<div class="card-header">Add Staff</div>
 	<div class="card-body">
 
 		<div class="form-group row {{ $errors->has('name')?'has-error':'' }}">
@@ -62,34 +60,24 @@
 <?php
 $divs = \App\Model\Division::pluck('division', 'id')->sortKeys()->toArray();
 ?>
-		<div class="container-fluid row">
-			<div class="col-sm-6">
-				<div class="col-sm-12">
-					<label class="col-sm-12" for="pos1">Main Position : </label>
-				</div>
-				<div class="form-group">
-					{{ Form::select( 'division_id', $divs, @$value, ['class' => 'form-control col-sm-12', 'id' => 'divid', 'placeholder' => 'Please choose', 'autocomplete' => 'off'] ) }}
-				</div>
-				<div class="form-group">
-					<select name="department_id" id="deptid" class="form-control col-sm-12" autocomplete="off"></select>
-				</div>
-				<div class="form-group">
-					<select name="position_id" id="posid" class="form-control col-sm-12" autocomplete="off"></select>
-				</div>
+		<div class="form-group row {{ $errors->has('division_id')?'has-error':'' }}">
+			{{ Form::label( 'divid', 'Division : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+			<div class="col-sm-10">
+				{{ Form::select( 'division_id', $divs, @$value, ['class' => 'form-control col-sm-12', 'id' => 'divid', 'placeholder' => 'Please choose', 'autocomplete' => 'off'] ) }}
 			</div>
-			<div class="col-sm-6">
-				<div class="col-sm-12">
-					<label class="col-sm-12" for="pos1">Secondary Position : </label>
-				</div>
-				<div class="form-group">
-					{{ Form::select( 'division_id_secondary', $divs, @$value, ['class' => 'form-control col-sm-12', 'id' => 'divid1', 'placeholder' => 'Please choose', 'autocomplete' => 'off'] ) }}
-				</div>
-				<div class="form-group">
-					<select name="department_id_secondary" id="deptid1" class="form-control col-sm-12" autocomplete="off"></select>
-				</div>
-				<div class="form-group">
-					<select name="position_id_secondary" id="posid1" class="form-control col-sm-12" autocomplete="off"></select>
-				</div>
+		</div>
+
+		<div class="form-group row {{ $errors->has('department_id')?'has-error':'' }}">
+			{{ Form::label( 'deptid', 'Department : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+			<div class="col-sm-10">
+				<select name="department_id" id="deptid" class="form-control col-sm-12" autocomplete="off"></select>
+			</div>
+		</div>
+
+		<div class="form-group row {{ $errors->has('position_id')?'has-error':'' }}">
+			{{ Form::label( 'posid', 'Main Position : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+			<div class="col-sm-10">
+				<select name="position_id" id="posid" class="form-control col-sm-12" autocomplete="off"></select>
 			</div>
 		</div>
 

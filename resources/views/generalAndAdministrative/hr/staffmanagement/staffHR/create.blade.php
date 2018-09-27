@@ -2,15 +2,47 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header"><h1>Add Staff</h1></div>
+	<div class="card-header"><h1>Human Resource Department</h1></div>
 	<div class="card-body">
+		@include('layouts.info')
+		@include('layouts.errorform')
+
+		<ul class="nav nav-tabs">
+@foreach( App\Model\Division::find(1)->hasmanydepartment()->whereNotIn('id', [22, 23, 24])->get() as $key)
+			<li class="nav-item">
+				<a class="nav-link {{ ($key->id == 3)? 'active' : 'disabled' }}" href="{{ route("$key->route.index") }}">{{ $key->department }}</a>
+			</li>
+@endforeach
+		</ul>
+
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a class="nav-link " href="{{ route('hrSettings.index') }}">Settings</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link active" href="{{ route('staffManagement.index') }}">Staff Management</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{{ route('leaveEditing.index') }}">Leave</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{{ route('tcms.index') }}">TCMS</a>
+			</li>
+		</ul>
+
+		<div class="card">
+			<div class="card-header">Staff Management</div>
+			<div class="card-body">
+
 		@include('layouts.info')
 		@include('layouts.errorform')
 
 {!! Form::open(['route' => ['staffHR.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
 	@include('generalAndAdministrative.hr.staffmanagement.staffHR._form')
 {{ Form::close() }}
-		
+
+			</div>
+		</div>
 	</div>
 </div>
 @endsection
@@ -79,11 +111,6 @@ $('#deptid').remoteChained({
 	url : "{{ route('workinghour.department') }}"
 });
 
-$('#deptid1').remoteChained({
-	parents: '#divid1',
-	url : "{{ route('workinghour.department') }}"
-});
-
 /////////////////////////////////////////////////////////////////////////////////////////
 // jquery chained
 $('#posid').remoteChained({
@@ -91,14 +118,9 @@ $('#posid').remoteChained({
 	url : "{{ route('workinghour.position') }}"
 });
 
-$('#posid1').remoteChained({
-	parents: '#deptid1',
-	url : "{{ route('workinghour.position') }}"
-});
-
 /////////////////////////////////////////////////////////////////////////////////////////
 //select2
-$('#divid,#divid1').select2({
+$('#divid').select2({
 	placeholder: 'Please choose',
 	allowClear: true,
 	closeOnSelect: true,
@@ -107,7 +129,7 @@ $('#divid,#divid1').select2({
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //select2
-$('#deptid,#deptid1').select2({
+$('#deptid').select2({
 	placeholder: 'Please choose',
 	allowClear: true,
 	closeOnSelect: true,
@@ -116,7 +138,7 @@ $('#deptid,#deptid1').select2({
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //select2
-$('#posid,#posid1').select2({
+$('#posid').select2({
 	placeholder: 'Please choose',
 	allowClear: true,
 	closeOnSelect: true,
@@ -168,6 +190,13 @@ $(document).ready(function() {
 					},
 				}
 			},
+			gender_id: {
+				validators : {
+					notEmpty: {
+						message: 'Please choose. '
+					},
+				}
+			},
 			username: {
 				validators : {
 					notEmpty: {
@@ -194,7 +223,7 @@ $(document).ready(function() {
 					},
 				}
 			},
-			join_date: {
+			join_at: {
 				validators: {
 					notEmpty: {
 						message: 'Please insert join date. '

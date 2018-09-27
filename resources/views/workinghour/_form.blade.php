@@ -1,7 +1,5 @@
 <div class="card">
-	<div class="card-header">
-		<h2 class="card-title">Add Working Hour</h2>
-	</div>
+	<div class="card-header">Add Working Hour</div>
 	<div class="card-body">
 
 		<div class="form-group row {{ ($errors->has('effective_date_start') || $errors->has('effective_date_end')) ? ' has-error' : '' }}">

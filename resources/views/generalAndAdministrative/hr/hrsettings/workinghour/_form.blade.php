@@ -1,8 +1,6 @@
 <div class="col-12">
 	<div class="card">
-		<div class="card-header">
-			<h2 class="card-title">Edit Working Hours</h2>
-		</div>
+		<div class="card-header">Edit Working Hours</div>
 		<div class="card-body">
 
 			<div class="form-group row {{ $errors->has('time') ? 'has-error' : '' }}">

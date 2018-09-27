@@ -125,7 +125,6 @@ $country = App\Model\Country::pluck('country', 'id')->sortKeys()->toArray();
 											{{ Form::select('country_id', $country, @$value, ['class' => 'form-control', 'id' => 'count', 'placeholder' => 'Please Select', 'autocomplete' => 'off']) }}
 										</div>
 									</div>
-
 <?php
 $marital = App\Model\MaritalStatus::pluck('marital_status', 'id')->sortKeys()->toArray();
 ?>

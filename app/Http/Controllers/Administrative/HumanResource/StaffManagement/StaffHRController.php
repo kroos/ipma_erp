@@ -62,13 +62,14 @@ class StaffHRController extends Controller
 		$u->belongtomanyposition()->attach( $request->only(['position_id']), ['main' => 1] );
 	}
 	
-	public function show(Staff $staff)
+	public function show(Staff $staffHR)
 	{
+		return view( 'generalAndAdministrative.hr.staffmanagement.staffHR.show', compact(['staffHR']) );
 	}
 	
-	public function edit(Staff $staff)
+	public function edit(Staff $staffHR)
 	{
-		return view('generalAndAdministrative.hr.staffmanagement.staffHR.edit', compact(['staff']));
+		return view('generalAndAdministrative.hr.staffmanagement.staffHR.edit', compact(['staffHR']));
 	}
 	
 	public function update(Request $request, Staff $staff)

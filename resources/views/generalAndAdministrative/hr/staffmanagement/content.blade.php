@@ -9,7 +9,7 @@ use Carbon\Carbon;
 $h = Staff::where('active', 1)->get();
 ?>
 <div class="card">
-	<div class="card-header">Staff List</div>
+	<div class="card-header">Active Staff List</div>
 	<div class="card-body">
 		<table class="table table-hover" style="font-size:12px" id="staff">
 			<thead>
@@ -21,7 +21,6 @@ $h = Staff::where('active', 1)->get();
 					<th>Division</th>
 					<th>Department</th>
 					<th>Position</th>
-					<th>Calendar</th>
 					<th>Action</th>
 				</tr>
 			</thead>
@@ -62,15 +61,22 @@ if (!is_null($b->belongtomanyposition()->wherePivot('main', 1)->first() )) {
 // echo $b->belongtomanyposition()->wherePivot('main', 1)->first()->belongtocategory->category;
 ?>
 				<tr>
-					<td>{{ $user }}</td>
+					<td>{{ $user }} - {{ $b->status_id }}</td>
 					<td>{{ $b->name }}</td>
 					<td>{{ $a }}</td>
 					<td>{{ $d }}</td>
 					<td>{{ $e }}</td>
 					<td>{{ $f }}</td>
 					<td>{{ $g }}</td>
-					<td><i class="far fa-calendar-alt"></i></td>
-					<td><i class="fas fa-user-edit"></i></td>
+					<td>
+						<a href="" title="Calendar" class="btn btn-primary"><i class="far fa-calendar-alt"></i></a>
+						<a href="{{ route('staffHR.show', $b->id) }}" title="Show" class="btn btn-primary"><i class="far fa-eye"></i></a>
+						<a href="{{ route('staffHR.edit', $b->id) }}" title="Edit" class="btn btn-primary"><i class="far fa-edit"></i></a>
+@if($b->status_id == 2)
+						<a href="" title="Promote" class="btn btn-primary"><i class="far fa-arrow-alt-circle-up"></i></a>
+@endif
+						<a href="" title="Disable" class="btn btn-primary"><i class="far fa-times-circle"></i></a>
+					</td>
 				</tr>
 @endforeach
 			</tbody>
@@ -78,5 +84,43 @@ if (!is_null($b->belongtomanyposition()->wherePivot('main', 1)->first() )) {
 	</div>
 	<div class="card-footer">
 		<a href="{{ route('staffHR.create') }}" class="btn btn-primary float-right">Add Staff</a>
+	</div>
+</div>
+<br />
+
+<div class="card">
+	<div class="card-header">Inactive Staff List</div>
+	<div class="card-body">
+		<table class="table table-hover" style="font-size:12px" id="staff">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Staff</th>
+					<th>Location</th>
+					<th>Category</th>
+					<th>Division</th>
+					<th>Department</th>
+					<th>Position</th>
+					<th>Calendar</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="card-footer">
+		<p>Link yet to be done</p>
 	</div>
 </div>
