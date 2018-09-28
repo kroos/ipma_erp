@@ -42,6 +42,17 @@ Route::resources([
 	
 ]);
 
+// editHR for staff
+Route::get('/staffHR/{staffHR}/editHR', [
+		'as' => 'staffHR.editHR',
+		'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@editHR'
+	]);
+
+Route::patch('/staffHR/{staffHR}/HR', [
+		'as' => 'staffHR.updateHR',
+		'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@updateHR'
+	]);
+
 ############################################################################
 // Division Page Controller
 Route::resources([

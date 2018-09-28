@@ -89,7 +89,7 @@ function my($string) {
 											<td scope="col">ID Pekerja :</td>
 											<td scope="col">{{ empty($staffHR->hasmanylogin()->where('active', 1)->first()->username)?'Not Set':$staffHR->hasmanylogin()->where('active', 1)->first()->username }}</td>
 										</tr>
-@foreach( \Auth::user()->belongtostaff->belongtomanyposition()->orderBy('staff_positions.main', 'desc')->get() as $val )
+@foreach( $staffHR->belongtomanyposition()->orderBy('staff_positions.main', 'desc')->get() as $val )
 										<tr>
 											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">Kategori :</td>
 											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">{{ empty($val->id)?'Not Set':$val->belongtocategory->category }}</td>

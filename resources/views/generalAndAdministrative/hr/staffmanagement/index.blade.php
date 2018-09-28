@@ -15,7 +15,6 @@
 @endforeach
 		</ul>
 
-
 		<ul class="nav nav-tabs">
 			<li class="nav-item">
 				<a class="nav-link " href="{{ route('hrSettings.index') }}">Settings</a>
@@ -34,10 +33,11 @@
 		<div class="card">
 			<div class="card-header">Staff Management</div>
 			<div class="card-body table-responsive">
+
 				@include('generalAndAdministrative.hr.staffmanagement.content')
+
 			</div>
 		</div>
-
 	</div>
 </div>
 @endsection

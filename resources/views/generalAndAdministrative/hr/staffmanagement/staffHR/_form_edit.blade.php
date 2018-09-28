@@ -5,7 +5,7 @@
 		<div class="form-group row {{ $errors->has('image') ? ' has-error' : '' }}">
 			{{ Form::label( 'image', 'Image : ', ['class' => 'col-sm-2 col-form-label'] ) }}
 			<div class="col-auto">
-				{{ Form::file( 'image', ['class' => 'form-control form-control-file', 'id' => 'image', 'placeholder' => 'Your Image']) }}
+				{{ Form::file( 'image', ['class' => 'form-control form-control-file', 'id' => 'image', 'placeholder' => 'Staff Image']) }}
 			</div>
 		</div>
 
@@ -25,7 +25,7 @@ $gids = \App\Model\Gender::pluck('gender', 'id')->sortKeys()->toArray();
 			</div>
 		</div>
 
-		<div class="form-group row {{ $errors->has('join_date')?'has-error':'' }}">
+		<div class="form-group row {{ $errors->has('join_at')?'has-error':'' }}">
 			{{ Form::label( 'jdate', 'Join Date : ', ['class' => 'col-sm-2 col-form-label'] ) }}
 			<div class="col-sm-10">
 				{{ Form::text('join_at', @$value, ['class' => 'form-control', 'id' => 'jdate', 'placeholder' => 'Join Date', 'autocomplete' => 'off']) }}

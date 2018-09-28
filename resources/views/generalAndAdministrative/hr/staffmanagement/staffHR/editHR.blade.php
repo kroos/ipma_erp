@@ -37,8 +37,8 @@
 		@include('layouts.info')
 		@include('layouts.errorform')
 
-{{ Form::model( $staffHR, ['route' => ['staffHR.update', $staffHR->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
-	@include('generalAndAdministrative.hr.staffmanagement.staffHR._form_edit')
+{{ Form::model( $staffHR, ['route' => ['staffHR.updateHR', $staffHR->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
+	@include('generalAndAdministrative.hr.staffmanagement.staffHR._form_edit_HR')
 {{ Form::close() }}
 		
 			</div>
@@ -55,34 +55,18 @@ $(document).on('keyup', '#hol ', function () {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
-//select2
-$('#gid').select2({
-	placeholder: 'Please choose',
-	allowClear: true,
-	closeOnSelect: true,
-	width: '100%',
-});
-
-/////////////////////////////////////////////////////////////////////////////////////////
-//select2
-$('#lid').select2({
-	placeholder: 'Please choose',
-	allowClear: true,
-	closeOnSelect: true,
-	width: '100%',
-});
-
-/////////////////////////////////////////////////////////////////////////////////////////
 // jquery chained
 $('#deptid').chainedTo('#divid');
+$('#deptid1').chainedTo('#divid1');
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // jquery chained
 $('#posid').chainedTo('#deptid');
+$('#posid1').chainedTo('#deptid1');
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //select2
-$('#divid').select2({
+$('#divid,#divid1').select2({
 	placeholder: 'Please choose',
 	allowClear: true,
 	closeOnSelect: true,
@@ -91,7 +75,7 @@ $('#divid').select2({
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //select2
-$('#deptid').select2({
+$('#deptid,#deptid1').select2({
 	placeholder: 'Please choose',
 	allowClear: true,
 	closeOnSelect: true,
@@ -100,21 +84,11 @@ $('#deptid').select2({
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //select2
-$('#posid').select2({
+$('#posid,#posid1').select2({
 	placeholder: 'Please choose',
 	allowClear: true,
 	closeOnSelect: true,
 	width: '100%',
-});
-
-/////////////////////////////////////////////////////////////////////////////////////////
-// join date
-$('#jdate').datetimepicker({
-	format:'YYYY-MM-DD',
-	useCurrent: false,
-})
-.on('dp.change dp.show dp.update', function() {
-	$('#form').bootstrapValidator('revalidateField', 'join_at');
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -127,69 +101,29 @@ $(document).ready(function() {
 			validating: ''
 		},
 		fields: {
-			image: {
-				validators: {
-					file: {
-						extension: 'jpeg,jpg,png,bmp',
-						type: 'image/jpeg,image/png,image/bmp',
-						maxSize: 2097152,	// 2048 * 1024,
-						message: 'The selected file is not valid. Please use jpeg or png and the image is below than 3MB. '
-					},
-				}
-			},
-			name: {
-				validators : {
-					notEmpty: {
-						message: 'Please insert name. '
-					},
-				}
-			},
-			gender_id: {
+
+			division_id: {
 				validators : {
 					notEmpty: {
 						message: 'Please choose. '
 					},
 				}
 			},
-			join_at: {
-				validators: {
-//					notEmpty: {
-//						message: 'Please insert join date. '
-//					},
-					date: {
-						format: 'YYYY-MM-DD',
-						message: 'The value is not a valid date. '
-					},
-				}
-			},
-			location_id: {
+			department_id: {
 				validators : {
 					notEmpty: {
 						message: 'Please choose. '
 					},
 				}
 			},
-			cimb_account: {
+			position_id: {
 				validators : {
-					integer: {
-						message: 'Please insert CIMB account. '
+					notEmpty: {
+						message: 'Please choose. '
 					},
 				}
 			},
-//			epf_no: {
-//				validators : {
-//					notEmpty: {
-//						message: 'Please insert KWSP No. '
-//					},
-//				}
-//			},
-//			income_tax_no: {
-//				validators : {
-//					notEmpty: {
-//						message: 'Please insert Income Tax No. '
-//					},
-//				}
-//			},
+
 		}
 	})
 	.find('[name="reason"]')

@@ -29,17 +29,17 @@ class StaffHRController extends Controller
 	{
 		$this->middleware('auth');
 	}
-	
+
 	public function index()
 	{
 	
 	}
-	
+
 	public function create()
 	{
 		return view('generalAndAdministrative.hr.staffmanagement.staffHR.create');
 	}
-	
+
 	public function store(Request $request)
 	{
 		print_r ($request->all());
@@ -66,19 +66,53 @@ class StaffHRController extends Controller
 	{
 		return view( 'generalAndAdministrative.hr.staffmanagement.staffHR.show', compact(['staffHR']) );
 	}
-	
+
 	public function edit(Staff $staffHR)
 	{
 		return view('generalAndAdministrative.hr.staffmanagement.staffHR.edit', compact(['staffHR']));
 	}
-	
-	public function update(Request $request, Staff $staff)
+
+	public function editHR(Staff $staffHR)
 	{
+		return view('generalAndAdministrative.hr.staffmanagement.staffHR.editHR', compact(['staffHR']));
+	}
+
+	public function update(Request $request, Staff $staffHR)
+	{
+		if( !is_null($request->file('image')) ) {
+			$filename = $request->file('image')->store('public/images/profiles');
+
+			$ass1 = explode('/', $filename);
+			$ass2 = array_except($ass1, ['0']);
+			$image = implode('/', $ass2);
+
+			$imag = Image::make(storage_path('app/'.$filename));
+
+			// resize the image to a height of 400 and constrain aspect ratio (auto width)
+			$imag->resize(null, 400, function ($constraint) {
+				$constraint->aspectRatio();
+			});
+
+			$imag->save();
+
+			$r = $staffHR->update( array_add($request->except(['_method', '_token', 'image']), 'image', $image) );
+		} else {
+			$r = $staffHR->update( $request->except(['_method', '_token', 'image']) );
+		}
+
 		Session::flash('flash_message', 'Data successfully edited!');
 		return redirect( route('staffManagement.index') );
 	}
-	
-	public function destroy(Staff $staff)
+
+	public function updateHR(Request $request, Staff $staffHR)
+	{
+		print_r($request->all());
+		echo '<br />';
+		print_r ($request->except(['_method', '_token']));
+		echo '<br />';
+	}
+
+	public function destroy(Staff $staffHR)
 	{
 	}
 }
