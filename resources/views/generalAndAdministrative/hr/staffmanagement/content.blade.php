@@ -61,7 +61,7 @@ if (!is_null($b->belongtomanyposition()->wherePivot('main', 1)->first() )) {
 // echo $b->belongtomanyposition()->wherePivot('main', 1)->first()->belongtocategory->category;
 ?>
 				<tr>
-					<td>{{ $user }} - {{ $b->status_id }}</td>
+					<td>{{ $user }}</td>
 					<td>{{ $b->name }}</td>
 					<td>{{ $a }}</td>
 					<td>{{ $d }}</td>

@@ -42,12 +42,12 @@ Route::resources([
 	
 ]);
 // createHR for staff
-Route::get('/staffHR/createHR', [
+Route::get('/createHR', [
 		'as' => 'staffHR.createHR',
 		'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@createHR'
 	]);
 // storeHR for staff
-Route::get('/staffHR/storeHR', [
+Route::post('/storeHR', [
 		'as' => 'staffHR.storeHR',
 		'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@storeHR'
 	]);
