@@ -41,13 +41,22 @@ Route::resources([
 	'staffHR' => 'Administrative\HumanResource\StaffManagement\StaffHRController',
 	
 ]);
-
+// createHR for staff
+Route::get('/staffHR/createHR', [
+		'as' => 'staffHR.createHR',
+		'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@createHR'
+	]);
+// storeHR for staff
+Route::get('/staffHR/storeHR', [
+		'as' => 'staffHR.storeHR',
+		'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@storeHR'
+	]);
 // editHR for staff
 Route::get('/staffHR/{staffHR}/editHR', [
 		'as' => 'staffHR.editHR',
 		'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@editHR'
 	]);
-
+// updateHR for staff
 Route::patch('/staffHR/{staffHR}/HR', [
 		'as' => 'staffHR.updateHR',
 		'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@updateHR'
