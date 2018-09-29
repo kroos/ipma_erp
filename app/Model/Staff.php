@@ -84,7 +84,7 @@ class Staff extends Model
 // https://laravel.com/docs/5.6/eloquent-relationships#many-to-many
     public function belongtomanyposition()
     {
-        return $this->belongsToMany('App\Model\Position', 'staff_positions', 'staff_id', 'position_id' )->withPivot('main')->withTimestamps();
+        return $this->belongsToMany('App\Model\Position', 'staff_positions', 'staff_id', 'position_id' )->withPivot('main')->withPivot('id')->withTimestamps();
     }
 
 

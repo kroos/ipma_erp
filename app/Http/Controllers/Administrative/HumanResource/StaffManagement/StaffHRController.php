@@ -61,16 +61,6 @@ class StaffHRController extends Controller
 		return redirect( route('staffManagement.index') );
 	}
 
-	public function createHR()
-	{
-		return view('generalAndAdministrative.hr.staffmanagement.staffHR.createHR');
-	}
-
-	public function storeHR(Request $request)
-	{
-		
-	}
-	
 	public function show(Staff $staffHR)
 	{
 		return view( 'generalAndAdministrative.hr.staffmanagement.staffHR.show', compact(['staffHR']) );
@@ -79,11 +69,6 @@ class StaffHRController extends Controller
 	public function edit(Staff $staffHR)
 	{
 		return view('generalAndAdministrative.hr.staffmanagement.staffHR.edit', compact(['staffHR']));
-	}
-
-	public function editHR(Staff $staffHR)
-	{
-		return view('generalAndAdministrative.hr.staffmanagement.staffHR.editHR', compact(['staffHR']));
 	}
 
 	public function update(Request $request, Staff $staffHR)
@@ -112,16 +97,50 @@ class StaffHRController extends Controller
 		Session::flash('flash_message', 'Data successfully edited!');
 		return redirect( route('staffManagement.index') );
 	}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+	public function createHR(Staff $staffHR)
+	{
+		return view('generalAndAdministrative.hr.staffmanagement.staffHR.createHR', compact(['staffHR']));
+	}
+
+	public function storeHR(Request $request, Staff $staffHR)
+	{
+		foreach( $request->staff as $key => $val ) {
+			if (!isset($val['main'])) {
+				$val['main'] = NULL;
+			}
+			$staffHR->belongtomanyposition()->attach( $val['position_id'], ['main' => $val['main']] );
+		}
+		Session::flash('flash_message', 'Data successfully edited!');
+		return redirect( route('staffManagement.index') );
+	}
+
+	public function editHR(Staff $staffHR)
+	{
+		return view('generalAndAdministrative.hr.staffmanagement.staffHR.editHR', compact(['staffHR']));
+	}
 
 	public function updateHR(Request $request, Staff $staffHR)
 	{
-		print_r($request->all());
-		echo '<br />';
-		print_r ($request->except(['_method', '_token']));
-		echo '<br />';
+		// buat kerja loqlaq, delete all then insert all from input
+		// use detach then attach
+		$staffHR->belongtomanyposition()->detach();
+		foreach( $request->staff as $key => $val ) {
+			if (!isset($val['main'])) {
+				$val['main'] = NULL;
+			}
+			$staffHR->belongtomanyposition()->attach( $val['position_id'], ['main' => $val['main']] );
+		}
+		Session::flash('flash_message', 'Data successfully edited!');
+		return redirect( route('staffManagement.index') );
 	}
-
+///////////////////////////////////////////////////////////////////////////////////////////////////
 	public function destroy(Staff $staffHR)
 	{
+		\App\Model\StaffPosition::destroy($staffHR->id);
+        return response()->json([
+                                    'message' => 'Data deleted',
+                                    'status' => 'success'
+                                ]);
 	}
 }

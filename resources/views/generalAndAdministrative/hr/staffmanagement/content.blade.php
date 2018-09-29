@@ -71,11 +71,7 @@ if (!is_null($b->belongtomanyposition()->wherePivot('main', 1)->first() )) {
 					<td>
 						<a href="" title="Calendar" class="btn btn-primary"><i class="far fa-calendar-alt"></i></a>
 						<a href="{{ route('staffHR.show', $b->id) }}" title="Show" class="btn btn-primary"><i class="far fa-eye"></i></a>
-@if( $b->belongtomanyposition()->get()->count() > 0 )
 						<a href="{{ route('staffHR.editHR', $b->id) }}" title="Edit" class="btn btn-primary"><i class="far fa-edit"></i></a>
-@else
-						<a href="{{ route('staffHR.createHR') }}" title="Edit" class="btn btn-primary"><i class="far fa-edit"></i></a>
-@endif
 
 @if($b->status_id == 2)
 						<a href="" title="Promote" class="btn btn-primary"><i class="far fa-arrow-alt-circle-up"></i></a>

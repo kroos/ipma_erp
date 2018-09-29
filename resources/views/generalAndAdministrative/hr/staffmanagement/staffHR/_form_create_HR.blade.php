@@ -1,5 +1,5 @@
 <?php
-$divs = \App\Model\Division::all();
+$divs = \App\Model\Division::pluck('division', 'id')->sortKeys()->toArray();
 $depts = \App\Model\Department::all();
 $poss = \App\Model\Position::all();
 ?>
@@ -8,23 +8,11 @@ $poss = \App\Model\Position::all();
 	<div class="card-body">
 
 		<div class="container-fluid position_wrap">
-<?php
-$i=0;
-$a=0;
-$b=0;
-$c=0;
-$d=0;
-$e=0;
-$f=0;
-$g=0;
-?>
-@if($staffHR->belongtomanyposition()->orderBy('staff_positions.main', 'desc')->get()->count() > 0)
-@foreach($staffHR->belongtomanyposition()->orderBy('staff_positions.main', 'desc')->get() as $val)
 			<div class="rowposition">
 				<div class="row col-sm-12">
 
 					<div class="col-sm-1">
-						<button class="btn btn-danger delete_position" type="button" id="button_delete_{{ $val->pivot->id }}" data-id="{{ $val->pivot->id }}">
+						<button class="btn btn-danger remove_position" type="button">
 							<i class="fas fa-trash" aria-hidden="true"></i>
 						</button>
 					</div>
@@ -35,24 +23,20 @@ $g=0;
 
 					<div class="col-sm-1">
 						<div class="form-group {{ $errors->has('staff.*.main') ? 'has-error' : '' }}">
-							<input class="form-check-input" type="radio" name="staff[][main]" id="main_{{ $i++ }}" value="1" {{ ($val->pivot->main == 1)?'checked':'' }} required="required"><label for="main_{{ $a++ }}">Main Position</label>
+							<input class="form-check-input" type="radio" name="staff[][main]" id="main_1" value="1" required="required"><label for="main_1">Main Position</label>
 						</div>
 					</div>
 					<div class="col-sm-2">
 						<div class="form-group {{ $errors->has('staff.*.division_id') ? 'has-error' : '' }}">
-							<select name="staff[{{ $b++ }}][division_id]" id="division_id_{{ $c++ }}" class="form-control">
-@foreach( $divs as $l )
-								<option value="{{ $l->id }}" {{ ($l->id == $val->belongtodivision->id)?'selected':'' }}>{{ $l->division }}</option>
-@endforeach
-							</select>
+							{{ Form::select('staff[1][division_id]', $divs, @$value, ['class' => 'form-control', 'id' => 'division_id_1', 'placeholder' => 'Please choose division', 'autocomplete' => 'off']) }}
 						</div>
 					</div>
 
 					<div class="col-sm-2">
 						<div class="form-group {{ $errors->has('staff.*.department_id') ? 'has-error' : '' }}">
-							<select name="staff[{{ $d++ }}][department_id]" id="department_id_{{ $e++ }}" class="form-control">
+							<select name="staff[1][department_id]" id="department_id_1" class="form-control">
 @foreach($depts as $de)
-								<option value="{{ $de->id }}" data-chained="{{ $de->division_id }}" {{ ($de->id == $val->belongtodepartment->id)?'selected':'' }}>{{ $de->department }}</option>
+								<option value="{{ $de->id }}" data-chained="{{ $de->division_id }}">{{ $de->department }}</option>
 @endforeach
 							</select>
 						</div>
@@ -60,9 +44,9 @@ $g=0;
 
 					<div class="col-sm-3">
 						<div class="form-group {{ $errors->has('staff.*.position_id') ? 'has-error' : '' }}">
-							<select name="staff[{{ $f++ }}][position_id]" id="position_id_{{ $g++ }}" class="form-control">
+							<select name="staff[1][position_id]" id="position_id_1" class="form-control">
 @foreach($poss as $po)
-								<option value="{{ $po->id }}" data-chained="{{ $po->department_id }}" {{ ($po->id == $val->id)?'selected':'' }}>{{ $po->position }}</option>
+								<option value="{{ $po->id }}" data-chained="{{ $po->department_id }}">{{ $po->position }}</option>
 @endforeach
 							</select>
 						</div>
@@ -70,8 +54,6 @@ $g=0;
 
 				</div>
 			</div>
-@endforeach
-@endif
 		</div>
 		<div class="row col-lg-12">
 			<p>

@@ -37,9 +37,10 @@
 		@include('layouts.info')
 		@include('layouts.errorform')
 
-{{ Form::model( $staffHR, ['route' => ['staffHR.updateHR', $staffHR->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
-	@include('generalAndAdministrative.hr.staffmanagement.staffHR._form_edit_HR')
+{{ Form::model( $staffHR, ['route' => ['staffHR.storeHR', $staffHR->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
+	@include('generalAndAdministrative.hr.staffmanagement.staffHR._form_create_HR')
 {{ Form::close() }}
+
 			</div>
 		</div>
 	</div>
@@ -48,44 +49,39 @@
 
 @section('js')
 /////////////////////////////////////////////////////////////////////////////////////////
-// jquery chained to
-<?php
-$a=0;
-$b=0;
-$c=0;
-$d=0;
-$e=0;
-$f=0;
-$g=0;
-$h=0;
-$i=0;
-$j=0;
-?>
-@foreach($staffHR->belongtomanyposition()->orderBy('staff_positions.main', 'desc')->get() as $val)
-	$('#department_id_{{ $a++ }}').chainedTo('#division_id_{{ $b++ }}');
-	$('#position_id_{{ $d++ }}').chainedTo('#department_id_{{ $c++ }}');
+// jquery chained
+$('#department_id_1').chainedTo('#division_id_1');
 
-	$('#division_id_{{ $e++ }}').select2({
-		placeholder: 'Please choose',
-		allowClear: true,
-		closeOnSelect: true,
-		width: '100%',
-	});
-	
-	$('#department_id_{{ $f++ }}').select2({
-		placeholder: 'Please choose',
-		allowClear: true,
-		closeOnSelect: true,
-		width: '100%',
-	});
-	
-	$('#position_id_{{ $g++ }}').select2({
-		placeholder: 'Please choose',
-		allowClear: true,
-		closeOnSelect: true,
-		width: '100%',
-	});
-@endforeach
+/////////////////////////////////////////////////////////////////////////////////////////
+// jquery chained
+$('#position_id_1').chainedTo('#department_id_1');
+
+/////////////////////////////////////////////////////////////////////////////////////////
+//select2
+$('#division_id_1').select2({
+	placeholder: 'Please choose',
+	allowClear: true,
+	closeOnSelect: true,
+	width: '100%',
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
+//select2
+$('#department_id_1').select2({
+	placeholder: 'Please choose',
+	allowClear: true,
+	closeOnSelect: true,
+	width: '100%',
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
+//select2
+$('#position_id_1').select2({
+	placeholder: 'Please choose',
+	allowClear: true,
+	closeOnSelect: true,
+	width: '100%',
+});
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // add position : add and remove row
@@ -99,7 +95,7 @@ var max_fields      = 3; //maximum input boxes allowed
 var add_buttons	= $(".add_position");
 var wrappers	= $(".position_wrap");
 
-var xs = {{ $g }};
+var xs = 1;
 $(add_buttons).click(function(){
 	// e.preventDefault();
 
@@ -120,7 +116,7 @@ $(add_buttons).click(function(){
 					'</div>' +
 					'<div class="col-sm-1">' +
 						'<div class="form-group {{ $errors->has('staff.*.main') ? 'has-error' : '' }}">' +
-							'<input class="form-check-input" type="radio" name="staff[][main]" id="main_' + xs + '" value="1" required><label for="main_' + xs + '">Main Position</label>' +
+							'<input class="form-check-input" type="radio" name="staff[][main]" id="main_' + xs + '" value="1" ><label for="main_' + xs + '">Main Position</label>' +
 						'</div>' +
 					'</div>' +
 					'<div class="col-sm-2">' +
@@ -209,58 +205,6 @@ $(wrappers).on("click",".remove_position", function(e){
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////
-// ajax post delete row
-$(document).on('click', '.delete_position', function(e){
-	
-	var productId = $(this).data('id');
-	SwalDelete(productId);
-	e.preventDefault();
-});
-
-function SwalDelete(productId){
-	swal({
-		title: 'Are you sure?',
-		text: "It will be deleted permanently!",
-		type: 'warning',
-		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
-		cancelButtonColor: '#d33',
-		confirmButtonText: 'Yes, delete it!',
-		showLoaderOnConfirm: true,
-
-		preConfirm: function() {
-			return new Promise(function(resolve) {
-				$.ajax({
-					url: '{{ url('staffHR') }}' + '/' + productId,
-					type: 'DELETE',
-					data: {
-							_token : $('meta[name=csrf-token]').attr('content'),
-							id: productId,
-					},
-					dataType: 'json'
-				})
-				.done(function(response){
-					swal('Deleted!', response.message, response.status)
-					.then(function(){
-						window.location.reload(true);
-					});
-					//$('#delete_product_' + productId).parent().parent().remove();
-				})
-				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
-				})
-			});
-		},
-		allowOutsideClick: false			  
-	})
-	.then((result) => {
-		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
-		}
-	});
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////
 // validator
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
@@ -270,6 +214,7 @@ $(document).ready(function() {
 			validating: ''
 		},
 		fields: {
+@for($i = 1; $i <= 3; $i++)
 			'staff[][main]': {
 				validators: {
 					notEmpty: {
@@ -277,42 +222,43 @@ $(document).ready(function() {
 					}
 				}
 			},
-@foreach($staffHR->belongtomanyposition()->orderBy('staff_positions.main', 'desc')->get() as $val)
-			'staff[{{ $h++ }}][division_id]': {
+			'staff[{{ $i }}][division_id]': {
 				validators : {
 					notEmpty: {
 						message: 'Please choose. '
 					},
 				}
 			},
-			'staff[{{ $i++ }}][department_id]': {
+			'staff[{{ $i }}][department_id]': {
 				validators : {
 					notEmpty: {
 						message: 'Please choose. '
 					},
 				}
 			},
-			'staff[{{ $j++ }}][position_id]': {
+			'staff[{{ $i }}][position_id]': {
 				validators : {
 					notEmpty: {
 						message: 'Please choose. '
 					},
 				}
 			},
-@endforeach
+@endfor
 		}
 	})
-	// .find('[name="reason"]')
+	.find('[name="reason"]')
 	// .ckeditor()
 	// .editor
 	//	.on('change', function() {
-		// Revalidate the bio field
+	//		// Revalidate the bio field
 	//	$('#form').bootstrapValidator('revalidateField', 'reason');
 	//	console.log($('#reason').val());
-	// })
+	//})
 	;
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+
+
 @endsection
 
