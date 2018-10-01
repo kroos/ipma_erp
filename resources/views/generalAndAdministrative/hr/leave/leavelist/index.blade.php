@@ -1,5 +1,8 @@
+@extends('generalAndAdministrative.hr.leave.index')
+
 @section('content1')
-<ul class="nav nav-pills">
+
+<ul class="nav nav-tabs">
 	<li class="nav-item">
 		<a class="nav-link" href="{{ route('leaveSetting.index') }}">Settings</a>
 	</li>
@@ -7,7 +10,7 @@
 		<a class="nav-link" href="{{ route('leaveNRL.index') }}">Non Replacement Leave</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="{{ route('leaveList.index') }}">Leave List</a>
+		<a class="nav-link dropdown-toggle active" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="{{ route('leaveList.index') }}">Leave List</a>
 		<div class="dropdown-menu">
 			<a class="dropdown-item" href="#">Action</a>
 			<a class="dropdown-item" href="#">Another action</a>
@@ -22,4 +25,15 @@
 </ul>
 
 
-@show
+@endsection
+
+@section('js')
+/////////////////////////////////////////////////////////////////////////////////////////
+//ucwords
+$("#username").keyup(function() {
+	uch(this);
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
+@endsection
+

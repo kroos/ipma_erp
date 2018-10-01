@@ -128,8 +128,8 @@ Route::resources([
 // leave editing page controller
 Route::resources([
 	'leaveSetting' => 'Administrative\HumanResource\LeaveEditing\Settings\LeaveSettingController',
-	'leaveList' => 'Administrative\HumanResource\LeaveEditing\LeaveList\LeaveListController',
 	'leaveNRL' => 'Administrative\HumanResource\LeaveEditing\NRL\LeaveNRLController',
+	'leaveList' => 'Administrative\HumanResource\LeaveEditing\LeaveList\LeaveListController',
 ]);
 ############################################################################
 //remote
