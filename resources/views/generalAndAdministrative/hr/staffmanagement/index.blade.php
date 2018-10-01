@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
+<?php
+ini_set('max_execution_time', 180); //3 minutes
+?>
 <div class="card">
 	<div class="card-header"><h1>Human Resource Department</h1></div>
 	<div class="card-body">
