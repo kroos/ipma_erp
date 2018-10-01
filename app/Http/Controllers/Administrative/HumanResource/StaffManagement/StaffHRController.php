@@ -98,23 +98,6 @@ class StaffHRController extends Controller
 		return redirect( route('staffManagement.index') );
 	}
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-	public function createHR(Staff $staffHR)
-	{
-		return view('generalAndAdministrative.hr.staffmanagement.staffHR.createHR', compact(['staffHR']));
-	}
-
-	public function storeHR(Request $request, Staff $staffHR)
-	{
-		foreach( $request->staff as $key => $val ) {
-			if (!isset($val['main'])) {
-				$val['main'] = NULL;
-			}
-			$staffHR->belongtomanyposition()->attach( $val['position_id'], ['main' => $val['main']] );
-		}
-		Session::flash('flash_message', 'Data successfully edited!');
-		return redirect( route('staffManagement.index') );
-	}
-
 	public function editHR(Staff $staffHR)
 	{
 		return view('generalAndAdministrative.hr.staffmanagement.staffHR.editHR', compact(['staffHR']));
@@ -131,16 +114,71 @@ class StaffHRController extends Controller
 			}
 			$staffHR->belongtomanyposition()->attach( $val['position_id'], ['main' => $val['main']] );
 		}
+		if (!is_null($request->leave_need_backup)) {
+			$staffHR->update(['leave_need_backup' => $request->leave_need_backup]);
+		}
 		Session::flash('flash_message', 'Data successfully edited!');
 		return redirect( route('staffManagement.index') );
 	}
+
+	public function disableHR(Staff $staffHR)
+	{
+		$staffHR->hasmanylogin()->where('active', 1)->update(['active' => 0]);
+		$staffHR->update(['active' => 0]);
+		return response()->json([
+			'message' => 'Data deleted',
+			'status' => 'success'
+		]);
+	}
+
+	public function promoteHR(Staff $staffHR)
+	{
+		return view('generalAndAdministrative.hr.staffmanagement.staffHR.promoteHR', compact(['staffHR']));
+	}
+
+	public function promoteupdateHR(Request $request, Staff $staffHR)
+	{
+		// 1. get the the id
+		$id = $staffHR->hasmanylogin()->where('active', 1)->first()->id;
+
+		// 2. disable old login
+		$staffHR->hasmanylogin()->where('id', $id)->update(['active' => 0]);
+		$pass = $staffHR->hasmanylogin()->where('id', $id)->first()->password;
+
+		// 3. insert new Login
+		$staffHR->hasmanylogin()->create([
+			'username' => $request->username,
+			'password' => $pass,
+			'active' => 1
+		]);
+
+		// 4. change status at staff model
+		$staffHR->update(['status_id' => 1]);
+// die();
+		// 5. update the staff_annual_MC_maternity_leave
+		$staffHR->hasmanystaffannualmcleave()->where('year', date('Y'))->updateOrCreate(
+			['year' => date('Y')],
+			[
+				'annual_leave' => $request->annual_leave,
+				'annual_leave_balance' => $request->annual_leave,
+				'medical_leave' => $request->medical_leave,
+				'medical_leave_balance' => $request->medical_leave,
+				'maternity_leave' => '60',
+				'maternity_leave_balance' => '60',
+			]
+		);
+		Session::flash('flash_message', 'Data successfully edited!');
+		return redirect( route('staffManagement.index') );
+	}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 	public function destroy(Staff $staffHR)
 	{
 		\App\Model\StaffPosition::destroy($staffHR->id);
-        return response()->json([
-                                    'message' => 'Data deleted',
-                                    'status' => 'success'
-                                ]);
+		return response()->json([
+			'message' => 'Data deleted',
+			'status' => 'success'
+		]);
 	}
 }
+

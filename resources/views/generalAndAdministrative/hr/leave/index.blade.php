@@ -33,7 +33,9 @@
 
 		<div class="card">
 			<div class="card-header">Leaves Management</div>
-			<div class="card-body"></div>
+			<div class="card-body">
+				@include('generalAndAdministrative.hr.leave.content')
+			</div>
 		</div>
 
 

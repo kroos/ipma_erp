@@ -71,6 +71,8 @@ $g=0;
 				</div>
 			</div>
 @endforeach
+@else
+		<p>Please click on "Add More Position" to begin</p>
 @endif
 		</div>
 		<div class="row col-lg-12">
@@ -80,6 +82,29 @@ $g=0;
 				</button>
 			</p>
 		</div>
+<?php
+// echo $staffHR->belongtomanyposition()->wherePivot('main', 1)->first();
+$d = $staffHR->belongtomanyposition()->wherePivot('main', 1)->first();
+?>
+@if( !is_null($d) )
+@if( ($d->group_id == 7 && $d->category_id != 1) || $d->group_id == 5 || $d->group_id == 6)
+		<div class="form-group row">
+			<div class="col-sm-10 offset-sm-2">
+
+				<div class="pretty p-icon p-round p-smooth">
+					<input type="checkbox" />
+					<input type='hidden' value='0' name='leave_need_backup'>
+					{{ Form::checkbox('leave_need_backup', 1, @$value) }}
+					<div class="state p-success">
+						<i class="icon mdi mdi-check"></i>
+						<label>This User Need Backup?</label>
+					</div>
+				</div>
+
+			</div>
+		</div>
+@endif
+@endif
 
 		<div class="form-group row">
 			<div class="col-sm-10 offset-sm-2">

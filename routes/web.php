@@ -62,6 +62,22 @@ Route::patch('/staffHR/{staffHR}/HR', [
 		'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@updateHR'
 	]);
 
+// promoteHR for staff
+Route::get('/staffHR/{staffHR}/promoteHR', [
+		'as' => 'staffHR.promoteHR',
+		'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@promoteHR'
+	]);
+// promoteupdateHR for staff
+Route::patch('/staffHR/{staffHR}/promoteupdateHR', [
+		'as' => 'staffHR.promoteupdateHR',
+		'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@promoteupdateHR'
+	]);
+
+Route::delete('disableHR/{staffHR}', [
+		'as' => 'staffHR.disableHR',
+		'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@disableHR'
+]);
+
 ############################################################################
 // Division Page Controller
 Route::resources([
@@ -109,6 +125,9 @@ Route::resources([
    'hrSettings' => 'Administrative\HumanResource\HRSettings\HRSettingsController',		// this is for page
 ]);
 
+Route::resources([
+	'leavesetting' => 'Administrative\HumanResource\LeaveEditing\LeaveEditingController',
+]);
 ############################################################################
 //remote
 Route::post('/staffSearch', [

@@ -86,7 +86,6 @@ $j=0;
 		width: '100%',
 	});
 @endforeach
-
 /////////////////////////////////////////////////////////////////////////////////////////
 // add position : add and remove row
 <?php
@@ -126,6 +125,7 @@ $(add_buttons).click(function(){
 					'<div class="col-sm-2">' +
 						'<div class="form-group {{ $errors->has('staff.*.division_id') ? 'has-error' : '' }}">' +
 							'<select name="staff[' + xs + '][division_id]" id="division_id_' + xs + '" class="form-control">' +
+								'<option value="">Please choose</option>' +
 @foreach($divs as $di)
 								'<option value="{{ $di->id }}">{{ $di->division }}</option>' +
 @endforeach
@@ -135,6 +135,7 @@ $(add_buttons).click(function(){
 					'<div class="col-sm-2">' +
 						'<div class="form-group {{ $errors->has('staff.*.department_id') ? 'has-error' : '' }}">' +
 							'<select name="staff[' + xs + '][department_id]" id="department_id_' + xs + '" class="form-control">' +
+								'<option value="">Please choose</option>' +
 @foreach($depts as $de)
 								'<option value="{{ $de->id }}" data-chained="{{ $de->division_id }}">{{ $de->department }}</option>' +
 @endforeach
@@ -144,6 +145,7 @@ $(add_buttons).click(function(){
 					'<div class="col-sm-3">' +
 						'<div class="form-group {{ $errors->has('staff.*.position_id') ? 'has-error' : '' }}">' +
 							'<select name="staff[' + xs + '][position_id]" id="position_id_' + xs + '" class="form-control">' +
+								'<option value="">Please choose</option>' +
 @foreach($poss as $po)
 								'<option value="{{ $po->id }}" data-chained="{{ $po->department_id }}">{{ $po->position }}</option>' +
 @endforeach
