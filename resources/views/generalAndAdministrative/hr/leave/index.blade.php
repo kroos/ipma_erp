@@ -38,16 +38,6 @@
 			</div>
 		</div>
 
-
-
-
-
-
-
-
-
-
-
 	</div>
 </div>
 @endsection
@@ -60,5 +50,60 @@ $("#username").keyup(function() {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+$('#leaves').DataTable({
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	// "order": [[5, "desc" ]],	// sorting the 4th column descending
+	// responsive: true
+	"ordering": false
+});
+
+$('#leaves1').DataTable({
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	// "order": [[5, "desc" ]],	// sorting the 4th column descending
+	// responsive: true
+	"ordering": false
+});
+
+$('#leaves2').DataTable({
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	// "order": [[5, "desc" ]],	// sorting the 4th column descending
+	// responsive: true
+	"ordering": false
+});
+
+$('#leaves3').DataTable({
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	// "order": [[5, "desc" ]],	// sorting the 4th column descending
+	// responsive: true
+	"ordering": false
+});
+
+$('#leaves4').DataTable({
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	// "order": [[5, "desc" ]],	// sorting the 4th column descending
+	// responsive: true
+	"ordering": false
+});
+
+$('#leaves5').DataTable({
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	// "order": [[5, "desc" ]],	// sorting the 4th column descending
+	// responsive: true
+	"ordering": false
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
+$('#selectAll').on('click',function(){
+	if(this.checked){
+		$('.checkbox').each(function(){
+			this.checked = true;
+		});
+	}else{
+		$('.checkbox').each(function(){
+			this.checked = false;
+		});
+	}
+});
+
 @endsection
 

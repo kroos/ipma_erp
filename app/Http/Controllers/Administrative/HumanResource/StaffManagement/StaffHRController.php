@@ -107,13 +107,18 @@ class StaffHRController extends Controller
 	{
 		// buat kerja loqlaq, delete all then insert all from input
 		// use detach then attach
+		print_r($request->staff);
+		echo '<br />';
 		$staffHR->belongtomanyposition()->detach();
-		foreach( $request->staff as $key => $val ) {
+		foreach( $request->staff as $key => $val) {
 			if (!isset($val['main'])) {
 				$val['main'] = NULL;
 			}
 			$staffHR->belongtomanyposition()->attach( $val['position_id'], ['main' => $val['main']] );
+			// echo $val['main'].'<br />';
+			echo $val['position_id'].' key<br />';
 		}
+		// die();
 		if (!is_null($request->leave_need_backup)) {
 			$staffHR->update(['leave_need_backup' => $request->leave_need_backup]);
 		}

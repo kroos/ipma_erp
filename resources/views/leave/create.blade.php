@@ -68,7 +68,7 @@ $('#leave_id').on('change', function() {
 	// $('#opt_price').val($selection.data('price'));
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// annnual leave
+	// annual leave
 	if ($selection.val() == '1' || $selection.val() == '3') {
 
 		$('#form').bootstrapValidator('removeField', $('.datetime').find('[name="date_time_start"]'));
@@ -166,7 +166,7 @@ $('#leave_id').on('change', function() {
 			format:'YYYY-MM-DD',
 			// format:'LT',
 			// viewMode: 'years',
-			// useCurrent: true,
+			useCurrent: false,
 			daysOfWeekDisabled: [0],
 			minDate: moment().add(3, 'days').format('YYYY-MM-DD'),
 			disabledDates: 
@@ -410,7 +410,7 @@ foreach ($nodate1 as $key) {
 		// enable datetime for the 1st one
 		$('#from').datetimepicker({
 			format:'YYYY-MM-DD',
-			useCurrent: true,
+			useCurrent: false,
 			daysOfWeekDisabled: [0],
 			disabledDates:[
 <?php
@@ -442,7 +442,7 @@ foreach ($nodate1 as $key) {
 		$('#to').datetimepicker({
 			useCurrent: false,
 			format:'YYYY-MM-DD',
-			useCurrent: true,
+			useCurrent: false,
 			daysOfWeekDisabled: [0],
 			disabledDates:[
 <?php
@@ -564,7 +564,7 @@ $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave
 		// enable datetime for the 1st one
 		$('#from').datetimepicker({
 			format:'YYYY-MM-DD',
-			// useCurrent: true,
+			useCurrent: false,
 			daysOfWeekDisabled: [0],
 			disabledDates:[
 <?php
@@ -1398,7 +1398,7 @@ foreach ($nodate1 as $key) {
 		// enable datetime for the 1st one
 		$('#from').datetimepicker({
 			format:'YYYY-MM-DD',
-			useCurrent: true,
+			useCurrent: false,
 			daysOfWeekDisabled: [0],
 			disabledDates:[
 <?php
@@ -1430,7 +1430,7 @@ foreach ($nodate1 as $key) {
 		$('#to').datetimepicker({
 			useCurrent: false,
 			format:'YYYY-MM-DD',
-			useCurrent: true,
+			useCurrent: false,
 			daysOfWeekDisabled: [0],
 			disabledDates:[
 <?php

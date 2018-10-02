@@ -35,7 +35,7 @@ $g=0;
 
 					<div class="col-sm-1">
 						<div class="form-group {{ $errors->has('staff.*.main') ? 'has-error' : '' }}">
-							<input class="form-check-input" type="radio" name="staff[][main]" id="main_{{ $i++ }}" value="1" {{ ($val->pivot->main == 1)?'checked':'' }} required="required"><label for="main_{{ $a++ }}">Main Position</label>
+							<input class="form-check-input" type="radio" name="staff[1][main]" id="main_{{ $i++ }}" value="1" {{ ($val->pivot->main == 1)?'checked':'' }} required="required"><label for="main_{{ $a++ }}">Main Position</label>
 						</div>
 					</div>
 					<div class="col-sm-2">
