@@ -177,7 +177,7 @@ class StaffHRController extends Controller
 	}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-	public function destroy(Staff $staffHR)
+	public function destroy(StaffPosition $staffHR)
 	{
 		\App\Model\StaffPosition::destroy($staffHR->id);
 		return response()->json([
