@@ -119,7 +119,7 @@ $(add_buttons).click(function(){
 					'</div>' +
 					'<div class="col-sm-1">' +
 						'<div class="form-group {{ $errors->has('staff.*.main') ? 'has-error' : '' }}">' +
-							'<input class="form-check-input" type="radio" name="staff[1][main]" id="main_' + xs + '" value="1" required><label for="main_' + xs + '">Main Position</label>' +
+							'<input class="form-check-input" type="radio" name="staff[][main]" id="main_' + xs + '" value="1" required><label for="main_' + xs + '">Main Position</label>' +
 						'</div>' +
 					'</div>' +
 					'<div class="col-sm-2">' +
