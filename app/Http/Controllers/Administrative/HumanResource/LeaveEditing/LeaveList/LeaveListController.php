@@ -35,22 +35,21 @@ class LeaveListController extends Controller
 	//
 	}
 
-	public function show(Leave $leave)
+	public function show(StaffLeave $staffLeave)
 	{
 	//
 	}
 
-	public function edit(Leave $leave)
+	public function edit(StaffLeave $staffLeave)
+	{
+	}
+
+	public function update(Request $request, StaffLeave $staffLeave)
 	{
 	//
 	}
 
-	public function update(Request $request, Leave $leave)
-	{
-	//
-	}
-
-	public function destroy(Leave $leave)
+	public function destroy(StaffLeave $staffLeave)
 	{
 	//
 	}

@@ -39,7 +39,13 @@ Route::resources([
 	'workingHour' => 'Administrative\HumanResource\HRSettings\WorkingHourController',
 	'holidayCalendar' => 'Administrative\HumanResource\HRSettings\HolidayCalendarController',
 	'staffHR' => 'Administrative\HumanResource\StaffManagement\StaffHRController',
+	'staffLeaveHR' => 'Administrative\HumanResource\LeaveEditing\StaffLeaveHRController',
 	
+]);
+// received hardcopy
+Route::post('/staffLeaveHR', [
+	'as' => 'staffLeaveHR.updateRHC',
+	'uses' => 'Profile\StaffLeaveController@updateRHC'
 ]);
 // createHR for staff
 Route::get('/createHR/{staffHR}', [

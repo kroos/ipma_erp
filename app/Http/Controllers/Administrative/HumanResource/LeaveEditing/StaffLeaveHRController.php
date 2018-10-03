@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Administrative\HumanResource;
+namespace App\Http\Controllers\Administrative\HumanResource\LeaveEditing;
+
+use App\Http\Controllers\Controller;
 
 use App\Model\StaffLeave;
 use Illuminate\Http\Request;
 
-class StaffLeaveController extends Controller
+class StaffLeaveHRController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -57,7 +59,7 @@ class StaffLeaveController extends Controller
      */
     public function edit(StaffLeave $staffLeave)
     {
-        //
+return view('generalAndAdministrative.hr.leave.leavelist.edit');
     }
 
     /**

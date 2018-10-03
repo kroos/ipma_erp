@@ -1,6 +1,6 @@
-@extends('generalAndAdministrative.hr.leave.index')
+@extends('layouts.app')
 
-@section('content1')
+@section('content')
 
 <ul class="nav nav-tabs">
 	<li class="nav-item">
@@ -24,6 +24,12 @@
 	</li>
 </ul>
 
+<div class="card">
+	<div class="card-header">Edit Leave For </div>
+	<div class="card-body">
+		include
+	</div>
+</div>
 
 @endsection
 

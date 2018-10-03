@@ -4,8 +4,6 @@
 <div class="card">
 	<div class="card-header"><h1>Human Resource Department</h1></div>
 	<div class="card-body">
-		@include('layouts.info')
-		@include('layouts.errorform')
 
 		<ul class="nav nav-tabs">
 @foreach( App\Model\Division::find(1)->hasmanydepartment()->whereNotIn('id', [22, 23, 24])->get() as $key)
@@ -14,7 +12,6 @@
 			</li>
 @endforeach
 		</ul>
-
 
 		<ul class="nav nav-tabs">
 			<li class="nav-item">
@@ -65,7 +62,7 @@ $('#leaves1').DataTable({
 });
 
 $('#leaves2').DataTable({
-	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	"lengthMenu": [ [20, 25, 50, -1], [20, 25, 50, "All"] ],
 	// "order": [[5, "desc" ]],	// sorting the 4th column descending
 	// responsive: true
 	"ordering": false

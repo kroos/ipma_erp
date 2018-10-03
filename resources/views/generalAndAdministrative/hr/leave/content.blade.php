@@ -1,13 +1,25 @@
-@section('content1')
 @php
 use \App\Model\Staff;
 use \App\Model\StaffLeave;
 use Carbon\Carbon;
 
-$sl = StaffLeave::where('active', 1)->where('created_at', '>=', Carbon::now()->copy()->startOfYear())->orderBy('date_time_start', 'desc')->get();
-$sl1 = StaffLeave::where('active', 2)->where('created_at', '>=', Carbon::now()->copy()->startOfYear())->orderBy('date_time_start', 'desc')->get();
-$sl2 = StaffLeave::where('active', 3)->where('created_at', '>=', Carbon::now()->copy()->startOfYear())->orderBy('date_time_start', 'desc')->get();
-$sl3 = StaffLeave::where('active', 4)->where('created_at', '>=', Carbon::now()->copy()->startOfYear())->orderBy('date_time_start', 'desc')->get();
+$bor = Carbon::now();
+$bmonth = $bor->month;
+// echo $bmonth.' now <br />';
+// echo Carbon::create($bor->year, $bor->month, $bor->day, 0, 0, 0)->subMonth()->copy()->startOfMonth().' from start of last month<br />';
+
+if ( $bmonth != 1 ) {
+	$sl = StaffLeave::where('active', 1)->where('created_at', '>=', Carbon::now()->copy()->startOfYear())->orderBy('date_time_start', 'desc')->get();
+	$sl1 = StaffLeave::where('active', 2)->where('created_at', '>=', Carbon::now()->copy()->startOfYear())->orderBy('date_time_start', 'desc')->get();
+	$sl2 = StaffLeave::where('active', 3)->where('created_at', '>=', Carbon::now()->copy()->startOfYear())->orderBy('date_time_start', 'desc')->get();
+	$sl3 = StaffLeave::where('active', 4)->where('created_at', '>=', Carbon::now()->copy()->startOfYear())->orderBy('date_time_start', 'desc')->get();
+} else {
+	// if its in january, check the create date from early last month : 1 December, so can capture the leaves.
+	$sl = StaffLeave::where('active', 1)->where('created_at', '>=', Carbon::create($bor->year, $bor->month, $bor->day, 0, 0, 0)->subMonth()->copy()->startOfMonth() )->orderBy('date_time_start', 'desc')->get();
+	$sl1 = StaffLeave::where('active', 2)->where('created_at', '>=', Carbon::create($bor->year, $bor->month, $bor->day, 0, 0, 0)->subMonth()->copy()->startOfMonth() )->orderBy('date_time_start', 'desc')->get();
+	$sl2 = StaffLeave::where('active', 3)->where('created_at', '>=', Carbon::create($bor->year, $bor->month, $bor->day, 0, 0, 0)->subMonth()->copy()->startOfMonth() )->orderBy('date_time_start', 'desc')->get();
+	$sl3 = StaffLeave::where('active', 4)->where('created_at', '>=', Carbon::create($bor->year, $bor->month, $bor->day, 0, 0, 0)->subMonth()->copy()->startOfMonth() )->orderBy('date_time_start', 'desc')->get();
+}
 @endphp
 <ul class="nav nav-pills">
 	<li class="nav-item">
@@ -41,7 +53,7 @@ $sl3 = StaffLeave::where('active', 4)->where('created_at', '>=', Carbon::now()->
 		<table class="table table-hover table-sm" id="leaves" style="font-size:12px">
 			<thead>
 				<tr class="text-center">
-					<th colspan="13">Incoming Leaves</th>
+					<th colspan="13"><h3>Incoming Leaves</h3></th>
 				</tr>
 				<tr>
 					<th rowspan="2">ID</th>
@@ -119,7 +131,7 @@ if( !empty($stl->hasonestaffleavebackup) ) {
 @if($n1->lt($h1))
 				<tr>
 					<td>
-						HR9-{{ str_pad( $stl->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}
+						<a href="{{ route('staffLeaveHR.edit', $stl->id) }}">HR9-{{ str_pad( $stl->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}</a>
 							<br />
 					</td>
 					<td>{{ $stl->belongtostaff->name }}</td>
@@ -158,7 +170,7 @@ if( !empty($stl->hasonestaffleavebackup) ) {
 		<table class="table table-hover table-sm" id="leaves1" style="font-size:12px">
 			<thead>
 				<tr class="text-center">
-					<th colspan="13">Today Leaves</th>
+					<th colspan="13"><h3>Today Leaves</h3></th>
 				</tr>
 				<tr>
 					<th rowspan="2">ID</th>
@@ -187,6 +199,8 @@ $n = Carbon::now();
 $n1 = Carbon::create($n->year, $n->month, $n->day, 0 ,0 ,0);
 $h = Carbon::parse($stl1->date_time_start);
 $h1 = Carbon::create($h->year, $h->month, $h->day, 0 ,0 ,0);
+$e = Carbon::parse($stl1->date_time_end);
+$e1 = Carbon::create($e->year, $e->month, $e->day, 0 ,0 ,0);
 
 $dts = \Carbon\Carbon::parse($stl1->created_at)->format('Y');
 $arr = str_split( $dts, 2 );
@@ -233,7 +247,7 @@ if( !empty($stl1->hasonestaffleavebackup) ) {
 }
 ?>
 @if($stl1->belongtostaff->active == 1 )
-@if($n1->eq($h1))
+@if($n1->gte($h1) && $n1->lte($e1))
 				<tr>
 					<td>
 						HR9-{{ str_pad( $stl1->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}
@@ -273,11 +287,11 @@ if( !empty($stl1->hasonestaffleavebackup) ) {
 	<br />
 
 
-{!! Form::open(['route' => ['staffLeave.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true,  'data-toggle' => 'validator']) !!}
+{!! Form::open(['route' => ['staffLeaveHR.updateRHC'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true,  'data-toggle' => 'validator']) !!}
 		<table class="table table-hover table-sm" id="leaves2" style="font-size:12px">
 			<thead>
 				<tr class="text-center">
-					<th colspan="14">Past Leaves</th>
+					<th colspan="14"><h3>Past Leaves</h3></th>
 				</tr>
 				<tr>
 					<th rowspan="2"><input type="checkbox" id="selectAll"><label for="selectAll">Received Hardcopy</label></th>
@@ -305,7 +319,7 @@ if( !empty($stl1->hasonestaffleavebackup) ) {
 <?php
 $n = Carbon::now();
 $n1 = Carbon::create($n->year, $n->month, $n->day,0 ,0 ,0);
-$nn = Carbon::now()->subDays(3);
+$nn = Carbon::now()->subDays(2);	// 2 hari selepas bercuti
 $nn1 = Carbon::create($nn->year, $nn->month, $nn->day,0 ,0 ,0);
 $h = Carbon::parse($stl11->date_time_start);
 $h1 = Carbon::create($h->year, $h->month, $h->day,0 ,0 ,0);
@@ -357,7 +371,7 @@ if( !empty($stl11->hasonestaffleavebackup) ) {
 }
 ?>
 @if($stl11->belongtostaff->active == 1 )
-@if($n1->gt($h1))
+@if($n1->gt($j1))
 				<tr>
 					<td>
 @if($nn1->gte($j1))
@@ -402,15 +416,20 @@ if( !empty($stl11->hasonestaffleavebackup) ) {
 			</tbody>
 			<tfoot>
 				<tr>
-					<th colspan="14">{!! Form::button('Save', ['class' => 'btn btn-primary', 'type' => 'submit']) !!}</th>
+					<th colspan="14">{!! Form::button('Received Hardcopy', ['class' => 'btn btn-primary', 'type' => 'submit']) !!}</th>
 				</tr>
 			</tfoot>
 		</table>
+{!! Form::close() !!}
+
+
+
+
 	<br />
 		<table class="table table-hover table-sm" id="leaves3" style="font-size:12px">
 			<thead>
 				<tr class="text-center">
-					<th colspan="13">Closed Leaves</th>
+					<th colspan="13"><h3>Closed Leaves</h3></th>
 				</tr>
 				<tr>
 					<th rowspan="2">ID</th>
@@ -519,7 +538,7 @@ if( !empty($stl0->hasonestaffleavebackup) ) {
 		<table class="table table-hover table-sm" id="leaves4" style="font-size:12px">
 			<thead>
 				<tr class="text-center">
-					<th colspan="13">Cancelled Leaves</th>
+					<th colspan="13"><h3>Cancelled Leaves</h3></th>
 				</tr>
 				<tr>
 					<th rowspan="2">ID</th>
@@ -628,7 +647,7 @@ if( !empty($stl2->hasonestaffleavebackup) ) {
 		<table class="table table-hover table-sm" id="leaves5" style="font-size:12px">
 			<thead>
 				<tr class="text-center">
-					<th colspan="13">Rejected Leaves</th>
+					<th colspan="13"><h3>Rejected Leaves</h3></th>
 				</tr>
 				<tr>
 					<th rowspan="2">ID</th>
@@ -739,5 +758,3 @@ if( !empty($stl3->hasonestaffleavebackup) ) {
 
 	</div>
 </div>
-
-@show

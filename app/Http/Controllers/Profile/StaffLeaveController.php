@@ -1182,6 +1182,15 @@ class StaffLeaveController extends Controller
 		}
 	}
 
+	public function updateRHC(Request $request)
+	{
+		foreach ($request->hardcopy as $key) {
+			StaffLeave::where('id', $key)->update(['hardcopy' => 1]);
+		}
+		Session::flash('flash_message', 'Data successfully inserted.');
+		return redirect()->route('leaveEditing.index');
+	}
+
 	/**
 	* Remove the specified resource from storage.
 	*
