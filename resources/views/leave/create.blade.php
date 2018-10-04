@@ -29,21 +29,29 @@
 <?php
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // use for backup in append html and ajax.
-$usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
 $userloc = \Auth::user()->belongtostaff->location_id;
 // echo $userloc.'<-- location_id<br />';
 $userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
 
 // this is the strategy
 // 1. pull from their department
+$usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
 $lm = $usergroup->department_id;
 
-// find all personnel from that department
-$user = \App\Model\Staff::where('active', 1)->get();
-foreach ($user as $ey) {
-	echo $ey->belongtomanyposition()->wherePivot('main', 1)->get();
+$hj = \Auth::user()->belongtostaff->belongtomanyposition()->get();
+foreach ($hj as $key) {
+	echo $key->department_id.', ';
+	$user = \App\Model\Staff::where('active', 1)->where('id', '<>', \Auth::user()->belongtostaff->id)->where('location_id', $userloc)->where('leave_need_backup', 1)->get();
+	foreach ($user as $ey) {		// user is active, same location, need backup and not self
+		// $oi = $ey->belongtomanyposition()->wherePivot('main', 1)->where('department_id', $key->department_id)->get();
+		$oi = $ey->belongtomanyposition()->where('department_id', $key->department_id)->get();
+		foreach($oi as $nb) {	// got another user which is in the same department and same location of self
+			// echo $nb->pivot->staff_id.' test';
+			$bv = \App\Model\Staff::find($nb->pivot->staff_id)->name;
+			$sel[$nb->pivot->staff_id] = $bv;
+		}
+	}
 }
-
 
 // BACKUP
 // justify for those who doesnt have department
@@ -64,9 +72,9 @@ foreach ($user as $ey) {
 //			}
 //		}
 //	}
-//	if (empty($sel)) {
+	if (empty($sel)) {	// apa sebab empty? dalam department, dia sorang saja..
 		$sel = array();
-//	}
+	}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // block holiday tgk dlm disable date in datetimepicker
