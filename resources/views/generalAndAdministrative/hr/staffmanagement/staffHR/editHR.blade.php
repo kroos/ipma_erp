@@ -94,11 +94,15 @@ $depts = \App\Model\Department::all();
 $poss = \App\Model\Position::all();
 ?>
 
-var max_fields      = 3; //maximum input boxes allowed
+var max_fields	= 3; //maximum input boxes allowed
 var add_buttons	= $(".add_position");
 var wrappers	= $(".position_wrap");
 
+@if( $a > 0 )
 var xs = 0;
+@else
+var xs = -1;
+@endif
 $(add_buttons).click(function(){
 	// e.preventDefault();
 
@@ -213,7 +217,6 @@ $(wrappers).on("click",".remove_position", function(e){
 /////////////////////////////////////////////////////////////////////////////////////////
 // ajax post delete row
 $(document).on('click', '.delete_position', function(e){
-	
 	var productId = $(this).data('id');
 	SwalDelete(productId);
 	e.preventDefault();
@@ -279,29 +282,34 @@ $(document).ready(function() {
 					}
 				}
 			},
-@foreach($staffHR->belongtomanyposition()->orderBy('staff_positions.main', 'desc')->get() as $val)
-			'staff[{{ $h++ }}][division_id]': {
+<?php
+$t1 = 0;
+$t2 = 0;
+$t3 = 0;
+?>
+@for( $q1=0; $q1<=3; $q1++ )
+			'staff[{{ $t1++ }}][division_id]': {
 				validators : {
 					notEmpty: {
 						message: 'Please choose. '
 					},
 				}
 			},
-			'staff[{{ $i++ }}][department_id]': {
+			'staff[{{ $t2++ }}][department_id]': {
 				validators : {
 					notEmpty: {
 						message: 'Please choose. '
 					},
 				}
 			},
-			'staff[{{ $j++ }}][position_id]': {
+			'staff[{{ $t3++ }}][position_id]': {
 				validators : {
 					notEmpty: {
 						message: 'Please choose. '
 					},
 				}
 			},
-@endforeach
+@endfor
 		}
 	})
 	// .find('[name="reason"]')

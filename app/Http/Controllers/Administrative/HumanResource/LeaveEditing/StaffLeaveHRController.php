@@ -46,7 +46,7 @@ class StaffLeaveHRController extends Controller
      * @param  \App\Model\StaffLeave  $staffLeave
      * @return \Illuminate\Http\Response
      */
-    public function show(StaffLeave $staffLeave)
+    public function show(StaffLeave $staffLeaveHR)
     {
         //
     }
@@ -57,9 +57,9 @@ class StaffLeaveHRController extends Controller
      * @param  \App\Model\StaffLeave  $staffLeave
      * @return \Illuminate\Http\Response
      */
-    public function edit(StaffLeave $staffLeave)
+    public function edit(StaffLeave $staffLeaveHR)
     {
-return view('generalAndAdministrative.hr.leave.leavelist.edit');
+        return view('generalAndAdministrative.hr.leave.leavelist.edit', compact(['staffLeaveHR']));
     }
 
     /**
@@ -69,7 +69,7 @@ return view('generalAndAdministrative.hr.leave.leavelist.edit');
      * @param  \App\Model\StaffLeave  $staffLeave
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, StaffLeave $staffLeave)
+    public function update(Request $request, StaffLeave $staffLeaveHR)
     {
         //
     }
@@ -80,7 +80,7 @@ return view('generalAndAdministrative.hr.leave.leavelist.edit');
      * @param  \App\Model\StaffLeave  $staffLeave
      * @return \Illuminate\Http\Response
      */
-    public function destroy(StaffLeave $staffLeave)
+    public function destroy(StaffLeave $staffLeaveHR)
     {
         //
     }

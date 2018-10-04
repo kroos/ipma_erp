@@ -152,7 +152,7 @@ $('#jdate').datetimepicker({
 	useCurrent: false,
 })
 .on('dp.change dp.show dp.update', function() {
-	$('#form').bootstrapValidator('revalidateField', 'join_date');
+	$('#form').bootstrapValidator('revalidateField', 'join_at');
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////

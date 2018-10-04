@@ -10,6 +10,7 @@ use App\Model\Staff;
 use App\Model\StaffAnnualMCLeave;
 use App\Model\Login;
 use App\Model\StaffPosition;
+use App\Model\Position;
 
 use Illuminate\Http\Request;
 
@@ -42,7 +43,32 @@ class StaffHRController extends Controller
 
 	public function store(Request $request)
 	{
-		$u = Staff::create( array_add($request->only(['name', 'status_id', 'gender_id', 'join_at', 'dob', 'location_id']), 'active', 1 ) );
+		// leave need backup
+		$jk = Position::find($request->position_id);
+		if (($jk->group_id == 7 && $jk->category_id == 2) || ($jk->department_id == 10 && $jk->category_id == 2)) {	// ni geng tak kena backup
+			$u = Staff::create([
+				'name' => $request->name,
+				'status_id' => $request->status_id,
+				'gender_id' => $request->gender_id,
+				'join_at' => $request->join_at,
+				'dob' => $request->dob,
+				'location_id' => $request->location_id,
+				'active' => 1,
+				'leave_need_backup' => 0
+			]);
+		} else {
+			$u = Staff::create([
+				'name' => $request->name,
+				'status_id' => $request->status_id,
+				'gender_id' => $request->gender_id,
+				'join_at' => $request->join_at,
+				'dob' => $request->dob,
+				'location_id' => $request->location_id,
+				'active' => 1,
+				'leave_need_backup' => 1
+			]);
+		}
+
 		$u->hasmanylogin()->create( array_add($request->only(['username', 'password']), 'active', 1) );
 		$u->hasmanystaffannualmcleave()->create([
 			'year' => date('Y'),

@@ -329,7 +329,7 @@ class StaffLeaveController extends Controller
 				echo $albal1.' = al - total cuti<br />';
 				if( $albal1 < 0 ) {
 					// negative value, so blocked
-					Session::flash('flash_message', 'Sorry, we cant process your leave. You doesn\'t have anymore Annual Leave from the date '.\Carbon\Carbon::parse($val['start'])->format('D, j F Y').' to '.\Carbon\Carbon::parse($val['end'])->format('D, j F Y').'. Please change your leave type. If you think its happen by mistake, please reach Human Resource Department.' );
+					Session::flash('flash_message', 'Sorry, we cant process your leave. You don\'t have anymore Annual Leave from the date '.\Carbon\Carbon::parse($val['start'])->format('D, j F Y').' to '.\Carbon\Carbon::parse($val['end'])->format('D, j F Y').'. Please change your leave type. If you think its happen by mistake, please reach Human Resource Department.' );
 					return redirect()->back()->withInput();
 				}
 
@@ -1184,11 +1184,16 @@ class StaffLeaveController extends Controller
 
 	public function updateRHC(Request $request)
 	{
-		foreach ($request->hardcopy as $key) {
-			StaffLeave::where('id', $key)->update(['hardcopy' => 1]);
+		if($request->has('hardcopy')) {
+			foreach ($request->hardcopy as $key) {
+				StaffLeave::where('id', $key)->update(['hardcopy' => 1]);
+			}
+			Session::flash('flash_message', 'Data successfully inserted.');
+			return redirect()->route('leaveEditing.index');
+		} else {
+			Session::flash('flash_message', 'Please click on the checkbox. There is no data passed to the system.');
+			return redirect()->route('leaveEditing.index');
 		}
-		Session::flash('flash_message', 'Data successfully inserted.');
-		return redirect()->route('leaveEditing.index');
 	}
 
 	/**
