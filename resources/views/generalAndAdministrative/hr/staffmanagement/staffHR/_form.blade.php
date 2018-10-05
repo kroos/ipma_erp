@@ -2,6 +2,13 @@
 	<div class="card-header">Add Staff</div>
 	<div class="card-body">
 
+		<div class="form-group row {{ $errors->has('image') ? ' has-error' : '' }}">
+			{{ Form::label( 'image', 'Image : ', ['class' => 'col-sm-2'] ) }}
+			<div class="col-sm-10">
+				{{ Form::file( 'image', ['class' => 'form-control-file', 'id' => 'image']) }}
+			</div>
+		</div>
+
 		<div class="form-group row {{ $errors->has('name')?'has-error':'' }}">
 			{{ Form::label( 'hol', 'Name : ', ['class' => 'col-sm-2 col-form-label'] ) }}
 			<div class="col-sm-10">
@@ -78,6 +85,21 @@ $divs = \App\Model\Division::pluck('division', 'id')->sortKeys()->toArray();
 			{{ Form::label( 'posid', 'Main Position : ', ['class' => 'col-sm-2 col-form-label'] ) }}
 			<div class="col-sm-10">
 				<select name="position_id" id="posid" class="form-control col-sm-12" autocomplete="off"></select>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<div class="col-sm-10 offset-sm-2">
+
+				<div class="pretty p-icon p-round p-smooth">
+					<input type='hidden' value='0' name='leave_need_backup'>
+					{{ Form::checkbox('leave_need_backup', 1, @$value) }}
+					<div class="state p-success">
+						<i class="icon mdi mdi-check"></i>
+						<label>This User Need Backup?</label>
+					</div>
+				</div>
+
 			</div>
 		</div>
 

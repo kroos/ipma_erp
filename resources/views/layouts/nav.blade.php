@@ -83,7 +83,7 @@ $userloc = \Auth::user()->belongtostaff->location_id;
 // echo $userloc.'<-- location_id<br />';
 $userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
 ?>
-@if( ($usergroup->category_id == 1 || $usergroup->group_id == 5 || $usergroup->group_id == 6) || $userneedbackup == 1 )
+@if( $userneedbackup == 1 )
 						<a class="dropdown-item" href="{{ route('staffLeaveBackup.index') }}">
 							Leave Backup
 @if($tsb > 0)

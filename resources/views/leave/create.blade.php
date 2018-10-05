@@ -28,19 +28,18 @@
 
 <?php
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// use for backup in append html and ajax.
+$usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
 $userloc = \Auth::user()->belongtostaff->location_id;
-// echo $userloc.'<-- location_id<br />';
 $userneedbackup = \Auth::user()->belongtostaff->leave_need_backup;
+$lm = $usergroup->division_id;
 
 // this is the strategy
 // 1. pull from their department
-$usergroup = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
-$lm = $usergroup->department_id;
 
+// use for backup in append html and ajax.
 $hj = \Auth::user()->belongtostaff->belongtomanyposition()->get();
 foreach ($hj as $key) {
-	echo $key->department_id.', ';
+	// echo $key->department_id.', ';
 	$user = \App\Model\Staff::where('active', 1)->where('id', '<>', \Auth::user()->belongtostaff->id)->where('location_id', $userloc)->where('leave_need_backup', 1)->get();
 	foreach ($user as $ey) {		// user is active, same location, need backup and not self
 		// $oi = $ey->belongtomanyposition()->wherePivot('main', 1)->where('department_id', $key->department_id)->get();
@@ -53,28 +52,16 @@ foreach ($hj as $key) {
 	}
 }
 
-// BACKUP
-// justify for those who doesnt have department
-//	if( empty($usergroup->department_id) && $usergroup->category_id == 1 ) {
-//		$rt = \App\Model\Position::where('division_id', $usergroup->division_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
-//	} else {
-//		$rt = \App\Model\Position::where('department_id', $usergroup->department_id)->Where('group_id', '<>', 1)->where('category_id', $usergroup->category_id);
-//	}
-//	
-//	foreach ($rt->get() as $key) {
-//		// echo $key->position.' <-- position id<br />';
-//		$ft = \App\Model\StaffPosition::where('position_id', $key->id)->get();
-//		foreach($ft as $val) {
-//			// must checking on same location, active user, almost same level.
-//			if (\Auth::user()->belongtostaff->id != $val->belongtostaff->id && \Auth::user()->belongtostaff->location_id == $val->belongtostaff->location_id && $val->belongtostaff->active == 1 && $val->belongtostaff->leave_need_backup == 1 ) {
-//				// echo $val->belongtostaff->name.' <-- name staff<br />';
-//				$sel[$val->belongtostaff->id] = $val->belongtostaff->name;
-//			}
-//		}
-//	}
-	if (empty($sel)) {	// apa sebab empty? dalam department, dia sorang saja..
-		$sel = array();
+if (empty($sel)) {	// apa sebab empty? dalam department DAN di location, dia sorang saja..
+	$hj1 = \App\Model\Staff::where('active', 1)->where('location_id', $userloc)->where('leave_need_backup', 1)->get();
+	foreach($hj1 as $mn) {
+		// echo $mn->belongtomanyposition()->wherePivot('main', 1)->first()->group_id.', ';
+		if($mn->belongtomanyposition()->wherePivot('main', 1)->first()->group_id == 4) {	// dapatkan supervisor
+			// echo $mn->name.' |';
+			$sel[$mn->id] = $mn->name;
+		}
 	}
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // block holiday tgk dlm disable date in datetimepicker
@@ -140,7 +127,7 @@ $('#leave_id').on('change', function() {
 					'</div>' +
 				'</div>' +
 
-@if(( $usergroup->category_id == 1 && $usergroup->group_id != 1 || $usergroup->group_id == 5 && $usergroup->department_id != 10 || $usergroup->group_id == 6 && $usergroup->department != 10 ))
+@if( $userneedbackup == 1 )
 				'<div class="form-group row {{ $errors->has('staff_id') ? 'has-error' : '' }}">' +
 					'{{ Form::label('backupperson', 'Backup Person : ', ['class' => 'col-sm-2 col-form-label']) }}' +
 					'<div class="col-sm-10 backup">' +
@@ -155,7 +142,7 @@ $('#leave_id').on('change', function() {
 		//add bootstrapvalidator
 		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_start"]'));
 		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_end"]'));
-@if(( $usergroup->category_id == 1 && $usergroup->group_id != 1 || $usergroup->group_id == 5 && $usergroup->department_id != 10 || $usergroup->group_id == 6 && $usergroup->department != 10 ))
+@if( $userneedbackup == 1 )
 		$('#form').bootstrapValidator('addField', $('.backup').find('[name="staff_id"]'));
 @endif
 
@@ -853,7 +840,7 @@ foreach ($nodate1 as $key) {
 						'{{ Form::text('date_time_end', @$value, ['class' => 'form-control', 'id' => 'to', 'placeholder' => 'To : ', 'autocomplete' => 'off']) }}' +
 					'</div>' +
 				'</div>' +
-@if(( $usergroup->category_id == 1 && $usergroup->group_id != 1 || $usergroup->group_id == 5 && $usergroup->department_id != 10 || $usergroup->group_id == 6 && $usergroup->department != 10 ))
+@if( $userneedbackup == 1 )
 				'<div class="form-group row {{ $errors->has('staff_id') ? 'has-error' : '' }}">' +
 					'{{ Form::label('backupperson', 'Backup Person : ', ['class' => 'col-sm-2 col-form-label']) }}' +
 					'<div class="col-sm-10 backup">' +
@@ -868,7 +855,7 @@ foreach ($nodate1 as $key) {
 		//add bootstrapvalidator
 		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_start"]'));
 		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_end"]'));
-@if(( $usergroup->category_id == 1 && $usergroup->group_id != 1 || $usergroup->group_id == 5 && $usergroup->department_id != 10 || $usergroup->group_id == 6 && $usergroup->department != 10 ))
+@if( $userneedbackup == 1 )
 		$('#form').bootstrapValidator('addField', $('.backup').find('[name="staff_id"]'));
 @endif
 
@@ -999,7 +986,7 @@ foreach ($nodate1 as $key) {
 					'</div>' +
 
 				'</div>' +
-@if(( $usergroup->category_id == 1 && $usergroup->group_id != 1 || $usergroup->group_id == 5 && $usergroup->department_id != 10 || $usergroup->group_id == 6 && $usergroup->department != 10 ))
+@if( $userneedbackup == 1 )
 				'<div id="rembackup">' +
 				'</div>' +
 @endif
@@ -1111,7 +1098,7 @@ foreach ($nodate1 as $key) {
 				);
 			}
 
-@if(( $usergroup->category_id == 1 && $usergroup->group_id != 1 || $usergroup->group_id == 5 && $usergroup->department_id != 10 || $usergroup->group_id == 6 && $usergroup->department != 10 ))
+@if( $userneedbackup == 1 )
 				$('#form').bootstrapValidator('addField', $('.backup').find('[name="staff_id"]'));
 @endif
 				$('#backupperson').select2({ placeholder: 'Please Choose', width: '100%',
@@ -1269,7 +1256,7 @@ foreach ($nodate1 as $key) {
 						'</div>' +
 					'</div>' +
 				'</div>' +
-@if(( $usergroup->category_id == 1 && $usergroup->group_id != 1 || $usergroup->group_id == 5 && $usergroup->department_id != 10 || $usergroup->group_id == 6 && $usergroup->department != 10 ))
+@if( $userneedbackup == 1 )
 				'<div class="form-group row {{ $errors->has('staff_id') ? 'has-error' : '' }}">' +
 					'{{ Form::label('backupperson', 'Backup Person : ', ['class' => 'col-sm-2 col-form-label']) }}' +
 					'<div class="col-sm-10 backup">' +

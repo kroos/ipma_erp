@@ -176,6 +176,16 @@ $(document).ready(function() {
 			validating: ''
 		},
 		fields: {
+			image: {
+				validators: {
+					file: {
+						extension: 'jpeg,jpg,png,bmp',
+						type: 'image/jpeg,image/png,image/bmp',
+						maxSize: 2097152,	// 2048 * 1024,
+						message: 'The selected file is not valid. Please use jpeg or png and the image is below than 3MB. '
+					},
+				}
+			},
 			name: {
 				validators : {
 					notEmpty: {

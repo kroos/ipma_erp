@@ -49,6 +49,13 @@
 @section('js')
 /////////////////////////////////////////////////////////////////////////////////////////
 // jquery chained to
+	$('#lid').select2({
+		placeholder: 'Please choose',
+		allowClear: true,
+		closeOnSelect: true,
+		width: '100%',
+	});
+
 <?php
 $a=0;
 $b=0;

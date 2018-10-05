@@ -56,7 +56,7 @@ $("#username").keyup(function() {
 // table
 $('#staff').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	"order": [[0, "asc" ]],	// sorting the 4th column descending
+	"order": [[3, "asc" ]],	// sorting the 4th column descending
 	// responsive: true
 });
 

@@ -43,30 +43,28 @@ class StaffHRController extends Controller
 
 	public function store(Request $request)
 	{
-		// leave need backup
-		$jk = Position::find($request->position_id);
-		if (($jk->group_id == 7 && $jk->category_id == 2) || ($jk->department_id == 10 && $jk->category_id == 2)) {	// ni geng tak kena backup
-			$u = Staff::create([
-				'name' => $request->name,
-				'status_id' => $request->status_id,
-				'gender_id' => $request->gender_id,
-				'join_at' => $request->join_at,
-				'dob' => $request->dob,
-				'location_id' => $request->location_id,
-				'active' => 1,
-				'leave_need_backup' => 0
-			]);
-		} else {
-			$u = Staff::create([
-				'name' => $request->name,
-				'status_id' => $request->status_id,
-				'gender_id' => $request->gender_id,
-				'join_at' => $request->join_at,
-				'dob' => $request->dob,
-				'location_id' => $request->location_id,
-				'active' => 1,
-				'leave_need_backup' => 1
-			]);
+		$u = Staff::create( array_add($request->only(['name', 'status_id', 'gender_id', 'join_at', 'dob', 'location_id', 'leave_need_backup']), 'active', 1) );
+
+		if(!empty($request->file('image'))) {
+			$filename = $request->file('image')->store('public/images/profiles');
+
+			$ass1 = explode('/', $filename);
+			$ass2 = array_except($ass1, ['0']);
+			$image = implode('/', $ass2);
+
+			// dd($image);
+
+			$imag = Image::make(storage_path('app/'.$filename));
+
+			// resize the image to a height of 400 and constrain aspect ratio (auto width)
+			$imag->resize(null, 400, function ($constraint) {
+				$constraint->aspectRatio();
+			});
+
+			$imag->save();
+			// dd( array_add($request->except(['image']), 'image', $filename) );
+
+			$u->update(['image' => $image]);
 		}
 
 		$u->hasmanylogin()->create( array_add($request->only(['username', 'password']), 'active', 1) );
@@ -133,8 +131,6 @@ class StaffHRController extends Controller
 	{
 		// buat kerja loqlaq, delete all then insert all from input
 		// use detach then attach
-		print_r($request->staff);
-		echo '<br />';
 		$staffHR->belongtomanyposition()->detach();
 		foreach( $request->staff as $key => $val) {
 			if (!isset($val['main'])) {
@@ -142,12 +138,9 @@ class StaffHRController extends Controller
 			}
 			$staffHR->belongtomanyposition()->attach( $val['position_id'], ['main' => $val['main']] );
 			// echo $val['main'].'<br />';
-			echo $val['position_id'].' key<br />';
 		}
-		// die();
-		if (!is_null($request->leave_need_backup)) {
-			$staffHR->update(['leave_need_backup' => $request->leave_need_backup]);
-		}
+
+		$staffHR->update( $request->only(['leave_need_backup', 'location_id']) );
 		Session::flash('flash_message', 'Data successfully edited!');
 		return redirect( route('staffManagement.index') );
 	}

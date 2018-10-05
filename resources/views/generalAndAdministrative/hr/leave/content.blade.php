@@ -254,7 +254,7 @@ if( !empty($stl1->hasonestaffleavebackup) ) {
 @if($n1->gte($h1) && $n1->lte($e1))
 				<tr>
 					<td>
-						HR9-{{ str_pad( $stl1->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}
+						<a href="{{ route('staffLeaveHR.edit', $stl1->id) }}">HR9-{{ str_pad( $stl1->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}</a>
 							<br />
 					</td>
 					<td>{{ $stl1->belongtostaff->name }}</td>
@@ -385,7 +385,7 @@ if( !empty($stl11->hasonestaffleavebackup) ) {
 @endif
 					</td>
 					<td>
-						HR9-{{ str_pad( $stl11->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}
+						<a href="{{ route('staffLeaveHR.edit', $stl11->id) }}">HR9-{{ str_pad( $stl11->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}</a>
 							<br />
 					</td>
 					<td>{{ $stl11->belongtostaff->name }}</td>

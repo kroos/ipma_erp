@@ -2,6 +2,7 @@
 $divs = \App\Model\Division::all();
 $depts = \App\Model\Department::all();
 $poss = \App\Model\Position::all();
+$locs = \App\Model\Location::pluck('location', 'id')->sortKeys()->toArray();
 ?>
 <div class="card">
 	<div class="card-header">Edit {{ $staffHR->name }} Position Setting</div>
@@ -38,6 +39,7 @@ $g=0;
 							<input class="form-check-input" type="radio" name="staff[][main]" id="main_{{ $i++ }}" value="1" {{ ($val->pivot->main == 1)?'checked':'' }} required="required"><label for="main_{{ $a++ }}">Main Position</label>
 						</div>
 					</div>
+
 					<div class="col-sm-2">
 						<div class="form-group {{ $errors->has('staff.*.division_id') ? 'has-error' : '' }}">
 							<select name="staff[{{ $b++ }}][division_id]" id="division_id_{{ $c++ }}" class="form-control">
@@ -82,17 +84,11 @@ $g=0;
 				</button>
 			</p>
 		</div>
-<?php
-// echo $staffHR->belongtomanyposition()->wherePivot('main', 1)->first();
-$d = $staffHR->belongtomanyposition()->wherePivot('main', 1)->first();
-?>
-@if( !is_null($d) )
-@if( ($d->group_id == 7 && $d->category_id != 1) || $d->group_id == 5 || $d->group_id == 6)
-		<div class="form-group row">
+
+		<div class="form-group row {{ $errors->has('leave_need_backup') ? 'has-error' : '' }}">
 			<div class="col-sm-10 offset-sm-2">
 
 				<div class="pretty p-icon p-round p-smooth">
-					<input type="checkbox" />
 					<input type='hidden' value='0' name='leave_need_backup'>
 					{{ Form::checkbox('leave_need_backup', 1, @$value) }}
 					<div class="state p-success">
@@ -103,8 +99,13 @@ $d = $staffHR->belongtomanyposition()->wherePivot('main', 1)->first();
 
 			</div>
 		</div>
-@endif
-@endif
+
+			<div class="form-group row {{ $errors->has('location_id') ? 'has-error' : '' }}">
+				{!! Form::label('lid', 'Location :', ['class' => 'form-label col-sm-2']) !!}
+				<div class="col-sm-10">
+					{{ Form::select('location_id', $locs, @$value, ['class' => 'form-control', 'id' => 'lid', 'placeholder' => 'Please choose']) }}
+				</div>
+			</div>
 
 		<div class="form-group row">
 			<div class="col-sm-10 offset-sm-2">

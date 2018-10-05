@@ -100,7 +100,7 @@ class StaffLeaveController extends Controller
 		// in mc, there is no $request->leave_type
 		if( $request->leave_type == 1 || empty($request->leave_type) ) {
 			$time_start = ' 00:00:00';
-			$time_end = ' 23:59:59';
+			$time_end = ' 00:00:00';
 
 			$date_time_start = $request->date_time_start.' '.$time_start;
 			$date_time_end = $request->date_time_end.' '.$time_end;
@@ -206,7 +206,7 @@ class StaffLeaveController extends Controller
 				// 2nd part for insert parameter
 				[
 					'annual_leave_balance' => 0,
-					'remarks' => 'auto insert data due to no data at all'
+					'remarks' => 'Auto insert data due to no data at all'
 				]
 			);
 			// must call save() in this method
