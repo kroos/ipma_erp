@@ -67,7 +67,7 @@ if (empty($sel)) {	// apa sebab empty? dalam department DAN di location, dia sor
 // block holiday tgk dlm disable date in datetimepicker
 $nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
 // block cuti sendiri
-$nodate1 = \Auth::user()->belongtostaff->hasmanystaffleave()->where(['active' => 1, 'active' => 2])->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
+$nodate1 = \Auth::user()->belongtostaff->hasmanystaffleave()->where('active', 1)->orWhere('active', 2)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
 ?>
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $('#leave_id').on('change', function() {
@@ -218,6 +218,7 @@ $('#leave_id').on('change', function() {
 			$('#form').bootstrapValidator('revalidateField', 'date_time_start');
 			var minDate = $('#from').val();
 			$('#to').datetimepicker('minDate', minDate);
+
 			if($('#from').val() === $('#to').val()) {
 				if( $('.removehalfleave').length === 0) {
 					$('#wrapperday').append(
@@ -230,7 +231,7 @@ $('#leave_id').on('change', function() {
 									'</div>' +
 								'</div>' +
 								'<div class="pretty p-default p-curve form-check removehalfleave" id="appendleavehalf">' +
-									'{{ Form::radio('leave_type', '0', NULL, ['id' => 'radio2', 'class' => ' removehalfleave']) }}' +
+									'{{ Form::radio('leave_type', '2', NULL, ['id' => 'radio2', 'class' => ' removehalfleave']) }}' +
 									'<div class="state p-success removehalfleave">' +
 										'{{ Form::label('radio2', 'Cuti Separuh', ['class' => 'form-check-label removehalfleave']) }}' +
 									'</div>' +
@@ -288,7 +289,7 @@ foreach ($nodate1 as $key) {
 									'</div>' +
 								'</div>' +
 								'<div class="pretty p-default p-curve form-check removehalfleave" id="appendleavehalf">' +
-									'{{ Form::radio('leave_type', '0', NULL, ['id' => 'radio2', 'class' => ' removehalfleave']) }}' +
+									'{{ Form::radio('leave_type', '2', NULL, ['id' => 'radio2', 'class' => ' removehalfleave']) }}' +
 									'<div class="state p-success removehalfleave">' +
 										'{{ Form::label('radio2', 'Cuti Separuh Hari', ['class' => 'form-check-label removehalfleave']) }}' +
 									'</div>' +
@@ -326,7 +327,7 @@ foreach ($nodate1 as $key) {
 						console.log(textStatus, errorThrown);
 					}
 				}).responseText;
-				
+
 				// convert data1 into json
 				var obj = $.parseJSON( data1 );
 
@@ -611,7 +612,7 @@ foreach ($nodate1 as $key) {
 								'</div>' +
 							'</div>' +
 							'<div class="pretty p-default p-curve form-check removehalfleave" id="appendleavehalf">' +
-								'{{ Form::radio('leave_type', '0', NULL, ['id' => 'radio2', 'class' => ' removehalfleave']) }}' +
+								'{{ Form::radio('leave_type', '2', NULL, ['id' => 'radio2', 'class' => ' removehalfleave']) }}' +
 								'<div class="state p-success removehalfleave">' +
 									'{{ Form::label('radio2', 'Cuti Separuh', ['class' => 'form-check-label removehalfleave']) }}' +
 								'</div>' +
@@ -669,7 +670,7 @@ foreach ($nodate1 as $key) {
 								'</div>' +
 							'</div>' +
 							'<div class="pretty p-default p-curve form-check removehalfleave" id="appendleavehalf">' +
-								'{{ Form::radio('leave_type', '0', NULL, ['id' => 'radio2', 'class' => ' removehalfleave']) }}' +
+								'{{ Form::radio('leave_type', '2', NULL, ['id' => 'radio2', 'class' => ' removehalfleave']) }}' +
 								'<div class="state p-success removehalfleave">' +
 									'{{ Form::label('radio2', 'Cuti Separuh Hari', ['class' => 'form-check-label removehalfleave']) }}' +
 								'</div>' +
@@ -1064,7 +1065,7 @@ foreach ($nodate1 as $key) {
 								'</div>' +
 							'</div>' +
 							'<div class="pretty p-default p-curve form-check removehalfleave" id="appendleavehalf">' +
-								'{{ Form::radio('leave_type', '0', NULL, ['id' => 'radio2', 'class' => ' removehalfleave']) }}' +
+								'{{ Form::radio('leave_type', '2', NULL, ['id' => 'radio2', 'class' => ' removehalfleave']) }}' +
 								'<div class="state p-success removehalfleave">' +
 									'{{ Form::label('radio2', 'Cuti Separuh', ['class' => 'form-check-label removehalfleave']) }}' +
 								'</div>' +
@@ -1150,7 +1151,7 @@ foreach ($nodate1 as $key) {
 								'</div>' +
 							'</div>' +
 							'<div class="pretty p-default p-curve form-check removehalfleave" id="appendleavehalf">' +
-								'{{ Form::radio('leave_type', '0', NULL, ['id' => 'radio2', 'class' => ' removehalfleave']) }}' +
+								'{{ Form::radio('leave_type', '2', NULL, ['id' => 'radio2', 'class' => ' removehalfleave']) }}' +
 								'<div class="state p-success removehalfleave">' +
 									'{{ Form::label('radio2', 'Cuti Separuh Hari', ['class' => 'form-check-label removehalfleave']) }}' +
 								'</div>' +

@@ -46,26 +46,21 @@
 // block holiday tgk dlm disable date in datetimepicker
 $nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
 // block cuti sendiri
-$nodate1 = $staffLeaveHR->belongtostaff->hasmanystaffleave()->where('active', 1)->where('active', 2)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
+$nodate1 = $staffLeaveHR->belongtostaff->hasmanystaffleave()->where('id', '<>', $staffLeaveHR->id)->where('active', 1)->orwhere('active', 2)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
+
+
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
 /////////////////////////////////////////////////////////////////////////////////////////
 //ucwords
 $("#username").keyup(function() {
 	uch(this);
 });
 
+<?php
+if($staffLeaveHR->half_day == 1) {
+	echo '$(".removehalfleave").remove();';
+}
+?>
 /////////////////////////////////////////////////////////////////////////////////////////
 // date time
 $('#dts').datetimepicker({
@@ -93,6 +88,66 @@ $('#dts').datetimepicker({
 	}
 ?>
 					],
+
+})
+.on('dp.change dp.show dp.update', function(e){
+
+	var minDate = $('#dts').val();
+	$('#dte').datetimepicker('minDate', minDate);
+
+	var data1 = $.ajax({
+		url: "{{ route('workinghour.dts') }}",
+		type: "POST",
+		data: {
+					dts: minDate,
+					dte: $('#dte').val(),
+					_token: '{!! csrf_token() !!}'
+			},
+		dataType: 'json',
+		global: false,
+		async:false,
+		success: function (response) {
+			// you will get response from your php page (what you echo or print)
+			return response;
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.log(textStatus, errorThrown);
+		}
+	}).responseText;
+	// convert data1 into json
+	var obj = $.parseJSON( data1 );
+
+	$('#per').val(obj.period);
+	$('#perday').val(obj.period);
+
+	// inserting half leave
+	if($('#dts').val() === $('#dte').val()) {
+		if( $('.removehalfleave').length === 0) {
+			$('#wrapperday').append(
+					'{{ Form::label('lt', 'Jenis Cuti : ', ['class' => 'col-sm-2 col-form-label removehalfleave']) }}' +
+					'<div class="col-sm-10 removehalfleave" id="halfleave">' +
+						'<div class="pretty p-default p-curve form-check removehalfleave" id="removeleavehalf">' +
+							'<input type="radio" name="leave_type" value="1" class="removehalfleave" id="radio1">' +
+							'<div class="state p-success removehalfleave">' +
+								'{{ Form::label('radio1', 'Cuti Penuh', ['class' => 'form-check-label removehalfleave']) }}' +
+							'</div>' +
+						'</div>' +
+						'<div class="pretty p-default p-curve form-check removehalfleave" id="appendleavehalf">' +
+							'<input type="radio" name="leave_type" value="2" class="removehalfleave" id="radio2">' +
+							'<div class="state p-success removehalfleave">' +
+								'{{ Form::label('radio2', 'Cuti Separuh', ['class' => 'form-check-label removehalfleave']) }}' +
+							'</div>' +
+						'</div>' +
+					'</div>' +
+					'<div class="form-group row col-sm-10 offset-sm-2 {{ $errors->has('leave_half') ? 'has-error' : '' }} removehalfleave"  id="wrappertest">' +
+					'</div>'
+			);
+		}
+	}
+	if( $('#dts').val() !== $('#dte').val() ) {
+		$('.removehalfleave').remove();
+	}
+
 
 });
 
@@ -122,7 +177,148 @@ $('#dte').datetimepicker({
 ?>
 					],
 
+})
+.on('dp.change dp.show dp.update', function(e){
+
+	var maxDate = $('#dte').val();
+	$('#dts').datetimepicker('maxDate', maxDate);
+
+	var data1 = $.ajax({
+		url: "{{ route('workinghour.dte') }}",
+		type: "POST",
+		data: {
+					dts: $('#dts').val(),
+					dte: maxDate,
+					_token: '{!! csrf_token() !!}'
+			},
+		dataType: 'json',
+		global: false,
+		async:false,
+		success: function (response) {
+			// you will get response from your php page (what you echo or print)
+			return response;
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.log(textStatus, errorThrown);
+		}
+	}).responseText;
+
+	// convert data1 into json
+	var obj = $.parseJSON( data1 );
+
+	$('#per').val(obj.period);
+	$('#perday').val(obj.period);
+
+	// inserting half leave
+	if($('#dts').val() === $('#dte').val()) {
+		if( $('.removehalfleave').length === 0) {
+			$('#wrapperday').append(
+					'{{ Form::label('lt', 'Jenis Cuti : ', ['class' => 'col-sm-2 col-form-label removehalfleave']) }}' +
+					'<div class="col-sm-10 removehalfleave" id="halfleave">' +
+						'<div class="pretty p-default p-curve form-check removehalfleave" id="removeleavehalf">' +
+							'<input type="radio" name="leave_type" value="1" class="removehalfleave" id="radio1">' +
+							'<div class="state p-success removehalfleave">' +
+								'{{ Form::label('radio1', 'Cuti Penuh', ['class' => 'form-check-label removehalfleave']) }}' +
+							'</div>' +
+						'</div>' +
+						'<div class="pretty p-default p-curve form-check removehalfleave" id="appendleavehalf">' +
+							'<input type="radio" name="leave_type" value="2" class="removehalfleave" id="radio2">' +
+							'<div class="state p-success removehalfleave">' +
+								'{{ Form::label('radio2', 'Cuti Separuh', ['class' => 'form-check-label removehalfleave']) }}' +
+							'</div>' +
+						'</div>' +
+					'</div>' +
+					'<div class="form-group row col-sm-10 offset-sm-2 {{ $errors->has('leave_half') ? 'has-error' : '' }} removehalfleave"  id="wrappertest">' +
+					'</div>'
+			);
+		}
+	}
+	if($('#dts').val() !== $('#dte').val()) {
+		$('.removehalfleave').remove();
+	}
+
 });
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// enable radio
+$(document).on('change', '#radio2', function () {
+	if (this.checked) {
+		var daynow = moment($('#from').val(), 'YYYY-MM-DD').format('dddd');
+		var datenow =$('#dts').val();
+
+		var data1 = $.ajax({
+			url: "{{ route('workinghour.workingtime') }}",
+			type: "POST",
+			data: {date: datenow, _token: '{!! csrf_token() !!}'},
+			dataType: 'json',
+			global: false,
+			async:false,
+			success: function (response) {
+				// you will get response from your php page (what you echo or print)
+				return response;
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				console.log(textStatus, errorThrown);
+			}
+		}).responseText;
+		
+		// convert data1 into json
+		var obj = jQuery.parseJSON( data1 );
+
+		// checking so there is no double
+		if( $('.removetest').length == 0 ) {
+			$('#wrappertest').append(
+				'<div class="pretty p-default p-curve form-check removetest">' +
+					'<input type="radio" name="leave_half" value="' + obj.start_am + '/' + obj.end_am + '" id="am" checked="checked">' +
+					'<div class="state p-primary">' +
+						'<label for="am" class="form-check-label">' + moment(obj.start_am, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_am, 'HH:mm:ss').format('h:mm a') + '</label> ' +
+					'</div>' +
+				'</div>' +
+				'<div class="pretty p-default p-curve form-check removetest">' +
+					'<input type="radio" name="leave_half" value="' + obj.start_pm + '/' + obj.end_pm + '" id="pm">' +
+					'<div class="state p-primary">' +
+						'<label for="pm" class="form-check-label">' + moment(obj.start_pm, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_pm, 'HH:mm:ss').format('h:mm a') + '</label> ' +
+					'</div>' +
+				'</div>'
+			);
+		}
+	}
+});
+
+$(document).on('change', '#removeleavehalf :radio', function () {
+//$('#removeleavehalf :radio').change(function() {
+	if (this.checked) {
+		$('.removetest').remove();
+	}
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
+		var daynow = moment($('#from').val(), 'YYYY-MM-DD').format('dddd');
+		var datenow =$('#dts').val();
+		var data1 = $.ajax({
+			url: "{{ route('workinghour.workingtime') }}",
+			type: "POST",
+			data: {date: datenow, _token: '{!! csrf_token() !!}'},
+			dataType: 'json',
+			global: false,
+			async:false,
+			success: function (response) {
+				// you will get response from your php page (what you echo or print)
+				return response;
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				console.log(textStatus, errorThrown);
+			}
+		}).responseText;
+		
+		// convert data1 into json
+		var obj = jQuery.parseJSON( data1 );
+
+		$('#am').val( obj.start_am + '/' + obj.end_am );
+		$('#pm').val( obj.start_pm + '/' + obj.end_pm );
+
+		$('label.am1').text(moment(obj.start_am, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_am, 'HH:mm:ss').format('h:mm a'));
+		$('label.pm1').text(moment(obj.start_pm, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_pm, 'HH:mm:ss').format('h:mm a'));
 
 /////////////////////////////////////////////////////////////////////////////////////////
 @endsection

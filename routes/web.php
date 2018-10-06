@@ -250,6 +250,42 @@ Route::post('/loginuser', [
 	]);
 
 ############################################################################
+// dts Ajax Controller
+Route::post('/dts', [
+		'as' => 'workinghour.dts',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@dts'
+	]);
+
+############################################################################
+// dte Ajax Controller
+Route::post('/dte', [
+		'as' => 'workinghour.dte',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@dte'
+	]);
+
+############################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+############################################################################
 // PrintPDFLeaves Controller
 Route::get('printpdfleaves/{staffLeave}', [
 		'as' => 'printpdfleave.show',

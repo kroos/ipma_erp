@@ -393,7 +393,109 @@ class WorkingHourAjaxController extends Controller
 		]);
 	}
 
+	public function dts(Request $request)
+	{
+		$date1 = \Carbon\Carbon::parse($request->dts)->format('Y-m-d');
+		$date2 = \Carbon\Carbon::parse($request->dte)->format('Y-m-d');
 
+		$period = \Carbon\CarbonPeriod::create($date1, '1 days', $date2);
+
+		// count all date
+		// echo $period->count().' total hari<br />';
+
+		// kira cuti ahad
+		$cuti = [];
+		$nodays = \App\Model\HolidayCalendar::where('date_start', '>=', $date1 )->where( 'date_end', '<=', $date2 )->get();
+		// echo $nodays.' json for the whole year<br />';
+		foreach ($nodays as $uy) {
+			// take cuti date from database
+			$perC = \Carbon\CarbonPeriod::create($uy->date_start, '1 days', $uy->date_end);
+			// echo $perC->count().' hari cuti dari '.$date1.' <=> '.$date2.'<br />';
+			foreach ($perC as $aha) {
+				$adaahaddlmni = \Carbon\Carbon::parse( $aha, 'Y-m-d' )->dayOfWeek;
+				if($adaahaddlmni != 0) {
+					// echo $aha.' no ahad in cuti<br />';
+					$cuti[] = $aha;
+				}
+			}
+		}
+		// echo count($cuti).' bilangan hari cuti ahad<br />';
+
+		// substract all sundays
+		$sundi = [];
+		foreach ($period as $op) {
+			$sund = \Carbon\Carbon::parse( $op )->dayOfWeek;
+			if($sund != 0) {
+				// echo $op.' bukan hari ahad<br />';
+				$sundi[] = $op;
+			}
+		}
+		// echo count($sundi).' bilangan hari bukan hari ahad dalam range<br />';
+
+		if($request->leave_type == 2) {
+			$haricuti = 0.5;
+		} else {
+			$haricuti = count($sundi) - count($cuti);
+		}
+
+		// echo $haricuti.' applied leave for this year<br />';
+
+		return response()->json([
+			'period' => $haricuti
+		]);
+	}
+
+	public function dte(Request $request)
+	{
+		$date1 = \Carbon\Carbon::parse($request->dts)->format('Y-m-d');
+		$date2 = \Carbon\Carbon::parse($request->dte)->format('Y-m-d');
+
+		$period = \Carbon\CarbonPeriod::create($date1, '1 days', $date2);
+
+		// count all date
+		// echo $period->count().' total hari<br />';
+
+		// kira cuti ahad
+		$cuti = [];
+		$nodays = \App\Model\HolidayCalendar::where('date_start', '>=', $date1 )->where( 'date_end', '<=', $date2 )->get();
+		// echo $nodays.' json for the whole year<br />';
+		foreach ($nodays as $uy) {
+			// take cuti date from database
+			$perC = \Carbon\CarbonPeriod::create($uy->date_start, '1 days', $uy->date_end);
+			// echo $perC->count().' hari cuti dari '.$date1.' <=> '.$date2.'<br />';
+			foreach ($perC as $aha) {
+				$adaahaddlmni = \Carbon\Carbon::parse( $aha, 'Y-m-d' )->dayOfWeek;
+				if($adaahaddlmni != 0) {
+					// echo $aha.' no ahad in cuti<br />';
+					$cuti[] = $aha;
+				}
+			}
+		}
+		// echo count($cuti).' bilangan hari cuti ahad<br />';
+
+		// substract all sundays
+		$sundi = [];
+		foreach ($period as $op) {
+			$sund = \Carbon\Carbon::parse( $op )->dayOfWeek;
+			if($sund != 0) {
+				// echo $op.' bukan hari ahad<br />';
+				$sundi[] = $op;
+			}
+		}
+		// echo count($sundi).' bilangan hari bukan hari ahad dalam range<br />';
+
+		if($request->leave_type == 2) {
+			$haricuti = 0.5;
+		} else {
+			$haricuti = count($sundi) - count($cuti);
+		}
+
+		// echo $haricuti.' applied leave for this year<br />';
+
+		return response()->json([
+			'period' => $haricuti
+		]);
+	}
 
 
 
