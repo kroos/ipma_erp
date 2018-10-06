@@ -265,6 +265,33 @@ $(document).on('change', '#radio2', function () {
 		// convert data1 into json
 		var obj = jQuery.parseJSON( data1 );
 
+		var data11 = $.ajax({
+			url: "{{ route('workinghour.dte') }}",
+			type: "POST",
+			data: {
+						dts: $('#dts').val(),
+						dte: $('#dte').val(),
+						leave_type: 2,
+						_token: '{!! csrf_token() !!}'
+				},
+			dataType: 'json',
+			global: false,
+			async:false,
+			success: function (response) {
+				// you will get response from your php page (what you echo or print)
+				return response;
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				console.log(textStatus, errorThrown);
+			}
+		}).responseText;
+
+		// convert data1 into json
+		var obj1 = $.parseJSON( data11 );
+
+		$('#per').val(obj1.period);
+		$('#perday').val(obj1.period);
+
 		// checking so there is no double
 		if( $('.removetest').length == 0 ) {
 			$('#wrappertest').append(
