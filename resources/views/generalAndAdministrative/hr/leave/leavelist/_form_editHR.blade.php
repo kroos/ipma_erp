@@ -149,11 +149,6 @@ $start = \Carbon\Carbon::create(2018,1,1,12,0,0);
 		</div>
 @endif
 
-
-
-
-
-
 		{{ Form::hidden('periodday', @$value, ['id' => 'perday']) }}
 		{{ Form::hidden('periodtime', @$value, ['id' => 'pertime']) }}
 

@@ -1,29 +1,34 @@
 @php
+ini_set('max_execution_time', 180);
 use \App\Model\Staff;
 use \App\Model\StaffLeave;
 use Carbon\Carbon;
 
 $bor = Carbon::now();
+$bor1 = Carbon::create($bor->year, $bor->month, $bor->day, 0, 0, 0);
 $bmonth = $bor->month;
-// echo $bmonth.' now <br />';
-// echo Carbon::create($bor->year, $bor->month, $bor->day, 0, 0, 0)->subMonth()->copy()->startOfMonth().' from start of last month<br />';
+// echo $bmonth.' month now <br />';
+// echo $bor1.' now <br />';
+// echo $bor1->copy()->subMonth()->startOfMonth().' from start of last month<br />';
 
 if ( $bmonth != 1 ) {
-	$sl = StaffLeave::where('active', 1)->where('created_at', '>=', Carbon::now()->copy()->startOfYear())->orderBy('date_time_start', 'desc')->get();
-	$sla = StaffLeave::where('active', 1)->where('created_at', '>=', Carbon::now()->copy()->startOfYear())->orderBy('date_time_end', 'desc')->get();
-	$slb = StaffLeave::where('active', 1)->where('created_at', '>=', Carbon::now()->copy()->startOfYear())->orderBy('date_time_end', 'desc')->get();
-	$sl1 = StaffLeave::where('active', 2)->where('created_at', '>=', Carbon::now()->copy()->startOfYear())->orderBy('date_time_start', 'desc')->get();
-	$sl2 = StaffLeave::where('active', 3)->where('created_at', '>=', Carbon::now()->copy()->startOfYear())->orderBy('date_time_start', 'desc')->get();
-	$sl3 = StaffLeave::where('active', 4)->where('created_at', '>=', Carbon::now()->copy()->startOfYear())->orderBy('date_time_start', 'desc')->get();
+	$sl = StaffLeave::where('active', 1)->whereDate('created_at', '>=', $bor1->copy()->startOfYear())->whereDate('date_time_start', '>', $bor1)->orderBy('date_time_start', 'desc')->get();
+	$sla = StaffLeave::where('active', 1)->whereDate('created_at', '>=', $bor1->copy()->startOfYear())->whereDate('date_time_end', '<', $bor1)->orderBy('date_time_end', 'desc')->orderBy('date_time_start', 'DESC')->get();
+	$slb = StaffLeave::where('active', 1)->whereDate('created_at', '>=', $bor1->copy()->startOfYear())->whereRaw('"'.$bor1.'" BETWEEN DATE(date_time_start) AND DATE(date_time_end)')->orderBy('date_time_end', 'desc')->get();
+	$sl1 = StaffLeave::where('active', 2)->whereDate('created_at', '>=', $bor1->copy()->startOfYear())->whereDate('date_time_start', '>', $bor1)->orderBy('date_time_start', 'desc')->get();
+	$sl2 = StaffLeave::where('active', 3)->whereDate('created_at', '>=', $bor1->copy()->startOfYear())->whereDate('date_time_start', '>', $bor1)->orderBy('date_time_start', 'desc')->get();
+	$sl3 = StaffLeave::where('active', 4)->whereDate('created_at', '>=', $bor1->copy()->startOfYear())->whereDate('date_time_start', '>', $bor1)->orderBy('date_time_start', 'desc')->get();
 } else {
 	// if its in january, check the create date from early last month : 1 December, so can capture the leaves.
-	$sl = StaffLeave::where('active', 1)->where('created_at', '>=', Carbon::create($bor->year, $bor->month, $bor->day, 0, 0, 0)->subMonth()->copy()->startOfMonth() )->orderBy('date_time_start', 'desc')->get();
-	$sla = StaffLeave::where('active', 1)->where('created_at', '>=', Carbon::create($bor->year, $bor->month, $bor->day, 0, 0, 0)->subMonth()->copy()->startOfMonth() )->orderBy('date_time_end', 'desc')->get();
-	$slb = StaffLeave::where('active', 1)->where('created_at', '>=', Carbon::create($bor->year, $bor->month, $bor->day, 0, 0, 0)->subMonth()->copy()->startOfMonth() )->orderBy('date_time_end', 'desc')->get();
-	$sl1 = StaffLeave::where('active', 2)->where('created_at', '>=', Carbon::create($bor->year, $bor->month, $bor->day, 0, 0, 0)->subMonth()->copy()->startOfMonth() )->orderBy('date_time_start', 'desc')->get();
-	$sl2 = StaffLeave::where('active', 3)->where('created_at', '>=', Carbon::create($bor->year, $bor->month, $bor->day, 0, 0, 0)->subMonth()->copy()->startOfMonth() )->orderBy('date_time_start', 'desc')->get();
-	$sl3 = StaffLeave::where('active', 4)->where('created_at', '>=', Carbon::create($bor->year, $bor->month, $bor->day, 0, 0, 0)->subMonth()->copy()->startOfMonth() )->orderBy('date_time_start', 'desc')->get();
+	$sl = StaffLeave::where('active', 1)->whereDate('created_at', '>=', $bor1->copy()->subMonth()->startOfMonth() )->whereDate('date_time_start', '>', $bor1)->orderBy('date_time_start', 'desc')->get();
+	$sla = StaffLeave::where('active', 1)->whereDate('created_at', '>=', $bor1->copy()->subMonth()->startOfMonth() )->whereDate('date_time_end', '<', $bor1)->orderBy('date_time_end', 'desc')->orderBy('date_time_start', 'DESC')->get();
+	$slb = StaffLeave::where('active', 1)->whereDate('created_at', '>=', $bor1->copy()->subMonth()->startOfMonth() )->whereRaw('"'.$bor1.'" BETWEEN DATE(date_time_start) AND DATE(date_time_end)')->orderBy('date_time_end', 'desc')->get();
+	$sl1 = StaffLeave::where('active', 2)->whereDate('created_at', '>=', $bor1->copy()->subMonth()->startOfMonth() )->whereDate('date_time_start', '>', $bor1)->orderBy('date_time_start', 'desc')->get();
+	$sl2 = StaffLeave::where('active', 3)->whereDate('created_at', '>=', $bor1->copy()->subMonth()->startOfMonth() )->whereDate('date_time_start', '>', $bor1)->orderBy('date_time_start', 'desc')->get();
+	$sl3 = StaffLeave::where('active', 4)->whereDate('created_at', '>=', $bor1->copy()->subMonth()->startOfMonth() )->whereDate('date_time_start', '>', $bor1)->orderBy('date_time_start', 'desc')->get();
 }
+
+
 @endphp
 <ul class="nav nav-pills">
 	<li class="nav-item">
@@ -82,11 +87,6 @@ if ( $bmonth != 1 ) {
 			<tbody>
 @foreach($sl as $stl)
 <?php
-$n = Carbon::now();
-$n1 = Carbon::create($n->year, $n->month, $n->day, 0, 0, 0);
-$h = Carbon::parse($stl->date_time_start);
-$h1 = Carbon::create($h->year, $h->month, $h->day, 0, 0, 0);
-
 $dts = \Carbon\Carbon::parse($stl->created_at)->format('Y');
 $arr = str_split( $dts, 2 );
 
@@ -132,7 +132,6 @@ if( !empty($stl->hasonestaffleavebackup) ) {
 }
 ?>
 @if($stl->belongtostaff->active == 1 )
-@if($n1->lt($h1))
 				<tr>
 					<td>
 						<a href="{{ route('staffLeaveHR.edit', $stl->id) }}">HR9-{{ str_pad( $stl->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}</a>
@@ -164,7 +163,6 @@ if( !empty($stl->hasonestaffleavebackup) ) {
 					<td>{{ $stl->remarks }}</td>
 					<td>{{ $stl->belongtoleavestatus->status }}</td>
 				</tr>
-@endif
 @endif
 @endforeach
 			</tbody>
@@ -199,13 +197,6 @@ if( !empty($stl->hasonestaffleavebackup) ) {
 			<tbody>
 @foreach($slb as $stl1)
 <?php
-$n = Carbon::now();
-$n1 = Carbon::create($n->year, $n->month, $n->day, 0 ,0 ,0);
-$h = Carbon::parse($stl1->date_time_start);
-$h1 = Carbon::create($h->year, $h->month, $h->day, 0 ,0 ,0);
-$e = Carbon::parse($stl1->date_time_end);
-$e1 = Carbon::create($e->year, $e->month, $e->day, 0 ,0 ,0);
-
 $dts = \Carbon\Carbon::parse($stl1->created_at)->format('Y');
 $arr = str_split( $dts, 2 );
 
@@ -251,7 +242,6 @@ if( !empty($stl1->hasonestaffleavebackup) ) {
 }
 ?>
 @if($stl1->belongtostaff->active == 1 )
-@if($n1->gte($h1) && $n1->lte($e1))
 				<tr>
 					<td>
 						<a href="{{ route('staffLeaveHR.edit', $stl1->id) }}">HR9-{{ str_pad( $stl1->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}</a>
@@ -283,7 +273,6 @@ if( !empty($stl1->hasonestaffleavebackup) ) {
 					<td>{{ $stl1->remarks }}</td>
 					<td>{{ $stl1->belongtoleavestatus->status }}</td>
 				</tr>
-@endif
 @endif
 @endforeach
 			</tbody>
@@ -321,12 +310,8 @@ if( !empty($stl1->hasonestaffleavebackup) ) {
 			<tbody>
 @foreach($sla as $stl11)
 <?php
-$n = Carbon::now();
-$n1 = Carbon::create($n->year, $n->month, $n->day,0 ,0 ,0);
 $nn = Carbon::now()->subDays(2);	// 2 hari selepas bercuti
 $nn1 = Carbon::create($nn->year, $nn->month, $nn->day,0 ,0 ,0);
-$h = Carbon::parse($stl11->date_time_start);
-$h1 = Carbon::create($h->year, $h->month, $h->day,0 ,0 ,0);
 $j = Carbon::parse($stl11->date_time_end);
 $j1 = Carbon::create($j->year, $j->month, $j->day,0 ,0 ,0);
 
@@ -375,7 +360,6 @@ if( !empty($stl11->hasonestaffleavebackup) ) {
 }
 ?>
 @if($stl11->belongtostaff->active == 1 )
-@if($n1->gt($j1))
 				<tr>
 					<td>
 @if($nn1->gte($j1))
@@ -414,7 +398,6 @@ if( !empty($stl11->hasonestaffleavebackup) ) {
 					<td>{{ $stl11->remarks }}</td>
 					<td>{{ $stl11->belongtoleavestatus->status }}</td>
 				</tr>
-@endif
 @endif
 @endforeach
 			</tbody>

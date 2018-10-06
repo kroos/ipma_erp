@@ -127,13 +127,13 @@ $('#dts').datetimepicker({
 					'{{ Form::label('lt', 'Jenis Cuti : ', ['class' => 'col-sm-2 col-form-label removehalfleave']) }}' +
 					'<div class="col-sm-10 removehalfleave" id="halfleave">' +
 						'<div class="pretty p-default p-curve form-check removehalfleave" id="removeleavehalf">' +
-							'<input type="radio" name="leave_type" value="1" class="removehalfleave" id="radio1">' +
+							'<input type="radio" name="leave_type" value="1" class="removehalfleave" id="radio1" {{ ($staffLeaveHR->half_day != 2)?'checked="checked"':'' }} >' +
 							'<div class="state p-success removehalfleave">' +
 								'{{ Form::label('radio1', 'Cuti Penuh', ['class' => 'form-check-label removehalfleave']) }}' +
 							'</div>' +
 						'</div>' +
 						'<div class="pretty p-default p-curve form-check removehalfleave" id="appendleavehalf">' +
-							'<input type="radio" name="leave_type" value="2" class="removehalfleave" id="radio2">' +
+							'<input type="radio" name="leave_type" value="2" class="removehalfleave" id="radio2" {{ ($staffLeaveHR->half_day == 2)?'checked="checked"':'' }} >' +
 							'<div class="state p-success removehalfleave">' +
 								'{{ Form::label('radio2', 'Cuti Separuh', ['class' => 'form-check-label removehalfleave']) }}' +
 							'</div>' +
@@ -216,13 +216,13 @@ $('#dte').datetimepicker({
 					'{{ Form::label('lt', 'Jenis Cuti : ', ['class' => 'col-sm-2 col-form-label removehalfleave']) }}' +
 					'<div class="col-sm-10 removehalfleave" id="halfleave">' +
 						'<div class="pretty p-default p-curve form-check removehalfleave" id="removeleavehalf">' +
-							'<input type="radio" name="leave_type" value="1" class="removehalfleave" id="radio1">' +
+							'<input type="radio" name="leave_type" value="1" class="removehalfleave" id="radio1" {{ ($staffLeaveHR->half_day != 2)?'checked="checked"':'' }} >' +
 							'<div class="state p-success removehalfleave">' +
 								'{{ Form::label('radio1', 'Cuti Penuh', ['class' => 'form-check-label removehalfleave']) }}' +
 							'</div>' +
 						'</div>' +
 						'<div class="pretty p-default p-curve form-check removehalfleave" id="appendleavehalf">' +
-							'<input type="radio" name="leave_type" value="2" class="removehalfleave" id="radio2">' +
+							'<input type="radio" name="leave_type" value="2" class="removehalfleave" id="radio2" {{ ($staffLeaveHR->half_day == 2)?'checked="checked"':'' }} >' +
 							'<div class="state p-success removehalfleave">' +
 								'{{ Form::label('radio2', 'Cuti Separuh', ['class' => 'form-check-label removehalfleave']) }}' +
 							'</div>' +
@@ -241,7 +241,7 @@ $('#dte').datetimepicker({
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // enable radio
-$(document).on('change', '#radio2', function () {
+$(document).on('change', '#appendleavehalf :radio', function () {
 	if (this.checked) {
 		var daynow = moment($('#from').val(), 'YYYY-MM-DD').format('dddd');
 		var datenow =$('#dts').val();
@@ -317,6 +317,8 @@ $(document).on('change', '#removeleavehalf :radio', function () {
 	if (this.checked) {
 		$('.removetest').remove();
 	}
+		$('#per').val(1);
+		$('#perday').val(1);
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
