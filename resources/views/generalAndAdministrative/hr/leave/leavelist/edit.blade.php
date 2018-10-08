@@ -391,14 +391,14 @@ function update_period() {
 
 		if( cbal < 0 ) {
 			$('#albc').text(cbal.toFixed(1)).css({"color": "red", 'font-weight': 'bold'});
+			$(':input[type="submit"]').prop('disabled', true);
 			if( $('#danger1').length <= 0 ) {
 				$('#danger').append(
-					'<div class="alert alert-success">' +
+					'<div class="alert alert-danger" id="danger1">' +
 						'<h4 class="text-danger">Warning! Exceeding Balance Leave</h4>' +
 						'<p>Please don\'t proceed with this value. Adjust your date so that the <b>Balance Change</b> is <b>GREEN</b>.</p>' +
 					'</div>'
 				);
-
 				//		swal({
 				//			type: 'error',
 				//			title: 'Warning! Exceeding Balance Leave',
@@ -407,12 +407,13 @@ function update_period() {
 				//		.then(function(){
 				//			window.location.reload(true);
 				//		});
-			} else {
-				$('#danger').remove();
 			}
-		} else {
+
+		} else if( cbal >= 0 ){
 			$('#albc').text(cbal.toFixed(1)).css({"color": "green", 'font-weight': 'bold'});
 			$('#balance').val(cbal.toFixed(1));
+			$('#danger1').remove();
+			$(':input[type="submit"]').prop('disabled', false);
 		}
 @endif
 @if( $staffLeaveHR->leave_id == 3 || $staffLeaveHR->leave_id == 6 || $staffLeaveHR->leave_id == 11 )
