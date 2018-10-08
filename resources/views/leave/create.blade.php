@@ -172,46 +172,29 @@ $('#leave_id').on('change', function() {
 		// $('#datetimepicker').data('DateTimePicker').daysOfWeekDisabled([1, 2]);
 		$('#from').datetimepicker({
 			format:'YYYY-MM-DD',
-			// format:'LT',
-			// viewMode: 'years',
 			useCurrent: false,
 			daysOfWeekDisabled: [0],
 			minDate: moment().add(3, 'days').format('YYYY-MM-DD'),
 			disabledDates: 
-						//	function(){
-						//		$.post("{{ route('workinghour.blockholidaysandleave') }}",
-						//			{
-						//				_token: '{{ csrf_token() }}'
-						//			},
-						//			function(response){
-						//				var t = JSON.strigify(response);
-						//				//console.log(t);
-						//				var arr = [];
-						//				for(var i in t)
-						//					arr.push(t[i]);
-						//				//console.log(arr);
-						//				return arr;
-						//			});
-						//	},
 					[
-<?php
-// block holiday tgk dlm disable date in datetimepicker
-	foreach ($nodate as $nda) {
-		$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
-		foreach ($period as $key) {
-			echo 'moment("'.$key->format('Y-m-d').'"),';
-			// $holiday[] = $key->format('Y-m-d');
-		}
-	}
-	// block cuti sendiri
-	foreach ($nodate1 as $key) {
-		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
-		foreach ($period1 as $key1) {
-			echo 'moment("'.$key1->format('Y-m-d').'"),';
-			// $holiday[] = $key1->format('Y-m-d');
-		}
-	}
-?>
+						<?php
+						// block holiday tgk dlm disable date in datetimepicker
+							foreach ($nodate as $nda) {
+								$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+								foreach ($period as $key) {
+									echo 'moment("'.$key->format('Y-m-d').'"),';
+									// $holiday[] = $key->format('Y-m-d');
+								}
+							}
+							// block cuti sendiri
+							foreach ($nodate1 as $key) {
+								$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
+								foreach ($period1 as $key1) {
+									echo 'moment("'.$key1->format('Y-m-d').'"),';
+									// $holiday[] = $key1->format('Y-m-d');
+								}
+							}
+						?>
 					],
 		})
 		.on('dp.change dp.show dp.update', function(e) {
@@ -870,6 +853,7 @@ foreach ($nodate1 as $key) {
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// enable datetime for the 1st one
 		$('#from').datetimepicker({
+			useCurrent: false,
 			format:'YYYY-MM-DD',
 			daysOfWeekDisabled: [0],
 			disabledDates:[
@@ -1026,6 +1010,7 @@ foreach ($nodate1 as $key) {
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// enable datetime for the 1st one
 		$('#from').datetimepicker({
+			useCurrent: false,
 			format:'YYYY-MM-DD',
 			daysOfWeekDisabled: [0],
 			disabledDates:[
@@ -1299,6 +1284,7 @@ foreach ($nodate1 as $key) {
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// enable datetime for the 1st one
 		$('#from').datetimepicker({
+			useCurrent: false,
 			format:'YYYY-MM-DD',
 			daysOfWeekDisabled: [0],
 			disabledDates:[

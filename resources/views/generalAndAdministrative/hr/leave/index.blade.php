@@ -92,11 +92,11 @@ $('#leaves5').DataTable({
 /////////////////////////////////////////////////////////////////////////////////////////
 $('#selectAll').on('click',function(){
 	if(this.checked){
-		$('.checkbox').each(function(){
+		$('.checkbox1').each(function(){
 			this.checked = true;
 		});
 	}else{
-		$('.checkbox').each(function(){
+		$('.checkbox1').each(function(){
 			this.checked = false;
 		});
 	}

@@ -134,8 +134,12 @@ if( !empty($stl->hasonestaffleavebackup) ) {
 @if($stl->belongtostaff->active == 1 )
 				<tr>
 					<td>
+@if($stl->leave_id != 7)
 						<a href="{{ route('staffLeaveHR.edit', $stl->id) }}">HR9-{{ str_pad( $stl->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}</a>
-							<br />
+@else
+						HR9-{{ str_pad( $stl->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}
+@endif
+						<br />
 					</td>
 					<td>{{ $stl->belongtostaff->name }}</td>
 					<td>{{ Carbon::parse($stl->created_at)->format('D, j M y') }}</td>
@@ -364,7 +368,7 @@ if( !empty($stl11->hasonestaffleavebackup) ) {
 					<td>
 @if($nn1->gte($j1))
 @if( is_null($stl11->document) && is_null($stl11->hardcopy) && ( $stl11->leave_id == 2 || $stl11->leave_id == 5 || $stl11->leave_id == 6 || $stl11->leave_id == 9 || $stl11->leave_id == 11 ) )
-					<label for="cb{{ $stl11->id }}"><input type="checkbox" value="{{ $stl11->id }}"  name="hardcopy[]" id="cb{{ $stl11->id }}" class="checkbox"></label>
+					<label for="cb{{ $stl11->id }}"><input type="checkbox" value="{{ $stl11->id }}"  name="hardcopy[]" id="cb{{ $stl11->id }}" class="checkbox1"></label>
 @endif
 @endif
 					</td>

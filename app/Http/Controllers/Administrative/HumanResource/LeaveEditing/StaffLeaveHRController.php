@@ -71,7 +71,7 @@ class StaffLeaveHRController extends Controller
      */
     public function update(Request $request, StaffLeave $staffLeaveHR)
     {
-        //
+        print_r ($request->all());
     }
 
     /**

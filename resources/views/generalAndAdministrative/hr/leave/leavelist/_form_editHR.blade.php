@@ -6,13 +6,6 @@ use Carbon\Carbon;
 	<div class="card-body">
 
 		<dl class="row">
-			<dt class="col-sm-3"><h5 class="text-danger">SYSTEM REMINDER :</h5></dt>
-			<dd class="col-sm-9">
-				<p>AMEND function will ignore all the <strong>Restriction</strong> (Date/Balance/Type Checking) and if there is any changes (total days) that affected the current balance (AL,EL-AL/MC, UPL), it should be change manually with the help of IT staff.</p>
-			</dd>
-		</dl>
-
-		<dl class="row">
 			<dt class="col-sm-3"><h5>No. Staff :</h5></dt>
 			<dd class="col-sm-9">{{ $staffLeaveHR->belongtostaff->hasmanylogin()->where('active', 1)->first()->username }}</dd>
 			<dt class="col-sm-3"><h5>Apply Date :</h5></dt>
@@ -27,34 +20,46 @@ use Carbon\Carbon;
 			<dd class="col-sm-9">
 				<dl class="row">
 					<dt class="col-sm-3"><h5>Initial :</h5></dt>
-					<dd class="col-sm-9">{{ $staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->annual_leave }}</dd>
-					<dt class="col-sm-3"><h5>Balance :</h5></dt>
-					<dd class="col-sm-9" id="alb">{{ $staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->annual_leave_balance }}</dd>
+					<dd class="col-sm-9">{{ $staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->annual_leave }} day/s</dd>
+					<dt class="col-sm-3"><h5>Balance Initialize :</h5></dt>
+					<dd class="col-sm-9" id="alb"><span id="albi">{{ $staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->annual_leave_balance }}</span> day/s</dd>
+					<dt class="col-sm-3"><h5>Balance Change :</h5></dt>
+					<dd class="col-sm-9" id="alb"><span id="albc">{{ $staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->annual_leave_balance }}</span> day/s</dd>
 				</dl>
 			</dd>
+			{{ Form::text('balance', (is_null(@$value))?$staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->annual_leave_balance:@$value, ['id' => 'balance']) }}
 @endif
 @if( $staffLeaveHR->leave_id == 2 )
 			<dt class="col-sm-3"><h5>Medical Leave :</h5></dt>
 			<dd class="col-sm-9">
 				<dl class="row">
 					<dt class="col-sm-3"><h5>Initial :</h5></dt>
-					<dd class="col-sm-9">{{ $staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->medical_leave }}</dd>
-					<dt class="col-sm-3"><h5>Balance :</h5></dt>
-					<dd class="col-sm-9" id="mlb">{{ $staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->medical_leave_balance }}</dd>
+					<dd class="col-sm-9">{{ $staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->medical_leave }} day/s</dd>
+					<dt class="col-sm-3"><h5>Balance Initialize :</h5></dt>
+					<dd class="col-sm-9" id="mlb"><span id="albi">{{ $staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->medical_leave_balance }}</span> day/s</dd>
+					<dt class="col-sm-3"><h5>Balance Change :</h5></dt>
+					<dd class="col-sm-9" id="alb"><span id="albc">{{ $staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->medical_leave_balance }}</span> day/s</dd>
 				</dl>
 			</dd>
+			{{ Form::text('balance', (is_null(@$value))?$staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->medical_leave_balance:@$value, ['id' => 'balance']) }}
 @endif
 @if( $staffLeaveHR->leave_id == 3 || $staffLeaveHR->leave_id == 6 || $staffLeaveHR->leave_id == 11 )
 			<dt class="col-sm-3"><h5>Unpaid Leave :</h5></dt>
 			<dd class="col-sm-9">
 				<dl class="row">
-					<dt class="col-sm-3"><h5>Utilized :</h5></dt>
+					<dt class="col-sm-3"><h5>Utilized All UPL :</h5></dt>
 <?php
 $upl = $staffLeaveHR->belongtostaff->hasmanystaffleave()->where('leave_id', 3)->get()->sum('period');
 $elupl = $staffLeaveHR->belongtostaff->hasmanystaffleave()->where('leave_id', 6)->get()->sum('period');
 $mcupl = $staffLeaveHR->belongtostaff->hasmanystaffleave()->where('leave_id', 11)->get()->sum('period');
 ?>
-					<dd class="col-sm-9" id="ulb">{{ $upl + $elupl + $mcupl }}</dd>
+					<dd class="col-sm-9" id="ulb"><span id="albi">{{ $upl + $elupl + $mcupl }}</span> day/s</dd>
+
+
+
+					<dt class="col-sm-3"><h5>New Utilized All UPL :</h5></dt>
+					<dd class="col-sm-9" id="alb"><span id="albca">{{ $upl + $elupl + $mcupl }}</span> day/s</dd>
+
 				</dl>
 			</dd>
 @endif
@@ -63,24 +68,39 @@ $mcupl = $staffLeaveHR->belongtostaff->hasmanystaffleave()->where('leave_id', 11
 			<dd class="col-sm-9">
 				<dl class="row">
 					<dt class="col-sm-3"><h5>Initial :</h5></dt>
-					<dd class="col-sm-9">{{ $staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->maternity_leave }}</dd>
-					<dt class="col-sm-3"><h5>Balance :</h5></dt>
-					<dd class="col-sm-9" id="matlb">{{ $staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->maternity_leave_balance }}</dd>
+					<dd class="col-sm-9">{{ $staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->maternity_leave }} day/s</dd>
+					<dt class="col-sm-3"><h5>Balance Initialize :</h5></dt>
+					<dd class="col-sm-9" id="matlb"><span id="albi">{{ $staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->maternity_leave_balance }}</span> day/s</dd>
+					<dt class="col-sm-3"><h5>Balance Change :</h5></dt>
+					<dd class="col-sm-9" id="alb"><span id="albc">{{ $staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->maternity_leave_balance }}</span> day/s</dd>
 				</dl>
 			</dd>
+			{{ Form::text('balance', (is_null(@$value))?$staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->maternity_leave_balance:@$value, ['id' => 'balance']) }}
 @endif
 @if( $staffLeaveHR->leave_id == 4 )
 			<dt class="col-sm-3"><h5>Non Replacement Leave :</h5></dt>
 			<dd class="col-sm-9">
 				<dl class="row">
 					<dt class="col-sm-3"><h5>Initialize :</h5></dt>
-					<dd class="col-sm-9"></dd>
-					<dt class="col-sm-3"><h5>Utilized :</h5></dt>
-					<dd class="col-sm-9" id="matlb"></dd>
+					<dd class="col-sm-9"><span id="">{{ $staffLeaveHR->hasmanystaffleavereplacement()->first()->leave_total }}</span> day/s</dd>
+					<dt class="col-sm-3"><h5>Initial Utilized :</h5></dt>
+					<dd class="col-sm-9" id="matlb"><span id="albi">{{ $staffLeaveHR->hasmanystaffleavereplacement()->first()->leave_balance }}</span> day/s</dd>
+					<dt class="col-sm-3"><h5>Change Utilized :</h5></dt>
+					<dd class="col-sm-9" id="matlb"><span id="albc">{{ $staffLeaveHR->hasmanystaffleavereplacement()->first()->leave_balance }}</span> day/s</dd>
 				</dl>
 			</dd>
+			{{ Form::text('balance', (is_null(@$value))?$staffLeaveHR->hasmanystaffleavereplacement()->first()->leave_balance:@$value, ['id' => 'balance']) }}
 @endif
 		</dl>
+
+<!-- --------------------------------------------------------------- form initialization -------------------------------------------------------------------------------- -->
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-sm-8" id="danger">
+
+		</div>
+	</div>
+</div>
 
 
 @if($staffLeaveHR->leave_id != 9)
@@ -149,11 +169,6 @@ $start = \Carbon\Carbon::create(2018,1,1,12,0,0);
 		</div>
 @endif
 
-		{{ Form::hidden('periodday', @$value, ['id' => 'perday']) }}
-		{{ Form::hidden('periodtime', @$value, ['id' => 'pertime']) }}
-
-
-
 @if( $staffLeaveHR->leave_id == 9 )
 		<div class="form-group row {{ $errors->has('time_start') ? 'has-error' : '' }}">
 			{{ Form::label( 'ts', 'Time From : ', ['class' => 'col-sm-2 col-form-label'] ) }}
@@ -162,18 +177,31 @@ $start = \Carbon\Carbon::create(2018,1,1,12,0,0);
 			</div>
 		</div>
 
-		<div class="form-group row {{ $errors->has('time_start') ? 'has-error' : '' }}">
+		<div class="form-group row {{ $errors->has('time_end') ? 'has-error' : '' }}">
 			{{ Form::label( 'te', 'Time End : ', ['class' => 'col-sm-2 col-form-label'] ) }}
 			<div class="col-sm-10">
 				{{ Form::text('time_end', @$value, ['class' => 'form-control', 'id' => 'te']) }}
 			</div>
 		</div>
 @endif
+		<div class="form-group row {{ $errors->has('remarks') ? 'has-error' : '' }}">
+			{{ Form::label( 'per', 'Remarks : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+			<div class="col-sm-10">
+				{{ Form::textarea('remarks', @$value, ['class' => 'form-control', 'id' => 'rem']) }}
+			</div>
+		</div>
 
-		<div class="form-group row {{ $errors->has('time_start') ? 'has-error' : '' }}">
+		<div class="form-group row {{ $errors->has('period') ? 'has-error' : '' }}">
 			{{ Form::label( 'per', 'Period : ', ['class' => 'col-sm-2 col-form-label'] ) }}
 			<div class="col-sm-10">
 				{{ Form::text('period', @$value, ['class' => 'form-control', 'id' => 'per', 'disabled']) }}
+			</div>
+		</div>
+		{{ Form::hidden('period', @$value, ['id' => 'perday']) }}
+
+		<div class="form-group row">
+			<div class="col-sm-10 offset-sm-2">
+				{!! Form::button('Update', ['class' => 'btn btn-primary btn-block', 'type' => 'submit']) !!}
 			</div>
 		</div>
 
