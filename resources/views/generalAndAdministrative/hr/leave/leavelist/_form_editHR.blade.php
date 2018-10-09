@@ -27,7 +27,7 @@ use Carbon\Carbon;
 					<dd class="col-sm-9" id="alb"><span id="albc">{{ $staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->annual_leave_balance }}</span> day/s</dd>
 				</dl>
 			</dd>
-			{{ Form::text('balance', (is_null(@$value))?$staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->annual_leave_balance:@$value, ['id' => 'balance']) }}
+			{{ Form::hidden('balance', (is_null(@$value))?$staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->annual_leave_balance:@$value, ['id' => 'balance']) }}
 @endif
 @if( $staffLeaveHR->leave_id == 2 )
 			<dt class="col-sm-3"><h5>Medical Leave :</h5></dt>
@@ -41,7 +41,7 @@ use Carbon\Carbon;
 					<dd class="col-sm-9" id="alb"><span id="albc">{{ $staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->medical_leave_balance }}</span> day/s</dd>
 				</dl>
 			</dd>
-			{{ Form::text('balance', (is_null(@$value))?$staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->medical_leave_balance:@$value, ['id' => 'balance']) }}
+			{{ Form::hidden('balance', (is_null(@$value))?$staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->medical_leave_balance:@$value, ['id' => 'balance']) }}
 @endif
 @if( $staffLeaveHR->leave_id == 3 || $staffLeaveHR->leave_id == 6 || $staffLeaveHR->leave_id == 11 )
 			<dt class="col-sm-3"><h5>Unpaid Leave :</h5></dt>
@@ -75,7 +75,7 @@ $mcupl = $staffLeaveHR->belongtostaff->hasmanystaffleave()->where('leave_id', 11
 					<dd class="col-sm-9" id="alb"><span id="albc">{{ $staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->maternity_leave_balance }}</span> day/s</dd>
 				</dl>
 			</dd>
-			{{ Form::text('balance', (is_null(@$value))?$staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->maternity_leave_balance:@$value, ['id' => 'balance']) }}
+			{{ Form::hidden('balance', (is_null(@$value))?$staffLeaveHR->belongtostaff->hasmanystaffannualmcleave()->where('year', Carbon::parse($staffLeaveHR->date_time_start)->format('Y') )->first()->maternity_leave_balance:@$value, ['id' => 'balance']) }}
 @endif
 @if( $staffLeaveHR->leave_id == 4 )
 			<dt class="col-sm-3"><h5>Non Replacement Leave :</h5></dt>
@@ -89,7 +89,7 @@ $mcupl = $staffLeaveHR->belongtostaff->hasmanystaffleave()->where('leave_id', 11
 					<dd class="col-sm-9" id="matlb"><span id="albc">{{ $staffLeaveHR->hasmanystaffleavereplacement()->first()->leave_balance }}</span> day/s</dd>
 				</dl>
 			</dd>
-			{{ Form::text('balance', (is_null(@$value))?$staffLeaveHR->hasmanystaffleavereplacement()->first()->leave_balance:@$value, ['id' => 'balance']) }}
+			{{ Form::hidden('balance', (is_null(@$value))?$staffLeaveHR->hasmanystaffleavereplacement()->first()->leave_balance:@$value, ['id' => 'balance']) }}
 @endif
 		</dl>
 
@@ -145,12 +145,11 @@ $exp1 = explode(' ', $dts);
 $exp2 = explode(' ', $dte);
 // echo $exp1[1].'<br />';
 // echo $exp2[1].'<br />';
-$s1 = \Carbon\Carbon::parse($exp1[1]);
-$start = \Carbon\Carbon::create(2018,1,1,$s1->hour, $s1->minute, $s1->second);
-$pkl9 = \Carbon\Carbon::create(2018,1,1,9,0,0);
-$pkl12 = \Carbon\Carbon::create(2018,1,1,12,0,0);
-$start = \Carbon\Carbon::create(2018,1,1,12,0,0);
-// echo $start;
+$s1 = \Carbon\Carbon::parse($dts);
+$start = \Carbon\Carbon::create($s1->year, $s1->month ,$s1->day ,$s1->hour, $s1->minute, 0);
+$pkl9 = \Carbon\Carbon::create($s1->year, $s1->month ,$s1->day ,9,0,0);
+$pkl12 = \Carbon\Carbon::create($s1->year, $s1->month ,$s1->day ,12,0,0);
+echo $start;
 ?>
 				<div class="pretty p-default p-curve form-check removetest">
 					<input type="radio" name="leave_half" value="" id="am" {{ ( $start->lt($pkl9) )?'checked':( $start->gte($pkl12) )?'checked':'' }}>
@@ -164,30 +163,9 @@ $start = \Carbon\Carbon::create(2018,1,1,12,0,0);
 						<label for="pm" class="form-check-label pm1"></label> 
 					</div>
 				</div>
-@endif
-			</div>
-		</div>
-@endif
 
-@if( $staffLeaveHR->leave_id == 9 )
-		<div class="form-group row {{ $errors->has('time_start') ? 'has-error' : '' }}">
-			{{ Form::label( 'ts', 'Time From : ', ['class' => 'col-sm-2 col-form-label'] ) }}
-			<div class="col-sm-10">
-				{{ Form::text('time_start', @$value, ['class' => 'form-control', 'id' => 'ts']) }}
-			</div>
-		</div>
 
-		<div class="form-group row {{ $errors->has('time_end') ? 'has-error' : '' }}">
-			{{ Form::label( 'te', 'Time End : ', ['class' => 'col-sm-2 col-form-label'] ) }}
-			<div class="col-sm-10">
-				{{ Form::text('time_end', @$value, ['class' => 'form-control', 'id' => 'te']) }}
-			</div>
-		</div>
 @endif
-		<div class="form-group row {{ $errors->has('remarks') ? 'has-error' : '' }}">
-			{{ Form::label( 'per', 'Remarks : ', ['class' => 'col-sm-2 col-form-label'] ) }}
-			<div class="col-sm-10">
-				{{ Form::textarea('remarks', @$value, ['class' => 'form-control', 'id' => 'rem']) }}
 			</div>
 		</div>
 
@@ -197,7 +175,58 @@ $start = \Carbon\Carbon::create(2018,1,1,12,0,0);
 				{{ Form::text('period', @$value, ['class' => 'form-control', 'id' => 'per', 'disabled']) }}
 			</div>
 		</div>
-		{{ Form::hidden('period', @$value, ['id' => 'perday']) }}
+		{{ Form::text('period', @$value, ['id' => 'perday']) }}
+@endif
+
+@if( $staffLeaveHR->leave_id == 9 )
+
+		<div class="form-group row {{ $errors->has('date_time_start') ? 'has-error' : '' }}">
+			{{ Form::label( 'dtstf', 'Date : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+			<div class="col-sm-10">
+				{{ Form::text('date_time_start', @$value, ['class' => 'form-control', 'id' => 'dtstf']) }}
+			</div>
+		</div>
+
+<?php
+$ts1 = $staffLeaveHR->date_time_start;
+$te1 = $staffLeaveHR->date_time_end;
+$ts2 = \Carbon\Carbon::parse($ts1);
+$te2 = \Carbon\Carbon::parse($te1);
+
+$ts3 = \Carbon\Carbon::create($ts2->year, $ts2->month, $ts2->day, $ts2->hour, $ts2->minute, 0)->format('H:i');
+$te3 = \Carbon\Carbon::create($te2->year, $te2->month, $te2->day, $te2->hour, $te2->minute, 0)->format('H:i');
+
+echo $ts3;
+?>
+		<div class="form-group row {{ $errors->has('time_start') ? 'has-error' : '' }}">
+			{{ Form::label( 'ts', 'Time From : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+			<div class="col-sm-10">
+				{{ Form::text('time_start', (empty(@$value))?$ts3:@$value, ['class' => 'form-control', 'id' => 'ts']) }}
+			</div>
+		</div>
+
+		<div class="form-group row {{ $errors->has('time_end') ? 'has-error' : '' }}">
+			{{ Form::label( 'te', 'Time End : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+			<div class="col-sm-10">
+				{{ Form::text('time_end', (empty(@$value))?$te3:@$value, ['class' => 'form-control', 'id' => 'te']) }}
+			</div>
+		</div>
+
+		<div class="form-group row {{ $errors->has('period') ? 'has-error' : '' }}">
+			{{ Form::label( 'per', 'Period : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+			<div class="col-sm-10">
+				{{ Form::text('period', @$value, ['class' => 'form-control', 'id' => 'per', 'disabled']) }} minute
+			</div>
+		</div>
+		{{ Form::text('period', @$value, ['id' => 'perday']) }}
+@endif
+
+		<div class="form-group row {{ $errors->has('remarks') ? 'has-error' : '' }}">
+			{{ Form::label( 'per', 'Remarks : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+			<div class="col-sm-10">
+				{{ Form::textarea('remarks', @$value, ['class' => 'form-control', 'id' => 'rem']) }}
+			</div>
+		</div>
 
 		<div class="form-group row">
 			<div class="col-sm-10 offset-sm-2">

@@ -4,6 +4,8 @@
 <div class="card">
 	<div class="card-header"><h1>Human Resource Department</h1></div>
 	<div class="card-body">
+		@include('layouts.info')
+		@include('layouts.errorform')
 
 		<ul class="nav nav-tabs">
 @foreach( App\Model\Division::find(1)->hasmanydepartment()->whereNotIn('id', [22, 23, 24])->get() as $key)
@@ -250,7 +252,8 @@ $('#dte').datetimepicker({
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // enable radio
-$(document).on('change', '#appendleavehalf :radio', function () {
+// $(document).on('change', '#appendleavehalf :radio', function () {
+$(document).on('change', '#wrapperday :radio', function () {
 	if (this.checked) {
 		var daynow = moment($('#from').val(), 'YYYY-MM-DD').format('dddd');
 		var datenow =$('#dts').val();
@@ -274,6 +277,7 @@ $(document).on('change', '#appendleavehalf :radio', function () {
 		var obj = jQuery.parseJSON( data1 );
 		// end get time //
 
+		///////////////////////////////////////////////////////////////////////////////
 		// get the period
 		var data11 = $.ajax({
 			url: "{{ route('workinghour.dte') }}",
@@ -341,32 +345,34 @@ $(document).on('load change', '#radio2', function() {
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // time for half day
-var daynow = moment($('#from').val(), 'YYYY-MM-DD').format('dddd');
-var datenow = $('#dts').val();
-var data1 = $.ajax({
-	url: "{{ route('workinghour.workingtime') }}",
-	type: "POST",
-	data: {date: datenow, _token: '{!! csrf_token() !!}'},
-	dataType: 'json',
-	global: false,
-	async:false,
-	success: function (response) {
-		// you will get response from your php page (what you echo or print)
-		return response;
-	},
-	error: function(jqXHR, textStatus, errorThrown) {
-		console.log(textStatus, errorThrown);
-	}
-}).responseText;
-
-// convert data1 into json
-var obj = jQuery.parseJSON( data1 );
-
-$('#am').val( obj.start_am + '/' + obj.end_am );
-$('#pm').val( obj.start_pm + '/' + obj.end_pm );
-
-$('label.am1').text(moment(obj.start_am, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_am, 'HH:mm:ss').format('h:mm a'));
-$('label.pm1').text(moment(obj.start_pm, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_pm, 'HH:mm:ss').format('h:mm a'));
+@if( $staffLeaveHR->leave_id != 9 )
+	var daynow = moment($('#from').val(), 'YYYY-MM-DD').format('dddd');
+	var datenow = $('#dts').val();
+	var data1 = $.ajax({
+		url: "{{ route('workinghour.workingtime') }}",
+		type: "POST",
+		data: {date: datenow, _token: '{!! csrf_token() !!}'},
+		dataType: 'json',
+		global: false,
+		async:false,
+		success: function (response) {
+			// you will get response from your php page (what you echo or print)
+			return response;
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.log(textStatus, errorThrown);
+		}
+	}).responseText;
+	
+	// convert data1 into json
+	var obj = jQuery.parseJSON( data1 );
+	
+	$('#am').val( obj.start_am + '/' + obj.end_am );
+	$('#pm').val( obj.start_pm + '/' + obj.end_pm );
+	
+	$('label.am1').text(moment(obj.start_am, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_am, 'HH:mm:ss').format('h:mm a'));
+	$('label.pm1').text(moment(obj.start_pm, 'HH:mm:ss').format('h:mm a') + ' to ' + moment(obj.end_pm, 'HH:mm:ss').format('h:mm a'));
+@endif
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // function update the period after changes
@@ -425,6 +431,122 @@ function update_period() {
 
 @endif
 };
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// date for tf
+$('#dtstf').datetimepicker({
+	format: 'YYYY-MM-DD',
+	useCurrent: false,
+	minDate: $('#dts').val(),
+	daysOfWeekDisabled: [0],
+	disabledDates: 
+					[
+						<?php
+						// block holiday tgk dlm disable date in datetimepicker
+							foreach ($nodate as $nda) {
+								$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+								foreach ($period as $key) {
+									echo 'moment("'.$key->format('Y-m-d').'"),';
+									// $holiday[] = $key->format('Y-m-d');
+								}
+							}
+							// block cuti sendiri
+							foreach ($nodate1 as $key) {
+								$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
+								foreach ($period1 as $key1) {
+									echo 'moment("'.$key1->format('Y-m-d').'"),';
+									// $holiday[] = $key1->format('Y-m-d');
+								}
+							}
+						?>
+					],
+})
+.on('dp.change dp.show dp.update', function(e){});
+;
+
+// time start
+$('#ts').datetimepicker({
+	useCurrent: false,
+	format: 'h:mm A',
+	enabledHours: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+})
+.on('dp.change dp.show dp.update', function(e){
+//	$('#form').bootstrapValidator('revalidateField', 'time_start');
+
+	//		var startTime = $('#ts').val();
+	//		var endTime = $('#te').val();
+	//		var hours = moment.duration( moment( endTime, 'h:mm A' ).diff( moment(startTime, 'h:mm A') ) ).asMinutes();
+	//		console.log(hours);
+
+	var data2 = $.ajax({
+		url: "{{ route('workinghour.tftimeperiod') }}",
+		type: "POST",
+		data: {
+				date_time_start: $('#dtstf').val(),
+				time_start: $('#ts').val(),
+				time_end: $('#te').val(),
+				_token: '{!! csrf_token() !!}'
+			},
+		dataType: 'json',
+		global: false,
+		async:false,
+		success: function (response) {
+			// you will get response from your php page (what you echo or print)
+			return response;
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.log(textStatus, errorThrown);
+		}
+	}).responseText;
+	
+	// convert data1 into json
+	var obj2 = jQuery.parseJSON( data2 );
+
+	$('#per').val( obj2.hours );
+	$('#perday').val( obj2.period );
+});
+
+$('#te').datetimepicker({
+	useCurrent: false,
+	format: 'h:mm A',
+	enabledHours: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17],
+})
+.on('dp.change dp.show dp.update', function(e){
+//	$('#form').bootstrapValidator('revalidateField', 'time_end');
+
+	//		var startTime = $('#ts').val();
+	//		var endTime = $('#te').val();
+	//		var hours = moment.duration( moment( endTime, 'h:mm A' ).diff( moment(startTime, 'h:mm A') ) ).asMinutes();
+	//		console.log(hours);
+
+	var data2 = $.ajax({
+		url: "{{ route('workinghour.tftimeperiod') }}",
+		type: "POST",
+		data: {
+				date_time_start: $('#dtstf').val(),
+				time_start: $('#ts').val(),
+				time_end: $('#te').val(),
+				_token: '{!! csrf_token() !!}'
+			},
+		dataType: 'json',
+		global: false,
+		async:false,
+		success: function (response) {
+			// you will get response from your php page (what you echo or print)
+			return response;
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.log(textStatus, errorThrown);
+		}
+	}).responseText;
+	
+	// convert data1 into json
+	var obj2 = jQuery.parseJSON( data2 );
+
+	$('#per').val( obj2.hours );
+	$('#perday').val( obj2.period );
+});
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // bootstrap validator

@@ -264,6 +264,13 @@ Route::post('/dte', [
 	]);
 
 ############################################################################
+// dte Ajax Controller
+Route::post('/tftimeperiod', [
+		'as' => 'workinghour.tftimeperiod',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@tftimeperiod'
+	]);
+
+############################################################################
 
 
 

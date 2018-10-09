@@ -487,9 +487,12 @@ class WorkingHourAjaxController extends Controller
 		if($request->leave_type == 2) {
 			$haricuti = 0.5;
 		} else {
-			$haricuti = count($sundi) - count($cuti);
+			if($request->leave_type == 1) {
+				$haricuti = 1;
+			} else {
+				$haricuti = count($sundi) - count($cuti);
+			}
 		}
-
 		// echo $haricuti.' applied leave for this year<br />';
 
 		return response()->json([
@@ -497,7 +500,110 @@ class WorkingHourAjaxController extends Controller
 		]);
 	}
 
+	public function tftimeperiod(Request $request)
+	{
+		$tim1 = \Carbon\Carbon::create($request->date_time_start.' '.$request->time_start, 'Y-m-d h:m A');
+		$tim2 = \Carbon\Carbon::create($request->date_time_start.' '.$request->time_end, 'Y-m-d h:m A');
+		// echo $tim1.' date time start<br />';
+		// echo $tim2.' date time end<br />';
 
+		// var_dump($tim1->gte($tim2));
+
+		if ( $tim1->gte($tim2) ) { // time start less than time end
+			Session::flash('flash_message', 'Masa bagi permohonon Time Off tidak dapat diproses ('.\Carbon\Carbon::parse($request->date_time_start.' '.$request->time_start)->format('D, j F Y h:i A').' hingga '.\Carbon\Carbon::parse($request->date_time_start.' '.$request->time_end)->format('D, j F Y h:i A').') . Sila ambil masa yang lain.');
+			return redirect()->back()->withInput();
+		}
+
+		// period time
+		$userposition = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
+		$dt = \Carbon\Carbon::parse($request->date_time_start);
+
+		if( $userposition->id == 72 && $dt->dayOfWeek != 5 ) {	// checking for friday
+
+			$time = \App\Model\WorkingHour::where('year', $dt->year)->where('category', 8);
+		} else {
+
+			if ( $userposition->id == 72 && $dt->dayOfWeek == 5 ) {	// checking for friday
+
+				$time = \App\Model\WorkingHour::where('year', $dt->year)->where('category', 8);
+			} else {
+
+				if( $userposition->id != 72 && $dt->dayOfWeek != 5 ) {	// checking for friday
+					// normal
+					$time = \App\Model\WorkingHour::where('year', $dt->year)->whereRaw('"'.$request->date_time_start.'" BETWEEN working_hours.effective_date_start AND working_hours.effective_date_end' )->limit(1);
+				} else {
+					if( $userposition->id != 72 && $dt->dayOfWeek == 5 ) {	// checking for friday
+						$time = \App\Model\WorkingHour::where('year', $dt->year)->where('category', 3)->whereRaw('"'.$request->date_time_start.'" BETWEEN working_hours.effective_date_start AND working_hours.effective_date_end' )->limit(1);
+					}
+				}
+			}
+		}
+
+		$times = \Carbon\Carbon::parse($request->date_time_start.' '.$request->time_start)->format('H:i:s');
+		$timee = \Carbon\Carbon::parse($request->date_time_start.' '.$request->time_end)->format('H:i:s');
+		$timep = \Carbon\CarbonPeriod::create($request->date_time_start.' '.$times, '1 minutes', $request->date_time_start.' '.$timee, \Carbon\CarbonPeriod::EXCLUDE_START_DATE);
+		// echo $times.' time start<br />';
+		// echo $timee.' time end<br />';
+
+		// echo $timep->count().' tempoh minit masa keluar sblm tolak recess<br />';
+
+		// echo 'start_am => '.$time->first()->time_start_am.' time start am<br />';
+		// echo 'end_am => '.$time->first()->time_end_am.' time end am<br />';
+		// echo 'start_pm => '.$time->first()->time_start_pm.' time start pm<br />';
+		// echo 'end_pm => '.$time->first()->time_end_pm.' time end pm<br />';
+
+		$timefull = \Carbon\CarbonPeriod::create($request->date_time_start.' '.$time->first()->time_start_am, '1 minutes', $request->date_time_start.' '.$time->first()->time_end_pm, \Carbon\CarbonPeriod::EXCLUDE_START_DATE);
+		$timeamwh = \Carbon\CarbonPeriod::create($request->date_time_start.' '.$time->first()->time_start_am, '1 minutes', $request->date_time_start.' '.$time->first()->time_end_am, \Carbon\CarbonPeriod::EXCLUDE_START_DATE);
+		$timepmwh = \Carbon\CarbonPeriod::create($request->date_time_start.' '.$time->first()->time_start_pm, '1 minutes', $request->date_time_start.' '.$time->first()->time_end_pm, \Carbon\CarbonPeriod::EXCLUDE_START_DATE);
+
+		// echo $timefull->count().' time full<br />';
+		// echo $timeamwh->count().' timeamwh<br />';
+		// echo $timepmwh->count().' timepmwh<br />';
+
+		// foreach($timep as $tpout) {
+		// 	echo $tpout.' time off<br />';
+		// }
+
+		foreach($timefull as $tf) {
+			// echo $tf.' minutes for time full<br />';
+			foreach ($timeamwh as $tamwh) {
+				if ($tf == $tamwh) {
+					// echo $tamwh.' minutes for am working hours<br />';
+					$timecomb[] = $tamwh;
+				}
+			}
+			foreach ($timepmwh as $tpmwh) {
+				if($tf == $tpmwh) {
+					// echo $tpmwh.' minutes for pm working hours<br />';
+					$timecomb[] = $tpmwh;
+				}
+			}
+		}
+
+		$i = 0;
+		// we already have all the working minutes synch, so..
+		foreach ($timecomb as $key) {
+			// echo $key.' working minutes combin<br />';
+			foreach($timep as $tpout) {
+				if($tpout == $key) {
+					$timing = $i++; // satu saja.. jgn 2 sekali
+					// echo $tpout.' time off<br />';
+					// echo $i++.' minutes<br />';
+				}
+			}
+		}
+
+		// convert minuts to hour and minutes
+		$hour = floor($i/60);
+		$minute = ($i % 60);
+		$hours1 = $hour.' jam '.$minute.' minit';
+		// echo $hour.' jam '.$minute.' minit<br />';
+
+		return response()->json([
+			'period' => $i,
+			'hours' => $hours1,
+		]);
+	}
 
 
 
