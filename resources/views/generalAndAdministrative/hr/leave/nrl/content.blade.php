@@ -69,6 +69,10 @@ if( $jan != 1 ) {
 			</thead>
 			<tbody>
 @foreach( $tynrl as $rnl )
+<?php
+
+
+?>
 				<tr>
 					<td>{!! $rnl->belongtostaff->name !!}</td>
 					<td>{!! Carbon::parse($rnl->working_date)->format('D, j M Y') !!}</td>
@@ -116,19 +120,24 @@ if( $jan != 1 ) {
 			<tbody>
 @foreach($tynr2 as $crl)
 <?php
-$arr = str_split( Carbon::parse($crl->belongtostaffleave->created_at)->format('Y'), 2 );
+if( is_null($crl->belongtostaffleave) ) {
+	$href = NULL;
+} else {
+	$arr = str_split( Carbon::parse($crl->belongtostaffleave->created_at)->format('Y'), 2 );
+	$href = 'HR9-'.str_pad( $crl->belongtostaffleave->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
+}
 ?>
 				<tr>
-					<th>{!! $crl->belongtostaff->name !!}</th>
-					<th>HR-{!! str_pad( $crl->belongtostaffleave->leave_no, 5, "0", STR_PAD_LEFT ) !!}/{!! $arr[1] !!}</th>
-					<th>{!! Carbon::parse($crl->updated_at)->format('D, j M Y') !!}Date Claimed</th>
-					<th>{!! $crl->working_date !!}</th>
-					<th>{!! $crl->working_location !!}</th>
-					<th>{!! $crl->working_reason !!}</th>
-					<th>{!! $crl->remarks !!}</th>
-					<th>{!! $crl->leave_total !!} day/s</th>
-					<th>{!! $crl->leave_utilize !!} day/s</th>
-					<th>{!! $crl->leave_balance !!} day/s</th>
+					<td>{!! $crl->belongtostaff->name !!}</td>
+					<td>{!! $href !!}</td>
+					<td>{!! Carbon::parse($crl->updated_at)->format('D, j M Y') !!}</td>
+					<td>{!! $crl->working_date !!}</td>
+					<td>{!! $crl->working_location !!}</td>
+					<td>{!! $crl->working_reason !!}</td>
+					<td>{!! $crl->remarks !!}</td>
+					<td>{!! $crl->leave_total !!} day/s</td>
+					<td>{!! $crl->leave_utilize !!} day/s</td>
+					<td>{!! $crl->leave_balance !!} day/s</td>
 				</tr>
 @endforeach
 			</tbody>
