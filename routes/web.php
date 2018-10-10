@@ -45,7 +45,7 @@ Route::resources([
 // received hardcopy
 Route::post('/staffLeaveHR', [
 	'as' => 'staffLeaveHR.updateRHC',
-	'uses' => 'Profile\StaffLeaveController@updateRHC'
+	'uses' => 'Administrative\HumanResource\LeaveEditing\StaffLeaveHRController@updateRHC'
 ]);
 // createHR for staff
 Route::get('/createHR/{staffHR}', [

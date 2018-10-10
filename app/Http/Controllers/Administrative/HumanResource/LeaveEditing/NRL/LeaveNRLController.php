@@ -22,7 +22,7 @@ class LeaveNRLController extends Controller
 
 	public function index()
 	{
-		// return view('generalAndAdministrative.hr.leave.nrl.index');
+		return view('generalAndAdministrative.hr.leave.nrl.index');
 	}
 
 	public function create()

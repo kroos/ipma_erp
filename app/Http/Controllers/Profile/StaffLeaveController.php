@@ -935,7 +935,7 @@ class StaffLeaveController extends Controller
 						'reason' => $request->reason,
 						'date_time_start' => $tim1,
 						'date_time_end' => $tim2,
-						'period' => $timing,	
+						'period' => $timing,
 						'document' => $image,
 						'active' => 1,
 					]);
@@ -1179,20 +1179,6 @@ class StaffLeaveController extends Controller
 				'status' => 'success',
 				'message' => 'Your leave has been cancelled.'
 			]);
-		}
-	}
-
-	public function updateRHC(Request $request)
-	{
-		if($request->has('hardcopy')) {
-			foreach ($request->hardcopy as $key) {
-				StaffLeave::where('id', $key)->update(['hardcopy' => 1]);
-			}
-			Session::flash('flash_message', 'Data successfully inserted.');
-			return redirect()->route('leaveEditing.index');
-		} else {
-			Session::flash('flash_message', 'Please click on the checkbox. There is no data passed to the system.');
-			return redirect()->route('leaveEditing.index');
 		}
 	}
 

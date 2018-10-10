@@ -149,16 +149,16 @@ $s1 = \Carbon\Carbon::parse($dts);
 $start = \Carbon\Carbon::create($s1->year, $s1->month ,$s1->day ,$s1->hour, $s1->minute, 0);
 $pkl9 = \Carbon\Carbon::create($s1->year, $s1->month ,$s1->day ,9,0,0);
 $pkl12 = \Carbon\Carbon::create($s1->year, $s1->month ,$s1->day ,12,0,0);
-echo $start;
+// echo $start;
 ?>
 				<div class="pretty p-default p-curve form-check removetest">
-					<input type="radio" name="leave_half" value="" id="am" {{ ( $start->lt($pkl9) )?'checked':( $start->gte($pkl12) )?'checked':'' }}>
+					<input type="radio" name="leave_half" value="" id="am" {{ ( $start->lt($pkl9) )?'checked':'' }}>
 					<div class="state p-primary">
 						<label for="am" class="form-check-label am1"></label> 
 					</div>
 				</div>
 				<div class="pretty p-default p-curve form-check removetest">
-					<input type="radio" name="leave_half" value="" id="pm" {{ ( $start->gt($pkl9) )?'checked':( $start->lte($pkl12) )?'checked':'' }}>
+					<input type="radio" name="leave_half" value="" id="pm" {{ ( $start->gt($pkl9) )?'checked':'' }}>
 					<div class="state p-primary">
 						<label for="pm" class="form-check-label pm1"></label> 
 					</div>
@@ -175,7 +175,7 @@ echo $start;
 				{{ Form::text('period', @$value, ['class' => 'form-control', 'id' => 'per', 'disabled']) }}
 			</div>
 		</div>
-		{{ Form::text('period', @$value, ['id' => 'perday']) }}
+		{{ Form::hidden('period', @$value, ['id' => 'perday']) }}
 @endif
 
 @if( $staffLeaveHR->leave_id == 9 )
@@ -196,7 +196,7 @@ $te2 = \Carbon\Carbon::parse($te1);
 $ts3 = \Carbon\Carbon::create($ts2->year, $ts2->month, $ts2->day, $ts2->hour, $ts2->minute, 0)->format('H:i');
 $te3 = \Carbon\Carbon::create($te2->year, $te2->month, $te2->day, $te2->hour, $te2->minute, 0)->format('H:i');
 
-echo $ts3;
+// echo $ts3;
 ?>
 		<div class="form-group row {{ $errors->has('time_start') ? 'has-error' : '' }}">
 			{{ Form::label( 'ts', 'Time From : ', ['class' => 'col-sm-2 col-form-label'] ) }}
@@ -218,7 +218,7 @@ echo $ts3;
 				{{ Form::text('period', @$value, ['class' => 'form-control', 'id' => 'per', 'disabled']) }} minute
 			</div>
 		</div>
-		{{ Form::text('period', @$value, ['id' => 'perday']) }}
+		{{ Form::hidden('period', @$value, ['id' => 'perday']) }}
 @endif
 
 		<div class="form-group row {{ $errors->has('remarks') ? 'has-error' : '' }}">

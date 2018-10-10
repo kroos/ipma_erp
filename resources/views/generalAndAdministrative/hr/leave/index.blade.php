@@ -47,6 +47,9 @@ $("#username").keyup(function() {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+// datatables
+$.fn.dataTable.moment( 'ddd, D MMM YYYY' );
+$.fn.dataTable.moment( 'ddd, D MMM YYYY h:mm a' );
 $('#leaves').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
 	// "order": [[5, "desc" ]],	// sorting the 4th column descending
@@ -70,23 +73,23 @@ $('#leaves2').DataTable({
 
 $('#leaves3').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	// "order": [[5, "desc" ]],	// sorting the 4th column descending
+	"order": [[5, "desc" ]],	// sorting the 4th column descending
 	// responsive: true
-	"ordering": false
+	// "ordering": false
 });
 
 $('#leaves4').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	// "order": [[5, "desc" ]],	// sorting the 4th column descending
+	"order": [[5, "desc" ]],	// sorting the 4th column descending
 	// responsive: true
-	"ordering": false
+	// "ordering": false
 });
 
 $('#leaves5').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
 	// "order": [[5, "desc" ]],	// sorting the 4th column descending
 	// responsive: true
-	"ordering": false
+	// "ordering": false
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -97,6 +100,18 @@ $('#selectAll').on('click',function(){
 		});
 	}else{
 		$('.checkbox1').each(function(){
+			this.checked = false;
+		});
+	}
+});
+
+$('#selectAllClosed').on('click',function(){
+	if(this.checked){
+		$('.closed').each(function(){
+			this.checked = true;
+		});
+	}else{
+		$('.closed').each(function(){
 			this.checked = false;
 		});
 	}

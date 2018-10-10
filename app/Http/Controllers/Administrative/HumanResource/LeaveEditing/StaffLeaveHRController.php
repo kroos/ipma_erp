@@ -44,7 +44,7 @@ class StaffLeaveHRController extends Controller
 
 	public function update(Request $request, StaffLeave $staffLeaveHR)
 	{
-		print_r ($request->all());
+		// print_r ($request->all());
 
 		// checking for half day
 		if( $request->leave_type == 1 || empty($request->leave_type) ) {
@@ -188,15 +188,27 @@ class StaffLeaveHRController extends Controller
 				]);
 			}
 		}
-	
-	
-	
-	
-	
-	
-	
-	
 		Session::flash('flash_message', 'Data successfully inserted.');
+		return redirect()->route('leaveEditing.index');
+	}
+
+	public function updateRHC(Request $request)
+	{
+		if($request->has('hardcopy')) {
+			foreach ($request->hardcopy as $key) {
+				StaffLeave::where('id', $key)->update(['hardcopy' => 1]);
+			}
+			Session::flash('flash_message', 'Data successfully inserted.');
+			return redirect()->route('leaveEditing.index');
+		}
+		if($request->has('closed')) {
+			foreach ($request->closed as $key) {
+				StaffLeave::where('id', $key)->update(['active' => 2]);
+			}
+			Session::flash('flash_message', 'Data successfully inserted.');
+			return redirect()->route('leaveEditing.index');
+		}
+		Session::flash('flash_message', 'Please click on the checkbox. There is no data passed to the system.');
 		return redirect()->route('leaveEditing.index');
 	}
 

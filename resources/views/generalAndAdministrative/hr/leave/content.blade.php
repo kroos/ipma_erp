@@ -6,28 +6,32 @@ use Carbon\Carbon;
 
 $bor = Carbon::now();
 $bor1 = Carbon::create($bor->year, $bor->month, $bor->day, 0, 0, 0);
+
+// start early in this year
+$bor2 = $bor1->copy()->startOfYear();
+
 $bmonth = $bor->month;
 // echo $bmonth.' month now <br />';
 // echo $bor1.' now <br />';
 // echo $bor1->copy()->subMonth()->startOfMonth().' from start of last month<br />';
+$bor3 = $bor1->copy()->subMonth()->startOfMonth();
 
 if ( $bmonth != 1 ) {
-	$sl = StaffLeave::where('active', 1)->whereDate('created_at', '>=', $bor1->copy()->startOfYear())->whereDate('date_time_start', '>', $bor1)->orderBy('date_time_start', 'desc')->get();
-	$sla = StaffLeave::where('active', 1)->whereDate('created_at', '>=', $bor1->copy()->startOfYear())->whereDate('date_time_end', '<', $bor1)->orderBy('date_time_end', 'desc')->orderBy('date_time_start', 'DESC')->get();
-	$slb = StaffLeave::where('active', 1)->whereDate('created_at', '>=', $bor1->copy()->startOfYear())->whereRaw('"'.$bor1.'" BETWEEN DATE(date_time_start) AND DATE(date_time_end)')->orderBy('date_time_end', 'desc')->get();
-	$sl1 = StaffLeave::where('active', 2)->whereDate('created_at', '>=', $bor1->copy()->startOfYear())->whereDate('date_time_start', '>', $bor1)->orderBy('date_time_start', 'desc')->get();
-	$sl2 = StaffLeave::where('active', 3)->whereDate('created_at', '>=', $bor1->copy()->startOfYear())->whereDate('date_time_start', '>', $bor1)->orderBy('date_time_start', 'desc')->get();
-	$sl3 = StaffLeave::where('active', 4)->whereDate('created_at', '>=', $bor1->copy()->startOfYear())->whereDate('date_time_start', '>', $bor1)->orderBy('date_time_start', 'desc')->get();
+	$sl = StaffLeave::where('active', 1)->whereDate('created_at', '>=', $bor2)->whereDate('date_time_start', '>', $bor1)->orderBy('date_time_start', 'desc')->get();
+	$sla = StaffLeave::where('active', 1)->whereDate('created_at', '>=', $bor2)->whereDate('date_time_end', '<', $bor1)->orderBy('date_time_end', 'desc')->orderBy('date_time_start', 'DESC')->get();
+	$slb = StaffLeave::where('active', 1)->whereDate('created_at', '>=', $bor2)->whereRaw('"'.$bor1.'" BETWEEN DATE(date_time_start) AND DATE(date_time_end)')->orderBy('date_time_end', 'desc')->get();
+	$sl1 = StaffLeave::where('active', 2)->whereDate('created_at', '>=', $bor2)->orderBy('date_time_start', 'desc')->get();
+	$sl2 = StaffLeave::where('active', 3)->whereDate('created_at', '>=', $bor2)->orderBy('date_time_start', 'desc')->get();
+	$sl3 = StaffLeave::where('active', 4)->whereDate('created_at', '>=', $bor2)->orderBy('date_time_start', 'desc')->get();
 } else {
 	// if its in january, check the create date from early last month : 1 December, so can capture the leaves.
-	$sl = StaffLeave::where('active', 1)->whereDate('created_at', '>=', $bor1->copy()->subMonth()->startOfMonth() )->whereDate('date_time_start', '>', $bor1)->orderBy('date_time_start', 'desc')->get();
-	$sla = StaffLeave::where('active', 1)->whereDate('created_at', '>=', $bor1->copy()->subMonth()->startOfMonth() )->whereDate('date_time_end', '<', $bor1)->orderBy('date_time_end', 'desc')->orderBy('date_time_start', 'DESC')->get();
-	$slb = StaffLeave::where('active', 1)->whereDate('created_at', '>=', $bor1->copy()->subMonth()->startOfMonth() )->whereRaw('"'.$bor1.'" BETWEEN DATE(date_time_start) AND DATE(date_time_end)')->orderBy('date_time_end', 'desc')->get();
-	$sl1 = StaffLeave::where('active', 2)->whereDate('created_at', '>=', $bor1->copy()->subMonth()->startOfMonth() )->whereDate('date_time_start', '>', $bor1)->orderBy('date_time_start', 'desc')->get();
-	$sl2 = StaffLeave::where('active', 3)->whereDate('created_at', '>=', $bor1->copy()->subMonth()->startOfMonth() )->whereDate('date_time_start', '>', $bor1)->orderBy('date_time_start', 'desc')->get();
-	$sl3 = StaffLeave::where('active', 4)->whereDate('created_at', '>=', $bor1->copy()->subMonth()->startOfMonth() )->whereDate('date_time_start', '>', $bor1)->orderBy('date_time_start', 'desc')->get();
+	$sl = StaffLeave::where('active', 1)->whereDate('created_at', '>=', $bor3 )->whereDate('date_time_start', '>', $bor1)->orderBy('date_time_start', 'desc')->get();
+	$sla = StaffLeave::where('active', 1)->whereDate('created_at', '>=', $bor3 )->whereDate('date_time_end', '<', $bor1)->orderBy('date_time_end', 'desc')->orderBy('date_time_start', 'DESC')->get();
+	$slb = StaffLeave::where('active', 1)->whereDate('created_at', '>=', $bor3 )->whereRaw('"'.$bor1.'" BETWEEN DATE(date_time_start) AND DATE(date_time_end)')->orderBy('date_time_end', 'desc')->get();
+	$sl1 = StaffLeave::where('active', 2)->whereDate('created_at', '>=', $bor3 )->orderBy('date_time_start', 'desc')->get();
+	$sl2 = StaffLeave::where('active', 3)->whereDate('created_at', '>=', $bor3 )->orderBy('date_time_start', 'desc')->get();
+	$sl3 = StaffLeave::where('active', 4)->whereDate('created_at', '>=', $bor3 )->orderBy('date_time_start', 'desc')->get();
 }
-
 
 @endphp
 <ul class="nav nav-pills">
@@ -288,7 +292,7 @@ if( !empty($stl1->hasonestaffleavebackup) ) {
 		<table class="table table-hover table-sm" id="leaves2" style="font-size:12px">
 			<thead>
 				<tr class="text-center">
-					<th colspan="14"><h3>Past Leaves</h3></th>
+					<th colspan="15"><h3>Past Leaves</h3></th>
 				</tr>
 				<tr>
 					<th rowspan="2"><input type="checkbox" id="selectAll"><label for="selectAll">Received Hardcopy</label></th>
@@ -303,6 +307,7 @@ if( !empty($stl1->hasonestaffleavebackup) ) {
 					<th rowspan="2">Approval, Remarks and Updated At</th>
 					<th rowspan="2">Remarks</th>
 					<th rowspan="2">Leave Status</th>
+					<th rowspan="2"><input type="checkbox" id="selectAllClosed"><label for="selectAllClosed">Closed Status</label></th>
 				</tr>
 				<tr>
 					<th>From</th>
@@ -314,7 +319,8 @@ if( !empty($stl1->hasonestaffleavebackup) ) {
 			<tbody>
 @foreach($sla as $stl11)
 <?php
-$nn = Carbon::now()->subDays(2);	// 2 hari selepas bercuti
+// 3 days after come back from leave then they need to send the supporting document
+$nn = Carbon::now()->subDays(0);	// 2 hari selepas bercuti
 $nn1 = Carbon::create($nn->year, $nn->month, $nn->day,0 ,0 ,0);
 $j = Carbon::parse($stl11->date_time_end);
 $j1 = Carbon::create($j->year, $j->month, $j->day,0 ,0 ,0);
@@ -401,13 +407,19 @@ if( !empty($stl11->hasonestaffleavebackup) ) {
 					</td>
 					<td>{{ $stl11->remarks }}</td>
 					<td>{{ $stl11->belongtoleavestatus->status }}</td>
+					<td>
+						<label for="cb{{ $stl11->id }}"><input type="checkbox" value="{{ $stl11->id }}"  name="closed[]" id="cb{{ $stl11->id }}" class="closed"></label>
+					</td>
 				</tr>
 @endif
 @endforeach
 			</tbody>
 			<tfoot>
 				<tr>
-					<th colspan="14">{!! Form::button('Received Hardcopy', ['class' => 'btn btn-primary', 'type' => 'submit']) !!}</th>
+					<th colspan="14">
+						{!! Form::button('Received Hardcopy', ['class' => 'btn btn-primary', 'type' => 'submit']) !!}
+						{!! Form::button('Closed Leave', ['class' => 'btn btn-primary float-right', 'type' => 'submit']) !!}
+					</th>
 				</tr>
 			</tfoot>
 		</table>
