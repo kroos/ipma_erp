@@ -40,6 +40,7 @@ Route::resources([
 	'holidayCalendar' => 'Administrative\HumanResource\HRSettings\HolidayCalendarController',
 	'staffHR' => 'Administrative\HumanResource\StaffManagement\StaffHRController',
 	'staffLeaveHR' => 'Administrative\HumanResource\LeaveEditing\StaffLeaveHRController',
+	'staffLeaveReplacement' => 'Administrative\HumanResource\LeaveEditing\NRL\StaffLeaveReplacementController',
 	
 ]);
 // received hardcopy

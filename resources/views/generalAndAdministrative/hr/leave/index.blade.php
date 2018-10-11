@@ -65,7 +65,7 @@ $('#leaves1').DataTable({
 });
 
 $('#leaves2').DataTable({
-	"lengthMenu": [ [20, 25, 50, -1], [20, 25, 50, "All"] ],
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
 	// "order": [[5, "desc" ]],	// sorting the 4th column descending
 	// responsive: true
 	"ordering": false
