@@ -58,7 +58,7 @@ if( $jan != 1 ) {
 				<table class="table table-hover table-sm" id="nrl1" style="font-size:12px">
 					<thead>
 						<tr>
-							<th colspan="8"><h3>Unclaimed Replacement Leave</h3></th>
+							<th colspan="9"><h3>Unclaimed Replacement Leave</h3></th>
 						</tr>
 						<tr>
 							<th>Staff</th>
@@ -69,6 +69,7 @@ if( $jan != 1 ) {
 							<th>Total</th>
 							<th>Utilize</th>
 							<th>Balance</th>
+							<th>&nbsp;</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -82,6 +83,10 @@ if( $jan != 1 ) {
 							<td>{!! $rnl->leave_total !!}</td>
 							<td>{!! $rnl->leave_utilize !!}</td>
 							<td>{!! $rnl->leave_balance !!}</td>
+							<td>
+								<a href="{{ route('staffLeaveReplacement.edit', $rnl->id) }}" title="Edit" class="btn btn-primary"><i class="far fa-edit"></i></a>
+								<button title="Delete" class="btn btn-danger delete_nrl" id="delete_nrl_{!! $rnl->id !!}" data-id="{!! $rnl->id !!}"><i class="fas fa-trash" aria-hidden="true"></i></button>
+							</td>
 						</tr>
 				@endforeach
 					</tbody>
@@ -134,7 +139,7 @@ if( $jan != 1 ) {
 		}
 		?>
 				<tr>
-					<td>{!! $crl->belongtostaff->name !!}<!--  ID => {{ $crl->id }} --></td>
+					<td>ID {{ $crl->id }} => {!! $crl->belongtostaff->name !!}</td>
 					<td>
 		<?php
 		$i=0;

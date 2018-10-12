@@ -32,7 +32,7 @@ Route::resources([
 	'staffEmergencyPerson' => 'Profile\StaffEmergencyPersonController',
 	'staffEmergencyPersonPhone' => 'Profile\StaffEmergencyPersonPhoneController',
 	'staffEducation' => 'Profile\StaffEducationController',
-	'staffAnnualMCLeave' => 'Administrative\HumanResource\StaffAnnualMCLeaveController',
+	'staffAnnualMCLeave' => 'Administrative\HumanResource\LeaveEditing\StaffAnnualMCLeaveController',
 	'staffLeave' => 'Profile\StaffLeaveController',
 	'staffLeaveBackup' => 'Profile\StaffLeaveBackupController',
 	'staffLeaveApproval' => 'Profile\StaffLeaveApprovalController',

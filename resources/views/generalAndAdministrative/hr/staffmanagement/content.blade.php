@@ -77,7 +77,7 @@ if (!is_null($b->belongtomanyposition()->wherePivot('main', 1)->first() )) {
 @if($b->status_id == 2)
 						<a href="{{ route('staffHR.promoteHR', $b->id) }}" title="Promote" class="btn btn-primary"><i class="far fa-arrow-alt-circle-up"></i></a>
 @endif
-						<button title="Disable" class="btn btn-primary disable_user" id="disable_user_{{ $b->id }}" data-id="{{ $b->id }}"><i class="far fa-times-circle"></i></button>
+						<button title="Disable" class="btn btn-danger disable_user" id="disable_user_{{ $b->id }}" data-id="{{ $b->id }}"><i class="far fa-times-circle"></i></button>
 					</td>
 				</tr>
 @endforeach

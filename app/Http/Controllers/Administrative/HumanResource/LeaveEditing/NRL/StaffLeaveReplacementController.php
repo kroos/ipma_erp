@@ -39,23 +39,30 @@ class StaffLeaveReplacementController extends Controller
 		return redirect()->route('leaveNRL.index');
 	}
 
-	public function show(Leave $leave)
+	public function show(StaffLeaveReplacement $staffLeaveReplacement)
 	{
 	//
 	}
 
-	public function edit(Leave $leave)
+	public function edit(StaffLeaveReplacement $staffLeaveReplacement)
 	{
-	//
+		return view('generalAndAdministrative.hr.leave.nrl.edit', compact(['staffLeaveReplacement']));
 	}
 
-	public function update(Request $request, Leave $leave)
+	public function update(Request $request, StaffLeaveReplacement $staffLeaveReplacement)
 	{
-	//
+		print_r( $request->except(['_method', '_token']) );
+		$staffLeaveReplacement->update( $request->except(['_method', '_token']) );
+		Session::flash('flash_message', 'Data successfully updated.');
+		return redirect()->route('leaveNRL.index');
 	}
 
-	public function destroy(Leave $leave)
+	public function destroy(StaffLeaveReplacement $staffLeaveReplacement)
 	{
-	//
+		$staffLeaveReplacement->destroy($staffLeaveReplacement->id);
+		return response()->json([
+			'message' => 'Data deleted',
+			'status' => 'success'
+		]);
 	}
 }

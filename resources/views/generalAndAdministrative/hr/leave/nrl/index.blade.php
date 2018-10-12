@@ -67,5 +67,57 @@ $('#nrl2').DataTable({
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+// user disable
+$(document).on('click', '.delete_nrl', function(e){
+	
+	var nrl_id = $(this).data('id');
+	SwalDelete(nrl_id);
+	e.preventDefault();
+});
+
+function SwalDelete(nrl_id){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					type: 'DELETE',
+					url: '{{ url('staffLeaveReplacement') }}' + '/' + nrl_id,
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: nrl_id,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_nrl_' + nrl_id).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
 @endsection
 

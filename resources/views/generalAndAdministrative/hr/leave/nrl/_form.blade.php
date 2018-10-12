@@ -5,8 +5,6 @@ use \App\Model\Staff;
 use \App\Model\StaffLeave;
 
 $now = Carbon::now();
-
-$sid = Staff::where('active', 1)->orderBy('name', 'asc')->pluck('name', 'id')->toArray();
 ?>
 <ul class="nav nav-pills">
 	<li class="nav-item">

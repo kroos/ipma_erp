@@ -47,23 +47,5 @@ $("#username").keyup(function() {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
-// datatables
-$.fn.dataTable.moment( 'ddd, D MMM YYYY' );
-$.fn.dataTable.moment( 'ddd, D MMM YYYY h:mm a' );
-$('#almcml1').DataTable({
-	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	// "order": [[5, "desc" ]],	// sorting the 4th column descending
-	// responsive: true
-	// "ordering": false
-});
-
-$('#almcml2').DataTable({
-	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	// "order": [[5, "desc" ]],	// sorting the 4th column descending
-	// responsive: true
-	// "ordering": false
-});
-
-/////////////////////////////////////////////////////////////////////////////////////////
 @endsection
 
