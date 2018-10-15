@@ -6,7 +6,8 @@ use \Carbon\Carbon;
 
 $n = Carbon::now();
 
-$s = Staff::where('active', 1)->orderBy('name', 'asc')->get();
+$s1 = StaffAnnualMCLeave::where('year', $n->year)->get();
+$s2 = StaffAnnualMCLeave::where('year', $n->copy()->addYear()->year)->get();
 ?>
 <ul class="nav nav-pills">
 	<li class="nav-item">
@@ -54,19 +55,19 @@ $s = Staff::where('active', 1)->orderBy('name', 'asc')->get();
 				</tr>
 			</thead>
 			<tbody>
-@foreach($s as $k)
-@if( $k->belongtomanyposition()->wherePivot('main', 1)->first()->group_id != 1 )
+@foreach($s1 as $k)
+@if( $k->belomgtostaff->id != 191 && $k->belomgtostaff->id != 192 && $k->belomgtostaff->active == 1 )
 				<tr>
-					<td>{{ $k->hasmanylogin()->where('active', 1)->first()->username }}</td>
-					<td>{{ $k->name }}</td>
-					<td>{{ $k->hasmanystaffannualmcleave()->where('year', $n->year)->first()->year }}</td>
-					<td>{{ $k->hasmanystaffannualmcleave()->where('year', $n->year)->first()->annual_leave }}</td>
-					<td>{{ $k->hasmanystaffannualmcleave()->where('year', $n->year)->first()->annual_leave_balance }}</td>
-					<td>{{ $k->hasmanystaffannualmcleave()->where('year', $n->year)->first()->medical_leave }}</td>
-					<td>{{ $k->hasmanystaffannualmcleave()->where('year', $n->year)->first()->medical_leave_balance }}</td>
-					<td>{{ ($k->gender_id == 1 )?NULL:$k->hasmanystaffannualmcleave()->where('year', $n->year)->first()->maternity_leave }}</td>
-					<td>{{ ($k->gender_id == 1 )?NULL:$k->hasmanystaffannualmcleave()->where('year', $n->year)->first()->maternity_leave_balance }}</td>
-					<td>{{ $k->hasmanystaffannualmcleave()->where('year', $n->year)->first()->remarks }}</td>
+					<td>{!! $k->belomgtostaff->hasmanylogin()->where('active', 1)->first()->username !!}</td>
+					<td>{{ $k->belomgtostaff->name }}</td>
+					<td>{{ $k->year }}</td>
+					<td>{{ $k->annual_leave }}</td>
+					<td>{{ $k->annual_leave_balance }}</td>
+					<td>{{ $k->medical_leave }}</td>
+					<td>{{ $k->medical_leave_balance }}</td>
+					<td>{{ ($k->belomgtostaff->gender_id == 1 )?NULL:$k->maternity_leave }}</td>
+					<td>{{ ($k->belomgtostaff->gender_id == 1 )?NULL:$k->maternity_leave_balance }}</td>
+					<td>{{ $k->remarks }}</td>
 					<td>
 						<a href="{{ route('staffAnnualMCLeave.edit', $k->id) }}" title="Edit" class="btn btn-primary"><i class="far fa-edit"></i></a>
 						<button title="Delete" class="btn btn-danger delete_almcml" id="delete_almcml_{!! $k->id !!}" data-id="{!! $k->id !!}"><i class="fas fa-trash" aria-hidden="true"></i></button>
@@ -77,6 +78,7 @@ $s = Staff::where('active', 1)->orderBy('name', 'asc')->get();
 			</tbody>
 		</table>
 		<p>&nbsp;</p>
+@if(StaffAnnualMCLeave::where('year', $n->copy()->addYear()->year)->count() > 0 )
 		<table class="table table-hover table-sm" id="almcml2" style="font-size:12px">
 			<thead>
 				<tr>
@@ -97,32 +99,20 @@ $s = Staff::where('active', 1)->orderBy('name', 'asc')->get();
 				</tr>
 			</thead>
 			<tbody>
-@if(StaffAnnualMCLeave::where('year', $n->copy()->addYear()->year)->count() > 0 )
-@foreach($s as $k)
-@if( $k->belongtomanyposition()->wherePivot('main', 1)->first()->group_id != 1 )
+@foreach($s2 as $k)
+@if( $k->belomgtostaff->id != 191 && $k->belomgtostaff->id != 192 && $k->belomgtostaff->active == 1 )
 <?php
-if (!is_null( $k->hasmanystaffannualmcleave()->where('year', $n->copy()->addYear()->year)->first() )) {
-	$year = $k->hasmanystaffannualmcleave()->where('year', $n->copy()->addYear()->year)->first()->year;
-	$annual_leave = $k->hasmanystaffannualmcleave()->where('year', $n->copy()->addYear()->year)->first()->annual_leave;
-	$annual_leave_balance = $k->hasmanystaffannualmcleave()->where('year', $n->copy()->addYear()->year)->first()->annual_leave_balance;
-	$medical_leave = $k->hasmanystaffannualmcleave()->where('year', $n->copy()->addYear()->year)->first()->medical_leave;
-	$medical_leave_balance = $k->hasmanystaffannualmcleave()->where('year', $n->copy()->addYear()->year)->first()->medical_leave_balance;
-	$maternity_leave = $k->hasmanystaffannualmcleave()->where('year', $n->copy()->addYear()->year)->first()->maternity_leave;
-	$maternity_leave_balance = $k->hasmanystaffannualmcleave()->where('year', $n->copy()->addYear()->year)->first()->maternity_leave_balance;
-	$remarks = $k->hasmanystaffannualmcleave()->where('year', $n->copy()->addYear()->year)->first()->remarks;
-} else {
-	$year = NULL;
-	$annual_leave = NULL;
-	$annual_leave_balance = NULL;
-	$medical_leave = NULL;
-	$medical_leave_balance = NULL;
-	$maternity_leave = NULL;
-	$maternity_leave_balance = NULL;
-	$remarks = NULL;
-}
+	$year = $k->year;
+	$annual_leave = $k->annual_leave;
+	$annual_leave_balance = $k->annual_leave_balance;
+	$medical_leave = $k->medical_leave;
+	$medical_leave_balance = $k->medical_leave_balance;
+	$maternity_leave = $k->maternity_leave;
+	$maternity_leave_balance = $k->maternity_leave_balance;
+	$remarks = $k->remarks;
 ?>
 				<tr>
-					<td>{{ $k->hasmanylogin()->where('active', 1)->first()->username }}</td>
+					<td>{{ $k->belomgtostaff->hasmanylogin()->where('active', 1)->first()->username }}</td>
 					<td>{{ $k->name }}</td>
 					<td>{{ $year }}</td>
 					<td>{{ $annual_leave }}</td>
@@ -139,16 +129,15 @@ if (!is_null( $k->hasmanystaffannualmcleave()->where('year', $n->copy()->addYear
 				</tr>
 @endif
 @endforeach
-@else
-<tr>
-	<td colspan="10"><h6>No data for Year {!! $n->copy()->addYear()->year !!}</h6></td>
-</tr>
-@endif
 			</tbody>
 		</table>
-
-
-
+@else
+	<p><h3>No data for Year {!! $n->copy()->addYear()->year !!}</h3></p>
+	<p>It is adviseable to use this button at the end of the year (early december if possible). This button will automatically generate all the annual leave, medical certificate leave including maternity leave for the next year <strong>ONLY</strong> for <strong>currently active staff</strong>. If there is new staff intake after this button is used before this year end , please use button <strong>"Create New AL, MC or ML for User In Year {!! $n->copy()->addYear()->year !!}"</strong> to create his/her AL, MC and ML for the next year.</p>
+	<p><button type="submit" class="btn btn-primary" id="galmcml" data-id="{{ $n->copy()->addYear()->year }}">Generate Annual, Medical Leave for Year {!! $n->copy()->addYear()->year !!}</button></p>
+@endif
+	<p>Please use this button if there is NO "Generate Annual, Medical Leave for Year {!! $n->copy()->addYear()->year !!}" button AND before the year ({!! $n->copy()->addYear()->year !!}) end.</p>
+	<p><a href="{!! route('staffAnnualMCLeave.create') !!}" class="btn btn-primary">Create New AL, MC or ML for User In Year {!! $n->copy()->addYear()->year !!}</a></p>
 
 	</div>
 </div>

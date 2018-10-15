@@ -84,6 +84,11 @@ Route::delete('disableHR/{staffHR}', [
 		'as' => 'staffHR.disableHR',
 		'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@disableHR'
 ]);
+// generate ALMCML
+Route::post('/staffAnnualMCLeave/storeALMCML', [
+	'as' => 'staffAnnualMCLeave.storeALMCML',
+	'uses' => 'Administrative\HumanResource\LeaveEditing\StaffAnnualMCLeaveController@storeALMCML'
+]);
 
 ############################################################################
 // Division Page Controller
