@@ -33,7 +33,7 @@
 		<div class="card">
 			<div class="card-header">Leaves Management</div>
 			<div class="card-body">
-				{{ Form::open(['route' => ['staffLeaveReplacement.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true, 'autocomplete' => 'off', 'files' => true]) }}
+				{{ Form::open(['route' => ['staffLeaveReplacement.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true, 'autocomplete' => 'off']) }}
 					@include('generalAndAdministrative.hr.leave.nrl._form')
 				{{ Form::close() }}
 			</div>

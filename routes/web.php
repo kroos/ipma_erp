@@ -41,6 +41,7 @@ Route::resources([
 	'staffHR' => 'Administrative\HumanResource\StaffManagement\StaffHRController',
 	'staffLeaveHR' => 'Administrative\HumanResource\LeaveEditing\StaffLeaveHRController',
 	'staffLeaveReplacement' => 'Administrative\HumanResource\LeaveEditing\NRL\StaffLeaveReplacementController',
+	'staffTCMS' => 'Administrative\HumanResource\TCMS\StaffTCMSController',
 	
 ]);
 // received hardcopy

@@ -33,7 +33,9 @@
 
 		<div class="card">
 			<div class="card-header">TCMS Management</div>
-			<div class="card-body">yuiyui</div>
+			<div class="card-body">
+				@include('generalAndAdministrative.hr.tcms.content')
+			</div>
 		</div>
 
 
@@ -59,5 +61,58 @@ $("#username").keyup(function() {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+// date
+$('#dte').datetimepicker({
+	format: 'YYYY-MM-DD',
+	useCurrent: false,
+	daysOfWeekDisabled: [0],
+	disabledDates: 
+		[
+			<?php
+				// block holiday tgk dlm disable date in datetimepicker
+				$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+				foreach ($nodate as $nda) {
+					$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+					foreach ($period as $key) {
+						echo 'moment("'.$key->format('Y-m-d').'"),';
+						// $holiday[] = $key->format('Y-m-d');
+					}
+				}
+			?>
+		],
+})
+.on('dp.change dp.show dp.update', function() {
+	$('#form').bootstrapValidator('revalidateField', 'date');
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// aajax for date attendance
+$('#search').on('click', function(e){
+	e.preventDefault();
+	console.log('click on button');
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
+$('#form').bootstrapValidator({
+	group: '.input-group',
+	feedbackIcons: {
+		valid: '',
+		invalid: '',
+		validating: ''
+	},
+	fields: {
+		date: {
+			validators: {
+				notEmpty: {
+					message: 'Please insert date. '
+				},
+				date: {
+					format: 'YYYY-MM-DD',
+					message: 'Invalid format. '
+				}
+			}
+		}
+	},
+});
 @endsection
 

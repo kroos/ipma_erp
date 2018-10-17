@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Administrative\HumanResource\TCMS;
 use App\Http\Controllers\Controller;
 
 // load model
-// use App\Model\Leave;
+use App\Model\StaffTCMS;
 
 use Illuminate\Http\Request;
 
-class TCMSController extends Controller
+class StaffTCMSController extends Controller
 {
 	function __construct()
 	{
@@ -18,7 +18,7 @@ class TCMSController extends Controller
 
 	public function index()
 	{
-		return view('generalAndAdministrative.hr.tcms.index');
+		// return view('generalAndAdministrative.hr.tcms.index');
 	}
 
 	public function create()
@@ -28,7 +28,7 @@ class TCMSController extends Controller
 
 	public function store(Request $request)
 	{
-	//
+	
 	}
 
 	public function show(Leave $leave)
