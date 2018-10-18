@@ -54,10 +54,28 @@
 @endsection
 
 @section('js')
+<?php
+$act = \App\Model\Staff::where('active', 1)->get();
+$act1 = $act->count() - 2;
+?>
+
 /////////////////////////////////////////////////////////////////////////////////////////
 //ucwords
 $("#username").keyup(function() {
 	uch(this);
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// table
+// https://datatables.net/blog/2014-12-18
+// $.fn.dataTable.moment( 'HH:mm MMM D, YY' );
+$.fn.dataTable.moment( 'ddd, D MMM YYYY' );
+
+$('#attendance').DataTable({
+	"lengthMenu": [ [{!! $act1 !!}, {!! $act1*2 !!}, {!! $act1*3 !!}, -1], [{!! $act1 !!}, {!! $act1*2 !!}, {!! $act1*3 !!}, "All"] ],
+	"order": [[1, "desc" ]],	// sorting the 4th column descending
+	// responsive: true
+	// "ordering": false
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////

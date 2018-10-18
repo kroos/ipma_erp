@@ -20,7 +20,7 @@ class PrintPDFLeavesController extends Controller
 	function __construct()
 	{
 		$this->middleware('auth');
-		$this->middleware('leaveaccess');
+		// $this->middleware('leaveaccess');
 	}
 
 	public function show(StaffLeave $staffLeave)

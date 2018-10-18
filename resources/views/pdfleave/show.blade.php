@@ -22,6 +22,7 @@ $userposition = $staffLeave->belongtostaff->belongtomanyposition()->wherePivot('
 $dt = \Carbon\Carbon::parse($staffLeave->date_time_start);
 
 // echo $userposition->id; // 60
+// die();
 // echo $dt->year; // 2019
 // echo $dt->dayOfWeek; // dayOfWeek returns a number between 0 (sunday) and 6 (saturday) // 5
 
@@ -177,6 +178,7 @@ if ( !is_null( $bakvalid ) ) :
 	// data
 	$pdf->Cell(80, 4, $bakvalid->belongtostaff->name, 'LRB', 0, 'C');
 	$pdf->Cell(50, 4, $ack, 'LRB', 0, 'C');
+
 if (is_null($ack)) {
 	$de = NULL;
 } else {
@@ -213,8 +215,6 @@ endif;
 	} else {
 		$catatan = '';
 	}
-	$pdf->Cell(0, 4, 'Catatan : '.$catatan, 0, 1, 'L');
-	$pdf->Ln(1);
 
 	// get this approval not HR from group
 	$dept = $staffapproval->whereNull('hr')->first();
@@ -276,7 +276,6 @@ endif;
 	} else {
 		$drnotes = $staffLeave->hasmanystaffapproval()->where('hr', 2)->first()->notes_by_approval;
 	}
-	
 
 	if(is_null($dr)) {
 		$drsok = 'Diluluskan/Ditolak';
@@ -304,6 +303,9 @@ endif;
 	} else {
 		$hru = Carbon::parse($staffLeave->hasmanystaffapproval()->where('hr', 1)->first()->updated_at)->format('D, j M Y g:i a');
 	}
+
+	$pdf->Cell(0, 4, 'Catatan : '.$catatan, 0, 1, 'L');
+	$pdf->Ln(1);
 
 	// approval part
 	$pdf->Ln(10);

@@ -215,7 +215,7 @@ $te3 = \Carbon\Carbon::create($te2->year, $te2->month, $te2->day, $te2->hour, $t
 		<div class="form-group row {{ $errors->has('period') ? 'has-error' : '' }}">
 			{{ Form::label( 'per', 'Period : ', ['class' => 'col-sm-2 col-form-label'] ) }}
 			<div class="col-sm-10">
-				{{ Form::text('period', @$value, ['class' => 'form-control', 'id' => 'per', 'disabled']) }} minute
+				{{ Form::text('period', @$value, ['class' => 'form-control', 'id' => 'per', 'disabled']) }}
 			</div>
 		</div>
 		{{ Form::hidden('period', @$value, ['id' => 'perday']) }}
