@@ -306,6 +306,11 @@ Route::get('printpdfleaves/{staffLeave}', [
 		'uses' => 'PDFController\PrintPDFLeavesController@show'
 	]);
 
+Route::post('printpdftcms', [
+		'as' => 'printpdftcms.store',
+		'uses' => 'PDFController\PrintPDFLeavesController@tcmsstore'
+	]);
+
 ############################################################################
 // Ajax Controller
 Route::apiResources([

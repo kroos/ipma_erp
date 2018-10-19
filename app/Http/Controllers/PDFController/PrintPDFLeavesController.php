@@ -27,4 +27,11 @@ class PrintPDFLeavesController extends Controller
 	{
 		echo view('pdfleave.show', compact(['staffLeave']) );
 	}
+
+	public function tcmsstore(Request $request)
+	{
+		$dts = $request->date_start;
+		$dte = $request->date_end;
+		echo view('pdfleave.staffTCMS', compact(['dts', 'dte']));
+	}
 }

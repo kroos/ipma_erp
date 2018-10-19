@@ -38,15 +38,17 @@ $tcms = StaffTCMS::where('date', '>=', $n1)->orderBy('date', 'desc')->get();
 	<div class="card-header">Attendance</div>
 	<div class="card-body table-responsive">
 
-		{!! Form::open(['route' => ['staffTCMS.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true, 'autocomplete' => 'off']) !!}
+		{!! Form::open(['route' => ['printpdftcms.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true, 'autocomplete' => 'off']) !!}
+		<h4>Generate Report</h4>
 		<div class="input-group">
 			<div class="input-group-prepend">
 				<span class="input-group-text">Date Attendance : </span>
 			</div>
 			<!-- <input type="text" aria-label="First name" class="form-control"> -->
-			{{ Form::text('date', @$value, ['class' => 'form-control', 'aria-label' => 'Date Start', 'id' => 'dte']) }}
+			{{ Form::text('date_start', @$value, ['class' => 'form-control', 'aria-label' => 'Date Start', 'placeholder' => 'Date Start', 'id' => 'dts']) }}
+			{{ Form::text('date_end', @$value, ['class' => 'form-control', 'aria-label' => 'Date End', 'placeholder' => 'Date End', 'id' => 'dte']) }}
 			<div class="input-group-append">
-				<button class="btn btn-outline-primary" type="submit" id="search">Search</button>
+				<button class="btn btn-outline-primary" type="submit" id="search">Report</button>
 			</div>
 		</div>
 		{!! Form::close() !!}
@@ -72,7 +74,6 @@ $tcms = StaffTCMS::where('date', '>=', $n1)->orderBy('date', 'desc')->get();
 			<th>Leave Taken</th>
 			<th>Remarks</th>
 			<th>HR Ref Form</th>
-			<th>Exception</th>
 			<th>Exception</th>
 			<th>&nbsp;</th>
 		</tr>
@@ -210,12 +211,12 @@ if ( !empty( $lea ) ) {
 	$leaid = NULL;
 }
 
-$username = $tc->belongtostaff->hasmanylogin()->where('active', 1)->first();
+$username = $tc->belongtostaff->hasmanylogin()->where('active', 1)->first()->username;
 ?>
 		<tr>
 			<td>{!! Carbon::parse($tc->date)->format('D, j M Y') !!}</td>
 			<td>{!! $tc->belongtostaff->belongtolocation->location !!}</td>
-			<td>{!! $username->username !!}</td>
+			<td>{!! $username !!}</td>
 			<td>{!! $tc->belongtostaff->name !!}</td>
 			<td>{{ $tc->daytype }}</td>
 			<td>{!! $in1 !!}</td>
@@ -226,21 +227,16 @@ $username = $tc->belongtostaff->hasmanylogin()->where('active', 1)->first();
 			<td>{!! ($tc->short_hour > 0)?'<span class="text-danger">'.$tc->short_hour.'</span>':$tc->short_hour !!}</td>
 			<td>{!! $ot !!}</td>
 			<td>{!! $tc->leave_taken !!}</td>
-			<td>{!! $tc->reamrk !!}</td>
+			<td>{!! $tc->remark !!}</td>
 			<td>{!! $leaid !!}</td>
-			<td>{!! is_null($tc->exception)?'<i class="fas fa-times"></i>':'<i class="fas fa-check"></i>' !!}</td>
+			<td>{!! (is_null($tc->exception) || $tc->exception == 0)?'<i class="fas fa-times"></i>':'<i class="fas fa-check"></i>' !!}</td>
+			<td>
+				<a href="{!! route('staffTCMS.edit', [$tc->staff_id, 'date' => $tc->date]) !!}" class="btn btn-primary"><i class="far fa-edit"></i></a>
+			</td>
 		</tr>
 @endif
 @endforeach
 	</tbody>
 </table>
-
-
-
-
-
-
-
-
 	</div>
 </div>

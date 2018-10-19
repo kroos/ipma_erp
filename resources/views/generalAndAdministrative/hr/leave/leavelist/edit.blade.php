@@ -49,7 +49,6 @@
 $nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
 // block cuti sendiri
 $nodate1 = $staffLeaveHR->belongtostaff->hasmanystaffleave()->where('id', '<>', $staffLeaveHR->id)->where('active', 1)->orwhere('active', 2)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
-
 ?>
 /////////////////////////////////////////////////////////////////////////////////////////
 //ucwords

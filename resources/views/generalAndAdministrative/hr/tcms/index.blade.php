@@ -15,7 +15,6 @@
 @endforeach
 		</ul>
 
-
 		<ul class="nav nav-tabs">
 			<li class="nav-item">
 				<a class="nav-link " href="{{ route('hrSettings.index') }}">Settings</a>
@@ -37,17 +36,6 @@
 				@include('generalAndAdministrative.hr.tcms.content')
 			</div>
 		</div>
-
-
-
-
-
-
-
-
-
-
-
 
 	</div>
 </div>
@@ -73,13 +61,39 @@ $.fn.dataTable.moment( 'ddd, D MMM YYYY' );
 
 $('#attendance').DataTable({
 	"lengthMenu": [ [{!! $act1 !!}, {!! $act1*2 !!}, {!! $act1*3 !!}, -1], [{!! $act1 !!}, {!! $act1*2 !!}, {!! $act1*3 !!}, "All"] ],
-	"order": [[1, "desc" ]],	// sorting the 4th column descending
+	"order": [[0, "desc" ]],	// sorting the 4th column descending
 	// responsive: true
 	// "ordering": false
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // date
+$('#dts').datetimepicker({
+	format: 'YYYY-MM-DD',
+	useCurrent: false,
+	daysOfWeekDisabled: [0],
+	disabledDates: 
+		[
+			<?php
+				// block holiday tgk dlm disable date in datetimepicker
+				$nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
+				foreach ($nodate as $nda) {
+					$period = \Carbon\CarbonPeriod::create($nda->date_start, '1 days', $nda->date_end);
+					foreach ($period as $key) {
+						echo 'moment("'.$key->format('Y-m-d').'"),';
+						// $holiday[] = $key->format('Y-m-d');
+					}
+				}
+			?>
+		],
+})
+.on('dp.change dp.show dp.update', function() {
+	$('#form').bootstrapValidator('revalidateField', 'date_start');
+
+	var minDate = $('#dts').val();
+	$('#dte').datetimepicker('minDate', minDate);
+});
+
 $('#dte').datetimepicker({
 	format: 'YYYY-MM-DD',
 	useCurrent: false,
@@ -100,15 +114,17 @@ $('#dte').datetimepicker({
 		],
 })
 .on('dp.change dp.show dp.update', function() {
-	$('#form').bootstrapValidator('revalidateField', 'date');
+	$('#form').bootstrapValidator('revalidateField', 'date_end');
+	var maxDate = $('#dte').val();
+	$('#dts').datetimepicker('maxDate', maxDate);
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // aajax for date attendance
-$('#search').on('click', function(e){
-	e.preventDefault();
-	console.log('click on button');
-});
+// $('#search').on('click', function(e){
+// 	e.preventDefault();
+// 	console.log('click on button');
+// });
 
 /////////////////////////////////////////////////////////////////////////////////////////
 $('#form').bootstrapValidator({
@@ -119,7 +135,7 @@ $('#form').bootstrapValidator({
 		validating: ''
 	},
 	fields: {
-		date: {
+		date_start: {
 			validators: {
 				notEmpty: {
 					message: 'Please insert date. '
@@ -129,7 +145,18 @@ $('#form').bootstrapValidator({
 					message: 'Invalid format. '
 				}
 			}
-		}
+		},
+		date_end: {
+			validators: {
+				notEmpty: {
+					message: 'Please insert date. '
+				},
+				date: {
+					format: 'YYYY-MM-DD',
+					message: 'Invalid format. '
+				}
+			}
+		},
 	},
 });
 @endsection
