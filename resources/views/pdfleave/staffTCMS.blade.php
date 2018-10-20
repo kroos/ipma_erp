@@ -58,7 +58,7 @@ class PDF extends Fpdf
 }
 
 // Instanciation of inherited class
-	$pdf = new Pdf('P','mm', 'A4');
+	$pdf = new Pdf('L','mm', 'A4');
 	$pdf->AliasNbPages();
 	$pdf->AddPage();
 	$pdf->SetTitle('Staff Attendance Report - '. Carbon::parse($dts)->format('D, j F Y').' To '.Carbon::parse($dte)->format('D, j F Y'));
@@ -67,15 +67,56 @@ class PDF extends Fpdf
 	// $pdf->Cell(0, 5, $pdf->GetPageWidth(), 0, 0, 'C'); // 210
 
 	$pdf->Ln(5);
-	$pdf->SetFont('Arial', 'BU', 10);
+	$pdf->SetFont('Arial', 'BU', 10);	// bold & underline
 	$pdf->MultiCell(0, 5, 'Staff Attendance Report From '. Carbon::parse($dts)->format('D, j F Y').' To '.Carbon::parse($dte)->format('D, j F Y'), 0, 'C');
+	$pdf->Ln(2);
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// working on all the variables
-	$staffTCMS = StaffTCMS::whereBetween('date', [$dts, $dte])->get();
+	$staffTCMS = StaffTCMS::whereBetween('date', [$dts, $dte])->orderBy('date', 'DESC')->orderBy('leave_taken', 'desc')->get();
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	$pdf->SetFont('Arial', NULL, 10);
-	$pdf->MultiCell(0, 5, $staffTCMS, 0, 'L');
+	// $pdf->MultiCell(0, 5, $staffTCMS, 0, 'L');
+
+
+	// 10 left and 10 right, left only 190..so we have 8 column
+	$pdf->SetFont('Arial', 'B', 10);	// setting font
+
+	$pdf->Cell(20, 5, 'Date', 1, 0, 'C');
+	$pdf->Cell(18, 5, 'Status', 1, 0, 'C');
+	$pdf->Cell(15, 5, 'Loc', 1, 0, 'C');
+	$pdf->Cell(52, 5, 'Dept', 1, 0, 'C');
+	$pdf->Cell(15, 5, 'Staff ID', 1, 0, 'C');
+	$pdf->Cell(60, 5, 'Name', 1, 0, 'C');
+	$pdf->Cell(72, 5, 'Remarks', 1, 0, 'C');
+	$pdf->Cell(25, 5, 'Leave Form', 1, 1, 'C');
+
+	$pdf->SetFont('Arial', NULL, 8);	// setting font
+	foreach( $staffTCMS as $stcms ):
+
+		$lea = StaffLeave::where('staff_id', $stcms->staff_id)->whereRaw('"'.$stcms->date.'" BETWEEN staff_leaves.date_time_start AND  staff_leaves.date_time_end')->first();
+		if ( !empty( $lea ) ) {
+			$dts = Carbon::parse($lea->created_at)->format('Y');
+			$arr = str_split( $dts, 2 );
+			$leaid = 'HR9-'.str_pad( $lea->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
+		} else {
+
+			$leaid = NULL;
+		}
+		if($stcms->belongtostaff->active == 1):
+			if($stcms->in == '00:00:00' && $stcms->work_hour == 0 && $stcms->break == '00:00:00' && $stcms->leave_taken != 'Outstation' && $stcms->break = '00:00:00' ):
+				$pdf->Cell(20, 10, Carbon::parse($stcms->date)->format('j M Y'), 1, 0, 'L');
+				$pdf->Cell(18, 10, $stcms->leave_taken, 1, 0, 'L');
+				$pdf->Cell(15, 10, $stcms->belongtostaff->belongtolocation->location, 1, 0, 'L');
+				$pdf->Cell(52, 10, $stcms->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first()->belongtodepartment->department, 1, 0, 'L');
+				$pdf->Cell(15, 10, $stcms->belongtostaff->hasmanylogin()->where('active', 1)->first()->username, 1, 0, 'L');
+				$pdf->Cell(60, 10, $stcms->belongtostaff->name, 1, 0, 'L');
+				$pdf->Cell(72, 10, $stcms->remark, 1, 0, 'L');
+				$pdf->Cell(25, 10, $leaid, 1, 1, 'L');
+			endif;
+		endif;
+
+	endforeach;
 
 
 

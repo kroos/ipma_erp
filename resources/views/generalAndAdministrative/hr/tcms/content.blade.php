@@ -48,7 +48,7 @@ $tcms = StaffTCMS::where('date', '>=', $n1)->orderBy('date', 'desc')->get();
 			{{ Form::text('date_start', @$value, ['class' => 'form-control', 'aria-label' => 'Date Start', 'placeholder' => 'Date Start', 'id' => 'dts']) }}
 			{{ Form::text('date_end', @$value, ['class' => 'form-control', 'aria-label' => 'Date End', 'placeholder' => 'Date End', 'id' => 'dte']) }}
 			<div class="input-group-append">
-				<button class="btn btn-outline-primary" type="submit" id="search">Report</button>
+				<button class="btn btn-outline-primary" type="submit" target="_blank" id="search">Report</button>
 			</div>
 		</div>
 		{!! Form::close() !!}
