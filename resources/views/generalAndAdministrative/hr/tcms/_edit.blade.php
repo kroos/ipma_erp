@@ -3,7 +3,7 @@ use \Carbon\Carbon;
 ?>
 <ul class="nav nav-pills">
 	<li class="nav-item">
-		<a class="nav-link" href="">Settings</a>
+		<a class="nav-link" href="{{ route('staffTCMS.create') }}">ODBC / CSV Uploader</a>
 	</li>
 	<li class="nav-item">
 		<a class="nav-link" href="{{ route('staffTCMS.index') }}">Attendance</a>

@@ -45,9 +45,15 @@ Route::resources([
 	
 ]);
 // received hardcopy
-Route::post('/staffLeaveHR', [
-	'as' => 'staffLeaveHR.updateRHC',
-	'uses' => 'Administrative\HumanResource\LeaveEditing\StaffLeaveHRController@updateRHC'
+Route::post('/staffTCMS/storeODBC', [
+	'as' => 'staffTCMS.storeODBC',
+	'uses' => 'Administrative\HumanResource\TCMS\StaffTCMSController@storeODBC'
+]);
+
+// received hardcopy
+Route::post('/staffTCMS/storeCSV', [
+	'as' => 'staffTCMS.storeCSV',
+	'uses' => 'Administrative\HumanResource\TCMS\StaffTCMSController@storeCSV'
 ]);
 // createHR for staff
 Route::get('/createHR/{staffHR}', [

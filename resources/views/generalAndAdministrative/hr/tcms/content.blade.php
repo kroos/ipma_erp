@@ -14,7 +14,7 @@ $tcms = StaffTCMS::where('date', '>=', $n1)->orderBy('date', 'desc')->get();
 ?>
 <ul class="nav nav-pills">
 	<li class="nav-item">
-		<a class="nav-link" href="">Settings</a>
+		<a class="nav-link" href="{{ route('staffTCMS.create') }}">ODBC / CSV Uploader</a>
 	</li>
 	<li class="nav-item">
 		<a class="nav-link" href="{{ route('staffTCMS.index') }}">Attendance</a>
@@ -202,7 +202,7 @@ if( $tc->out != '00:00:00' ) {
 }
 
 // looking for appropriate leaves for user.
-$lea = StaffLeave::where('staff_id', $tc->staff_id)->whereRaw('"'.$tc->date.'" BETWEEN staff_leaves.date_time_start AND  staff_leaves.date_time_end')->first();
+$lea = StaffLeave::where('staff_id', $tc->staff_id)->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->first();
 if ( !empty( $lea ) ) {
 	$dts = Carbon::parse($lea->created_at)->format('Y');
 	$arr = str_split( $dts, 2 );

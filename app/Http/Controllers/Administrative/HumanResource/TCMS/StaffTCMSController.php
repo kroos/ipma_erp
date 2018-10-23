@@ -26,7 +26,17 @@ class StaffTCMSController extends Controller
 
 	public function create()
 	{
-	//
+		return view('generalAndAdministrative.hr.tcms.create');
+	}
+
+	public function storeODBC(Request $request)
+	{
+	
+	}
+
+	public function storeCSV(Request $request)
+	{
+	
 	}
 
 	public function store(Request $request)
