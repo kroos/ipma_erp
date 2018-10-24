@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 
 // load model
 use App\Model\StaffTCMS;
+use App\Model\Login;
+use App\Model\StaffTCMSODBC;
 
 use Illuminate\Http\Request;
 
@@ -31,7 +33,20 @@ class StaffTCMSController extends Controller
 
 	public function storeODBC(Request $request)
 	{
-	
+		// echo 'reamrks';
+		$odbc = StaffTCMSODBC::all();
+		foreach($odbc as $od) {
+			$id = Login::where('username', $od->EMPNO)->where('active', 1);
+			if( !is_null($id) ) {
+				$sid = Login::where('username', $od->EMPNO)->first()->staff_id;
+			} else {
+				$sid = NULL;
+			}
+			echo $sid.' staff_id<br />';
+			$tcms = StaffTCMS::where([['username', $od->EMPNO], ['date', Carbon::parse($od->DATE)->format('Y-m-d')]])->updateOrNew([
+						
+					]);
+		}
 	}
 
 	public function storeCSV(Request $request)

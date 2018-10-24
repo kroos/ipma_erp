@@ -37,9 +37,7 @@
 		@include('layouts.info')
 		@include('layouts.errorform')
 
-{{ Form::open( ['route' => ['staffTCMS.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
-	@include('generalAndAdministrative.hr.tcms._create')
-{{ Form::close() }}
+		@include('generalAndAdministrative.hr.tcms._create')
 
 			</div>
 		</div>
