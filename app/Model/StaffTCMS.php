@@ -16,9 +16,9 @@ class StaffTCMS extends Model
 	protected $table = 'staff_tcms';
 	protected $dates = ['deleted_at'];
 
-    protected $primaryKey = ['staff_id', 'date'];
+    // protected $primaryKey = ['staff_id', 'date'];
 
-    public $incrementing = false;
+    // public $incrementing = false;
     // protected $keyType = string;
 
     // hasmany

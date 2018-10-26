@@ -13,14 +13,14 @@ class StaffTCMSUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'csv' => 'required|',
+            'csv' => 'required|mimes:csv,xls,xlm,xla,xlc,xlt,xlw',
        ];
     }
 
     public function messages()
     {
         return [
-            'staff.*.id_card_passport.alpha_num' => 'ID Kad or Passport number can be consists of alphabet and/or digits.',
+            'csv' => 'Upload file can only be with this extension :csv,xls,xlm,xla,xlc,xlt,xlw.',
         ];
     }
 }

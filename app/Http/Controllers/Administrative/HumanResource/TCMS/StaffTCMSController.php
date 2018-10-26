@@ -4,15 +4,23 @@ namespace App\Http\Controllers\Administrative\HumanResource\TCMS;
 
 use App\Http\Controllers\Controller;
 
+// load excel/csv/xls import/upload
+use App\Imports\StaffTCMSImport;
+use Maatwebsite\Excel\Facades\Excel;
+
 // load model
 use App\Model\StaffTCMS;
 use App\Model\Login;
+use App\Model\Staff;
 use App\Model\StaffTCMSODBC;
 
 use Illuminate\Http\Request;
 
+use App\Http\Requests\StaffTCMSUpdateRequest;
+
 use \Carbon\Carbon;
 use Session;
+use Storage;
 
 class StaffTCMSController extends Controller
 {
@@ -36,22 +44,54 @@ class StaffTCMSController extends Controller
 		// echo 'reamrks';
 		$odbc = StaffTCMSODBC::all();
 		foreach($odbc as $od) {
-			$id = Login::where('username', $od->EMPNO)->where('active', 1);
-			if( !is_null($id) ) {
-				$sid = Login::where('username', $od->EMPNO)->first()->staff_id;
+			$id = Login::where('username', $od->EMPNO);
+			if( !is_null($id->where('active', 1)) ) {
+				$sid = $id->where('active', 1)->first();
 			} else {
 				$sid = NULL;
 			}
-			echo $sid.' staff_id<br />';
-			$tcms = StaffTCMS::where([['username', $od->EMPNO], ['date', Carbon::parse($od->DATE)->format('Y-m-d')]])->updateOrNew([
-						
-					]);
+			// echo $sid->staff_id.' staff_id<br />';
+
+			if( $sid->belongtostaff->active == 1 ) {
+				// run query updateOrCreate
+				// echo 'ok<br />';
+				$tcms = StaffTCMS::updateOrCreate(
+				[
+						'username' => $od->EMPNO,
+						'date' => Carbon::parse($od->DATE)->format('Y-m-d')
+				],
+				[
+					'staff_id' => $sid->staff_id,
+					'name' => $od->BADGENAME,
+					'daytype' => $od->DAYTYPE,
+					'in' => (!empty($od->IN_))?$od->IN_:'00:00:00',
+					'break' => (!empty($od->BREAK_))?$od->BREAK_:'00:00:00',
+					'resume' => (!empty($od->RESUME_))?$od->RESUME_:'00:00:00',
+					'out' => (!empty($od->OUT_))?$od->OUT_:'00:00:00',
+					'work_hour' => $od->WORK,
+					'short_hour' => $od->SHORT,
+					'leave_taken' => $od->LEAVETYPE,
+					'remark' => $od->REMARK,
+					// 'exception' => $od->,
+					// 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+					// 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+					// 'deleted_at' => NULL
+				]);
+			}
 		}
+		Session::flash('flash_message', 'Data successfully update!');
+		return redirect( route('tcms.index') );
 	}
 
-	public function storeCSV(Request $request)
+	public function storeCSV(StaffTCMSUpdateRequest $request)
 	{
-	
+		$filename = Storage::putFile('csv', $request->file('csv'));
+
+		// this onw only to import direct to model
+		// Excel::import(new StaffTCMSImport, request()->file('your_file'));
+
+		// import to collection
+		// $collection = Excel::toCollection(new StaffTCMSImport, $request->file('csv'));
 	}
 
 	public function store(Request $request)

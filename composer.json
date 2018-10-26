@@ -10,11 +10,14 @@
         "cviebrock/eloquent-sluggable": "4.5",
         "fideloper/proxy": "^4.0",
         "intervention/image": "^2.4",
+        "jpgraph/jpgraph": "^4.0",
         "kylekatarnls/laravel-carbon-2": "^1.0.0",
         "laravel/framework": "5.6.*",
         "laravel/tinker": "^1.0",
         "laravelcollective/html": "^5.6",
-        "nesbot/carbon": "2.0.0-beta.4 as 1.25.0"
+        "maatwebsite/excel": "^3.1",
+        "nesbot/carbon": "2.0.0-beta.4 as 1.25.0",
+        "tecnickcom/tcpdf": "^6.2"
     },
     "require-dev": {
         "filp/whoops": "^2.0",
