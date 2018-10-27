@@ -55,6 +55,10 @@ Route::post('/staffTCMS/storeCSV', [
 	'as' => 'staffTCMS.storeCSV',
 	'uses' => 'Administrative\HumanResource\TCMS\StaffTCMSController@storeCSV'
 ]);
+Route::post('/staffLeaveHR/updateRHC', [
+	'as' => 'staffLeaveHR.updateRHC',
+	'uses' => 'Administrative\HumanResource\LeaveEditing\StaffLeaveHRController@updateRHC'
+]);
 // createHR for staff
 Route::get('/createHR/{staffHR}', [
 		'as' => 'staffHR.createHR',
