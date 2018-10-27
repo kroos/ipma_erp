@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Administrative\HumanResource\TCMS;
 use App\Http\Controllers\Controller;
 
 // load excel/csv/xls import/upload
-use App\Imports\StaffTCMSImport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\StaffTCMSImport;
 
 // load model
 use App\Model\StaffTCMS;
@@ -41,13 +41,7 @@ class StaffTCMSController extends Controller
 
 	public function storeODBC(Request $request)
 	{
-		ini_set('max_execution_time', 300);
-		// echo 'reamrks';
-		// get only 7 days ago.. thats it for looping Data
-		$now = Carbon::now();
-		$d7 = $now->subDays(7);
-
-		// echo $d7;	// 7 days ago
+		ini_set('max_execution_time', 3000);
 
 		$odbc = StaffTCMSODBC::all();
 		foreach($odbc as $od) {
@@ -58,7 +52,13 @@ class StaffTCMSController extends Controller
 				$sid = NULL;
 			}
 
-			if( $sid->belongtostaff->active == 1 ) {
+			if( !is_null($sid) ) {
+				$sid1 = $sid->belongtostaff->active;
+			} else {
+				$sid1 = 0;
+			}
+
+			if( $sid1 == 1 ) {
 
 				// run query updateOrCreate
 				$tc = StaffTCMS::where('username', $od->EMPNO)->where('date', Carbon::parse($od->DATE)->format('Y-m-d'))->first();
@@ -81,7 +81,7 @@ class StaffTCMSController extends Controller
 					$tcout = $tc->out;
 				}
 
-				echo $tcname.' name<br />'.$tcdate.' date<br />'.$tcin.' in<br />'.$tcbreak.' break<br />'.$tcresume.' resume<br />'.$tcout.' out<br /><br />';
+				// echo $tcname.' name<br />'.$tcdate.' date<br />'.$tcin.' in<br />'.$tcbreak.' break<br />'.$tcresume.' resume<br />'.$tcout.' out<br /><br />';
 
 				if( is_null($tc) ) {
 					StaffTCMS::create([
@@ -99,6 +99,7 @@ class StaffTCMSController extends Controller
 											'leave_taken' => $od->LEAVETYPE,
 											'remark' => $od->REMARK,
 					]);
+
 				// update all column
 				} elseif ( $tcin == '00:00:00' && $tcbreak == '00:00:00' && $tcresume == '00:00:00' && $tcout == '00:00:00' ) {
 					StaffTCMS::where('username', $od->EMPNO)->where('date', Carbon::parse($od->DATE)->format('Y-m-d'))->update([
@@ -284,47 +285,275 @@ class StaffTCMSController extends Controller
 						'remark' => $od->REMARK,
 					]);
 				}
-
-				// $tcms = StaffTCMS::updateOrCreate([
-				// 		'username' => $od->EMPNO,
-				// 		'date' => Carbon::parse($od->DATE)->format('Y-m-d')
-				// 	],
-				// 	[
-				// 		'staff_id' => $sid->staff_id,
-				// 		'name' => $od->BADGENAME,
-				// 		'daytype' => $od->DAYTYPE,
-
-
-				// 		'in' => (!empty($od->IN_))?$od->IN_:'00:00:00',
-				// 		'break' => (!empty($od->BREAK_))?$od->BREAK_:'00:00:00',
-				// 		'resume' => (!empty($od->RESUME_))?$od->RESUME_:'00:00:00',
-				// 		'out' => (!empty($od->OUT_))?$od->OUT_:'00:00:00',
-
-
-				// 		'work_hour' => $od->WORK,
-				// 		'short_hour' => $od->SHORT,
-				// 		'leave_taken' => $od->LEAVETYPE,
-				// 		'remark' => $od->REMARK,
-				// 		// 'exception' => $od->,
-				// 		// 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-				// 		// 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
-				// 		// 'deleted_at' => NULL
-				// 	]);
 			}
 		}
-		// Session::flash('flash_message', 'Data successfully update!');
-		// return redirect( route('tcms.index') );
+		Session::flash('flash_message', 'Data successfully update!');
+		return redirect( route('tcms.index') );
 	}
 
 	public function storeCSV(StaffTCMSUpdateRequest $request)
 	{
+		ini_set('max_execution_time', 3000);
+
 		$filename = Storage::putFile('csv', $request->file('csv'));
 
 		// this onw only to import direct to model
-		// Excel::import(new StaffTCMSImport, request()->file('your_file'));
+		// Excel::import(new StaffTCMSImport, request()->file('csv'));
 
 		// import to collection
-		// $collection = Excel::toCollection(new StaffTCMSImport, $request->file('csv'));
+		$collection = Excel::toCollection(new StaffTCMSImport, $request->file('csv'));
+		// $collection = (new UsersImport)->toCollection('users.xlsx');
+
+		// echo $collection;
+
+		foreach ($collection->first() as $row) {
+
+			$id = Login::where('username', $row['empno']);
+
+			if( !is_null($id->where('active', 1)) ) {
+				$sid = $id->where('active', 1)->first();
+			} else {
+				$sid = NULL;
+			}
+
+			if( !is_null($sid) ) {
+				$sid1 = $sid->belongtostaff->active;
+			} else {
+				$sid1 = 0;
+			}
+
+			if( $sid1 == 1 ) {
+
+// echo $sid1.' sid<br />';
+// echo $row['empno'].' empno<br />';
+// echo Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d').' date<br />';
+				// run query updateOrCreate
+				$tc = StaffTCMS::where('username', $row['empno'])->where('date', Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d') )->first();
+
+				if( is_null($tc) ) {
+					$tcname = NULL;
+					$tcdate = NULL;
+					$tcin = NULL;
+					$tcbreak = NULL;
+					$tcresume = NULL;
+					$tcout = NULL;
+				} else {
+					$tcname = $tc->name;
+					$tcdate = $tc->date;
+					$tcin = $tc->in;
+					$tcbreak = $tc->break;
+					$tcresume = $tc->resume;
+					$tcout = $tc->out;
+				}
+
+				// echo $tcname.' name<br />'.$tcdate.' date<br />'.$tcin.' in<br />'.$tcbreak.' break<br />'.$tcresume.' resume<br />'.$tcout.' out<br /><br />';
+
+				if( is_null($tc) ) {
+					StaffTCMS::create([
+											'username' => $row['empno'],
+											'date' => Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d') ,
+											'staff_id' => $sid->staff_id,
+											'name' => $row['name'],
+											'daytype' => $row['day_type'],
+											'in' => (!empty($row['in']))?$row['in']:'00:00:00',
+											'break' => (!empty($row['break']))?$row['break']:'00:00:00',
+											'resume' => (!empty($row['resume']))?$row['resume']:'00:00:00',
+											'out' => (!empty($row['out']))?$row['out']:'00:00:00',
+											'work_hour' => $row['work'],
+											'short_hour' => $row['short_minutes'],
+											'leave_taken' => $row['leavetype'],
+											'remark' => $row['remark'],
+					]);
+
+				// update all column
+				} elseif ( $tcin == '00:00:00' && $tcbreak == '00:00:00' && $tcresume == '00:00:00' && $tcout == '00:00:00' ) {
+					StaffTCMS::where('username', $row['empno'])->where('date', Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d') )->update([
+						'in' => (!empty($row['in']))?$row['in']:'00:00:00',
+						'break' => (!empty($row['break']))?$row['break']:'00:00:00',
+						'resume' => (!empty($row['resume']))?$row['resume']:'00:00:00',
+						'out' => (!empty($row['out']))?$row['out']:'00:00:00',
+						'work_hour' => $row['work'],
+						'short_hour' => $row['short_minutes'],
+						'leave_taken' => $row['leavetype'],
+						'remark' => $row['remark'],
+					]);
+
+				// update 1 column only
+				} elseif ( $tcin != '00:00:00' && $tcbreak == '00:00:00' && $tcresume == '00:00:00' && $tcout == '00:00:00' ) {
+					StaffTCMS::where('username', $row['empno'])->where('date', Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d') )->update([
+						// 'in' => (!empty($row['in']))?$row['in']:'00:00:00',
+						'break' => (!empty($row['break']))?$row['break']:'00:00:00',
+						'resume' => (!empty($row['resume']))?$row['resume']:'00:00:00',
+						'out' => (!empty($row['out']))?$row['out']:'00:00:00',
+						'work_hour' => $row['work'],
+						'short_hour' => $row['short_minutes'],
+						'leave_taken' => $row['leavetype'],
+						'remark' => $row['remark'],
+					]);
+				} elseif ( $tcin == '00:00:00' && $tcbreak != '00:00:00' && $tcresume == '00:00:00' && $tcout == '00:00:00' ) {
+					StaffTCMS::where('username', $row['empno'])->where('date', Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d') )->update([
+						'in' => (!empty($row['in']))?$row['in']:'00:00:00',
+						// 'break' => (!empty($row['break']))?$row['break']:'00:00:00',
+						'resume' => (!empty($row['resume']))?$row['resume']:'00:00:00',
+						'out' => (!empty($row['out']))?$row['out']:'00:00:00',
+						'work_hour' => $row['work'],
+						'short_hour' => $row['short_minutes'],
+						'leave_taken' => $row['leavetype'],
+						'remark' => $row['remark'],
+					]);
+				} elseif ( $tcin == '00:00:00' && $tcbreak == '00:00:00' && $tcresume != '00:00:00' && $tcout == '00:00:00' ) {
+					StaffTCMS::where('username', $row['empno'])->where('date', Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d') )->update([
+						'in' => (!empty($row['in']))?$row['in']:'00:00:00',
+						'break' => (!empty($row['break']))?$row['break']:'00:00:00',
+						// 'resume' => (!empty($row['resume']))?$row['resume']:'00:00:00',
+						'out' => (!empty($row['out']))?$row['out']:'00:00:00',
+						'work_hour' => $row['work'],
+						'short_hour' => $row['short_minutes'],
+						'leave_taken' => $row['leavetype'],
+						'remark' => $row['remark'],
+					]);
+				} elseif ( $tcin == '00:00:00' && $tcbreak == '00:00:00' && $tcresume == '00:00:00' && $tcout != '00:00:00' ) {
+					StaffTCMS::where('username', $row['empno'])->where('date', Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d') )->update([
+						'in' => (!empty($row['in']))?$row['in']:'00:00:00',
+						'break' => (!empty($row['break']))?$row['break']:'00:00:00',
+						'resume' => (!empty($row['resume']))?$row['resume']:'00:00:00',
+						// 'out' => (!empty($row['out']))?$row['out']:'00:00:00',
+						'work_hour' => $row['work'],
+						'short_hour' => $row['short_minutes'],
+						'leave_taken' => $row['leavetype'],
+						'remark' => $row['remark'],
+					]);
+
+				// update 2 column only
+				} elseif ( $tcin != '00:00:00' && $tcbreak != '00:00:00' && $tcresume == '00:00:00' && $tcout == '00:00:00' ) {
+					StaffTCMS::where('username', $row['empno'])->where('date', Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d') )->update([
+						// 'in' => (!empty($row['in']))?$row['in']:'00:00:00',
+						// 'break' => (!empty($row['break']))?$row['break']:'00:00:00',
+						'resume' => (!empty($row['resume']))?$row['resume']:'00:00:00',
+						'out' => (!empty($row['out']))?$row['out']:'00:00:00',
+						'work_hour' => $row['work'],
+						'short_hour' => $row['short_minutes'],
+						'leave_taken' => $row['leavetype'],
+						'remark' => $row['remark'],
+					]);
+				} elseif ( $tcin != '00:00:00' && $tcbreak == '00:00:00' && $tcresume != '00:00:00' && $tcout == '00:00:00' ) {
+					StaffTCMS::where('username', $row['empno'])->where('date', Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d') )->update([
+						// 'in' => (!empty($row['in']))?$row['in']:'00:00:00',
+						'break' => (!empty($row['break']))?$row['break']:'00:00:00',
+						// 'resume' => (!empty($row['resume']))?$row['resume']:'00:00:00',
+						'out' => (!empty($row['out']))?$row['out']:'00:00:00',
+						'work_hour' => $row['work'],
+						'short_hour' => $row['short_minutes'],
+						'leave_taken' => $row['leavetype'],
+						'remark' => $row['remark'],
+					]);
+				} elseif ( $tcin != '00:00:00' && $tcbreak == '00:00:00' && $tcresume == '00:00:00' && $tcout != '00:00:00' ) {
+					StaffTCMS::where('username', $row['empno'])->where('date', Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d') )->update([
+						// 'in' => (!empty($row['in']))?$row['in']:'00:00:00',
+						'break' => (!empty($row['break']))?$row['break']:'00:00:00',
+						'resume' => (!empty($row['resume']))?$row['resume']:'00:00:00',
+						// 'out' => (!empty($row['out']))?$row['out']:'00:00:00',
+						'work_hour' => $row['work'],
+						'short_hour' => $row['short_minutes'],
+						'leave_taken' => $row['leavetype'],
+						'remark' => $row['remark'],
+					]);
+				} elseif ( $tcin == '00:00:00' && $tcbreak != '00:00:00' && $tcresume != '00:00:00' && $tcout == '00:00:00' ) {
+					StaffTCMS::where('username', $row['empno'])->where('date', Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d') )->update([
+						'in' => (!empty($row['in']))?$row['in']:'00:00:00',
+						// 'break' => (!empty($row['break']))?$row['break']:'00:00:00',
+						// 'resume' => (!empty($row['resume']))?$row['resume']:'00:00:00',
+						'out' => (!empty($row['out']))?$row['out']:'00:00:00',
+						'work_hour' => $row['work'],
+						'short_hour' => $row['short_minutes'],
+						'leave_taken' => $row['leavetype'],
+						'remark' => $row['remark'],
+					]);
+				} elseif ( $tcin == '00:00:00' && $tcbreak != '00:00:00' && $tcresume == '00:00:00' && $tcout != '00:00:00' ) {
+					StaffTCMS::where('username', $row['empno'])->where('date', Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d') )->update([
+						'in' => (!empty($row['in']))?$row['in']:'00:00:00',
+						// 'break' => (!empty($row['break']))?$row['break']:'00:00:00',
+						'resume' => (!empty($row['resume']))?$row['resume']:'00:00:00',
+						// 'out' => (!empty($row['out']))?$row['out']:'00:00:00',
+						'work_hour' => $row['work'],
+						'short_hour' => $row['short_minutes'],
+						'leave_taken' => $row['leavetype'],
+						'remark' => $row['remark'],
+					]);
+				} elseif ( $tcin == '00:00:00' && $tcbreak == '00:00:00' && $tcresume != '00:00:00' && $tcout != '00:00:00' ) {
+					StaffTCMS::where('username', $row['empno'])->where('date', Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d') )->update([
+						'in' => (!empty($row['in']))?$row['in']:'00:00:00',
+						'break' => (!empty($row['break']))?$row['break']:'00:00:00',
+						// 'resume' => (!empty($row['resume']))?$row['resume']:'00:00:00',
+						// 'out' => (!empty($row['out']))?$row['out']:'00:00:00',
+						'work_hour' => $row['work'],
+						'short_hour' => $row['short_minutes'],
+						'leave_taken' => $row['leavetype'],
+						'remark' => $row['remark'],
+					]);
+
+				// update 3 column
+				} elseif ( $tcin != '00:00:00' && $tcbreak != '00:00:00' && $tcresume != '00:00:00' && $tcout == '00:00:00' ) {
+					StaffTCMS::where('username', $row['empno'])->where('date', Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d') )->update([
+						// 'in' => (!empty($row['in']))?$row['in']:'00:00:00',
+						// 'break' => (!empty($row['break']))?$row['break']:'00:00:00',
+						// 'resume' => (!empty($row['resume']))?$row['resume']:'00:00:00',
+						'out' => (!empty($row['out']))?$row['out']:'00:00:00',
+						'work_hour' => $row['work'],
+						'short_hour' => $row['short_minutes'],
+						'leave_taken' => $row['leavetype'],
+						'remark' => $row['remark'],
+					]);
+				} elseif ( $tcin == '00:00:00' && $tcbreak != '00:00:00' && $tcresume != '00:00:00' && $tcout != '00:00:00' ) {
+					StaffTCMS::where('username', $row['empno'])->where('date', Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d') )->update([
+						'in' => (!empty($row['in']))?$row['in']:'00:00:00',
+						// 'break' => (!empty($row['break']))?$row['break']:'00:00:00',
+						// 'resume' => (!empty($row['resume']))?$row['resume']:'00:00:00',
+						// 'out' => (!empty($row['out']))?$row['out']:'00:00:00',
+						'work_hour' => $row['work'],
+						'short_hour' => $row['short_minutes'],
+						'leave_taken' => $row['leavetype'],
+						'remark' => $row['remark'],
+					]);
+				} elseif ( $tcin != '00:00:00' && $tcbreak == '00:00:00' && $tcresume != '00:00:00' && $tcout != '00:00:00' ) {
+					StaffTCMS::where('username', $row['empno'])->where('date', Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d') )->update([
+						// 'in' => (!empty($row['in']))?$row['in']:'00:00:00',
+						'break' => (!empty($row['break']))?$row['break']:'00:00:00',
+						// 'resume' => (!empty($row['resume']))?$row['resume']:'00:00:00',
+						// 'out' => (!empty($row['out']))?$row['out']:'00:00:00',
+						'work_hour' => $row['work'],
+						'short_hour' => $row['short_minutes'],
+						'leave_taken' => $row['leavetype'],
+						'remark' => $row['remark'],
+					]);
+				} elseif ( $tcin != '00:00:00' && $tcbreak != '00:00:00' && $tcresume == '00:00:00' && $tcout != '00:00:00' ) {
+					StaffTCMS::where('username', $row['empno'])->where('date', Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d') )->update([
+						// 'in' => (!empty($row['in']))?$row['in']:'00:00:00',
+						// 'break' => (!empty($row['break']))?$row['break']:'00:00:00',
+						'resume' => (!empty($row['resume']))?$row['resume']:'00:00:00',
+						// 'out' => (!empty($row['out']))?$row['out']:'00:00:00',
+						'work_hour' => $row['work'],
+						'short_hour' => $row['short_minutes'],
+						'leave_taken' => $row['leavetype'],
+						'remark' => $row['remark'],
+					]);
+				// not updating any column
+				} elseif ( $tcin != '00:00:00' && $tcbreak != '00:00:00' && $tcresume != '00:00:00' && $tcout != '00:00:00' ) {
+					StaffTCMS::where('username', $row['empno'])->where('date', Carbon::createFromFormat('d/m/Y', $row['date'])->format('Y-m-d') )->update([
+						// 'in' => (!empty($row['in']))?$row['in']:'00:00:00',
+						// 'break' => (!empty($row['break']))?$row['break']:'00:00:00',
+						// 'resume' => (!empty($row['resume']))?$row['resume']:'00:00:00',
+						// 'out' => (!empty($row['out']))?$row['out']:'00:00:00',
+						'work_hour' => $row['work'],
+						'short_hour' => $row['short_minutes'],
+						'leave_taken' => $row['leavetype'],
+						'remark' => $row['remark'],
+					]);
+				}
+			}
+		}
+		Session::flash('flash_message', 'Data successfully update!');
+		return redirect( route('tcms.index') );
 	}
 
 	public function store(Request $request)
@@ -357,7 +586,7 @@ class StaffTCMSController extends Controller
 		$resume = Carbon::parse($request->resume)->format('H:i:s');
 		$out = Carbon::parse($request->out)->format('H:i:s');
 
-		echo $in;
+		// echo $in;
 
 		$staffTCMS = StaffTCMS::where([ ['staff_id', $request->segment(2)],	['date', $request->date] ]);
 
