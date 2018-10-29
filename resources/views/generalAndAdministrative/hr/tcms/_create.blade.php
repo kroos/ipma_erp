@@ -5,9 +5,9 @@ use \Carbon\Carbon;
 	<li class="nav-item">
 		<a class="nav-link active" href="{{ route('staffTCMS.create') }}">ODBC / CSV Uploader</a>
 	</li>
-	<li class="nav-item">
+<!-- 	<li class="nav-item">
 		<a class="nav-link" href="{{ route('staffTCMS.index') }}">Attendance</a>
-	</li>
+	</li> -->
 <!-- 	<li class="nav-item">
 		<a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="{{ route('leaveList.index') }}">Leave List</a>
 		<div class="dropdown-menu">

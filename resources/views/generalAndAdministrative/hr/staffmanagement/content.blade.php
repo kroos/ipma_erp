@@ -7,7 +7,7 @@ use App\Model\Department;
 use Carbon\Carbon;
 
 $h = Staff::where('active', 1)->get();
-$m = Staff::where('active', 0)->get();
+$m = Staff::where('active', '<>', 1)->get();
 ?>
 <div class="card">
 	<div class="card-header">Active Staff List</div>
@@ -70,7 +70,7 @@ if (!is_null($b->belongtomanyposition()->wherePivot('main', 1)->first() )) {
 					<td>{{ $f }}</td>
 					<td>{{ $g }}</td>
 					<td>
-						<a href="" title="Calendar" class="btn btn-primary"><i class="far fa-calendar-alt"></i></a>
+						<a href="{!! route('staffHR.showReport', $b->id) !!}" title="Calendar" class="btn btn-primary"><i class="far fa-calendar-alt"></i></a>
 						<a href="{{ route('staffHR.show', $b->id) }}" title="Show" class="btn btn-primary"><i class="far fa-eye"></i></a>
 						<a href="{{ route('staffHR.editHR', $b->id) }}" title="Edit" class="btn btn-primary"><i class="far fa-edit"></i></a>
 
@@ -169,7 +169,5 @@ if (!is_null($z->belongtomanyposition()->wherePivot('main', 1)->first() )) {
 			</tbody>
 		</table>
 	</div>
-	<div class="card-footer">
-		<p>Link yet to be done</p>
-	</div>
+	<div class="card-footer">&nbsp;</div>
 </div>

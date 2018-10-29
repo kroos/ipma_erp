@@ -49,7 +49,11 @@ Route::post('/staffTCMS/storeODBC', [
 	'as' => 'staffTCMS.storeODBC',
 	'uses' => 'Administrative\HumanResource\TCMS\StaffTCMSController@storeODBC'
 ]);
-
+// staffHR Report
+Route::get('/staffHR/{staffHR}/showReport', [
+	'as' => 'staffHR.showReport',
+	'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@showReport',
+]);
 // received hardcopy
 Route::post('/staffTCMS/storeCSV', [
 	'as' => 'staffTCMS.storeCSV',

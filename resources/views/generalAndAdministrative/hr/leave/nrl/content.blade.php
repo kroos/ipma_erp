@@ -31,7 +31,7 @@ if( $jan != 1 ) {
 	<li class="nav-item">
 		<a class="nav-link active" href="{{ route('leaveNRL.index') }}">Non Replacement Leave</a>
 	</li>
-	<li class="nav-item">
+<!-- 	<li class="nav-item">
 		<a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="{{ route('leaveList.index') }}">Leave List</a>
 		<div class="dropdown-menu">
 			<a class="dropdown-item" href="#">Action</a>
@@ -43,7 +43,7 @@ if( $jan != 1 ) {
 	</li>
 	<li class="nav-item">
 		<a class="nav-link" href="#">check lain function yang ada</a>
-	</li>
+	</li> -->
 </ul>
 
 <div class="card">
@@ -142,7 +142,7 @@ if( $jan != 1 ) {
 					<td>ID {{ $crl->id }} => {!! $crl->belongtostaff->name !!}</td>
 					<td>
 		<?php
-		$i=0;
+		$i = 0;
 		if(is_null($href)) {
 		$p = StaffLeave::where('staff_id', $crl->staff_id)->where('leave_id', 4)->where('period', $crl->leave_utilize)->get();
 		// echo $p.' query<br />';

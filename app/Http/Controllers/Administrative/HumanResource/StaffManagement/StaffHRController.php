@@ -90,6 +90,15 @@ class StaffHRController extends Controller
 		return view( 'generalAndAdministrative.hr.staffmanagement.staffHR.show', compact(['staffHR']) );
 	}
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// custom show for report
+	public function showReport(Staff $staffHR)
+	{
+		return view( 'generalAndAdministrative.hr.staffmanagement.staffHR.showReport', compact(['staffHR']) );
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	public function edit(Staff $staffHR)
 	{
 		return view('generalAndAdministrative.hr.staffmanagement.staffHR.edit', compact(['staffHR']));
