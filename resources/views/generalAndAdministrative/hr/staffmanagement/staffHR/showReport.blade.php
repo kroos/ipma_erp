@@ -1,6 +1,7 @@
 @extends('layouts.app')
 <?php
 use App\Model\StaffLeave;
+use App\Model\HolidayCalendar;
 use Carbon\Carbon;
 
 $n = Carbon::now();
@@ -374,7 +375,22 @@ if( !empty($sd->hasonestaffleavebackup) ) {
 $tcms = $staffHR->hasmanystafftcms()->whereBetween('date', [$dn->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->get();
 ?>
 @foreach($tcms as $tc)
+@if(Carbon::parse($tc->date)->dayOfWeek != 0)
 <?php
+// echo $tc->date.' date<br />';
+if( Carbon::parse($tc->date)->dayOfWeek != 0 ) {
+	echo $tc->date.' kerja <br />';
+	$cuti = HolidayCalendar::all();
+	foreach ($cuti as $cu) {
+		$co = CarbonPeriod::create($cu->date_start, '1 days', $cu->date_end);
+		foreach ($co as $key) {
+			echo $key.' key<br />';
+		}
+	}
+}
+
+
+
 $in = Carbon::createFromTimeString($tc->in);
 $break = Carbon::createFromTimeString($tc->break);
 $resume = Carbon::createFromTimeString($tc->resume);
@@ -420,20 +436,22 @@ if ( !empty( $lea1 ) ) {
 @endif
 @if( !is_null($lea) )
 								<tr>
-									<td>{!! Carbon::parse($tc->date)->format('D, j F Y') !!}</td>
-									<td>{{ $tc->daytype }}</td>
-									<td>{{ Carbon::createFromTimeString($tc->in) }}</td>
-									<td>{{ ($tc->break == '00:00:00')?NULL:$break->format('h:i a') }}</td>
-									<td>{!! ($tc->resume == '00:00:00')?NULL:$resume->format('h:i a') !!}</td>
-									<td>{{ Carbon::createFromTimeString($tc->out) }}</td>
-									<td>{!! $tc->work_hour !!}</td>
-									<td>{!! ($tc->short_hour > 0)?'<span class="text-danger">'.$tc->short_hour.'</span>':$tc->short_hour !!}</td>
-									<td>{!! $tc->leave_taken !!}</td>
-									<td>{!! $leaid !!}{!! $leaid1 !!}</td>
-									<td>{!! (is_null($tc->exception) || $tc->exception == 0)?'<i class="fas fa-times"></i>':'<i class="fas fa-check"></i>' !!}</td>
+									<td class="text-danger">{!! Carbon::parse($tc->date)->format('D, j F Y') !!}</td>
+									<td class="text-danger">{{ $tc->daytype }}</td>
+									<td class="text-danger">{{ ($tc->in == '00:00:00')?NULL:Carbon::createFromTimeString($tc->in)->format('h:i a') }}</td>
+									<td class="text-danger">{{ ($tc->break == '00:00:00')?NULL:$break->format('h:i a') }}</td>
+									<td class="text-danger">{!! ($tc->resume == '00:00:00')?NULL:$resume->format('h:i a') !!}</td>
+									<td class="text-danger">{{ ($tc->out == '00:00:00')?NULL:Carbon::createFromTimeString($tc->out)->format('h:i a') }}</td>
+									<td class="text-danger">{!! $tc->work_hour !!}</td>
+									<td class="text-danger">{!! ($tc->short_hour > 0)?'<span class="text-danger">'.$tc->short_hour.'</span>':$tc->short_hour !!}</td>
+									<td class="text-danger">{!! $tc->leave_taken !!}</td>
+									<td class="text-danger">{!! $leaid !!}{!! $leaid1 !!}</td>
+									<td class="text-danger">{!! (is_null($tc->exception) || $tc->exception == 0)?'<i class="fas fa-times"></i>':'<i class="fas fa-check"></i>' !!}</td>
 								</tr>
 @endif
+@endif
 @endforeach
+
 							</tbody>
 						</table>
 

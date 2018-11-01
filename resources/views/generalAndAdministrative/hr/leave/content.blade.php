@@ -373,7 +373,7 @@ if( !empty($stl11->hasonestaffleavebackup) ) {
 				<tr>
 					<td>
 @if($nn1->gte($j1))
-@if( is_null($stl11->document) && is_null($stl11->hardcopy) && ( $stl11->leave_id == 2 || $stl11->leave_id == 5 || $stl11->leave_id == 6 || $stl11->leave_id == 9 || $stl11->leave_id == 11 || $stl11->leave_id == 3 ) )
+@if( is_null($stl11->document) && $stl11->hardcopy == 0 && ( $stl11->leave_id == 2 || $stl11->leave_id == 5 || $stl11->leave_id == 6 || $stl11->leave_id == 9 || $stl11->leave_id == 11 || $stl11->leave_id == 3 ) )
 					<label for="cb{{ $stl11->id }}"><input type="checkbox" value="{{ $stl11->id }}"  name="hardcopy[]" id="cb{{ $stl11->id }}" class="checkbox1"></label>
 @endif
 @endif
