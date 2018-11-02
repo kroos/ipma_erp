@@ -3,6 +3,7 @@
 use App\Model\StaffLeave;
 use App\Model\HolidayCalendar;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 $n = Carbon::now();
 $dn = $n->today();
@@ -106,7 +107,7 @@ $leaveALMC = $staffHR->hasmanystaffannualmcleave()->where('year', date('Y'))->fi
 												</dd>
 @endif
 												<dt class="col-sm-3"><h5>Unpaid Leave Utilize :</h5></dt>
-												<dd class="col-sm-9">{{ $staffHR->hasmanystaffleave()->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [3, 6])->get()->sum('period') }} days</dd>
+												<dd class="col-sm-9">{{ $staffHR->hasmanystaffleave()->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [3, 6])->whereIn('active', [1, 2])->get()->sum('period') }} days</dd>
 <?php
 $oi = $staffHR->hasmanystaffleavereplacement()->where('leave_balance', '<>', 0)->get();
 ?>
@@ -117,20 +118,39 @@ $oi = $staffHR->hasmanystaffleavereplacement()->where('leave_balance', '<>', 0)-
 												<dt class="col-sm-3"><h5>Tidak Hadir (ABSENT) :</h5></dt>
 												<dd class="col-sm-9">
 <?php
-	$absent = $staffHR->hasmanystafftcms()->where('leave_taken', 'ABSENT')->whereBetween('date', [$dn->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->get();
-	$abs = $absent->count();
-	$h = 0;
-	foreach ( $absent as $ab ) {
-		$c = $staffHR->hasmanystaffleave()->whereRaw('"'.$ab->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->whereNotIn('active', [3, 4]);
-		if ( !is_null($c) ) {
-			$h += $c->get()->count();
-		} else {
-			$h += 0;
+	$absent = $staffHR->hasmanystafftcms()->where('leave_taken', 'ABSENT')->whereBetween('date', [$dn->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->whereNull('exception')->get();
+
+			$b = 0;
+	foreach($absent as $ab) {
+		$lea1 = $staffHR->hasmanystaffleave()->whereRaw('"'.$ab->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->whereIn('active', [1, 2])->first();
+
+		// all of this are for checking sunday and holiday
+		$hol = [];
+		// echo $tc->date.' date<br />';
+		if( Carbon::parse($ab->date)->dayOfWeek != 0 ) {
+			// echo $tc->date.' kerja <br />';
+			$cuti = HolidayCalendar::all();
+			foreach ($cuti as $cu) {
+				$co = CarbonPeriod::create($cu->date_start, '1 days', $cu->date_end);
+				// echo $co.' array or string<br />';
+				foreach ($co as $key) {
+					if (Carbon::parse($key)->format('Y-m-d') == $ab->date) {
+						$hol[Carbon::parse($key)->format('Y-m-d')] = 'a';
+						// echo $key.' key<br />';
+					}
+				}
+			}
+			if( !array_has($hol, $ab->date) ) {
+				if( $ab->leave_taken == 'ABSENT' && is_null($lea1) ) {
+					$b++;
+				}
+			}
 		}
 	}
-		// echo $h.' h<br />';
+
+	echo $b;
 ?>
-													{{ $abs - $h }} days
+													 days
 												</dd>
 											</dl>
 
@@ -372,84 +392,83 @@ if( !empty($sd->hasonestaffleavebackup) ) {
 							<tbody>
 <?php
 // $tcms = $staffHR->hasmanystafftcms()->where('leave_taken', 'ABSENT')->get();
-$tcms = $staffHR->hasmanystafftcms()->whereBetween('date', [$dn->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->get();
-?>
+$tcms = $staffHR->hasmanystafftcms()->whereBetween('date', [$dn->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->whereNULL('exception')->get(); ?>
 @foreach($tcms as $tc)
-@if(Carbon::parse($tc->date)->dayOfWeek != 0)
-<?php
-// echo $tc->date.' date<br />';
-if( Carbon::parse($tc->date)->dayOfWeek != 0 ) {
-	echo $tc->date.' kerja <br />';
-	$cuti = HolidayCalendar::all();
-	foreach ($cuti as $cu) {
-		$co = CarbonPeriod::create($cu->date_start, '1 days', $cu->date_end);
-		foreach ($co as $key) {
-			echo $key.' key<br />';
+	@if(Carbon::parse($tc->date)->dayOfWeek != 0)
+		<?php
+
+		// all of this are for checking sunday and holiday
+		$hol = [];
+		// echo $tc->date.' date<br />';
+		if( Carbon::parse($tc->date)->dayOfWeek != 0 ) {
+			// echo $tc->date.' kerja <br />';
+			$cuti = HolidayCalendar::all();
+			foreach ($cuti as $cu) {
+				$co = CarbonPeriod::create($cu->date_start, '1 days', $cu->date_end);
+				// echo $co.' array or string<br />';
+				foreach ($co as $key) {
+					if (Carbon::parse($key)->format('Y-m-d') == $tc->date) {
+						$hol[Carbon::parse($key)->format('Y-m-d')] = 'a';
+						// echo $key.' key<br />';
+					}
+				}
+			}
 		}
-	}
-}
 
+		// print_r($hol);
+		// echo '<br />';
+		// if( array_has($hol, '2018-10-22') ) {
+		// 	echo 'success<br />';
+		// } else {
+		// 	echo 'tak jumpa<br />';
+		// }
 
+		$in = Carbon::createFromTimeString($tc->in);
+		$break = Carbon::createFromTimeString($tc->break);
+		$resume = Carbon::createFromTimeString($tc->resume);
+		$out = Carbon::createFromTimeString($tc->out);
 
-$in = Carbon::createFromTimeString($tc->in);
-$break = Carbon::createFromTimeString($tc->break);
-$resume = Carbon::createFromTimeString($tc->resume);
-$out = Carbon::createFromTimeString($tc->out);
+		// looking for appropriate leaves for user and the status of the leave is "cancelled" or "rejected"
+		$lea = $staffHR->hasmanystaffleave()->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->whereIn('active', [3, 4])->first();
+		// echo $lea.'<br />';
 
-// looking for appropriate leaves for user and the status of the leave is "cancelled" or "rejected"
-$lea = $staffHR->hasmanystaffleave()->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->whereIn('active', [3, 4])->first();
-// echo $lea.'<br />';
+		// looking for appropriate leaves for user and the status of the leave is "active" or "closed"
+		$lea1 = $staffHR->hasmanystaffleave()->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->whereIn('active', [1, 2])->first();
 
-// looking for appropriate leaves for user and the status of the leave is "active" or "closed"
-$lea1 = $staffHR->hasmanystaffleave()->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->whereIn('active', [1, 2])->first();
+		if ( !empty( $lea ) ) {
+			$dts = Carbon::parse($lea->created_at)->format('Y');
+			$arr = str_split( $dts, 2 );
+			$leaid = 'HR9-'.str_pad( $lea->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
+		} else {
+			$leaid = NULL;
+		}
 
-if ( !empty( $lea ) ) {
-	$dts = Carbon::parse($lea->created_at)->format('Y');
-	$arr = str_split( $dts, 2 );
-	$leaid = 'HR9-'.str_pad( $lea->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
-} else {
-	$leaid = NULL;
-}
-
-if ( !empty( $lea1 ) ) {
-	$dts = Carbon::parse($lea1->created_at)->format('Y');
-	$arr = str_split( $dts, 2 );
-	$leaid1 = 'HR9-'.str_pad( $lea1->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
-} else {
-	$leaid1 = NULL;
-}
-?>
-@if( $tc->leave_taken == 'ABSENT' && is_null($lea1) )
-								<tr>
-									<td>{!! Carbon::parse($tc->date)->format('D, j F Y') !!}</td>
-									<td>{{ $tc->daytype }}</td>
-									<td>{{ ($tc->in == '00:00:00')?NULL:$in->format('h:i a') }}</td>
-									<td>{{ ($tc->break == '00:00:00')?NULL:$break->format('h:i a') }}</td>
-									<td>{!! ($tc->resume == '00:00:00')?NULL:$resume->format('h:i a') !!}</td>
-									<td>{{ ($tc->out == '00:00:00')?NULL:$out->format('h:i a') }}</td>
-									<td>{!! $tc->work_hour !!}</td>
-									<td>{!! ($tc->short_hour > 0)?'<span class="text-danger">'.$tc->short_hour.'</span>':$tc->short_hour !!}</td>
-									<td>{!! $tc->leave_taken !!}</td>
-									<td>{!! $leaid !!}{!! $leaid1 !!}</td>
-									<td>{!! (is_null($tc->exception) || $tc->exception == 0)?'<i class="fas fa-times"></i>':'<i class="fas fa-check"></i>' !!}</td>
-								</tr>
-@endif
-@if( !is_null($lea) )
-								<tr>
-									<td class="text-danger">{!! Carbon::parse($tc->date)->format('D, j F Y') !!}</td>
-									<td class="text-danger">{{ $tc->daytype }}</td>
-									<td class="text-danger">{{ ($tc->in == '00:00:00')?NULL:Carbon::createFromTimeString($tc->in)->format('h:i a') }}</td>
-									<td class="text-danger">{{ ($tc->break == '00:00:00')?NULL:$break->format('h:i a') }}</td>
-									<td class="text-danger">{!! ($tc->resume == '00:00:00')?NULL:$resume->format('h:i a') !!}</td>
-									<td class="text-danger">{{ ($tc->out == '00:00:00')?NULL:Carbon::createFromTimeString($tc->out)->format('h:i a') }}</td>
-									<td class="text-danger">{!! $tc->work_hour !!}</td>
-									<td class="text-danger">{!! ($tc->short_hour > 0)?'<span class="text-danger">'.$tc->short_hour.'</span>':$tc->short_hour !!}</td>
-									<td class="text-danger">{!! $tc->leave_taken !!}</td>
-									<td class="text-danger">{!! $leaid !!}{!! $leaid1 !!}</td>
-									<td class="text-danger">{!! (is_null($tc->exception) || $tc->exception == 0)?'<i class="fas fa-times"></i>':'<i class="fas fa-check"></i>' !!}</td>
-								</tr>
-@endif
-@endif
+		if ( !empty( $lea1 ) ) {
+			$dts = Carbon::parse($lea1->created_at)->format('Y');
+			$arr = str_split( $dts, 2 );
+			$leaid1 = 'HR9-'.str_pad( $lea1->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
+		} else {
+			$leaid1 = NULL;
+		}
+		?>
+		@if( !array_has($hol, $tc->date) )
+			@if( $tc->leave_taken == 'ABSENT' && is_null($lea1) )
+									<tr>
+										<td>{!! Carbon::parse($tc->date)->format('D, j F Y') !!}</td>
+										<td>{{ $tc->daytype }}</td>
+										<td>{{ ($tc->in == '00:00:00')?NULL:$in->format('h:i a') }}</td>
+										<td>{{ ($tc->break == '00:00:00')?NULL:$break->format('h:i a') }}</td>
+										<td>{!! ($tc->resume == '00:00:00')?NULL:$resume->format('h:i a') !!}</td>
+										<td>{{ ($tc->out == '00:00:00')?NULL:$out->format('h:i a') }}</td>
+										<td>{!! $tc->work_hour !!}</td>
+										<td>{!! ($tc->short_hour > 0)?'<span class="text-danger">'.$tc->short_hour.'</span>':$tc->short_hour !!}</td>
+										<td>{!! $tc->leave_taken !!}</td>
+										<td>{!! $leaid !!}&nbsp;{!! $leaid1 !!}</td>
+										<td>{!! (is_null($tc->exception) || $tc->exception == 0)?'<i class="fas fa-times"></i>':'<i class="fas fa-check"></i>' !!}</td>
+									</tr>
+			@endif
+		@endif	
+	@endif
 @endforeach
 
 							</tbody>

@@ -42,6 +42,7 @@ Route::resources([
 	'staffLeaveHR' => 'Administrative\HumanResource\LeaveEditing\StaffLeaveHRController',
 	'staffLeaveReplacement' => 'Administrative\HumanResource\LeaveEditing\NRL\StaffLeaveReplacementController',
 	'staffTCMS' => 'Administrative\HumanResource\TCMS\StaffTCMSController',
+	'staffOvertime' => 'Administrative\HumanResource\StaffManagement\StaffOvertimeController',
 	
 ]);
 // received hardcopy
@@ -323,6 +324,12 @@ Route::get('printpdfleaves/{staffLeave}', [
 Route::post('printpdftcms', [
 		'as' => 'printpdftcms.store',
 		'uses' => 'PDFController\PrintPDFLeavesController@tcmsstore'
+	]);
+
+############################################################################
+Route::post('printpdfovertime', [
+		'as' => 'printpdfovertime.store',
+		'uses' => 'PDFController\PrintPDFLeavesController@overtime'
 	]);
 
 ############################################################################

@@ -7,13 +7,13 @@
 		@include('layouts.info')
 		@include('layouts.errorform')
 
-		<dl class="row">
+<!-- 		<dl class="row">
 			<dt class="col-sm-3"><h5 class="text-danger">Perhatian :</h5></dt>
 			<dd class="col-sm-9">
 				<p>nnt pikiaq lain</p>
 				<p>:P</p>
 			</dd>
-		</dl>
+		</dl> -->
 <?php
 // ada yg kena tambah lagi, contoh utk HOD and HR alert.
 $shod = \Auth::user()->belongtostaff->hasmanystaffleaveapproval()->whereNull('hr')->whereNull('approval')->get();

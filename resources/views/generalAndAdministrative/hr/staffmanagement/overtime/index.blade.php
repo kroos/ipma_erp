@@ -37,13 +37,13 @@ ini_set('max_execution_time', 180); //3 minutes
 			<div class="card-header">Staff Management</div>
 			<div class="card-body table-responsive">
 
-				<ul class="nav nav-tabs">
+				<ul class="nav nav-pills">
 					<li class="nav-item">
-						<a class="nav-link" href="{{ route('staffOvertime.index') }}">Overtime</a>
+						<a class="nav-link active" href="{{ route('staffOvertime.index') }}">Overtime</a>
 					</li>
 				</ul>
 
-				@include('generalAndAdministrative.hr.staffmanagement.content')
+				@include('generalAndAdministrative.hr.staffmanagement.overtime.content')
 
 			</div>
 		</div>
@@ -59,11 +59,20 @@ $("#username").keyup(function() {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
-// table
-$('#staff').DataTable({
-	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	"order": [[3, "asc" ]],	// sorting the 4th column descending
-	// responsive: true
+//
+$('#half').select2({
+	placeholder: 'Please Choose',
+	width: '100%',
+});
+
+$('#loc').select2({
+	placeholder: 'Please Choose',
+	width: '100%',
+});
+
+$('#month').select2({
+	placeholder: 'Please Choose',
+	width: '100%',
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////

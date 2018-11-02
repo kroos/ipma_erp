@@ -34,4 +34,13 @@ class PrintPDFLeavesController extends Controller
 		$dte = $request->date_end;
 		echo view('pdfleave.staffTCMS', compact(['dts', 'dte']));
 	}
+
+	public function overtime(Request $request)
+	{
+		print_r($request->all());
+		$half = $request->half;
+		$loc = $request->location;
+		$month = $request->month;
+		echo view('pdfleave.overtime', compact(['half', 'loc', 'month']));
+	}
 }

@@ -6,9 +6,11 @@ ini_set('max_execution_time', 3000);
 use App\Model\Staff;
 use App\Model\StaffLeave;
 use App\Model\StaffTCMS;
+use App\Model\HolidayCalendar;
 
 use Crabbly\FPDF\FPDF as Fpdf;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 
 class PDF extends Fpdf
@@ -97,32 +99,50 @@ class PDF extends Fpdf
 	$pdf->SetFont('Arial', NULL, 8);	// setting font
 	$i = 0;
 	foreach( $staffTCMS as $stcms ):
+		$lea = StaffLeave::where('staff_id', $stcms->staff_id)->whereRaw('"'.$stcms->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->whereIn('active', [1, 2])->first();
 
-		$lea = StaffLeave::where('staff_id', $stcms->staff_id)->whereRaw('"'.$stcms->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->first();
-		if ( !empty( $lea ) ) {
-			$dts = Carbon::parse($lea->created_at)->format('Y');
-			$arr = str_split( $dts, 2 );
-			$leaid = 'HR9-'.str_pad( $lea->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
-		} else {
-			$leaid = NULL;
+		// all of this are for checking sunday and holiday
+		$hol = [];
+		// echo $tc->date.' date<br />';
+		if( Carbon::parse($stcms->date)->dayOfWeek != 0 ) {
+			// echo $tc->date.' kerja <br />';
+			$cuti = HolidayCalendar::all();
+			foreach ($cuti as $cu) {
+				$co = CarbonPeriod::create($cu->date_start, '1 days', $cu->date_end);
+				// echo $co.' array or string<br />';
+				foreach ($co as $key) {
+					if (Carbon::parse($key)->format('Y-m-d') == $stcms->date) {
+						$hol[Carbon::parse($key)->format('Y-m-d')] = 'a';
+						// echo $key.' key<br />';
+					}
+				}
+			}
+			if( !array_has($hol, $stcms->date) ) {
+				if( $stcms->leave_taken == 'ABSENT' && is_null($lea) ) {
+					if ( !empty( $lea ) ) {
+						$dts = Carbon::parse($lea->created_at)->format('Y');
+						$arr = str_split( $dts, 2 );
+						$leaid = 'HR9-'.str_pad( $lea->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
+					} else {
+						$leaid = NULL;
+					}
+
+					if($stcms->belongtostaff->active == 1):
+						if(/*$stcms->in == '00:00:00' &&*/ $stcms->work_hour == 0 /*&& $stcms->break == '00:00:00'*/ && $stcms->leave_taken != 'Outstation' ):
+							$i++;
+							$pdf->Cell(20, 10, Carbon::parse($stcms->date)->format('j M Y'), 1, 0, 'L');
+							$pdf->Cell(18, 10, $stcms->leave_taken, 1, 0, 'L');
+							$pdf->Cell(15, 10, $stcms->belongtostaff->belongtolocation->location, 1, 0, 'L');
+							$pdf->Cell(52, 10, $stcms->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first()->belongtodepartment->department, 1, 0, 'L');
+							$pdf->Cell(15, 10, $stcms->belongtostaff->hasmanylogin()->where('active', 1)->first()->username, 1, 0, 'L');
+							$pdf->Cell(60, 10, $stcms->belongtostaff->name, 1, 0, 'L');
+							$pdf->Cell(72, 10, $stcms->remark, 1, 0, 'L');
+							$pdf->Cell(25, 10, $leaid, 1, 1, 'L');
+						endif;
+					endif;
+				}
+			}
 		}
-
-
-
-		if($stcms->belongtostaff->active == 1):
-			if(/*$stcms->in == '00:00:00' &&*/$stcms->work_hour == 0 /*&& $stcms->break == '00:00:00'*/ && $stcms->leave_taken != 'Outstation' ):
-				$i++;
-				$pdf->Cell(20, 10, Carbon::parse($stcms->date)->format('j M Y'), 1, 0, 'L');
-				$pdf->Cell(18, 10, $stcms->leave_taken, 1, 0, 'L');
-				$pdf->Cell(15, 10, $stcms->belongtostaff->belongtolocation->location, 1, 0, 'L');
-				$pdf->Cell(52, 10, $stcms->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first()->belongtodepartment->department, 1, 0, 'L');
-				$pdf->Cell(15, 10, $stcms->belongtostaff->hasmanylogin()->where('active', 1)->first()->username, 1, 0, 'L');
-				$pdf->Cell(60, 10, $stcms->belongtostaff->name, 1, 0, 'L');
-				$pdf->Cell(72, 10, $stcms->remark, 1, 0, 'L');
-				$pdf->Cell(25, 10, $leaid, 1, 1, 'L');
-			endif;
-		endif;
-
 	endforeach;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
