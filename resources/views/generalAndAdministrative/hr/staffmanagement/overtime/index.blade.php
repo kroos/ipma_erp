@@ -76,64 +76,59 @@ $('#month').select2({
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
-// table
-$('#staffinactive').DataTable({
-	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	"order": [[0, "asc" ]],	// sorting the 4th column descending
-	// responsive: true
-});
-
-/////////////////////////////////////////////////////////////////////////////////////////
-// user disable
-$(document).on('click', '.disable_user', function(e){
-	
-	var productId = $(this).data('id');
-	SwalDelete(productId);
-	e.preventDefault();
-});
-
-function SwalDelete(productId){
-	swal({
-		title: 'Are you sure?',
-		text: "It will be deleted permanently!",
-		type: 'warning',
-		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
-		cancelButtonColor: '#d33',
-		confirmButtonText: 'Yes, delete it!',
-		showLoaderOnConfirm: true,
-
-		preConfirm: function() {
-			return new Promise(function(resolve) {
-				$.ajax({
-					type: 'DELETE',
-					url: '{{ url('disableHR') }}' + '/' + productId,
-					data: {
-							_token : $('meta[name=csrf-token]').attr('content'),
-							id: productId,
-					},
-					dataType: 'json'
-				})
-				.done(function(response){
-					swal('Deleted!', response.message, response.status)
-					.then(function(){
-						window.location.reload(true);
-					});
-					//$('#disable_user_' + productId).parent().parent().remove();
-				})
-				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
-				})
-			});
+	$('#form').bootstrapValidator({
+		feedbackIcons: {
+			valid: '',
+			invalid: '',
+			validating: ''
 		},
-		allowOutsideClick: false			  
-	})
-	.then((result) => {
-		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+		fields: {
+			year: {
+				validators : {
+					notEmpty: {
+						message: 'Please insert year in this format (YYYY). '
+					},
+					integer: {
+						message: 'The value is not an integer. '
+					},
+					stringLength: {
+						min: 4,
+						max: 4,
+						message: 'The year must exactly 4 digit. '
+					}
+				}
+			},
+			half: {
+				validators : {
+					notEmpty: {
+						message: 'Please choose. '
+					},
+				}
+			},
+			location: {
+				validators : {
+					notEmpty: {
+						message: 'Please choose. '
+					},
+				}
+			},
+			month: {
+				validators : {
+					notEmpty: {
+						message: 'Please choose. '
+					},
+				}
+			},
 		}
+	})
+	.find('[name="reason"]')
+	// .ckeditor()
+	// .editor
+		.on('change', function() {
+			// Revalidate the bio field
+		$('#form').bootstrapValidator('revalidateField', 'reason');
+		// console.log($('#reason').val());
 	});
-}
 
 /////////////////////////////////////////////////////////////////////////////////////////
 @endsection

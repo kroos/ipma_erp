@@ -5,6 +5,13 @@
 	{!! Form::open( ['route' => ['printpdfovertime.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
 
 		<div class="form-group row {{ $errors->has('half') ? ' has-error' : '' }}">
+			{{ Form::label('year', 'Year : ', ['class' => 'col-sm-2 col-form-label']) }}
+			<div class="col-sm-10">
+				{{ Form::text('year', @$value, ['class' => 'form-control', 'id' => 'year', 'placeholder' => 'Year', 'autocomplete' => 'off']) }}
+			</div>
+		</div>
+
+		<div class="form-group row {{ $errors->has('half') ? ' has-error' : '' }}">
 			{{ Form::label('half', 'Half Month : ', ['class' => 'col-sm-2 col-form-label']) }}
 			<div class="col-sm-10">
 				{{ Form::select('half', [1 => 'First Half', 2 => 'Second Half'], @$value, ['class' => 'form-control', 'id' => 'half', 'placeholder' => 'Please choose', 'autocomplete' => 'off']) }}

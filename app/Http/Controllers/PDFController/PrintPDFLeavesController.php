@@ -37,10 +37,11 @@ class PrintPDFLeavesController extends Controller
 
 	public function overtime(Request $request)
 	{
-		print_r($request->all());
+		// print_r($request->all());
+		$year = $request->year;
 		$half = $request->half;
 		$loc = $request->location;
 		$month = $request->month;
-		echo view('pdfleave.overtime', compact(['half', 'loc', 'month']));
+		echo view('pdfleave.overtime', compact(['year', 'half', 'loc', 'month']));
 	}
 }
