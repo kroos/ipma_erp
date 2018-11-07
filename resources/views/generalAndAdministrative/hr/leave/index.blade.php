@@ -47,6 +47,37 @@ $("#username").keyup(function() {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+$('.name1').popover({ 
+	trigger: "hover",
+	html: true,
+});
+
+$('.name2').popover({ 
+	trigger: "hover",
+	html: true,
+});
+
+$('.name3').popover({ 
+	trigger: "hover",
+	html: true,
+});
+
+$('.name4').popover({ 
+	trigger: "hover",
+	html: true,
+});
+
+$('.name5').popover({ 
+	trigger: "hover",
+	html: true,
+});
+
+$('.name6').popover({ 
+	trigger: "hover",
+	html: true,
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
 // datatables
 $.fn.dataTable.moment( 'ddd, D MMM YYYY' );
 $.fn.dataTable.moment( 'ddd, D MMM YYYY h:mm a' );

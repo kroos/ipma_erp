@@ -217,7 +217,9 @@ $username = $tc->belongtostaff->hasmanylogin()->where('active', 1)->first()->use
 			<td>{!! Carbon::parse($tc->date)->format('D, j M Y') !!}</td>
 			<td>{!! $tc->belongtostaff->belongtolocation->location !!}</td>
 			<td>{!! $username !!}</td>
-			<td>{!! $tc->belongtostaff->name !!}</td>
+			<td>
+				<span class="name1" data-content="<img src='{{ asset('storage/'.$tc->belongtostaff->image) }}'' alt='{{ $tc->belongtostaff->name }}' class='img-thumbnail rounded' >" data-placement="bottom" data-original-title="{{ $tc->belongtostaff->name }}" >{{ $tc->belongtostaff->name }}</span>
+			</td>
 			<td>{{ $tc->daytype }}</td>
 			<td>{!! $in1 !!}</td>
 			<td>{!! ($tc->break == '00:00:00')?NULL:$break->format('h:i a') !!}</td>

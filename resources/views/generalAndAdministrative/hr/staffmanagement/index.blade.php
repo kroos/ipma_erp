@@ -2,7 +2,7 @@
 
 @section('content')
 <?php
-ini_set('max_execution_time', 180); //3 minutes
+ini_set('max_execution_time', 300); //5 minutes
 ?>
 <div class="card">
 	<div class="card-header"><h1>Human Resource Department</h1></div>
@@ -41,6 +41,9 @@ ini_set('max_execution_time', 180); //3 minutes
 					<li class="nav-item">
 						<a class="nav-link" href="{{ route('staffOvertime.index') }}">Overtime</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('staffAvailability.index') }}">Staff Availability Report</a>
+					</li>
 				</ul>
 
 				@include('generalAndAdministrative.hr.staffmanagement.content')
@@ -52,6 +55,17 @@ ini_set('max_execution_time', 180); //3 minutes
 @endsection
 
 @section('js')
+/////////////////////////////////////////////////////////////////////////////////////////
+$('.name1').popover({ 
+	trigger: "hover",
+	html: true,
+});
+
+$('.name2').popover({ 
+	trigger: "hover",
+	html: true,
+});
+
 /////////////////////////////////////////////////////////////////////////////////////////
 //ucwords
 $("#username").keyup(function() {

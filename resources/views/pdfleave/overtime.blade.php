@@ -31,7 +31,7 @@ class PDF extends Fpdf
 		$this->SetTextColor(128);
 		$this->Cell(0, 5, 'IPMA Industry Sdn Bhd', 0, 1, 'C');
 		$this->SetFont('arial','B',10);
-		$this->Cell(0, 5, 'Attendance Report', 0, 1, 'C');
+		$this->Cell(0, 5, 'Overtime Report', 0, 1, 'C');
 		$this->SetFont('arial',NULL,7);
 		$this->Cell(0, 5, 'Phone : +604 917 8799 / 917 1799 Email : ipma@ipmaindustry.com', 0, 1, 'C');
 

@@ -90,7 +90,7 @@ class PDF extends Fpdf
 	$pdf->Cell(20, 5, 'Date', 1, 0, 'C');
 	$pdf->Cell(18, 5, 'Status', 1, 0, 'C');
 	$pdf->Cell(15, 5, 'Loc', 1, 0, 'C');
-	$pdf->Cell(52, 5, 'Dept', 1, 0, 'C');
+	$pdf->Cell(52, 5, 'Department', 1, 0, 'C');
 	$pdf->Cell(15, 5, 'Staff ID', 1, 0, 'C');
 	$pdf->Cell(60, 5, 'Name', 1, 0, 'C');
 	$pdf->Cell(72, 5, 'Remarks', 1, 0, 'C');
@@ -100,6 +100,7 @@ class PDF extends Fpdf
 	$i = 0;
 	foreach( $staffTCMS as $stcms ):
 		$lea = StaffLeave::where('staff_id', $stcms->staff_id)->whereRaw('"'.$stcms->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->whereIn('active', [1, 2])->first();
+		// $pdf->MultiCell(0, 5, $lea, 0, 'L');
 
 		// all of this are for checking sunday and holiday
 		$hol = [];
@@ -118,7 +119,9 @@ class PDF extends Fpdf
 				}
 			}
 			if( !array_has($hol, $stcms->date) ) {
-				if( $stcms->leave_taken == 'ABSENT' && is_null($lea) ) {
+
+
+				if( $stcms->leave_taken == 'ABSENT' /*&& is_null($lea)*/ || $stcms->leave_taken != 'Outstation' && !empty($stcms->leave_taken )  ) {
 					if ( !empty( $lea ) ) {
 						$dts = Carbon::parse($lea->created_at)->format('Y');
 						$arr = str_split( $dts, 2 );
@@ -127,8 +130,7 @@ class PDF extends Fpdf
 						$leaid = NULL;
 					}
 
-					if($stcms->belongtostaff->active == 1):
-						if(/*$stcms->in == '00:00:00' &&*/ $stcms->work_hour == 0 /*&& $stcms->break == '00:00:00'*/ && $stcms->leave_taken != 'Outstation' ):
+					if( $stcms->belongtostaff->active == 1 ){
 							$i++;
 							$pdf->Cell(20, 10, Carbon::parse($stcms->date)->format('j M Y'), 1, 0, 'L');
 							$pdf->Cell(18, 10, $stcms->leave_taken, 1, 0, 'L');
@@ -138,8 +140,7 @@ class PDF extends Fpdf
 							$pdf->Cell(60, 10, $stcms->belongtostaff->name, 1, 0, 'L');
 							$pdf->Cell(72, 10, $stcms->remark, 1, 0, 'L');
 							$pdf->Cell(25, 10, $leaid, 1, 1, 'L');
-						endif;
-					endif;
+					}
 				}
 			}
 		}

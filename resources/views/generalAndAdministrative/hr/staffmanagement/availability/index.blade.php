@@ -39,14 +39,14 @@ ini_set('max_execution_time', 180); //3 minutes
 
 				<ul class="nav nav-pills">
 					<li class="nav-item">
-						<a class="nav-link active" href="{{ route('staffOvertime.index') }}">Overtime</a>
+						<a class="nav-link" href="{{ route('staffOvertime.index') }}">Overtime</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{ route('staffAvailability.index') }}">Staff Availability Report</a>
+						<a class="nav-link active" href="{{ route('staffAvailability.index') }}">Staff Availability Report</a>
 					</li>
 				</ul>
 
-				@include('generalAndAdministrative.hr.staffmanagement.overtime.content')
+				@include('generalAndAdministrative.hr.staffmanagement.availability.content')
 
 			</div>
 		</div>
@@ -63,12 +63,7 @@ $("#username").keyup(function() {
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //
-$('#half').select2({
-	placeholder: 'Please Choose',
-	width: '100%',
-});
-
-$('#loc').select2({
+$('#cat').select2({
 	placeholder: 'Please Choose',
 	width: '100%',
 });
@@ -101,14 +96,7 @@ $('#month').select2({
 					}
 				}
 			},
-			half: {
-				validators : {
-					notEmpty: {
-						message: 'Please choose. '
-					},
-				}
-			},
-			location: {
+			category: {
 				validators : {
 					notEmpty: {
 						message: 'Please choose. '

@@ -63,7 +63,7 @@ if (!is_null($b->belongtomanyposition()->wherePivot('main', 1)->first() )) {
 ?>
 				<tr>
 					<td>{{ $user }}</td>
-					<td>{{ $b->name }}</td>
+					<td><span class="name1" data-content="<img src='{{ asset('storage/'.$b->image) }}'' alt='{{ $b->name }}' class='img-thumbnail rounded img-fluid' >" data-placement="bottom" data-original-title="{{ $b->name }}" >{{ $b->name }}</span></td>
 					<td>{{ $a }}</td>
 					<td>{{ $d }}</td>
 					<td>{{ $e }}</td>
@@ -158,7 +158,9 @@ if (!is_null($z->belongtomanyposition()->wherePivot('main', 1)->first() )) {
 	$g1 = NULL;
 }
 ?>
-					<td>{{ $z->name }}</td>
+					<td>
+						<span class="name2" data-content="<img src='{{ asset('storage/'.$z->image) }}'' alt='{{ $z->name }}' class='img-thumbnail rounded img-fluid' >" data-placement="bottom" data-original-title="{{ $z->name }}" >{{ $z->name }}</span>
+					</td>
 					<td>{{ $a1 }}</td>
 					<td>{{ $d1 }}</td>
 					<td>{{ $e1 }}</td>

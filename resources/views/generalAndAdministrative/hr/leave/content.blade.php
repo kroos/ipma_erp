@@ -145,7 +145,9 @@ if( !empty($stl->hasonestaffleavebackup) ) {
 @endif
 						<br />
 					</td>
-					<td>{{ $stl->belongtostaff->name }}</td>
+					<td>
+						<span class="name1" data-content="<img src='{{ asset('storage/'.$stl->belongtostaff->image) }}'' alt='{{ $stl->belongtostaff->name }}' class='img-thumbnail rounded img-fluid' >" data-placement="bottom" data-original-title="{{ $stl->belongtostaff->name }}" >{{ $stl->belongtostaff->name }}</span>
+					</td>
 					<td>{{ Carbon::parse($stl->created_at)->format('D, j M y') }}</td>
 					<td>{{ $stl->belongtoleave->leave }}</td>
 					<td>{{ ucwords(strtolower(trim($stl->reason))) }}</td>
@@ -255,7 +257,9 @@ if( !empty($stl1->hasonestaffleavebackup) ) {
 						<a href="{{ route('staffLeaveHR.edit', $stl1->id) }}">HR9-{{ str_pad( $stl1->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}</a>
 							<br />
 					</td>
-					<td>{{ $stl1->belongtostaff->name }}</td>
+					<td>
+						<span class="name2" data-content="<img src='{{ asset('storage/'.$stl1->belongtostaff->image) }}'' alt='{{ $stl1->belongtostaff->name }}' class='img-thumbnail rounded img-fluid' >" data-placement="bottom" data-original-title="{{ $stl1->belongtostaff->name }}" >{{ $stl1->belongtostaff->name }}</span>
+					</td>
 					<td>{{ Carbon::parse($stl1->created_at)->format('D, j M y') }}</td>
 					<td>{{ $stl1->belongtoleave->leave }}</td>
 					<td>{{ ucwords(strtolower(trim($stl1->reason))) }}</td>
@@ -382,7 +386,9 @@ if( !empty($stl11->hasonestaffleavebackup) ) {
 						<a href="{{ route('staffLeaveHR.edit', $stl11->id) }}">HR9-{{ str_pad( $stl11->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}</a>
 							<br />
 					</td>
-					<td>{{ $stl11->belongtostaff->name }}</td>
+					<td>
+						<span class="name3" data-content="<img src='{{ asset('storage/'.$stl11->belongtostaff->image) }}'' alt='{{ $stl11->belongtostaff->name }}' class='img-thumbnail rounded' >" data-placement="bottom" data-original-title="{{ $stl11->belongtostaff->name }}" >{{ $stl11->belongtostaff->name }}</span>
+					</td>
 					<td>{{ Carbon::parse($stl11->created_at)->format('D, j M y') }}</td>
 					<td>{{ $stl11->belongtoleave->leave }}</td>
 					<td>{{ ucwords(strtolower(trim($stl11->reason))) }}</td>
@@ -507,7 +513,9 @@ if( !empty($stl0->hasonestaffleavebackup) ) {
 						HR9-{{ str_pad( $stl0->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}
 							<br />
 					</td>
-					<td>{{ $stl0->belongtostaff->name }}</td>
+					<td>
+						<span class="name4" data-content="<img src='{{ asset('storage/'.$stl0->belongtostaff->image) }}'' alt='{{ $stl0->belongtostaff->name }}' class='img-thumbnail rounded' >" data-placement="bottom" data-original-title="{{ $stl0->belongtostaff->name }}" >{{ $stl0->belongtostaff->name }}</span>
+					</td>
 					<td>{{ Carbon::parse($stl0->created_at)->format('D, j M y') }}</td>
 					<td>{{ $stl0->belongtoleave->leave }}</td>
 					<td>{{ ucwords(strtolower(trim($stl0->reason))) }}</td>
@@ -616,7 +624,9 @@ if( !empty($stl2->hasonestaffleavebackup) ) {
 						HR9-{{ str_pad( $stl2->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}
 							<br />
 					</td>
-					<td>{{ $stl2->belongtostaff->name }}</td>
+					<td>
+						<span class="name5" data-content="<img src='{{ asset('storage/'.$stl2->belongtostaff->image) }}'' alt='{{ $stl2->belongtostaff->name }}' class='img-thumbnail rounded' >" data-placement="bottom" data-original-title="{{ $stl2->belongtostaff->name }}" >{{ $stl2->belongtostaff->name }}</span>
+					</td>
 					<td>{{ Carbon::parse($stl2->created_at)->format('D, j M y') }}</td>
 					<td>{{ $stl2->belongtoleave->leave }}</td>
 					<td>{{ ucwords(strtolower(trim($stl2->reason))) }}</td>
@@ -725,7 +735,9 @@ if( !empty($stl3->hasonestaffleavebackup) ) {
 						HR9-{{ str_pad( $stl3->leave_no, 5, "0", STR_PAD_LEFT ) }}/{{ $arr[1] }}
 							<br />
 					</td>
-					<td>{{ $stl3->belongtostaff->name }}</td>
+					<td>
+						<span class="name6" data-content="<img src='{{ asset('storage/'.$stl3->belongtostaff->image) }}'' alt='{{ $stl3->belongtostaff->name }}' class='img-thumbnail rounded' >" data-placement="bottom" data-original-title="{{ $stl3->belongtostaff->name }}" >{{ $stl3->belongtostaff->name }}</span>
+					</td>
 					<td>{{ Carbon::parse($stl3->created_at)->format('D, j M y') }}</td>
 					<td>{{ $stl3->belongtoleave->leave }}</td>
 					<td>{{ ucwords(strtolower(trim($stl3->reason))) }}</td>

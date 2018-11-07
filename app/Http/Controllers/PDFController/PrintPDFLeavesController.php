@@ -44,4 +44,12 @@ class PrintPDFLeavesController extends Controller
 		$month = $request->month;
 		echo view('pdfleave.overtime', compact(['year', 'half', 'loc', 'month']));
 	}
+
+	public function availability(Request $request)
+	{
+		$year = $request->year;
+		$month = $request->month;
+		$cat = $request->category;
+		echo view('pdfleave.availability', compact(['year', 'month', 'cat']));
+	}
 }
