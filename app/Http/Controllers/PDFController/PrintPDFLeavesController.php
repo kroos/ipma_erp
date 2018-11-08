@@ -47,9 +47,7 @@ class PrintPDFLeavesController extends Controller
 
 	public function availability(Request $request)
 	{
-		$year = $request->year;
-		$month = $request->month;
-		$cat = $request->category;
-		echo view('pdfleave.availability', compact(['year', 'month', 'cat']));
+		$cate = $request->category;
+		echo view('pdfleave.availability', compact(['cate']));
 	}
 }
