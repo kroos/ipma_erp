@@ -347,6 +347,19 @@ class WorkingHourAjaxController extends Controller
 		return response()->json( $div );
 	}
 
+	public function discipline()
+	{
+		$disc = \App\Model\Discipline::all();
+		foreach( $disc as $di ) {
+			$dis['results'][] = [
+				'id' => $di->id,
+				'text' => $di->discipline.' => '.$di->description,
+			];
+			// $dis['pagination'] = ['more' => true];
+		}
+		return response()->json($dis);
+	}
+
 	public function department(Request $request)
 	{
 		$depts = \App\Model\Department::where('division_id', $request->division_id)->get();

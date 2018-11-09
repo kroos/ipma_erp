@@ -97,6 +97,38 @@ class StaffHRController extends Controller
 		return view( 'generalAndAdministrative.hr.staffmanagement.staffHR.showReport', compact(['staffHR']) );
 	}
 
+	// custom edit for update merit
+	public function merit(Staff $staffHR)
+	{
+		return view( 'generalAndAdministrative.hr.staffmanagement.staffHR.merit', compact(['staffHR']) );
+	}
+
+	// custom edit for update merit
+	public function meritstore(Request $request, Staff $staffHR)
+	{
+		// print_r( $request->only('discipline_id', 'remarks') );
+		$staffHR->belongtomanydiscipline()->attach( $request->only(['discipline_id']), ['remarks' => $request->remarks] );
+		Session::flash('flash_message', 'Data successfully edited!');
+		return redirect( route('staffHR.showReport', $staffHR->id) );
+	}
+
+
+	public function ddestroy(Staff $staffHR, Request $request)
+	{
+		$rt = $staffHR->belongtomanydiscipline()->detach($request->id);
+		dd($rt);
+		if ($rt) {
+			return response()->json([
+				'message' => 'Data deleted',
+				'status' => 'success'
+			]);
+		} else {
+			return response()->json([
+				'message' => $request->id,
+				'status' => 'error'
+			]);
+		}
+	}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public function edit(Staff $staffHR)

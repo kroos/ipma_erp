@@ -131,7 +131,7 @@ function SwalDelete(productId){
 				})
 			});
 		},
-		allowOutsideClick: false			  
+		allowOutsideClick: false
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {

@@ -6,7 +6,7 @@ use App\Model\Department;
 
 use Carbon\Carbon;
 
-$h = Staff::where('active', 1)->get();
+$h = Staff::whereNotIn('id', [191, 192])->where('active', 1)->get();
 $m = Staff::where('active', '<>', 1)->get();
 ?>
 <div class="card">

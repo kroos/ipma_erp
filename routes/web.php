@@ -55,6 +55,21 @@ Route::get('/staffHR/{staffHR}/showReport', [
 	'as' => 'staffHR.showReport',
 	'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@showReport',
 ]);
+// staffHR discipline1
+Route::get('/staffHR/{staffHR}/merit', [
+	'as' => 'staffHR.merit',
+	'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@merit',
+]);
+// staffHR discipline2
+Route::post('/staffHR/{staffHR}', [
+	'as' => 'staffHR.meritstore',
+	'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@meritstore',
+]);
+// staffHR discipline2 delete
+Route::delete('/staffHRdiscipline/{staffHR}', [
+	'as' => 'staffHR.ddestroy',
+	'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@ddestroy',
+]);
 // received hardcopy
 Route::post('/staffTCMS/storeCSV', [
 	'as' => 'staffTCMS.storeCSV',
@@ -255,6 +270,13 @@ Route::post('/division', [
 Route::get('/department', [
 		'as' => 'workinghour.department',
 		'uses' => 'AjaxRemote\WorkingHourAjaxController@department'
+	]);
+
+############################################################################
+// discipline Ajax Controller
+Route::get('/discipline', [
+		'as' => 'workinghour.discipline',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@discipline'
 	]);
 
 ############################################################################

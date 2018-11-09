@@ -45,6 +45,12 @@ $leaveALMC = $staffHR->hasmanystaffannualmcleave()->where('year', date('Y'))->fi
 			<div class="card-header">Staff Management</div>
 			<div class="card-body">
 
+				<ul class="nav nav-pills">
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('staffHR.merit', $staffHR->id) }}">Discipline</a>
+					</li>
+				</ul>
+
 				<div class="card">
 					<div class="card-header">
 						<h1>{{ $staffHR->name }} Reports</h1>
@@ -57,7 +63,6 @@ $leaveALMC = $staffHR->hasmanystaffannualmcleave()->where('year', date('Y'))->fi
 								<div class="col-sm-9">
 									<div class="container">
 										<div class="row">
-
 
 											<dl class="row">
 												<dt class="col-sm-3">Staff ID</dt>
@@ -155,6 +160,46 @@ $oi = $staffHR->hasmanystaffleavereplacement()->where('leave_balance', '<>', 0)-
 											</dl>
 
 
+<?php
+$disc = $staffHR->belongtomanydiscipline()->get();
+?>
+@if( $disc->count() < 1 )
+											<h5>No Discipline Record</h5>
+@else
+											<h5>Discipline Record</h5>
+
+											<table class="table table-hover">
+												<thead>
+													<tr>
+														<th>Description</th>
+														<th>Remarks</th>
+														<th>Date</th>
+														<th>Point</th>
+														<th>&nbsp;</th>
+													</tr>
+												</thead>
+												<tbody>
+@foreach( $disc as $di )
+													<tr>
+														<td>{{ $di->description }}</td>
+														<td>{{ $di->pivot->remarks }}</td>
+														<td>{{ Carbon::parse($di->pivot->created_at)->format('l, j F Y') }}</td>
+														<td>{{ $di->merit_point }}</td>
+														<td>
+															<span class="text-danger disable_user" id="disable_user_{{ $di->pivot->id }}" data-id="{{ $di->pivot->id }}" ><i class="far fa-trash-alt"></i></span>
+														</td>
+													</tr>
+@endforeach
+												</tbody>
+												<tfoot>
+													<tr>
+														<th colspan="3">Total Point</th>
+														<th>{{ $disc->sum('merit_point') }} point{{ $disc->sum('merit_point') >= 2?'s':'' }}</th>
+														<th>&nbsp;</th>
+													</tr>
+												</tfoot>
+											</table>
+@endif
 										</div>
 									</div>
 								</div>
@@ -611,6 +656,60 @@ $('#late').DataTable({
 	"order": [[0, "desc" ]],	// sorting the 6th column descending
 	// responsive: true
 });
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// delete merit
+$(document).on('click', '.disable_user', function(e){
+	
+	var productId = $(this).data('id');
+	SwalDelete(productId);
+	e.preventDefault();
+});
+
+function SwalDelete(productId){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					type: 'DELETE',
+					url: '{{ url('staffHRdiscipline') }}' + '/' + '{{ $staffHR->id }}',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: productId,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#disable_user_' + productId).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
 @endsection
