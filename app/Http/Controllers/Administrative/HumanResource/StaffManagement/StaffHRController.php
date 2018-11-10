@@ -115,8 +115,10 @@ class StaffHRController extends Controller
 
 	public function ddestroy(Staff $staffHR, Request $request)
 	{
-		$rt = $staffHR->belongtomanydiscipline()->detach($request->id);
-		dd($rt);
+		// echo $request->id;
+		// $rt = $staffHR->belongtomanydiscipline()->detach($request->id);
+		$rt = \App\Model\StaffDiscipline::destroy($request->id);
+		// dd($rt);
 		if ($rt) {
 			return response()->json([
 				'message' => 'Data deleted',
