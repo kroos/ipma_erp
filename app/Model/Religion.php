@@ -6,6 +6,7 @@ namespace App\Model;
 
 class Religion extends Model
 {
+	protected $connection = 'mysql';
     protected $table = 'religions';
 
 	public function hasmanystaffprofile()

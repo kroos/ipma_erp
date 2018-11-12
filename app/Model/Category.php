@@ -6,6 +6,7 @@ namespace App\Model;
 
 class Category extends Model
 {
+	protected $connection = 'mysql';
     protected $table = 'categories';
 
     public function hasmanycategoryposition()

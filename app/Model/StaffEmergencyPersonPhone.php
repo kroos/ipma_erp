@@ -6,6 +6,7 @@ namespace App\Model;
 
 class StaffEmergencyPersonPhone extends Model
 {
+	protected $connection = 'mysql';
     protected $table = 'staff_emergency_person_phone';
 
     public function belongtoemergencyperson()

@@ -6,6 +6,7 @@ namespace App\Model;
 
 class StaffChildren extends Model
 {
+    protected $connection = 'mysql';
     protected $table = 'staff_childrens';
 
     public function belongtostaff()

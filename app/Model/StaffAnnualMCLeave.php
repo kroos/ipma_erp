@@ -12,6 +12,7 @@ class StaffAnnualMCLeave extends Model
 {
 	use SoftDeletes;
 
+	protected $connection = 'mysql';
 	protected $table = 'staff_annual_mc_maternity_leaves';
 
 

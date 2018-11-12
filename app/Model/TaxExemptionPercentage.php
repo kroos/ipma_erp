@@ -6,6 +6,7 @@ namespace App\Model;
 
 class TaxExemptionPercentage extends Model
 {
+	protected $connection = 'mysql';
     protected $table = 'tax_exemption_percentage';
 
 	public function hasmanystaffchildren()

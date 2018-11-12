@@ -6,6 +6,7 @@ namespace App\Model;
 
 class Gender extends Model
 {
+	protected $connection = 'mysql';
     protected $table = 'genders';
 
     public function hasonestaffprofile()

@@ -6,6 +6,7 @@ namespace App\Model;
 
 class Department extends Model
 {
+	protected $connection = 'mysql';
     protected $table = 'departments';
 
     public function belongtodivision() {

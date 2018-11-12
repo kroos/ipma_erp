@@ -6,6 +6,7 @@ namespace App\Model;
 
 class Location extends Model
 {
+	protected $connection = 'mysql';
     protected $table = 'locations';
 
     public function hasonestaff()

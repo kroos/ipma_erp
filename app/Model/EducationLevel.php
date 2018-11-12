@@ -6,6 +6,7 @@ namespace App\Model;
 
 class EducationLevel extends Model
 {
+	protected $connection = 'mysql';
     protected $table = 'educations_levels';
 
     public function hasmanystaffchildren()

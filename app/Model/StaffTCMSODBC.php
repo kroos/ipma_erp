@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StaffTCMSODBC extends Model
 {
+	protected $connection = 'mysql';
 	protected $table = 'staff_tcms_odbc';
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

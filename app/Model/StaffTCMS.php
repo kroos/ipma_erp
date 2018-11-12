@@ -13,6 +13,7 @@ class StaffTCMS extends Model
 {
 	use SoftDeletes;
 
+    protected $connection = 'mysql';
 	protected $table = 'staff_tcms';
 	protected $dates = ['deleted_at'];
 

@@ -6,6 +6,7 @@ namespace App\Model;
 
 class Locker extends Model
 {
+    protected $connection = 'mysql';
 	protected $table = 'lockers';
 
     public function belongtolockerstatus()

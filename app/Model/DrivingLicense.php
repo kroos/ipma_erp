@@ -6,6 +6,7 @@ namespace App\Model;
 
 class DrivingLicense extends Model
 {
+	protected $connection = 'mysql';
     protected $table = 'driving_licenses';
 
     public function hasmanystaffdrivinglicense()

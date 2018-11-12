@@ -6,6 +6,7 @@ namespace App\Model;
 
 class HealthStatus extends Model
 {
+	protected $connection = 'mysql';
     protected $table = 'health_statuses';
 
     public function hasmanystaffchildren()

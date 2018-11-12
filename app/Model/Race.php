@@ -6,6 +6,7 @@ namespace App\Model;
 
 class Race extends Model
 {
+	protected $connection = 'mysql';
     protected $table = 'races';
 
     public function hasmanystaffprofile()

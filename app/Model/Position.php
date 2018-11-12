@@ -6,6 +6,7 @@ namespace App\Model;
 
 class Position extends Model
 {
+    protected $connection = 'mysql';
     protected $table = 'positions';
 
     public function hasmanystaffposition()

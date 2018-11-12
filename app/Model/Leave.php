@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Leave extends Model
 {
+	protected $connection = 'mysql';
 	protected $table = 'leaves';
 
 	public function hasmanystaffleave()

@@ -6,6 +6,7 @@ namespace App\Model;
 
 class Discipline extends Model
 {
+	protected $connection = 'mysql';
 	protected $table = 'disciplines';
 
 // https://laravel.com/docs/5.6/eloquent-relationships#many-to-many

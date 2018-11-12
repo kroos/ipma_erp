@@ -13,6 +13,7 @@ class Staff extends Model
 {
 	use SoftDeletes;
 
+    protected $connection = 'mysql';
 	protected $table = 'staffs';
 	protected $dates = ['deleted_at'];
 

@@ -6,6 +6,7 @@ namespace App\Model;
 
 class StaffLeaveApproval extends Model
 {
+	protected $connection = 'mysql';
     protected $table = 'staff_leave_approvals';
 
 

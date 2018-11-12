@@ -6,6 +6,7 @@ namespace App\Model;
 
 class Status extends Model
 {
+	protected $connection = 'mysql';
     protected $table = 'statuses';
 
     public function hasmanystatus()

@@ -6,6 +6,7 @@ namespace App\Model;
 
 class MaritalStatus extends Model
 {
+	protected $connection = 'mysql';
     protected $table = 'marital_statuses';
 
     public function hasmanystaff()

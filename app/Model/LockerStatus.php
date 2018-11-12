@@ -6,6 +6,7 @@ namespace App\Model;
 
 class LockerStatus extends Model
 {
+	protected $connection = 'mysql';
 	protected $table = 'locker_statuses';
 	
     public function hasmanylocker()

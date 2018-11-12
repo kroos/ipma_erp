@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Login extends Authenticatable
 {
+	protected $connection = 'mysql';
 	use Notifiable;
 
 	/**
