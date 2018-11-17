@@ -274,12 +274,16 @@ class StaffLeaveController extends Controller
 			) {
 				// find department HOD
 				// dd( \App\Model\Position::where( [[ 'department_id', $usergroup->department_id ],[ 'group_id', 2 ]] )->get() );
-				$hood = \App\Model\Position::where( [[ 'department_id', $usergroup->department_id ],[ 'group_id', 2 ]] )->get();
-				foreach ($hood as $meek) {
-					$hee = $meek->hasmanystaffposition()->get();
-					foreach($hee as $moo) {
-						echo $moo->belongtostaff->name.' this is your HOD<br />';
-						$HOD = $moo->belongtostaff->id;
+				if( $usergroup->department_id == 3 ) {
+					$HOD = NULL;
+				} else {
+					$hood = \App\Model\Position::where( [[ 'department_id', $usergroup->department_id ],[ 'group_id', 2 ]] )->get();
+					foreach ($hood as $meek) {
+						$hee = $meek->hasmanystaffposition()->get();
+						foreach($hee as $moo) {
+							echo $moo->belongtostaff->name.' this is your HOD<br />';
+							$HOD = $moo->belongtostaff->id;
+						}
 					}
 				}
 			}
