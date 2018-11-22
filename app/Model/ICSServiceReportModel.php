@@ -19,4 +19,9 @@ class ICSServiceReportModel extends Model
 	{
 		return $this->belongsTo('App\Model\ICSServiceReport', 'service_report_id');
 	}
+
+	public function belongtomachinemodel()
+	{
+		return $this->belongsTo('App\Model\ICSMachineModel', 'model_id');
+	}
 }
