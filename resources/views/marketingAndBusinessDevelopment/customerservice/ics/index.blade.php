@@ -15,18 +15,27 @@
 @endforeach
 		</ul>
 
-
 		<ul class="nav nav-tabs">
 			<li class="nav-item">
-				<a class="nav-link" href="{{ route('servicereport.index') }}">Intelligence Customer Service</a>
+				<a class="nav-link active" href="{{ route('servicereport.index') }}">Intelligence Customer Service</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="{{ route('servicereport.index') }}">Cost Planning System</a>
+				<a class="nav-link" href="">Cost Planning System</a>
 			</li>
 		</ul>
 		<div class="card">
-			<div class="card-header">Customer Service</div>
-			<div class="card-body"></div>
+			<div class="card-header">Intelligence Customer Service</div>
+			<div class="card-body">
+				<div class="card">
+					<div class="card-header">Service Report List</div>
+					<div class="card-body">
+@include('marketingAndBusinessDevelopment.customerservice.ics._content')
+					</div>
+					<div class="card-footer">
+						<a href="{{ route('servicereport.create') }}" class="btn btn-primary float-right">Add Service Report</a>
+					</div>
+				</div>
+			</div>
 		</div>
 
 
@@ -39,6 +48,14 @@
 //ucwords
 $("#username").keyup(function() {
 	uch(this);
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// table
+$('#servicereport').DataTable({
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	"order": [[1, "desc" ]],	// sorting the 2nd column descending
+	// responsive: true
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////

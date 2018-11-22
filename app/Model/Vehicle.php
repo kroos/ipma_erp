@@ -7,10 +7,10 @@ namespace App\Model;
 class Vehicle extends Model
 {
 	protected $connection = 'mysql';
-    protected $table = 'vehicles';
+	protected $table = 'vehicles';
 
-    // public function hasmanyvehicle()
-    // {
-    // 	return $this->hasMany('App\Model\Vehicle');
-    // }
+	public function hasmanyservicereport()
+	{
+		return $this->hasMany('App\Model\ICSServiceReport');
+	}
 }

@@ -87,6 +87,11 @@ class Staff extends Model
         return $this->hasMany('\App\Model\StaffTCMS', 'staff_id');
     }
 
+    public function hasmanysrattendees()
+    {
+        return $this->hasMany('\App\Model\ICSServiceReportAttendees', 'attended_by');
+    }
+
 // https://laravel.com/docs/5.6/eloquent-relationships#many-to-many
     public function belongtomanydiscipline()
     {

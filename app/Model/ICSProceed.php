@@ -4,13 +4,13 @@ namespace App\Model;
 
 // use Illuminate\Database\Eloquent\Model;
 
-class ICSCharge extends Model
+class ICSProceed extends Model
 {
 	protected $connection = 'mysql';
 	protected $table = 'ics_charges';
 
-	public function hasmanyservicereport()
+	public function hasoneservicereport()
 	{
-		return $this->hasMany('App\Model\ICSServiceReport', 'charge_id');
+		return $this->hasOne('App\Model\ICSServiceReport', 'proceed_id');
 	}
 }
