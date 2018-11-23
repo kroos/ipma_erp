@@ -7,7 +7,7 @@ namespace App\Model;
 class ICSServiceReport extends Model
 {
 	protected $connection = 'mysql';
-	protected $table = 'ics_service_report';
+	protected $table = 'ics_service_reports';
 
 	public function hasmanyattendees()
 	{

@@ -18,10 +18,10 @@
 
 		<ul class="nav nav-tabs">
 			<li class="nav-item">
-				<a class="nav-link" href="{{ route('servicereport.index') }}">Intelligence Customer Service</a>
+				<a class="nav-link" href="{{ route('serviceReport.index') }}">Intelligence Customer Service</a>
 			</li>
 			<li class="nav-item">
-				<a class="nav-link" href="{{ route('servicereport.index') }}">Cost Planning System</a>
+				<a class="nav-link" href="">Cost Planning System</a>
 			</li>
 		</ul>
 		<div class="card">

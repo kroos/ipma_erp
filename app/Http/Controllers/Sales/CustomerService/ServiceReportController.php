@@ -28,7 +28,18 @@ class ServiceReportController extends Controller
 
 	public function store(Request $request)
 	{
-	//
+		print_r($request->all());
+		$sr = \Auth::user()->belongtostaff->hasmanyservicereport()->create(
+			array_add($request->only(['date', 'charge_id', 'customer_id']), 'active', 1)
+		);
+		$sr->hasmanycomplaint()->create( $request->only(['complaint', 'complaint_by']) );
+		$sr->hasmanyserial()->create( $request->only(['serial']) );
+		// $sr->hasmanyattendees()->create( $request->only('sr') );
+		foreach($request->sr as $key => $val) {
+			$sr->hasmanyattendees()->create( ['attended_by' => $val['attended_by']] );
+		}
+		Session::flash('flash_message', 'Data successfully stored!');
+		return redirect( route('serviceReport.index') );
 	}
 
 	public function show(Leave $leave)
