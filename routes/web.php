@@ -45,7 +45,8 @@ Route::resources([
 	'staffOvertime' => 'Administrative\HumanResource\StaffManagement\StaffOvertimeController',
 	'staffAvailability' => 'Administrative\HumanResource\StaffManagement\StaffAvailabilityController',
 
-	'servicereport' => 'Sales\CustomerService\ServiceReportController',
+// sales
+	'serviceReport' => 'Sales\CustomerService\ServiceReportController',
 ]);
 // received hardcopy
 Route::post('/staffTCMS/storeODBC', [

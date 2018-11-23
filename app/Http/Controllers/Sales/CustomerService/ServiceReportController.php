@@ -9,6 +9,8 @@ use App\Model\ICSServiceReport;
 
 use Illuminate\Http\Request;
 
+use Session;
+
 class ServiceReportController extends Controller
 {
 	function __construct()
