@@ -71,8 +71,8 @@ return [
             'driver' => 'sqlsrv',
             ///////////////////////////////////////////
             // tambah sendiri
-            'odbc' => true,
-            'odbc_datasource_name' => 'sqlsrv',     // nama odbc
+            // 'odbc' => true,
+            // 'odbc_datasource_name' => 'sqlsrv',     // nama odbc
             //////////////////////////////////////////
             'host' => env('DB_HOST1', 'localhost'),
             'port' => env('DB_PORT1', '1433'),

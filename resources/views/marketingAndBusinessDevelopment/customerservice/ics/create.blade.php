@@ -66,7 +66,7 @@ $(document).on('change', '#cust', function () {
 // table
 $('#date').datetimepicker({
 	format:'YYYY-MM-DD',
-	// useCurrent: false,
+	useCurrent: false,
 })
 .on('dp.change dp.show dp.update', function() {
 	$('#form').bootstrapValidator('revalidateField', 'date');
@@ -134,7 +134,7 @@ $(add_buttons).click(function(){
 		});
 
 		//bootstrap validate
-		$('#form').bootstrapValidator('addField',	$('.rowposition')	.find('[name="sr[' + xs + '][staff_id]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowposition')	.find('[name="sr[' + xs + '][attended_by]"]'));
 	}
 });
 
@@ -143,7 +143,7 @@ $(wrappers).on("click",".remove_position", function(e){
 	e.preventDefault();
 	//var $row = $(this).parent('.rowposition');
 	var $row = $(this).parent().parent().parent();
-	var $option1 = $row.find('[name="sr[][staff_id]"]');
+	var $option1 = $row.find('[name="sr[][attended_by]"]');
 	$row.remove();
 
 	$('#form').bootstrapValidator('removeField', $option1);
@@ -173,7 +173,7 @@ $('#form').bootstrapValidator({
 		serial: {
 			validators : {
 				notEmpty: {
-					message: 'Please choose. '
+					message: 'This value cannot be empty. '
 				},
 				integer: {
 					message: 'The value is not an integer. '
@@ -194,20 +194,9 @@ $('#form').bootstrapValidator({
 				},
 			}
 		},
-		join_at: {
-			validators: {
-				notEmpty: {
-					message: 'Please insert join date. '
-				},
-				date: {
-					format: 'YYYY-MM-DD',
-					message: 'The value is not a valid date. '
-				},
-			}
-		},
 @for ($u=1; $u < 10; $u++)
 
-		'sr[{{ $u }}][staff_id]': {
+		'sr[{{ $u }}][attended_by]': {
 			validators: {
 				notEmpty: {
 					message: 'Please choose. '
@@ -219,14 +208,14 @@ $('#form').bootstrapValidator({
 		complaint: {
 			validators : {
 				notEmpty: {
-					message: 'Please choose. '
+					message: 'This field cannot be empty. '
 				},
 			}
 		},
 		complaint_by: {
 			validators : {
 				notEmpty: {
-					message: 'Please choose. '
+					message: 'This field cannot be empty. '
 				},
 			}
 		},

@@ -18,7 +18,7 @@ $sre = ICSServiceReport::where([['date', '>=', $year], ['active', 1]])->get();
 			<th>Date</th>
 			<th>SR No</th>
 			<th>Customer</th>
-			<th>Attendees (Count)</th>
+			<th>Attendees</th>
 			<th>Complaints</th>
 			<th>Date Spend</th>
 			<th>Vehicle</th>
@@ -26,13 +26,14 @@ $sre = ICSServiceReport::where([['date', '>=', $year], ['active', 1]])->get();
 			<th>Approve By</th>
 			<th>Remarks</th>
 			<th>Invoice</th>
+			<th>&nbsp</th>
 		</tr>
 	</thead>
 	<tbody>
 @foreach($sre as $sr)
 		<tr>
 			<td>{!! $sr->id !!}</td>
-			<td>{!! Carbon::parse($sr->date)->format('D, j F Y') !!}</td>
+			<td>{!! Carbon::parse($sr->date)->format('D, j M Y') !!}</td>
 			<td>
 <?php
 // $sr->hasmanyserial()->get();
@@ -80,7 +81,10 @@ $sre = ICSServiceReport::where([['date', '>=', $year], ['active', 1]])->get();
 				{!! __('No Invoice') !!}
 @endif
 			</td>
-			<td></td>
+			<td>
+				<a href=""><i class="far fa-edit"></i></a>
+				<span class="text-danger"><i class="far fa-trash-alt"></i></span>
+			</td>
 		</tr>
 @endforeach
 	</tbody>
