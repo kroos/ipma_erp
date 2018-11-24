@@ -91,4 +91,10 @@ class ICSServiceReport extends Model
 		return $this->belongsTo('App\Model\ICSProceed', 'proceed_id');
 	}
 
+	public function belongtoinvoice()
+	{
+		return $this->belongsTo('App\Model\ICSSQLSRVInvoice', 'invoice_id');
+	}
+
+
 }

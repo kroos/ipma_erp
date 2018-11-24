@@ -17,7 +17,7 @@
 
 		<ul class="nav nav-tabs">
 			<li class="nav-item">
-				<a class="nav-link active" href="{{ route('servicereport.index') }}">Intelligence Customer Service</a>
+				<a class="nav-link active" href="{{ route('serviceReport.index') }}">Intelligence Customer Service</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="">Cost Planning System</a>
@@ -32,7 +32,7 @@
 @include('marketingAndBusinessDevelopment.customerservice.ics._content')
 					</div>
 					<div class="card-footer">
-						<a href="{{ route('servicereport.create') }}" class="btn btn-primary float-right">Add Service Report</a>
+						<a href="{{ route('serviceReport.create') }}" class="btn btn-primary float-right">Add Service Report</a>
 					</div>
 				</div>
 			</div>
