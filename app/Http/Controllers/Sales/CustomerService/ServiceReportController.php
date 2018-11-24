@@ -44,22 +44,22 @@ class ServiceReportController extends Controller
 		return redirect( route('serviceReport.index') );
 	}
 
-	public function show(Leave $leave)
+	public function show(ICSServiceReport $serviceReport)
 	{
 	//
 	}
 
-	public function edit(Leave $leave)
+	public function edit(ICSServiceReport $serviceReport)
+	{
+		return view('marketingAndBusinessDevelopment.customerservice.ics.edit', compact(['serviceReport']));
+	}
+
+	public function update(Request $request, ICSServiceReport $serviceReport)
 	{
 	//
 	}
 
-	public function update(Request $request, Leave $leave)
-	{
-	//
-	}
-
-	public function destroy(Leave $leave)
+	public function destroy(ICSServiceReport $serviceReport)
 	{
 	//
 	}

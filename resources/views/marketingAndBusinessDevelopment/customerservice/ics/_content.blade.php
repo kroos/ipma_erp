@@ -82,7 +82,7 @@ $sre = ICSServiceReport::where([['date', '>=', $year], ['active', 1]])->get();
 @endif
 			</td>
 			<td>
-				<a href=""><i class="far fa-edit"></i></a>
+				<a href="{!! route('serviceReport.edit', $sr->id) !!}" title="Update"><i class="far fa-edit"></i></a>
 				<span class="text-danger"><i class="far fa-trash-alt"></i></span>
 			</td>
 		</tr>
