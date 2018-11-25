@@ -48,6 +48,7 @@ Route::resources([
 // sales
 	'serviceReport' => 'Sales\CustomerService\ServiceReportController',
 	'srSerial' => 'Sales\CustomerService\ServiceReportSerialController',
+	'srAttend' => 'Sales\CustomerService\ServiceReportAttendeesController',
 ]);
 // received hardcopy
 Route::post('/staffTCMS/storeODBC', [

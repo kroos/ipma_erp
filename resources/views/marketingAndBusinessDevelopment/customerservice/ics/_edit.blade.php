@@ -127,12 +127,12 @@ $iii = 1;
 						<div class="row col-sm-12">
 
 							<div class="col-sm-1 text-danger">
-									<i class="fas fa-trash delete_attendees" aria-hidden="true" id="button_delete_{!! $sra->id !!}" data-id="{!! $sra->id !!}"></i>
+									<i class="fas fa-trash delete_attendees" aria-hidden="true" id="delete_attendees_{!! $sra->id !!}" data-id="{!! $sra->id !!}"></i>
 							</div>
 
 							<div class="col-sm-11">
 								<div class="form-group {{ $errors->has('sr.*.attended_by') ? 'has-error' : '' }}">
-									<select name="sr[{!! $iii !!}][attended_by]" id="staff_id_{!! $ii !!}" class="form-control">
+									<select name="sr[{!! $iii++ !!}][attended_by]" id="staff_id_{!! $ii++ !!}" class="form-control">
 										<option value="">Please choose</option>
 @foreach($staff as $st)
 										<option value="{!! $st->id !!}" {!! ($st->id == $sra->attended_by)?'selected':NULL !!} >{!! $st->hasmanylogin()->where('active', 1)->first()->username !!} {!! $st->name !!}</option>
@@ -145,7 +145,7 @@ $iii = 1;
 @endforeach
 				</div>
 				<div class="row col-lg-12 add_position">
-					<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Staff</p>
+					<span class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Staff</span>
 				</div>
 
 			</div>
@@ -156,7 +156,7 @@ $iii = 1;
 <br />
 
 <div class="row">
-	<div class="col-sm-12">
+	<div class="col-sm-6">
 		<div class="card">
 			<div class="div card-header">Nature Of Complaints</div>
 			<div class="card-body">
@@ -164,21 +164,75 @@ $iii = 1;
 				<div class="form-group row {{ $errors->has('complaints')?'has-error':'' }}">
 					{{ Form::label( 'compl', 'Complaints :', ['class' => 'col-sm-3 col-form-label'] ) }}
 					<div class="col-sm-9">
-						{!! Form::textarea('complaint', @$value, ['class' => 'form-control', 'id' => 'compl', 'placeholder' => 'Complaints', 'autocomplete' => 'off']) !!}
+						{!! Form::textarea('complaint', (is_null(@$value))?$serviceReport->hasmanycomplaint()->first()->complaint:@$value, ['class' => 'form-control', 'id' => 'compl', 'placeholder' => 'Complaints', 'autocomplete' => 'off']) !!}
 					</div>
 				</div>
 
 				<div class="form-group row {{ $errors->has('status_id')?'has-error':'' }}">
 					{{ Form::label( 'compby', 'Requested By :', ['class' => 'col-sm-3 col-form-label'] ) }}
 					<div class="col-sm-9">
-						{!! Form::text('complaint_by', @$value, ['class' => 'form-control', 'id' => 'compby', 'placeholder' => 'Complaint By', 'autocomplete' => 'off']) !!}
+						{!! Form::text('complaint_by', (is_null(@$value))?$serviceReport->hasmanycomplaint()->first()->complaint:@$value, ['class' => 'form-control', 'id' => 'compby', 'placeholder' => 'Complaint By', 'autocomplete' => 'off']) !!}
 					</div>
 				</div>
 
 			</div>
 		</div>
 	</div>
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-header">Model</div>
+			<div class="card-body">
 
+				<div class="container-fluid model_wrap">
+@if( $serviceReport->hasmanymodel()->get()->count() > 0 )
+@foreach( $serviceReport->hasmanymodel()->get() as $srmo )
+					<div class="rowmodel">
+						<div class="row col-sm-12">
+
+							<div class="col-sm-1 text-danger">
+									<i class="fas fa-trash delete_model" aria-hidden="true" id="delete_model_{!! $srmo->id !!}" data-id="{!! $srmo->id !!}"></i>
+							</div>
+
+							<div class="col-sm-2">
+								<div class="form-group {{ $errors->has('srmo.*.model_id') ? 'has-error' : '' }}">
+								</div>
+							</div>
+
+							<div class="col-sm-2">
+								<div class="form-group {{ $errors->has('srmo.*.test_run_machine') ? 'has-error' : '' }}">
+								</div>
+							</div>
+
+							<div class="col-sm-2">
+								<div class="form-group {{ $errors->has('srmo.*.serial_no') ? 'has-error' : '' }}">
+								</div>
+							</div>
+
+							<div class="col-sm-2">
+								<div class="form-group {{ $errors->has('srmo.*.test_capacity') ? 'has-error' : '' }}">
+								</div>
+							</div>
+
+							<div class="col-sm-2">
+								<div class="form-group {{ $errors->has('srmo.*.duration') ? 'has-error' : '' }}">
+								</div>
+							</div>
+
+						</div>
+					</div>
+@endforeach
+@endif
+				</div>
+				<div class="row col-lg-12 add_model">
+					<span class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Model</span>
+				</div>
+
+			</div>
+			<div class="card-footer">
+				<a href="" class="btn btn-primary float-right">Add Model</a>
+			</div>
+		</div>
+	</div>
 </div>
 
 <br />
