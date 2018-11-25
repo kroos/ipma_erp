@@ -184,7 +184,6 @@ $iii = 1;
 			<div class="card-body">
 
 				<div class="container-fluid model_wrap">
-@if( $serviceReport->hasmanymodel()->get()->count() > 0 )
 @foreach( $serviceReport->hasmanymodel()->get() as $srmo )
 					<div class="rowmodel">
 						<div class="row col-sm-12">
@@ -192,36 +191,39 @@ $iii = 1;
 							<div class="col-sm-1 text-danger">
 									<i class="fas fa-trash delete_model" aria-hidden="true" id="delete_model_{!! $srmo->id !!}" data-id="{!! $srmo->id !!}"></i>
 							</div>
-
 							<div class="col-sm-2">
 								<div class="form-group {{ $errors->has('srmo.*.model_id') ? 'has-error' : '' }}">
+									<select name="srmo[' + xmod + '][model_id]" id="model_' + xmod + '" class="form-control" autocomplete="off" placeholder="Please choose">
+										<option value="">Please choose</option>
+@foreach( $model as $mod )
+										<option value="{!! $mod->id !!}">{!! $mod->model !!}</option>
+@endforeach
+									</select>
 								</div>
 							</div>
-
 							<div class="col-sm-2">
 								<div class="form-group {{ $errors->has('srmo.*.test_run_machine') ? 'has-error' : '' }}">
+									<input type="text" name="srmo[' + xmod + '][test_run_machine]" id="test_run_machine_' + xmod + '" class="form-control" autocomplete="off" placeholder="Test Run Machine" />
 								</div>
 							</div>
-
 							<div class="col-sm-2">
 								<div class="form-group {{ $errors->has('srmo.*.serial_no') ? 'has-error' : '' }}">
+									<input type="text" name="srmo[' + xmod + '][serial_no]" id="serial_no_' + xmod + '" class="form-control" autocomplete="off" placeholder="Serial No." />
 								</div>
 							</div>
-
 							<div class="col-sm-2">
 								<div class="form-group {{ $errors->has('srmo.*.test_capacity') ? 'has-error' : '' }}">
+									<input type="text" name="srmo[' + xmod + '][test_capacity]" id="test_capacity_' + xmod + '" class="form-control" autocomplete="off" placeholder="Test Capacity" />
 								</div>
 							</div>
-
 							<div class="col-sm-2">
 								<div class="form-group {{ $errors->has('srmo.*.duration') ? 'has-error' : '' }}">
+									<input type="text" name="srmo[' + xmod + '][duration]" id="duration_' + xmod + '" class="form-control" autocomplete="off" placeholder="Duration" />
 								</div>
 							</div>
-
 						</div>
 					</div>
 @endforeach
-@endif
 				</div>
 				<div class="row col-lg-12 add_model">
 					<span class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Model</span>

@@ -142,7 +142,7 @@ $(wrapserial).on("click",".remove_serial", function(e){
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////
-// add position : add and remove row
+// add attendees : add and remove row
 <?php
 $staff = \App\Model\Staff::where('active', 1)->get();
 ?>
@@ -204,6 +204,103 @@ $(wrappers).on("click",".remove_position", function(e){
 	$('#form').bootstrapValidator('removeField', $option1);
 	console.log(xs);
 	xs--;
+})
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// add attendees : add and remove row
+<?php
+$model = \App\Model\ICSMachineModel::get();
+?>
+
+var maxfmod	= 10; //maximum input boxes allowed
+var addbtnmod	= $(".add_model");
+var wrapmodel	= $(".model_wrap");
+
+var xmod = <?= ($serviceReport->hasmanymodel()->get()->count() == 0)?1:$serviceReport->hasmanymodel()->get()->count() ?>;
+$(addbtnmod).click(function(){
+	// e.preventDefault();
+
+	//max input box allowed
+	if(xmod < maxfmod){
+		xmod++;
+		wrapmodel.append(
+
+					'<div class="rowmodel">' +
+						'<div class="row col-sm-12">' +
+							'<div class="col-sm-1 text-danger">' +
+									'<i class="fas fa-trash remove_model" aria-hidden="true" id="delete_model_' + xmod + '" data-id="' + xmod + '"></i>' +
+							'</div>' +
+							'<div class="col-sm-2">' +
+								'<div class="form-group {{ $errors->has('srmo.*.model_id') ? 'has-error' : '' }}">' +
+									'<select name="srmo[' + xmod + '][model_id]" id="model_' + xmod + '" class="form-control" autocomplete="off" placeholder="Please choose">' +
+										'<option value="">Please choose</option>' +
+@foreach( $model as $mod )
+										'<option value="{!! $mod->id !!}">{!! $mod->model !!}</option>' +
+@endforeach
+									'</select>' +
+								'</div>' +
+							'</div>' +
+							'<div class="col-sm-2">' +
+								'<div class="form-group {{ $errors->has('srmo.*.test_run_machine') ? 'has-error' : '' }}">' +
+									'<input type="text" name="srmo[' + xmod + '][test_run_machine]" id="test_run_machine_' + xmod + '" class="form-control" autocomplete="off" placeholder="Test Run Machine" />' +
+								'</div>' +
+							'</div>' +
+							'<div class="col-sm-2">' +
+								'<div class="form-group {{ $errors->has('srmo.*.serial_no') ? 'has-error' : '' }}">' +
+									'<input type="text" name="srmo[' + xmod + '][serial_no]" id="serial_no_' + xmod + '" class="form-control" autocomplete="off" placeholder="Serial No" />' +
+								'</div>' +
+							'</div>' +
+							'<div class="col-sm-2">' +
+								'<div class="form-group {{ $errors->has('srmo.*.test_capacity') ? 'has-error' : '' }}">' +
+									'<input type="text" name="srmo[' + xmod + '][test_capacity]" id="test_capacity_' + xmod + '" class="form-control" autocomplete="off" placeholder="Test Capacity" />' +
+								'</div>' +
+							'</div>' +
+							'<div class="col-sm-2">' +
+								'<div class="form-group {{ $errors->has('srmo.*.duration') ? 'has-error' : '' }}">' +
+									'<input type="text" name="srmo[' + xmod + '][duration]" id="duration_' + xmod + '" class="form-control" autocomplete="off" placeholder="Duration" />' +
+								'</div>' +
+							'</div>' +
+						'</div>' +
+					'</div>'
+
+		); //add input box
+
+		$('#staff_id_' + xmod).select2({
+			placeholder: 'Please choose',
+			allowClear: true,
+			closeOnSelect: true,
+			width: '100%',
+		});
+
+		//bootstrap validate
+		$('#form').bootstrapValidator('addField',	$('.rowmodel')	.find('[name="srmo[' + xmod + '][model_id]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowmodel')	.find('[name="srmo[' + xmod + '][test_run_machine]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowmodel')	.find('[name="srmo[' + xmod + '][serial_no]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowmodel')	.find('[name="srmo[' + xmod + '][test_capacity]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowmodel')	.find('[name="srmo[' + xmod + '][duration]"]'));
+	}
+});
+
+$(wrapmodel).on("click",".remove_model", function(e){
+	var modelId = $(this).data('id');
+	//user click on remove text
+	e.preventDefault();
+	//var $row = $(this).parent('.rowmodel');
+	var $row = $(this).parent().parent().parent();
+	var $option1 = $row.find('[name="srmo[' + modelId + '][model_id]"]');
+	var $option2 = $row.find('[name="srmo[' + modelId + '][test_run_machine]"]');
+	var $option3 = $row.find('[name="srmo[' + modelId + '][serial_no]"]');
+	var $option4 = $row.find('[name="srmo[' + modelId + '][test_capacity]"]');
+	var $option5 = $row.find('[name="srmo[' + modelId + '][duration]"]');
+	$row.remove();
+
+	$('#form').bootstrapValidator('removeField', $option1);
+	$('#form').bootstrapValidator('removeField', $option2);
+	$('#form').bootstrapValidator('removeField', $option3);
+	$('#form').bootstrapValidator('removeField', $option3);
+	$('#form').bootstrapValidator('removeField', $option3);
+	console.log(xmod);
+	xmod--;
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -379,17 +476,47 @@ $('#form').bootstrapValidator({
 				},
 			}
 		},
-		department_id: {
+@for ($uu=1; $uu < 10; $uu++)
+		'srmo[{!! $uu !!}][model_id]': {
 			validators : {
 				notEmpty: {
 					message: 'Please choose. '
 				},
 			}
 		},
+		'srmo[{!! $uu !!}][test_run_machine]': {
+			validators : {
+				notEmpty: {
+					message: 'This field cannot be empty. '
+				},
+			}
+		},
+		'srmo[{!! $uu !!}][serial_no]': {
+			validators : {
+				notEmpty: {
+					message: 'This field cannot be empty. '
+				},
+			}
+		},
+		'srmo[{!! $uu !!}][test_capacity]': {
+			validators : {
+				notEmpty: {
+					message: 'This field cannot be empty. '
+				},
+			}
+		},
+		'srmo[{!! $uu !!}][duration]': {
+			validators : {
+				notEmpty: {
+					message: 'This field cannot be empty. '
+				},
+			}
+		},
+@endfor
 		position_id: {
 			validators : {
 				notEmpty: {
-					message: 'Please choose. '
+					message: 'Please insert this field. '
 				},
 			}
 		},
