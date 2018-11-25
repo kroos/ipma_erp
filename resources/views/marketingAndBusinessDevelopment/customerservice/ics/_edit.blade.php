@@ -9,41 +9,75 @@ $cust = Customer::all();
 $ch = ICSCharge::all();
 $staff = Staff::where('active', 1)->get();
 ?>
-<div class="col-sm-12">
-	<div class="card">
-		<div class="card-header">Service Report</div>
-		<div class="card-body">
-
-			<div class="row">
-				<div class="col form-group {{ $errors->has('date')?'has-error':'' }}">
-					{!! Form::text('date', @$value, ['class' => 'form-control', 'id' => 'date', 'placeholder' => 'Date', 'autocomplete' => 'off']) !!}
-				</div>
-				<div class="col form-group {{ $errors->has('serial')?'has-error':'' }}">
-					{!! Form::text('serial', @$value, ['class' => 'form-control', 'id' => 'serial', 'placeholder' => 'Service Report No.', 'autocomplete' => 'off']) !!}
-				</div>
-			</div>
-
-			<div class="form-group">
-				<div class="form-check form-check-inline">
-					<label class="form-check-label" for="inlineRadio1">Charge : </label>
-				</div>
-
-@foreach($ch as $ci)
-				<div class="form-check form-check-inline">
-					<div class="pretty p-icon p-round p-smooth">
-						{{ Form::radio('charge_id', $ci->id, @$value, ['class' => 'form-control']) }}
-						<div class="state p-success">
-							<i class="icon mdi mdi-check"></i>
-							<label>{{ $ci->charge }}</label>
-						</div>
+<div class="row">
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-header">Service Report</div>
+			<div class="card-body">
+	
+				<div class="row">
+					<div class="col form-group {{ $errors->has('date')?'has-error':'' }}">
+						{!! Form::text('date', @$value, ['class' => 'form-control', 'id' => 'date', 'placeholder' => 'Date', 'autocomplete' => 'off']) !!}
 					</div>
 				</div>
-@endforeach
-			</div>
+	
+				<div class="form-group">
+					<div class="form-check form-check-inline">
+						<label class="form-check-label" for="inlineRadio1">Charge : </label>
+					</div>
 
+@foreach($ch as $ci)
+					<div class="form-check form-check-inline">
+						<div class="pretty p-icon p-round p-smooth">
+							{{ Form::radio('charge_id', $ci->id, @$value, ['class' => 'form-control']) }}
+							<div class="state p-success">
+								<i class="icon mdi mdi-check"></i>
+								<label>{{ $ci->charge }}</label>
+							</div>
+						</div>
+					</div>
+@endforeach
+				</div>
+	
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-header">Service Report Serial</div>
+			<div class="card-body">
+
+
+				<div class="container-fluid serial_wrap">
+<?php $i = 1; $r = 1; ?>
+@foreach($serviceReport->hasmanyserial()->get() as $srs)
+					<div class="rowserial">
+						<div class="row col-sm-12">
+
+							<div class="col-sm-1 text-danger delete_serial"  id="button_delete_{!! $srs->id !!}" data-id="{!! $srs->id !!}">
+									<i class="fas fa-trash" aria-hidden="true"></i>
+							</div>
+
+							<div class="col-sm-11">
+								<div class="form-group {{ $errors->has('sr.*.serial') ? 'has-error' : '' }}">
+									{!! Form::text('srs['.$i++.'][serial]', (is_null(@$value))?$srs->serial:@$value, ['class' => 'form-control', 'id' => 'serial_'.$r++, 'placeholder' => 'Service Report No.', 'autocomplete' => 'off']) !!}
+								</div>
+							</div>
+
+						</div>
+					</div>
+@endforeach
+				</div>
+				<div class="row col-lg-12 add_serial">
+					<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Service Report No</p>
+				</div>
+
+
+			</div>
 		</div>
 	</div>
 </div>
+
 <br />
 <div class="row">
 	<div class="col-sm-6">
@@ -57,7 +91,7 @@ $staff = Staff::where('active', 1)->get();
 						<select name="customer_id" id="cust" class="form-control col-sm-12" autocomplete="off">
 							<option value="" data-pc="" data-phone="">Please choose</option>
 @foreach($cust as $cu)
-							<option value="{!! $cu->id !!}" data-pc="{!! $cu->pc !!}" data-phone="{!! $cu->phone !!}">{!! $cu->customer !!}</option>
+							<option value="{!! $cu->id !!}" data-pc="{!! $cu->pc !!}" data-phone="{!! $cu->phone !!}" {!! ($serviceReport->customer_id == $cu->id)?'selected':NULL !!}>{!! $cu->customer !!}</option>
 @endforeach
 						</select>
 					</div>
@@ -83,27 +117,32 @@ $staff = Staff::where('active', 1)->get();
 			<div class="card-body">
 
 				<div class="container-fluid position_wrap">
+<?php
+$staff = \App\Model\Staff::where('active', 1)->get();
+$ii = 1;
+$iii = 1;
+?>
+@foreach( $serviceReport->hasmanyattendees()->get() as $sra )
 					<div class="rowposition">
 						<div class="row col-sm-12">
 
 							<div class="col-sm-1 text-danger">
-									<i class="fas fa-trash remove_position" aria-hidden="true" id="button_delete_"></i>
+									<i class="fas fa-trash delete_attendees" aria-hidden="true" id="button_delete_{!! $sra->id !!}" data-id="{!! $sra->id !!}"></i>
 							</div>
 
 							<div class="col-sm-11">
 								<div class="form-group {{ $errors->has('sr.*.attended_by') ? 'has-error' : '' }}">
-									<select name="sr[1][attended_by]" id="staff_id_1" class="form-control">
+									<select name="sr[{!! $iii !!}][attended_by]" id="staff_id_{!! $ii !!}" class="form-control">
 										<option value="">Please choose</option>
 @foreach($staff as $st)
-										<option value="{!! $st->id !!}">{!! $st->hasmanylogin()->where('active', 1)->first()->username !!} {!! $st->name !!}</option>
+										<option value="{!! $st->id !!}" {!! ($st->id == $sra->attended_by)?'selected':NULL !!} >{!! $st->hasmanylogin()->where('active', 1)->first()->username !!} {!! $st->name !!}</option>
 @endforeach
 									</select>
 								</div>
 							</div>
-
 						</div>
 					</div>
-
+@endforeach
 				</div>
 				<div class="row col-lg-12 add_position">
 					<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Staff</p>

@@ -27,9 +27,10 @@
 			<div class="card-header">Intelligence Customer Service</div>
 			<div class="card-body">
 				<div class="card">
-					<div class="card-header">Add Service Report</div>
+					<div class="card-header">Update Service Report</div>
 					<div class="card-body">
-{!! Form::model(['route' => ['serviceReport.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
+{!! Form::model( $serviceReport, ['route' => ['serviceReport.update', $serviceReport->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
+
 @include('marketingAndBusinessDevelopment.customerservice.ics._edit')
 {{ Form::close() }}
 					</div>
@@ -80,12 +81,63 @@ $('#cust').select2({
 	width: '100%',
 });
 
-$('#staff_id_1').select2({
+<?php
+$iiii = 1;
+?>
+@foreach( $serviceReport->hasmanyattendees()->get() as $sra )
+$('#staff_id_{!! $iiii !!}').select2({
 	placeholder: 'Please choose',
 	allowClear: true,
 	closeOnSelect: true,
 	width: '100%',
 });
+@endforeach
+/////////////////////////////////////////////////////////////////////////////////////////
+// add serial : add and remove row
+
+var maxfserial	= 200; //maximum input boxes allowed
+var addbtnserial	= $(".add_serial");
+var wrapserial	= $(".serial_wrap");
+
+var x = 1;
+$(addbtnserial).click(function(){
+	// e.preventDefault();
+
+	//max input box allowed
+	if(x < maxfserial){
+		x++;
+		wrapserial.append(
+					'<div class="rowserial">' +
+						'<div class="row col-sm-12">' +
+							'<div class="col-sm-1 text-danger remove_serial"  data-id="' + x + '">' +
+									'<i class="fas fa-trash" aria-hidden="true"></i>' +
+							'</div>' +
+							'<div class="col-sm-11">' +
+								'<div class="form-group {{ $errors->has('sr.*.serial') ? 'has-error' : '' }}">' +
+									'<input type="text" name="srs[' + x + '][serial]" value="{!! @$value !!}" class="form-control" id="serial_' + x + '" placeholder="Service Report No." autocomplete="off" />' +
+								'</div>' +
+							'</div>' +
+						'</div>' +
+					'</div>'
+		); //add input box
+		//bootstrap validate
+		$('#form').bootstrapValidator('addField', $('.rowserial').find('[name="srs[' + x + '][serial]"]'));
+		// console.log(x);
+	}
+});
+
+$(wrapserial).on("click",".remove_serial", function(e){
+	//user click on remove text
+	var serId = $(this).data('id');
+	e.preventDefault();
+	//var $row = $(this).parent('.rowserial');
+	var $row = $(this).parent().parent();
+	var $optserial = $row.find('[name="sr[' + serId + '][serial]"]');
+	// console.log('[name="sr[' + serId + '][serial]"]');
+	$('#form').bootstrapValidator('removeField', $optserial);
+	$row.remove();
+    x--;
+})
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // add position : add and remove row
@@ -109,7 +161,7 @@ $(add_buttons).click(function(){
 					'<div class="rowposition">' +
 						'<div class="row col-sm-12">' +
 							'<div class="col-sm-1 text-danger">' +
-									'<i class="fas fa-trash remove_position" aria-hidden="true" id="button_delete_"></i>' +
+									'<i class="fas fa-trash remove_position" aria-hidden="true" id="button_delete_' + xs + '" data-id="' + xs + '"></i>' +
 							'</div>' +
 							'<div class="col-sm-11">' +
 								'<div class="form-group {{ $errors->has('sr.*.attended_by') ? 'has-error' : '' }}">' +
@@ -139,17 +191,70 @@ $(add_buttons).click(function(){
 });
 
 $(wrappers).on("click",".remove_position", function(e){
+	var posId = $(this).data('id');
 	//user click on remove text
 	e.preventDefault();
 	//var $row = $(this).parent('.rowposition');
 	var $row = $(this).parent().parent().parent();
-	var $option1 = $row.find('[name="sr[][attended_by]"]');
+	var $option1 = $row.find('[name="sr[' + posId + '][attended_by]"]');
 	$row.remove();
 
 	$('#form').bootstrapValidator('removeField', $option1);
 	console.log(xs);
-    xs--;
+	xs--;
 })
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row serial
+$(document).on('click', '.delete_serial', function(e){
+	var serialId = $(this).data('id');
+	SwalDeleteSerial(serialId);
+	e.preventDefault();
+});
+
+function SwalDeleteSerial(serialId){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('srSerial') }}' + '/' + serialId,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: serialId,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_product_' + serialId).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
 $('#form').bootstrapValidator({
@@ -170,7 +275,8 @@ $('#form').bootstrapValidator({
 				},
 			}
 		},
-		serial: {
+@for($q=1; $q < 501; $q++)
+		'srs[{!! $q !!}][serial]': {
 			validators : {
 				notEmpty: {
 					message: 'This value cannot be empty. '
@@ -180,6 +286,7 @@ $('#form').bootstrapValidator({
 				},
 			}
 		},
+@endfor
 		customer_id: {
 			validators : {
 				notEmpty: {
