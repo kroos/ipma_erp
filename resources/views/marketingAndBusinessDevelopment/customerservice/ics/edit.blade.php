@@ -83,7 +83,6 @@ $('#cust').select2({
 
 <?php
 $iiii = 1;
-$iiiii = 1;
 ?>
 @foreach( $serviceReport->hasmanyattendees()->get() as $sra )
 $('#staff_id_{!! $iiii++ !!}').select2({
@@ -92,7 +91,47 @@ $('#staff_id_{!! $iiii++ !!}').select2({
 	closeOnSelect: true,
 	width: '100%',
 });
-<?php $count = $iiiii++; ?>
+@endforeach
+
+<?php
+$iiiii = 1;
+$iiiiii = 1;
+$iiiiiii = 1;
+$iiiiiiii = 1;
+$iiiiiiiii = 1;
+?>
+@foreach( $serviceReport->hasmanymodel()->get() as $srmo )
+$('#model_{!! $iiiii++ !!}').select2({
+	placeholder: 'Please choose',
+	allowClear: true,
+	closeOnSelect: true,
+	width: '100%',
+});
+
+$("#test_run_machine_{{ $iiiiii++ }}").keyup(function() {
+	tch(this);
+});
+
+$("#serial_no_{{ $iiiiiii++ }}").keyup(function() {
+	tch(this);
+});
+
+$("#test_capacity_{{ $iiiiiiii++ }}").keyup(function() {
+	tch(this);
+});
+
+$("#duration_{{ $iiiiiiiii++ }}").keyup(function() {
+	tch(this);
+});
+@endforeach
+
+<?php
+$t = 1;
+?>
+@foreach($serviceReport->hasmanypart()->get() as $srp)
+$("#part_accessory_{{ $t++ }}").keyup(function() {
+	tch(this);
+});
 @endforeach
 /////////////////////////////////////////////////////////////////////////////////////////
 // add serial : add and remove row
@@ -101,7 +140,7 @@ var maxfserial	= 200; //maximum input boxes allowed
 var addbtnserial	= $(".add_serial");
 var wrapserial	= $(".serial_wrap");
 
-var x = 1;
+var x = <?=($serviceReport->hasmanyserial()->get()->count() == 0)?1:$serviceReport->hasmanyserial()->get()->count() ?>;
 $(addbtnserial).click(function(){
 	// e.preventDefault();
 
@@ -151,7 +190,7 @@ var max_fields	= 10; //maximum input boxes allowed
 var add_buttons	= $(".add_position");
 var wrappers	= $(".position_wrap");
 
-var xs = <?= $count ?>;
+var xs = <?= ($serviceReport->hasmanyattendees()->get()->count() == 0)?1:$serviceReport->hasmanyattendees()->get()->count() ?>;
 $(add_buttons).click(function(){
 	// e.preventDefault();
 
@@ -207,7 +246,7 @@ $(wrappers).on("click",".remove_position", function(e){
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////
-// add attendees : add and remove row
+// add model : add and remove row
 <?php
 $model = \App\Model\ICSMachineModel::get();
 ?>
@@ -224,15 +263,14 @@ $(addbtnmod).click(function(){
 	if(xmod < maxfmod){
 		xmod++;
 		wrapmodel.append(
-
 					'<div class="rowmodel">' +
-						'<div class="row col-sm-12">' +
+						'<div class="row col-sm-12 form-inline">' +
 							'<div class="col-sm-1 text-danger">' +
 									'<i class="fas fa-trash remove_model" aria-hidden="true" id="delete_model_' + xmod + '" data-id="' + xmod + '"></i>' +
 							'</div>' +
-							'<div class="col-sm-2">' +
+							'<div class="">' +
 								'<div class="form-group {{ $errors->has('srmo.*.model_id') ? 'has-error' : '' }}">' +
-									'<select name="srmo[' + xmod + '][model_id]" id="model_' + xmod + '" class="form-control" autocomplete="off" placeholder="Please choose">' +
+									'<select name="srmo[' + xmod + '][model_id]" id="model_' + xmod + '" class="form-control form-control-sm" autocomplete="off" placeholder="Please choose">' +
 										'<option value="">Please choose</option>' +
 @foreach( $model as $mod )
 										'<option value="{!! $mod->id !!}">{!! $mod->model !!}</option>' +
@@ -240,36 +278,51 @@ $(addbtnmod).click(function(){
 									'</select>' +
 								'</div>' +
 							'</div>' +
-							'<div class="col-sm-2">' +
+							'<div class="">' +
 								'<div class="form-group {{ $errors->has('srmo.*.test_run_machine') ? 'has-error' : '' }}">' +
-									'<input type="text" name="srmo[' + xmod + '][test_run_machine]" id="test_run_machine_' + xmod + '" class="form-control" autocomplete="off" placeholder="Test Run Machine" />' +
+									'<input type="text" name="srmo[' + xmod + '][test_run_machine]" id="test_run_machine_' + xmod + '" class="form-control form-control-sm" autocomplete="off" placeholder="Test Run Machine" />' +
 								'</div>' +
 							'</div>' +
-							'<div class="col-sm-2">' +
+							'<div class="">' +
 								'<div class="form-group {{ $errors->has('srmo.*.serial_no') ? 'has-error' : '' }}">' +
-									'<input type="text" name="srmo[' + xmod + '][serial_no]" id="serial_no_' + xmod + '" class="form-control" autocomplete="off" placeholder="Serial No" />' +
+									'<input type="text" name="srmo[' + xmod + '][serial_no]" id="serial_no_' + xmod + '" class="form-control form-control-sm" autocomplete="off" placeholder="Serial No" />' +
 								'</div>' +
 							'</div>' +
-							'<div class="col-sm-2">' +
+							'<div class="">' +
 								'<div class="form-group {{ $errors->has('srmo.*.test_capacity') ? 'has-error' : '' }}">' +
-									'<input type="text" name="srmo[' + xmod + '][test_capacity]" id="test_capacity_' + xmod + '" class="form-control" autocomplete="off" placeholder="Test Capacity" />' +
+									'<input type="text" name="srmo[' + xmod + '][test_capacity]" id="test_capacity_' + xmod + '" class="form-control form-control-sm" autocomplete="off" placeholder="Test Capacity" />' +
 								'</div>' +
 							'</div>' +
-							'<div class="col-sm-2">' +
+							'<div class="">' +
 								'<div class="form-group {{ $errors->has('srmo.*.duration') ? 'has-error' : '' }}">' +
-									'<input type="text" name="srmo[' + xmod + '][duration]" id="duration_' + xmod + '" class="form-control" autocomplete="off" placeholder="Duration" />' +
+									'<input type="text" name="srmo[' + xmod + '][duration]" id="duration_' + xmod + '" class="form-control form-control-sm" autocomplete="off" placeholder="Duration" />' +
 								'</div>' +
 							'</div>' +
 						'</div>' +
 					'</div>'
-
 		); //add input box
 
-		$('#staff_id_' + xmod).select2({
+		$('#model_' + xmod).select2({
 			placeholder: 'Please choose',
 			allowClear: true,
 			closeOnSelect: true,
 			width: '100%',
+		});
+
+		$('#test_run_machine_' + xmod).keyup(function() {
+			tch(this);
+		});
+
+		$('#serial_no_' + xmod).keyup(function() {
+			tch(this);
+		});
+
+		$('#test_capacity_' + xmod).keyup(function() {
+			tch(this);
+		});
+
+		$('#duration_' + xmod).keyup(function() {
+			tch(this);
 		});
 
 		//bootstrap validate
@@ -297,10 +350,65 @@ $(wrapmodel).on("click",".remove_model", function(e){
 	$('#form').bootstrapValidator('removeField', $option1);
 	$('#form').bootstrapValidator('removeField', $option2);
 	$('#form').bootstrapValidator('removeField', $option3);
-	$('#form').bootstrapValidator('removeField', $option3);
-	$('#form').bootstrapValidator('removeField', $option3);
+	$('#form').bootstrapValidator('removeField', $option4);
+	$('#form').bootstrapValidator('removeField', $option5);
 	console.log(xmod);
 	xmod--;
+})
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// add part & Accessories : add and remove row
+var maxfpart	= 10; //maximum input boxes allowed
+var addbtnpart	= $(".add_part");
+var wrappart	= $(".part_wrap");
+
+var xpart = <?= ($serviceReport->hasmanypart()->get()->count() == 0)?1:$serviceReport->hasmanypart()->get()->count() ?>;
+$(addbtnpart).click(function(){
+	// e.preventDefault();
+
+	//max input box allowed
+	if(xpart < maxfpart){
+		xpart++;
+		wrappart.append(
+					'<div class="rowpart">' +
+						'<div class="row col-sm-12 form-inline">' +
+							'<div class="col-sm-1 text-danger">' +
+									'<i class="fas fa-trash remove_part" aria-hidden="true" id="delete_part_' + xpart + '" data-id="' + xpart + '"></i>' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srp.*.part_accessory') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srp[' + xpart + '][part_accessory]" value="{!! (!empty($srp->part_accessory))?$srp->part_accessory:@$value !!}" id="part_accessory_' + xpart + '" class="form-control" autocomplete="off" placeholder="Parts & Accessories" />' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srp.*.qty') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srp[' + xpart + '][qty]" value="{!! (!empty($srp->qty))?$srp->qty:@$value !!}" id="qty_' + xpart + '" class="form-control" autocomplete="off" placeholder="Quantity" />' +
+							'</div>' +
+						'</div>' +
+					'</div>'
+		); //add input box
+
+		$('#part_accessory_' + xpart).keyup(function() {
+			tch(this);
+		});
+
+		//bootstrap validate
+		$('#form').bootstrapValidator('addField',	$('.rowmodel')	.find('[name="srp[' + xpart + '][part_accessory]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowmodel')	.find('[name="srp[' + xpart + '][qty]"]'));
+	}
+});
+
+$(wrappart).on("click",".remove_part", function(e){
+	var modelId = $(this).data('id');
+	//user click on remove text
+	e.preventDefault();
+	//var $row = $(this).parent('.rowmodel');
+	var $row = $(this).parent().parent().parent();
+	var $option1 = $row.find('[name="srp[' + modelId + '][part_accessory]"]');
+	var $option2 = $row.find('[name="srp[' + modelId + '][qty]"]');
+	$row.remove();
+
+	$('#form').bootstrapValidator('removeField', $option1);
+	$('#form').bootstrapValidator('removeField', $option2);
+	console.log(xpart);
+	xpart--;
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -354,7 +462,6 @@ function SwalDeleteSerial(serialId){
 	});
 }
 
-
 /////////////////////////////////////////////////////////////////////////////////////////
 // ajax post delete row attendees
 $(document).on('click', '.delete_attendees', function(e){
@@ -391,6 +498,108 @@ function SwalDeleteAttend(attendId){
 						window.location.reload(true);
 					});
 					//$('#delete_attendees_' + attendId).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row attendees
+$(document).on('click', '.delete_model', function(e){
+	var modelId = $(this).data('id');
+	SwalDeleteModel(modelId);
+	e.preventDefault();
+});
+
+function SwalDeleteModel(modelId){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('srModel') }}' + '/' + modelId,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: modelId,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_attendees_' + modelId).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row part & accessories
+$(document).on('click', '.delete_part', function(e){
+	var partId = $(this).data('id');
+	SwalDeletePart(partId);
+	e.preventDefault();
+});
+
+function SwalDeletePart(partId){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('srPart') }}' + '/' + partId,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: partId,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_attendees_' + partId).parent().parent().remove();
 				})
 				.fail(function(){
 					swal('Oops...', 'Something went wrong with ajax !', 'error');
@@ -486,29 +695,48 @@ $('#form').bootstrapValidator({
 		},
 		'srmo[{!! $uu !!}][test_run_machine]': {
 			validators : {
-				notEmpty: {
-					message: 'This field cannot be empty. '
-				},
+				// notEmpty: {
+				// 	message: 'This field cannot be empty. '
+				// },
 			}
 		},
 		'srmo[{!! $uu !!}][serial_no]': {
 			validators : {
-				notEmpty: {
-					message: 'This field cannot be empty. '
-				},
+				// notEmpty: {
+				// 	message: 'This field cannot be empty. '
+				// },
 			}
 		},
 		'srmo[{!! $uu !!}][test_capacity]': {
 			validators : {
+				// notEmpty: {
+				// 	message: 'This field cannot be empty. '
+				// },
+			}
+		},
+		'srmo[{!! $uu !!}][duration]': {
+			validators : {
+				// notEmpty: {
+				// 	message: 'This field cannot be empty. '
+				// },
+			}
+		},
+@endfor
+@for($uuu=1; $uuu < 10; $uuu++)
+		'srp[{!! $uuu !!}][part_accessory]': {
+			validators : {
 				notEmpty: {
 					message: 'This field cannot be empty. '
 				},
 			}
 		},
-		'srmo[{!! $uu !!}][duration]': {
+		'srp[{!! $uuu !!}][qty]': {
 			validators : {
 				notEmpty: {
 					message: 'This field cannot be empty. '
+				},
+				integer: {
+					message: 'The value is not an integer. '
 				},
 			}
 		},

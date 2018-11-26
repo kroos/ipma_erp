@@ -14,11 +14,6 @@ class ICSServiceReportJob extends Model
 		return $this->hasMany('App\Model\ICSServiceReportJobDetail', 'service_report_job_id');
 	}
 
-	public function hasonesrjobworkingtime()
-	{
-		return $this->hasMany('App\Model\ICSServiceReportJobDetail', 'service_report_job_id');
-	}
-
 ///////////////////////////////////////////////////////////////////////////////////////////////
 	public function belongtoservicereport()
 	{

@@ -184,44 +184,66 @@ $iii = 1;
 			<div class="card-body">
 
 				<div class="container-fluid model_wrap">
+					<div class="row col-sm-12 form-inline">
+						<div class="col-sm-1 text-danger">&nbsp;</div>
+						<div class=""><input type="text" name="" placeholder="Select Model" class="form-control" disabled></div>
+						<div class=""><input type="text" name="" placeholder="Test Run Machine" class="form-control" disabled></div>
+						<div class=""><input type="text" name="" placeholder="Serial No." class="form-control" disabled></div>
+						<div class=""><input type="text" name="" placeholder="Test Capacity" class="form-control" disabled></div>
+						<div class=""><input type="text" name="" placeholder="Duration" class="form-control" disabled></div>
+					</div>
+<?php
+$model = \App\Model\ICSMachineModel::all();
+$e = 1;
+$ee = 1;
+$eee = 1;
+$eeee = 1;
+$eeeee = 1;
+$eeeeee = 1;
+$eeeeeee = 1;
+$eeeeeeee = 1;
+$eeeeeeeee = 1;
+$eeeeeeeeee = 1;
+?>
 @foreach( $serviceReport->hasmanymodel()->get() as $srmo )
 					<div class="rowmodel">
-						<div class="row col-sm-12">
+						<div class="row col-sm-12 form-inline">
 
 							<div class="col-sm-1 text-danger">
 									<i class="fas fa-trash delete_model" aria-hidden="true" id="delete_model_{!! $srmo->id !!}" data-id="{!! $srmo->id !!}"></i>
 							</div>
-							<div class="col-sm-2">
+							<div class="">
 								<div class="form-group {{ $errors->has('srmo.*.model_id') ? 'has-error' : '' }}">
-									<select name="srmo[' + xmod + '][model_id]" id="model_' + xmod + '" class="form-control" autocomplete="off" placeholder="Please choose">
+									<select name="srmo[{{ $ee++ }}][model_id]" id="model_{{ $e++ }}" class="form-control" autocomplete="off" placeholder="Please choose">
 										<option value="">Please choose</option>
 @foreach( $model as $mod )
-										<option value="{!! $mod->id !!}">{!! $mod->model !!}</option>
+										<option value="{!! $mod->id !!}" {!! ($srmo->model_id == $mod->id)?'selected':NULL !!}>{!! $mod->model !!}</option>
 @endforeach
 									</select>
 								</div>
 							</div>
-							<div class="col-sm-2">
+							<div class="">
 								<div class="form-group {{ $errors->has('srmo.*.test_run_machine') ? 'has-error' : '' }}">
-									<input type="text" name="srmo[' + xmod + '][test_run_machine]" id="test_run_machine_' + xmod + '" class="form-control" autocomplete="off" placeholder="Test Run Machine" />
+									{!! Form::text('srmo['. $eee++ .'][test_run_machine]', (!is_null($srmo->test_run_machine))?$srmo->test_run_machine:@$value,['id'=>'test_run_machine_'.$eeee++, 'class' => "form-control", 'autocomplete' => "off", 'placeholder' => "Test Run Machine"] ) !!}
 								</div>
 							</div>
-							<div class="col-sm-2">
+							<div class="">
 								<div class="form-group {{ $errors->has('srmo.*.serial_no') ? 'has-error' : '' }}">
-									<input type="text" name="srmo[' + xmod + '][serial_no]" id="serial_no_' + xmod + '" class="form-control" autocomplete="off" placeholder="Serial No." />
+									<input type="text" name="srmo[{{ $eeeee++ }}][serial_no]" value="{!! (!empty($srmo->serial_no))?$srmo->serial_no:@$value !!}" id="serial_no_{{ $eeeeee++ }}" class="form-control" autocomplete="off" placeholder="Serial No." />
 								</div>
 							</div>
-							<div class="col-sm-2">
+							<div class="">
 								<div class="form-group {{ $errors->has('srmo.*.test_capacity') ? 'has-error' : '' }}">
-									<input type="text" name="srmo[' + xmod + '][test_capacity]" id="test_capacity_' + xmod + '" class="form-control" autocomplete="off" placeholder="Test Capacity" />
+									<input type="text" name="srmo[{{ $eeeeeee++ }}][test_capacity]" value="{!! (!empty($srmo->test_capacity))?$srmo->test_capacity:@$value !!}" id="test_capacity_{{ $eeeeeeee++ }}" class="form-control" autocomplete="off" placeholder="Test Capacity" />
 								</div>
 							</div>
-							<div class="col-sm-2">
+							<div class="">
 								<div class="form-group {{ $errors->has('srmo.*.duration') ? 'has-error' : '' }}">
-									<input type="text" name="srmo[' + xmod + '][duration]" id="duration_' + xmod + '" class="form-control" autocomplete="off" placeholder="Duration" />
+									<input type="text" name="srmo[{{ $eeeeeeee++ }}][duration]" value="{!! (!empty($srmo->duration))?$srmo->duration:@$value !!}" id="duration_{{ $eeeeeeeee++ }}" class="form-control" autocomplete="off" placeholder="Duration" />
 								</div>
 							</div>
 						</div>
+
 					</div>
 @endforeach
 				</div>
@@ -232,6 +254,151 @@ $iii = 1;
 			</div>
 			<div class="card-footer">
 				<a href="" class="btn btn-primary float-right">Add Model</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<br />
+
+
+<div class="row">
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-header">Parts & Accessories</div>
+			<div class="card-body">
+
+				<div class="container-fluid part_wrap">
+<?php
+$r = 1;
+$rr = 1;
+$rrr = 1;
+$rrrr = 1;
+?>
+@foreach($serviceReport->hasmanypart()->get() as $srp)
+					<div class="rowpart">
+						<div class="row col-sm-12 form-inline">
+
+							<div class="col-sm-1 text-danger">
+									<i class="fas fa-trash delete_part" aria-hidden="true" id="delete_part_{!! $srp->id !!}" data-id="{!! $srp->id !!}"></i>
+							</div>
+							<div class="form-group {{ $errors->has('srp.*.part_accessory') ? 'has-error' : '' }}">
+								<input type="text" name="srp[{{ $r++ }}][part_accessory]" value="{!! (!empty($srp->part_accessory))?$srp->part_accessory:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Parts & Accessories" />
+							</div>
+							<div class="form-group {{ $errors->has('srp.*.qty') ? 'has-error' : '' }}">
+								<input type="text" name="srp[{{ $rrr++ }}][qty]" value="{!! (!empty($srp->qty))?$srp->qty:@$value !!}" id="qty_{{ $rrrr++ }}" class="form-control" autocomplete="off" placeholder="Quantity" />
+							</div>
+						</div>
+					</div>
+@endforeach
+				</div>
+				<div class="row col-lg-12 add_part">
+					<span class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Parts & Accessories</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-6">
+<!-- 		<div class="card">
+			<div class="card-header"></div>
+			<div class="card-body"></div>
+		</div> -->
+	</div>
+</div>
+
+
+<br />
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="card">
+			<div class="card-header">Job Performed</div>
+			<div class="card-body">
+
+				<div class="container-fluid jobdetail_wrap">
+<?php
+
+?>
+@foreach( $serviceReport->hasmanyjob()->get() as $srj )
+					<div class="rowjobdetail">
+						<div class="row col-sm-12 form-inline">
+
+							<div class="col-sm-1 text-danger">
+								<i class="fas fa-trash delete_job" aria-hidden="true" id="delete_job_" data-id=""></i>
+							</div>
+							<div class="form-group {{ $errors->has('srj.*.date') ? 'has-error' : '' }}">
+								<input type="text" name="srj[{{ $r++ }}][date]" value="{!! (!empty($srj->date))?$srj->date:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Date" />
+							</div>
+
+							<div class="form-group {{ $errors->has('srj.*.labour') ? 'has-error' : '' }}">
+								<input type="text" name="srj[{{ $r++ }}][labour]" value="{!! (!empty($srj->labour))?$srj->labour:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Labour Count" />
+							</div>
+
+							<div class="form-group {{ $errors->has('srj.*.job_perform') ? 'has-error' : '' }}">
+								<input type="textarea" name="srj[{{ $r++ }}][job_perform]" value="{!! (!empty($srj->job_perform))?$srj->job_perform:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Job Perform" />
+							</div>
+
+							<div class="form-group {{ $errors->has('srj.*.working_time_start') ? 'has-error' : '' }}">
+								<input type="text" name="srj[{{ $r++ }}][working_time_start]" value="{!! (!empty($srj->working_time_start))?$srj->working_time_start:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Working Time Start" />
+							</div>
+
+							<div class="form-group {{ $errors->has('srj.*.working_time_end') ? 'has-error' : '' }}">
+								<input type="text" name="srj[{{ $r++ }}][working_time_end]" value="{!! (!empty($srj->working_time_end))?$srj->working_time_end:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Working Time End" />
+							</div>
+						</div>
+
+@foreach( $srj->hasmanysrjobdetail()->where('return', '<>', 1)->get() as $srjd )
+						<div class="row col-sm-12 form-inline">
+							<div class="col-sm-1 text-primary">Trip<br />=></div>
+							<div class="form-group {{ $errors->has('srjd.*.date') ? 'has-error' : '' }}">
+								<input type="text" name="srjd[{{ $r++ }}][date]" value="{!! (!empty($srjd->date))?$srjd->date:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Date" />
+							</div>
+
+							<div class="form-group {{ $errors->has('srjd.*.labour') ? 'has-error' : '' }}">
+								<input type="text" name="srjd[{{ $r++ }}][labour]" value="{!! (!empty($srjd->labour))?$srjd->labour:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Labour Count" />
+							</div>
+
+							<div class="form-group {{ $errors->has('srjd.*.job_perform') ? 'has-error' : '' }}">
+								<input type="textarea" name="srjd[{{ $r++ }}][job_perform]" value="{!! (!empty($srjd->job_perform))?$srjd->job_perform:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Job Perform" />
+							</div>
+
+							<div class="form-group {{ $errors->has('srjd.*.working_time_start') ? 'has-error' : '' }}">
+								<input type="text" name="srjd[{{ $r++ }}][working_time_start]" value="{!! (!empty($srjd->working_time_start))?$srjd->working_time_start:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Working Time Start" />
+							</div>
+
+							<div class="form-group {{ $errors->has('srjd.*.working_time_end') ? 'has-error' : '' }}">
+								<input type="text" name="srjd[{{ $r++ }}][working_time_end]" value="{!! (!empty($srjd->working_time_end))?$srjd->working_time_end:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Working Time End" />
+							</div>
+						</div>
+@endforeach
+@foreach( $srj->hasmanysrjobdetail()->where('return', 1)->get() as $srjd )
+						<div class="row col-sm-12 form-inline">
+							<div class="col-sm-1 text-primary">Return<br /><=</div>
+							<div class="form-group {{ $errors->has('srjd.*.date') ? 'has-error' : '' }}">
+								<input type="text" name="srjd[{{ $r++ }}][date]" value="{!! (!empty($srjd->date))?$srjd->date:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Date" />
+							</div>
+
+							<div class="form-group {{ $errors->has('srjd.*.labour') ? 'has-error' : '' }}">
+								<input type="text" name="srjd[{{ $r++ }}][labour]" value="{!! (!empty($srjd->labour))?$srjd->labour:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Labour Count" />
+							</div>
+
+							<div class="form-group {{ $errors->has('srjd.*.job_perform') ? 'has-error' : '' }}">
+								<input type="textarea" name="srjd[{{ $r++ }}][job_perform]" value="{!! (!empty($srjd->job_perform))?$srjd->job_perform:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Job Perform" />
+							</div>
+
+							<div class="form-group {{ $errors->has('srjd.*.working_time_start') ? 'has-error' : '' }}">
+								<input type="text" name="srjd[{{ $r++ }}][working_time_start]" value="{!! (!empty($srjd->working_time_start))?$srjd->working_time_start:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Working Time Start" />
+							</div>
+
+							<div class="form-group {{ $errors->has('srjd.*.working_time_end') ? 'has-error' : '' }}">
+								<input type="text" name="srjd[{{ $r++ }}][working_time_end]" value="{!! (!empty($srjd->working_time_end))?$srjd->working_time_end:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Working Time End" />
+							</div>
+						</div>
+@endforeach
+					</div>
+@endforeach
+				</div>
+
 			</div>
 		</div>
 	</div>
