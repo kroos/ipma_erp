@@ -436,11 +436,11 @@ $r70 = 1;
 							</div>
 
 							<div class="form-group {{ $errors->has('srj.*.*.meter_start') ? 'has-error' : '' }}">
-								<input type="textarea" name="srj[{!! $r58++ !!}][1][meter_start]" value="{!! (!empty($srjd->meter_start))?$srjd->meter_start:@$value !!}" id="ms_1_{{ $r13++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Meter Start" />
+								<input type="textarea" name="srj[{!! $r58++ !!}][1][meter_start]" value="{!! (!empty($srjd->meter_start))?$srjd->meter_start:@$value !!}" id="ms_1_{{ $r13++ }}" class="form-control form-control-sm meterstart1" autocomplete="off" placeholder="Meter Start" />
 							</div>
 
 							<div class="form-group {{ $errors->has('srj.*.*.meter_end') ? 'has-error' : '' }}">
-								<input type="text" name="srj[{!! $r59++ !!}][1][meter_end]" value="{!! (!empty($srjd->meter_end))?$srjd->meter_end:@$value !!}" id="me_1_{{ $r14++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Meter End" />
+								<input type="text" name="srj[{!! $r59++ !!}][1][meter_end]" value="{!! (!empty($srjd->meter_end))?$srjd->meter_end:@$value !!}" id="me_1_{{ $r14++ }}" class="form-control form-control-sm meterend1" autocomplete="off" placeholder="Meter End" />
 							</div>
 
 							<div class="form-group {{ $errors->has('srj.*.*.time_start') ? 'has-error' : '' }}">
@@ -466,11 +466,11 @@ $r70 = 1;
 							</div>
 
 							<div class="form-group {{ $errors->has('srjd.*.meter_start') ? 'has-error' : '' }}">
-								<input type="textarea" name="srj[{!! $r65++ !!}][2][meter_start]" value="{!! (!empty($srjd->meter_start))?$srjd->meter_start:@$value !!}" id="ms_2_{{ $r19++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Meter Start" />
+								<input type="textarea" name="srj[{!! $r65++ !!}][2][meter_start]" value="{!! (!empty($srjd->meter_start))?$srjd->meter_start:@$value !!}" id="ms_2_{{ $r19++ }}" class="form-control form-control-sm meterstart2" autocomplete="off" placeholder="Meter Start" />
 							</div>
 
 							<div class="form-group {{ $errors->has('srjd.*.meter_end') ? 'has-error' : '' }}">
-								<input type="text" name="srj[{!! $r66++ !!}][2][meter_end]" value="{!! (!empty($srjd->meter_end))?$srjd->meter_end:@$value !!}" id="me_2_{{ $r20++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Meter End" />
+								<input type="text" name="srj[{!! $r66++ !!}][2][meter_end]" value="{!! (!empty($srjd->meter_end))?$srjd->meter_end:@$value !!}" id="me_2_{{ $r20++ }}" class="form-control form-control-sm meterend2" autocomplete="off" placeholder="Meter End" />
 							</div>
 
 							<div class="form-group {{ $errors->has('srjd.*.time_start') ? 'has-error' : '' }}">
@@ -537,7 +537,7 @@ $r70 = 1;
 										<tr>
 											<td>Overtime :</td>
 											<td>
-												RM <span class="totallabourallowance" id="total_labour_{!! $r33++ !!}">{{ $srj->labour_leader + (($srj->labour_non_leader)*($srj->labour - 1)) / ($srj->working_type_value) }}</span>
+												RM <span class="totallabourallowance1" id="total_labour_{!! $r33++ !!}">{{ $srj->labour_leader + (($srj->labour_non_leader)*($srj->labour - 1)) / ($srj->working_type_value) }}</span>
 											</td>
 											<td>X</td>
 											<td><span class="overtimeconstant1">{{ $srj->overtime_constant_1 }}</span> X <span class="overtimeconstant2">{{ $srj->overtime_constant_2 }}</span></td>
@@ -568,27 +568,27 @@ $r70 = 1;
 											</td>
 											<td colspan="6">&nbsp;</td>
 											<td>=</td>
-											<td class="font-weight-bold">RM <span id="total_accommodation_{{ $r40++ }}">{!! $srj->accommodation * $srj->accommodation_rate !!}</span></td>
+											<td class="font-weight-bold">RM <span class="totalaccommodation" id="total_accommodation_{{ $r40++ }}">{!! $srj->accommodation * $srj->accommodation_rate !!}</span></td>
 										</tr>
 										<tr>
 											<td>Travel :</td>
 											<td colspan="2">
 												Meter Calculator:<br />
-												Trip : <span id="ms_1_{{ $r41++ }}">{{ $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_end }}</span> - <span id="me_1_{{ $r42++ }}">{{ $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_start }}</span> = <span id="total_go_1_{!! $r43++ !!}">{{ $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_end - $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_start }}</span>KM<br />
-												Return : <span id="ms_2_{{ $r44++ }}">{{ $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_end }}</span> - <span id="me_2_{{ $r45++ }}">{{ $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_start }}</span> = <span id="total_go_2_{!! $r46++ !!}">{{ $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_end - $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_start }} KM</span><br />
-												Total = <span id="total_km_1_{!! $r47++ !!}">
+												Trip : <span class="meterend11" id="me_1_{{ $r41++ }}">{{ $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_end }}</span> - <span class="meterstart11" id="ms_1_{{ $r42++ }}">{{ $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_start }}</span> = <span class="km1" id="total_go_1_{!! $r43++ !!}">{{ $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_end - $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_start }}</span> KM<br />
+												Return : <span class="meterend22" id="me_2_{{ $r44++ }}">{{ $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_end }}</span> - <span class="meterstart22" id="ms_2_{{ $r45++ }}">{{ $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_start }}</span> = <span class="km2" id="total_go_2_{!! $r46++ !!}">{{ $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_end - $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_start }}</span> KM<br />
+												Total = <span class="totalkm" id="total_km_1_{!! $r47++ !!}">
 													{!! 
 															($srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_end - $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_start) + 
 															($srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_end - $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_start)
-													 !!} KM
-												</span>
+													 !!}
+												</span> KM
 											</td>
 											<td>X</td>
-											<td><span id="tmr_{!! $r48++ !!}">{!! $srj->travel_meter_rate !!}</span></td>
+											<td><span class="travelmeterrate" id="tmr_{!! $r48++ !!}">{!! $srj->travel_meter_rate !!}</span></td>
 											<td colspan="5"></td>
 											<td>=</td>
 											<td class="font-weight-bold">
-												RM <span id="total_meter_{!! $r49 !!}">{!!
+												RM <span class="totaltravel" id="total_meter_{!! $r49 !!}">{!!
 														(
 															($srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_end - $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_start) + 
 															($srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_end - $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_start)
@@ -599,7 +599,7 @@ $r70 = 1;
 										<tr>
 											<td>Travel Hour :</td>
 											<td>RM
-												 <span class="totallabourallowance" id="total_labour_th_{!! $r50++ !!}">{{ $srj->labour_leader + (($srj->labour_non_leader)*($srj->labour - 1)) / ($srj->working_type_value) }}</span>
+												 <span class="totallabourallowance2" id="total_labour_th_{!! $r50++ !!}">{{ $srj->labour_leader + (($srj->labour_non_leader)*($srj->labour - 1)) / ($srj->working_type_value) }}</span>
 											</td>
 											<td>X</td>
 											<td>
