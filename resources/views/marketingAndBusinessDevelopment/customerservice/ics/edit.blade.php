@@ -678,9 +678,9 @@ function update_totalperday() {
 	var psum = 0;
 	for (var ip = myNodelistp.length - 1; ip >= 0; ip--) {
 		// myNodelistp[ip].style.backgroundColor = "red";
-		console.log(myNodelistp[ip].value);
+		console.log(myNodelistp[ip].innerHTML);
 
-		psum = ( (psum * 10000) + (myNodelistp[ip].value * 10000) ) / 10000;
+		psum = ( (psum * 10000) + (myNodelistp[ip].innerHTML * 10000) ) / 10000;
 
 		// console.log(psum);
 	}
