@@ -140,7 +140,7 @@ var maxfserial	= 200; //maximum input boxes allowed
 var addbtnserial	= $(".add_serial");
 var wrapserial	= $(".serial_wrap");
 
-var x = <?=($serviceReport->hasmanyserial()->get()->count() == 0)?1:$serviceReport->hasmanyserial()->get()->count() ?>;
+var x = <?=($serviceReport->hasmanyserial()->get()->count() == 0)?0:$serviceReport->hasmanyserial()->get()->count() ?>;
 $(addbtnserial).click(function(){
 	// e.preventDefault();
 
@@ -190,7 +190,7 @@ var max_fields	= 10; //maximum input boxes allowed
 var add_buttons	= $(".add_position");
 var wrappers	= $(".position_wrap");
 
-var xs = <?= ($serviceReport->hasmanyattendees()->get()->count() == 0)?1:$serviceReport->hasmanyattendees()->get()->count() ?>;
+var xs = <?= ($serviceReport->hasmanyattendees()->get()->count() == 0)?0:$serviceReport->hasmanyattendees()->get()->count() ?>;
 $(add_buttons).click(function(){
 	// e.preventDefault();
 
@@ -255,7 +255,7 @@ var maxfmod	= 10; //maximum input boxes allowed
 var addbtnmod	= $(".add_model");
 var wrapmodel	= $(".model_wrap");
 
-var xmod = <?= ($serviceReport->hasmanymodel()->get()->count() == 0)?1:$serviceReport->hasmanymodel()->get()->count() ?>;
+var xmod = <?= ($serviceReport->hasmanymodel()->get()->count() == 0)?0:$serviceReport->hasmanymodel()->get()->count() ?>;
 $(addbtnmod).click(function(){
 	// e.preventDefault();
 
@@ -362,7 +362,7 @@ var maxfpart	= 10; //maximum input boxes allowed
 var addbtnpart	= $(".add_part");
 var wrappart	= $(".part_wrap");
 
-var xpart = <?= ($serviceReport->hasmanypart()->get()->count() == 0)?1:$serviceReport->hasmanypart()->get()->count() ?>;
+var xpart = <?= ($serviceReport->hasmanypart()->get()->count() == 0)?0:$serviceReport->hasmanypart()->get()->count() ?>;
 $(addbtnpart).click(function(){
 	// e.preventDefault();
 
@@ -615,6 +615,79 @@ function SwalDeletePart(partId){
 	});
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// counting on service report job
+// get all the variable -> start with labour
+
+$(document).on('keyup', '.labour_', function () {
+	// food section
+	var frate = $(this).parent().parent().parent().children().children().children().children().children().children().children('.fr_');
+	var labfrate = $(this).parent().parent().parent().children().children().children().children().children().children().children('.labourfr');
+	var tlabf = $(this).parent().parent().parent().children().children().children().children().children().children().children('.tlabourf');
+
+	// $(frate).css({"color": "red", "border": "2px solid red"});
+	// $(labfrate).css({"color": "red", "border": "2px solid red"});
+
+	$(labfrate).text( $(this).val() );
+	var totallabourfood = ((($(frate).val() * 100)/100) * (( $(this).val() * 100)/100)).toFixed(2);
+	$(tlabf).text( totallabourfood );
+
+	// labour section
+	var all = $(this).parent().parent().parent().children().children().children().children().children().children().children('.allowanceleaderlabour');
+	var anll = $(this).parent().parent().parent().children().children().children().children().children().children().children('.allowancenonleaderlabour');
+	var anl = $(this).parent().parent().parent().children().children().children().children().children().children().children('.allowancenonleader');
+	var wtv = $(this).parent().parent().parent().children().children().children().children().children().children().children('.workingtypevalue');
+	var tla = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totallabourallowance');
+
+	var countnonleader = $(this).val() - 1;
+	$(anl).text( countnonleader );
+
+	if( $(this).val() > 0 ) {
+			var totalallowancelabour = ((($(all).val()*100)/100) + ((($(anll).val()*100)/100) * ((countnonleader * 100)/100))) / ( (( $(wtv).val() )*100) /100 );
+	} else {
+		var totalallowancelabour = 0;
+	}
+	$(tla).text( totalallowancelabour.toFixed(2) );
+
+	// overtime section
+	var oc1 = $(this).parent().parent().parent().children().children().children().children().children().children().children('.overtimeconstant1');
+	var oc2 = $(this).parent().parent().parent().children().children().children().children().children().children().children('.overtimeconstant2');
+	var oh = $(this).parent().parent().parent().children().children().children().children().children().children().children('.overtimehour');
+	var to = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totalovertime');
+
+	var totalovertimee = (((totalallowancelabour * 100)/100) * ((( $(oc1).text() ) * 100 ) /100) * ((( $(oc2).text() ) * 100 ) /100) * (( $(oh).val() * 100) / 100)).toFixed(2)
+	$(to).text(totalovertimee);
+
+	// travel hour section
+	var thc = $(this).parent().parent().parent().children().children().children().children().children().children().children('.travelhourconstant');
+	var th = $(this).parent().parent().parent().children().children().children().children().children().children().children('.travelhour');
+	var tth = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totaltravelhour');
+
+	var totaltravho = (((totalallowancelabour * 100) / 100) * (($(thc).text() * 100) / 100) * (($(th).val() * 100) / 100)).toFixed(2);
+	$(tth).text(totaltravho);
+
+	// update grand total
+	update_totalperday();
+});
+
+
+
+// update grand total
+function update_totalperday() {
+	var myNodelistp = $(".totalperday");
+	var psum = 0;
+	for (var ip = myNodelistp.length - 1; ip >= 0; ip--) {
+		// myNodelistp[ip].style.backgroundColor = "red";
+		console.log(myNodelistp[ip].value);
+
+		psum = ( (psum * 10000) + (myNodelistp[ip].value * 10000) ) / 10000;
+
+		// console.log(psum);
+	}
+	$('#grandtotal').text( psum.toFixed(2) );
+};
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 $('#form').bootstrapValidator({
 	feedbackIcons: {
