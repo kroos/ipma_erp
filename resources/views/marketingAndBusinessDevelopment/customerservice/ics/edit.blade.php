@@ -133,6 +133,52 @@ $("#part_accessory_{{ $t++ }}").keyup(function() {
 	tch(this);
 });
 @endforeach
+
+///////////////////////////////////////////////////////////////////////////////////////////
+<?php
+$r1 = 1;
+$r2 = 1;
+$r3 = 1;
+$r4 = 1;
+$r5 = 1;
+$r6 = 1;
+$r7 = 1;
+$r8 = 1;
+$r9 = 1;
+$r10 = 1;
+$r11 = 1;
+$r12 = 1;
+$r13 = 1;
+$r14 = 1;
+$r15 = 1;
+$r16 = 1;
+?>
+@foreach( $serviceReport->hasmanyjob()->get() as $srj )
+$('#date_{{ $r1++ }}').datetimepicker({
+	format:'YYYY-MM-DD',
+	useCurrent: false,
+})
+.on('dp.change dp.show dp.update', function() {
+	$('#form').bootstrapValidator('revalidateField', 'srj[{{ $r2++ }}][date]');
+});
+
+$("#wts_{{ $r3++ }}, #wte_{{ $r4++ }}, #ts_1_{{ $r5++ }}, #te_1_{{ $r6++ }}, #ts_2_{{ $r7++ }}, #te_2_{{ $r8++ }}").datetimepicker({
+	format: 'h:mm A',
+	useCurrent: false,
+});
+
+$("#job_perform_{{ $r9++ }}, #ds_1_{{ $r10++ }}, #de_1_{{ $r11++ }}, #ds_2_{{ $r12++ }}, #de_2_{{ $r13++ }}").keyup(function() {
+	uch(this);
+});
+
+$('#fr_{{ $r14++ }}, #wtv_{{ $r15++ }}, #accommodation_{{ $r16++ }}').select2({
+	placeholder: 'Please choose',
+	allowClear: true,
+	closeOnSelect: true,
+	width: '100%',
+});
+
+@endforeach
 /////////////////////////////////////////////////////////////////////////////////////////
 // add serial : add and remove row
 
@@ -615,6 +661,57 @@ function SwalDeletePart(partId){
 	});
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row job
+$(document).on('click', '.delete_job', function(e){
+	var jobId = $(this).data('id');
+	SwalDeleteJob(jobId);
+	e.preventDefault();
+});
+
+function SwalDeleteJob(jobId){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('srJob') }}' + '/' + jobId,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: jobId,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_attendees_' + jobId).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // counting on service report job
 // get all the variable -> start with labour
@@ -630,7 +727,7 @@ $(document).on('keyup', '.labour_', function () {
 
 	$(labfrate).text( $(this).val() );
 	var totallabourfood = ((($(frate).val() * 100)/100) * (( $(this).val() * 100)/100));
-	$(tlabf).text( totallabourfood );
+	$(tlabf).text( totallabourfood.toFixed(2) );
 
 	// labour section
 	var all = $(this).parent().parent().parent().children().children().children().children().children().children().children('.allowanceleaderlabour');
@@ -638,6 +735,8 @@ $(document).on('keyup', '.labour_', function () {
 	var anl = $(this).parent().parent().parent().children().children().children().children().children().children().children('.allowancenonleader');
 	var wtv = $(this).parent().parent().parent().children().children().children().children().children().children().children('.workingtypevalue');
 	var tla = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totallabourallowance');
+	var tla1 = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totallabourallowance1');
+	var tla2 = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totallabourallowance2');
 
 	var countnonleader = $(this).val() - 1;
 	$(anl).text( countnonleader );
@@ -647,7 +746,9 @@ $(document).on('keyup', '.labour_', function () {
 	} else {
 		var totalallowancelabour = 0;
 	}
-	$(tla).text( totalallowancelabour );
+	$(tla).text( totalallowancelabour.toFixed(2) );
+	$(tla1).text( totalallowancelabour.toFixed(2) );
+	$(tla2).text( totalallowancelabour.toFixed(2) );
 
 	// overtime section
 	var oc1 = $(this).parent().parent().parent().children().children().children().children().children().children().children('.overtimeconstant1');
@@ -656,7 +757,7 @@ $(document).on('keyup', '.labour_', function () {
 	var to = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totalovertime');
 
 	var totalovertimee = (((totalallowancelabour * 100)/100) * ((( $(oc1).text() ) * 100 ) /100) * ((( $(oc2).text() ) * 100 ) /100) * (( $(oh).val() * 100) / 100))
-	$(to).text(totalovertimee);
+	$(to).text(totalovertimee.toFixed(2));
 
 	// travel hour section
 	var thc = $(this).parent().parent().parent().children().children().children().children().children().children().children('.travelhourconstant');
@@ -664,14 +765,14 @@ $(document).on('keyup', '.labour_', function () {
 	var tth = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totaltravelhour');
 
 	var totaltravho = (((totalallowancelabour * 100) / 100) * (($(thc).text() * 100) / 100) * (($(th).val() * 100) / 100));
-	$(tth).text(totaltravho);
+	$(tth).text(totaltravho.toFixed(2));
 
 	//total per day section
 	var ta = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totalaccommodation');
 	var tt = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totaltravel');
 	var tpdy = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totalperday');
 	var tpd = ((totallabourfood * 100) / 100) + ((totalallowancelabour * 100) / 100) + ((totalovertimee * 100) / 100) + (($(ta).text() * 100) / 100) + (($(tt).text() * 100) / 100) + ((totaltravho * 100) / 100);
-	$(tpdy).text(tpd);
+	$(tpdy).text(tpd.toFixed(2));
 
 	// update grand total
 	update_grandtotal();
@@ -695,7 +796,7 @@ $(document).on('keyup', '.meterstart1', function () {
 	$(tkm).text(tkmnew);
 
 	var ttnew = ((tkmnew * 100) / 100) * (($(tmr).text() * 100) / 100);
-	$(tt).text(ttnew);
+	$(tt).text(ttnew.toFixed(2));
 
 	//total per day section
 	var tlf = $(this).parent().parent().parent().children().children().children().children().children().children().children('.tlabourf');
@@ -705,8 +806,325 @@ $(document).on('keyup', '.meterstart1', function () {
 	var tth = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totaltravelhour');
 
 	var tpdy = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totalperday');
-	var tpd = ( $(tlf).text() + $(tla).text() + $(to).text() + $(ta).text() + ttnew + $(tth).text() );
-	$(tpdy).text(tpd);
+	var tpd = ( (($(tlf).text() * 100) / 100) + (($(tla).text() * 100) / 100) + (($(to).text() * 100) / 100) + (($(ta).text()* 100) / 100) + ((ttnew * 100) / 100) + (($(tth).text() * 100) / 100) );
+	$(tpdy).text(tpd.toFixed(2));
+
+	update_grandtotal();
+});
+
+$(document).on('keyup', '.meterend1', function () {
+	var ms11 = $(this).parent().parent().parent().children().children().children().children().children().children().children('.meterstart11');
+	var me11 = $(this).parent().parent().parent().children().children().children().children().children().children().children('.meterend11');
+	var km1 = $(this).parent().parent().parent().children().children().children().children().children().children().children('.km1');
+	var km2 = $(this).parent().parent().parent().children().children().children().children().children().children().children('.km2');
+	var tkm = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totalkm');
+	var tmr = $(this).parent().parent().parent().children().children().children().children().children().children().children('.travelmeterrate');
+	var tt = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totaltravel');
+	// $(ms11).css({"color": "red", "border": "2px solid red"});
+	$(me11).text($(this).val());
+
+	var km1new = (($(this).val() * 100) / 100) - (($(ms11).text() * 100) / 100);
+	$(km1).text(km1new);
+
+	var tkmnew = (($(km2).text() * 100) / 100) + ((km1new * 100) / 100);
+	$(tkm).text(tkmnew);
+
+	var ttnew = ((tkmnew * 100) / 100) * (($(tmr).text() * 100) / 100);
+	$(tt).text(ttnew.toFixed(2));
+
+	//total per day section
+	var tlf = $(this).parent().parent().parent().children().children().children().children().children().children().children('.tlabourf');
+	var tla = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totallabourallowance');
+	var to = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totalovertime');
+	var ta = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totalaccommodation');
+	var tth = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totaltravelhour');
+
+	var tpdy = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totalperday');
+	var tpd = ( (($(tlf).text() * 100) / 100) + (($(tla).text() * 100) / 100) + (($(to).text() * 100) / 100) + (($(ta).text()* 100) / 100) + ((ttnew * 100) / 100) + (($(tth).text() * 100) / 100) );
+	$(tpdy).text(tpd.toFixed(2));
+
+	update_grandtotal();
+});
+
+$(document).on('keyup', '.meterstart2', function () {
+	var ms22 = $(this).parent().parent().parent().children().children().children().children().children().children().children('.meterstart22');
+	var me22 = $(this).parent().parent().parent().children().children().children().children().children().children().children('.meterend22');
+	var km1 = $(this).parent().parent().parent().children().children().children().children().children().children().children('.km1');
+	var km2 = $(this).parent().parent().parent().children().children().children().children().children().children().children('.km2');
+	var tkm = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totalkm');
+	var tmr = $(this).parent().parent().parent().children().children().children().children().children().children().children('.travelmeterrate');
+	var tt = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totaltravel');
+	// $(ms11).css({"color": "red", "border": "2px solid red"});
+	$(ms22).text($(this).val());
+
+	var km2new = (($(me22).text() * 100) / 100) - (($(this).val() * 100) / 100);
+	$(km2).text(km2new);
+
+	var tkmnew = (($(km1).text() * 100) / 100) + ((km2new * 100) / 100);
+	$(tkm).text(tkmnew);
+
+	var ttnew = ((tkmnew * 100) / 100) * (($(tmr).text() * 100) / 100);
+	$(tt).text(ttnew.toFixed(2));
+
+	//total per day section
+	var tlf = $(this).parent().parent().parent().children().children().children().children().children().children().children('.tlabourf');
+	var tla = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totallabourallowance');
+	var to = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totalovertime');
+	var ta = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totalaccommodation');
+	var tth = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totaltravelhour');
+
+	var tpdy = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totalperday');
+	var tpd = ( (($(tlf).text() * 100) / 100) + (($(tla).text() * 100) / 100) + (($(to).text() * 100) / 100) + (($(ta).text()* 100) / 100) + ((ttnew * 100) / 100) + (($(tth).text() * 100) / 100) );
+	$(tpdy).text(tpd.toFixed(2));
+
+	update_grandtotal();
+});
+
+$(document).on('keyup', '.meterend2', function () {
+	var ms22 = $(this).parent().parent().parent().children().children().children().children().children().children().children('.meterstart22');
+	var me22 = $(this).parent().parent().parent().children().children().children().children().children().children().children('.meterend22');
+	var km1 = $(this).parent().parent().parent().children().children().children().children().children().children().children('.km1');
+	var km2 = $(this).parent().parent().parent().children().children().children().children().children().children().children('.km2');
+	var tkm = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totalkm');
+	var tmr = $(this).parent().parent().parent().children().children().children().children().children().children().children('.travelmeterrate');
+	var tt = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totaltravel');
+	// $(ms11).css({"color": "red", "border": "2px solid red"});
+	$(me22).text($(this).val());
+
+	var km2new = (($(this).val() * 100) / 100) - (($(ms22).text() * 100) / 100);
+	$(km2).text(km2new);
+
+	var tkmnew = (($(km1).text() * 100) / 100) + ((km2new * 100) / 100);
+	$(tkm).text(tkmnew);
+
+	var ttnew = ((tkmnew * 100) / 100) * (($(tmr).text() * 100) / 100);
+	$(tt).text(ttnew.toFixed(2));
+
+	//total per day section
+	var tlf = $(this).parent().parent().parent().children().children().children().children().children().children().children('.tlabourf');
+	var tla = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totallabourallowance');
+	var to = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totalovertime');
+	var ta = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totalaccommodation');
+	var tth = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totaltravelhour');
+
+	var tpdy = $(this).parent().parent().parent().children().children().children().children().children().children().children('.totalperday');
+	var tpd = ( (($(tlf).text() * 100) / 100) + (($(tla).text() * 100) / 100) + (($(to).text() * 100) / 100) + (($(ta).text()* 100) / 100) + ((ttnew * 100) / 100) + (($(tth).text() * 100) / 100) );
+	$(tpdy).text(tpd.toFixed(2));
+
+	update_grandtotal();
+});
+
+$(document).on('change', '.fr_', function () {
+	var lfr = $(this).parent().parent().parent().children().children().children('.labourfr');
+	var tlf = $(this).parent().parent().parent().children().children().children('.tlabourf');
+	// $(lfr).css({"color": "red", "border": "2px solid red"});
+	// $(tlf).css({"color": "red", "border": "2px solid red"});
+	// console.log($(this).val());
+
+	var tlfnew = (($(this).val() * 100) / 100) * (($(lfr).text() * 100) / 100);
+	$(tlf).text(tlfnew.toFixed(2));
+
+	//total per day section
+	// var tlf = $(this).parent().parent().parent().children().children().children('.labourfr');
+	var tla = $(this).parent().parent().parent().children().children().children('.totallabourallowance');
+	var to = $(this).parent().parent().parent().children().children().children('.totalovertime');
+	var ta = $(this).parent().parent().parent().children().children().children('.totalaccommodation');
+	var tt = $(this).parent().parent().parent().children().children().children('.totaltravel');
+	var tth = $(this).parent().parent().parent().children().children().children('.totaltravelhour');
+
+	var tpdy = $(this).parent().parent().parent().parent().children().children().children().children('.totalperday');
+	// $(tpdy).css({"color": "red", "border": "2px solid red"});
+
+	var tpd = ( ((tlfnew * 100) / 100) + (($(tla).text() * 100) / 100) + (($(to).text() * 100) / 100) + (($(ta).text()* 100) / 100) + (($(tt).text() * 100) / 100) + (($(tth).text() * 100) / 100) );
+	$(tpdy).text(tpd.toFixed(2));
+
+	update_grandtotal();
+});
+
+$(document).on('keyup', '.allowanceleaderlabour', function () {
+	var anll = $(this).parent().parent().parent().children().children().children('.allowancenonleaderlabour');
+	var anl = $(this).parent().parent().parent().children().children().children('.allowancenonleader');
+	var wtv = $(this).parent().parent().parent().children().children().children('.workingtypevalue');
+	var tla = $(this).parent().parent().parent().children().children().children('.totallabourallowance');
+
+	// $(anll).css({"color": "red", "border": "2px solid red"});
+	// console.log($(this).val());
+
+	var tlanew = ( (($(this).val() * 100) / 100) + ((($(anll).val() * 100) / 100) * (($(anl).text() * 100) / 100)) ) / (($(wtv).val() * 100) / 100);
+	$(tla).text(tlanew.toFixed(2));
+
+	//total per day section
+	var tlf = $(this).parent().parent().parent().children().children().children('.tlabourf');
+	// var tla = $(this).parent().parent().parent().children().children().children('.totallabourallowance');
+	var to = $(this).parent().parent().parent().children().children().children('.totalovertime');
+	var ta = $(this).parent().parent().parent().children().children().children('.totalaccommodation');
+	var tt = $(this).parent().parent().parent().children().children().children('.totaltravel');
+	var tth = $(this).parent().parent().parent().children().children().children('.totaltravelhour');
+
+	var tpdy = $(this).parent().parent().parent().parent().children().children().children().children('.totalperday');
+	// $(tpdy).css({"color": "red", "border": "2px solid red"});
+
+	var tpd = ( (($(tlf).text() * 100) / 100) + ((tlanew * 100) / 100) + (($(to).text() * 100) / 100) + (($(ta).text()* 100) / 100) + (($(tt).text() * 100) / 100) + (($(tth).text() * 100) / 100) );
+	$(tpdy).text(tpd.toFixed(2));
+
+	update_grandtotal();
+});
+
+$(document).on('keyup', '.allowancenonleaderlabour', function () {
+	var all = $(this).parent().parent().parent().children().children().children('.allowanceleaderlabour');
+	var anl = $(this).parent().parent().parent().children().children().children('.allowancenonleader');
+	var wtv = $(this).parent().parent().parent().children().children().children('.workingtypevalue');
+	var tla = $(this).parent().parent().parent().children().children().children('.totallabourallowance');
+
+	// $(anll).css({"color": "red", "border": "2px solid red"});
+	// console.log($(this).val());
+
+	var tlanew = ( (($(all).val() * 100) / 100) + ((($(this).val() * 100) / 100) * (($(anl).text() * 100) / 100)) ) / (($(wtv).val() * 100) / 100);
+	$(tla).text(tlanew.toFixed(2));
+
+	//total per day section
+	var tlf = $(this).parent().parent().parent().children().children().children('.tlabourf');
+	// var tla = $(this).parent().parent().parent().children().children().children('.totallabourallowance');
+	var to = $(this).parent().parent().parent().children().children().children('.totalovertime');
+	var ta = $(this).parent().parent().parent().children().children().children('.totalaccommodation');
+	var tt = $(this).parent().parent().parent().children().children().children('.totaltravel');
+	var tth = $(this).parent().parent().parent().children().children().children('.totaltravelhour');
+
+	var tpdy = $(this).parent().parent().parent().parent().children().children().children().children('.totalperday');
+	// $(tpdy).css({"color": "red", "border": "2px solid red"});
+
+	var tpd = ( (($(tlf).text() * 100) / 100) + ((tlanew * 100) / 100) + (($(to).text() * 100) / 100) + (($(ta).text()* 100) / 100) + (($(tt).text() * 100) / 100) + (($(tth).text() * 100) / 100) );
+	$(tpdy).text(tpd.toFixed(2));
+
+	update_grandtotal();
+});
+
+$(document).on('change', '.workingtypevalue', function () {
+	var all = $(this).parent().parent().parent().children().children().children('.allowanceleaderlabour');
+	var anl = $(this).parent().parent().parent().children().children().children('.allowancenonleader');
+	var anll = $(this).parent().parent().parent().children().children().children('.allowancenonleaderlabour');
+	var tla = $(this).parent().parent().parent().children().children().children('.totallabourallowance');
+
+	// $(anll).css({"color": "red", "border": "2px solid red"});
+	// console.log($(this).val());
+
+	var tlanew = ( (($(all).val() * 100) / 100) + ((($(anll).val() * 100) / 100) * (($(anl).text() * 100) / 100)) ) / (($(this).val() * 100) / 100);
+	$(tla).text(tlanew.toFixed(2));
+
+	//total per day section
+	var tlf = $(this).parent().parent().parent().children().children().children('.tlabourf');
+	// var tla = $(this).parent().parent().parent().children().children().children('.totallabourallowance');
+	var to = $(this).parent().parent().parent().children().children().children('.totalovertime');
+	var ta = $(this).parent().parent().parent().children().children().children('.totalaccommodation');
+	var tt = $(this).parent().parent().parent().children().children().children('.totaltravel');
+	var tth = $(this).parent().parent().parent().children().children().children('.totaltravelhour');
+
+	var tpdy = $(this).parent().parent().parent().parent().children().children().children().children('.totalperday');
+	// $(tpdy).css({"color": "red", "border": "2px solid red"});
+
+	var tpd = ( (($(tlf).text() * 100) / 100) + ((tlanew * 100) / 100) + (($(to).text() * 100) / 100) + (($(ta).text()* 100) / 100) + (($(tt).text() * 100) / 100) + (($(tth).text() * 100) / 100) );
+	$(tpdy).text(tpd.toFixed(2));
+
+	update_grandtotal();
+});
+
+$(document).on('keyup', '.overtimehour', function () {
+	var tla1 = $(this).parent().parent().parent().children().children().children('.totallabourallowance1');
+	var oc1 = $(this).parent().parent().parent().children().children().children('.overtimeconstant1');
+	var oc2 = $(this).parent().parent().parent().children().children().children('.overtimeconstant2');
+	var to = $(this).parent().parent().parent().children().children().children('.totalovertime');
+
+	var tonew = (($(tla1).text() * 100) / 100) * (($(oc1).text() * 100) / 100) * (($(oc2).text() * 100) / 100) * (($(this).val() * 100) / 100);
+	$(to).text(tonew.toFixed(2));
+
+	//total per day section
+	var tlf = $(this).parent().parent().parent().children().children().children('.tlabourf');
+	var tla = $(this).parent().parent().parent().children().children().children('.totallabourallowance');
+	// var to = $(this).parent().parent().parent().children().children().children('.totalovertime');
+	var ta = $(this).parent().parent().parent().children().children().children('.totalaccommodation');
+	var tt = $(this).parent().parent().parent().children().children().children('.totaltravel');
+	var tth = $(this).parent().parent().parent().children().children().children('.totaltravelhour');
+
+	var tpdy = $(this).parent().parent().parent().parent().children().children().children().children('.totalperday');
+	// $(tpdy).css({"color": "red", "border": "2px solid red"});
+
+	var tpd = ( (($(tlf).text() * 100) / 100) + (($(tla).text() * 100) / 100) + ((tonew * 100) / 100) + (($(ta).text()* 100) / 100) + (($(tt).text() * 100) / 100) + (($(tth).text() * 100) / 100) );
+	$(tpdy).text(tpd.toFixed(2));
+
+	update_grandtotal();
+});
+
+$(document).on('keyup', '.accommodationrate', function () {
+	// var ar = $(this).parent().parent().parent().children().children().children('.accommodationrate');
+	var ac = $(this).parent().parent().parent().children().children().children('.accommodation');
+	var ta = $(this).parent().parent().parent().children().children().children('.totalaccommodation');
+
+	var tanew = (($(this).val() * 100) / 100) * (($(ac).val() * 100) / 100);
+	$(ta).text(tanew.toFixed(2));
+
+	//total per day section
+	var tlf = $(this).parent().parent().parent().children().children().children('.tlabourf');
+	var tla = $(this).parent().parent().parent().children().children().children('.totallabourallowance');
+	var to = $(this).parent().parent().parent().children().children().children('.totalovertime');
+	// var ta = $(this).parent().parent().parent().children().children().children('.totalaccommodation');
+	var tt = $(this).parent().parent().parent().children().children().children('.totaltravel');
+	var tth = $(this).parent().parent().parent().children().children().children('.totaltravelhour');
+
+	var tpdy = $(this).parent().parent().parent().parent().children().children().children().children('.totalperday');
+	// $(tpdy).css({"color": "red", "border": "2px solid red"});
+
+	var tpd = ( (($(tlf).text() * 100) / 100) + (($(tla).text() * 100) / 100) + (($(to).text() * 100) / 100) + ((tanew * 100) / 100) + (($(tt).text() * 100) / 100) + (($(tth).text() * 100) / 100) );
+	$(tpdy).text(tpd.toFixed(2));
+
+	update_grandtotal();
+});
+
+$(document).on('change', '.accommodation', function () {				// 
+	var ar = $(this).parent().parent().parent().children().children().children('.accommodationrate');
+	// var ac = $(this).parent().parent().parent().children().children().children('.accommodation');
+	var ta = $(this).parent().parent().parent().children().children().children('.totalaccommodation');
+
+	var tanew = (($(ar).val() * 100) / 100) * (($(this).val() * 100) / 100);
+	$(ta).text(tanew.toFixed(2));
+
+	//total per day section
+	var tlf = $(this).parent().parent().parent().children().children().children('.tlabourf');
+	var tla = $(this).parent().parent().parent().children().children().children('.totallabourallowance');
+	var to = $(this).parent().parent().parent().children().children().children('.totalovertime');
+	// var ta = $(this).parent().parent().parent().children().children().children('.totalaccommodation');
+	var tt = $(this).parent().parent().parent().children().children().children('.totaltravel');
+	var tth = $(this).parent().parent().parent().children().children().children('.totaltravelhour');
+
+	var tpdy = $(this).parent().parent().parent().parent().children().children().children().children('.totalperday');
+	// $(tpdy).css({"color": "red", "border": "2px solid red"});
+
+	var tpd = ( (($(tlf).text() * 100) / 100) + (($(tla).text() * 100) / 100) + (($(to).text() * 100) / 100) + ((tanew * 100) / 100) + (($(tt).text() * 100) / 100) + (($(tth).text() * 100) / 100) );
+	$(tpdy).text(tpd.toFixed(2));
+
+	update_grandtotal();
+});
+
+$(document).on('keyup', '.travelhour', function () {
+	var tla2 = $(this).parent().parent().parent().children().children().children('.totallabourallowance2');
+	var thc = $(this).parent().parent().parent().children().children().children('.travelhourconstant');
+	var tth = $(this).parent().parent().parent().children().children().children('.totaltravelhour');
+
+	var tthnew = (($(tla2).text() * 100) / 100) * (($(thc).text() * 100) / 100) * (($(this).val() * 100) / 100);
+	$(tth).text(tthnew.toFixed(2));
+
+	//total per day section
+	var tlf = $(this).parent().parent().parent().children().children().children('.tlabourf');
+	var tla = $(this).parent().parent().parent().children().children().children('.totallabourallowance');
+	var to = $(this).parent().parent().parent().children().children().children('.totalovertime');
+	var ta = $(this).parent().parent().parent().children().children().children('.totalaccommodation');
+	var tt = $(this).parent().parent().parent().children().children().children('.totaltravel');
+	// var tth = $(this).parent().parent().parent().children().children().children('.totaltravelhour');
+
+	var tpdy = $(this).parent().parent().parent().parent().children().children().children().children('.totalperday');
+	// $(tpdy).css({"color": "red", "border": "2px solid red"});
+
+	var tpd = ( (($(tlf).text() * 100) / 100) + (($(tla).text() * 100) / 100) + (($(to).text() * 100) / 100) + (($(ta).text() * 100) / 100) + (($(tt).text() * 100) / 100) + ((tthnew * 100) / 100) );
+	$(tpdy).text(tpd.toFixed(2));
 
 	update_grandtotal();
 });
@@ -723,7 +1141,7 @@ function update_grandtotal() {
 		// console.log(myNodelistp[ip].innerHTML);
 		// console.log(psum);
 	}
-	$('#grandtotal').text( psum );
+	$('#grandtotal').text( psum.toFixed(2) );
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -853,13 +1271,26 @@ $('#form').bootstrapValidator({
 			}
 		},
 @endfor
-		position_id: {
+
+@for($xc = 1; $xc < 2000; $xc++)
+		'srj[{{ $xc }}][date]': {
 			validators : {
 				notEmpty: {
 					message: 'Please insert this field. '
 				},
 			}
 		},
+		'srj[{{ $xc }}][labour]': {
+			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+				integer: {
+					message: 'The value is not an integer. '
+				},
+			}
+		},
+@endfor
 	}
 })
 .find('[name="reason"]')

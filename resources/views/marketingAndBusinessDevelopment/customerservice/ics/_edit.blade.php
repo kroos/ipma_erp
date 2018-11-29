@@ -394,6 +394,8 @@ $r67 = 1;
 $r68 = 1;
 $r69 = 1;
 $r70 = 1;
+
+$r71 = 1;
 ?>
 @foreach( $serviceReport->hasmanyjob()->get() as $srj )
 					<div class="rowjob">
@@ -448,7 +450,7 @@ $r70 = 1;
 							</div>
 
 							<div class="form-group {{ $errors->has('srj.*.*.time_end') ? 'has-error' : '' }}">
-								<input type="text" name="srj[{!! $r61++ !!}][1][time_end]" value="{!! (!empty($srjd->time_end))?$srjd->time_end:@$value !!}" id="te_{{ $r16++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Time End" />
+								<input type="text" name="srj[{!! $r61++ !!}][1][time_end]" value="{!! (!empty($srjd->time_end))?$srjd->time_end:@$value !!}" id="te_1_{{ $r16++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Time End" />
 							</div>
 							<input type="hidden" name="srj[{!! $r62++ !!}][1][return]" value="0">
 						</div>
@@ -518,7 +520,7 @@ $r70 = 1;
 												<input type="text" name="srj[{{ $r28++ }}][labour_non_leader]" value="{{ (!is_null($srj->labour_non_leader))?$srj->labour_non_leader:@$value }}" class="form-control form-control-sm allowancenonleaderlabour" id="non_leadership_{{ $r29++ }}" placeholder="Non Leader Rate (RM)">
 											</td>
 											<td>X</td>
-											<td><span class="allowancenonleader" id="non_leader_count{{ $r30++ }}">{{ $srj->labour - 1 }} Person</span></td>
+											<td><span class="allowancenonleader" id="non_leader_count{{ $r30++ }}">{{ $srj->labour - 1 }}</span> Person</td>
 											<td>)</td>
 											<td>/</td>
 											<td class="form-group {{ $errors->has('srj.*.working_type_value') ? ' has-error' : '' }}">
@@ -555,11 +557,11 @@ $r70 = 1;
 										<tr>
 											<td>Accommodation :</td>
 											<td class="form-group {{ $errors->has('srj.*.accommodation_rate') ? ' has-error' : '' }}">
-												<input type="text" name="srj[{{ $r37++ }}][accommodation_rate]" value="{{ (!is_null($srj->accommodation_rate))?$srj->accommodation_rate:NULL }}" class="form-control form-control-sm" id="accommodation_rate_{!! $r38++ !!}" placeholder="Accommodation Rate (RM)">
+												<input type="text" name="srj[{{ $r37++ }}][accommodation_rate]" value="{{ (!is_null($srj->accommodation_rate))?$srj->accommodation_rate:NULL }}" class="form-control form-control-sm accommodationrate" id="accommodation_rate_{!! $r38++ !!}" placeholder="Accommodation Rate (RM)">
 											</td>
 											<td>X</td>
 											<td>
-												<select name="srj[][accommodation]" id="accommodation_{!! $r39++ !!}" class="form-control form-control-sm" placeholder="Please choose">
+												<select name="srj[{!! $r71++ !!}][accommodation]" id="accommodation_{!! $r39++ !!}" class="form-control form-control-sm accommodation" placeholder="Please choose">
 													<option value="">Please choose</option>
 @foreach( ICSAccommodationRate::all() as $acr )
 													<option value="{!! $acr->value !!}" {!! ($acr->value == $srj->accommodation)?'selected':NULL !!} data-value="{!! $acr->value !!}">{!! $acr->accommodation_rate !!}</option>
@@ -574,8 +576,8 @@ $r70 = 1;
 											<td>Travel :</td>
 											<td colspan="2">
 												Meter Calculator:<br />
-												Trip : <span class="meterend11" id="me_1_{{ $r41++ }}">{{ $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_end }}</span> - <span class="meterstart11" id="ms_1_{{ $r42++ }}">{{ $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_start }}</span> = <span class="km1" id="total_go_1_{!! $r43++ !!}">{{ $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_end - $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_start }}</span> KM<br />
-												Return : <span class="meterend22" id="me_2_{{ $r44++ }}">{{ $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_end }}</span> - <span class="meterstart22" id="ms_2_{{ $r45++ }}">{{ $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_start }}</span> = <span class="km2" id="total_go_2_{!! $r46++ !!}">{{ $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_end - $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_start }}</span> KM<br />
+												Trip : <span class="meterend11" id="ms_1_{{ $r41++ }}">{{ $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_end }}</span> - <span class="meterstart11" id="me_1_{{ $r42++ }}">{{ $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_start }}</span> = <span class="km1" id="total_go_1_{!! $r43++ !!}">{{ $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_end - $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_start }}</span> KM<br />
+												Return : <span class="meterend22" id="ms_2_{{ $r44++ }}">{{ $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_end }}</span> - <span class="meterstart22" id="me_2_{{ $r45++ }}">{{ $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_start }}</span> = <span class="km2" id="total_go_2_{!! $r46++ !!}">{{ $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_end - $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_start }}</span> KM<br />
 												Total = <span class="totalkm" id="total_km_1_{!! $r47++ !!}">
 													{!! 
 															($srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_end - $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_start) + 
