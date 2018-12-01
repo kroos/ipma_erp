@@ -396,6 +396,8 @@ $r69 = 1;
 $r70 = 1;
 
 $r71 = 1;
+
+$gt = 0;
 ?>
 @foreach( $serviceReport->hasmanyjob()->get() as $srj )
 					<div class="rowjob">
@@ -413,7 +415,7 @@ $r71 = 1;
 							</div>
 
 							<div class="form-group {{ $errors->has('srj.*.job_perform') ? 'has-error' : '' }}">
-								<input type="textarea" name="srj[{{ $r5++ }}][job_perform]" value="{!! (!empty($srj->job_perform))?$srj->job_perform:@$value !!}" id="job_perform_{{ $r6++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Job Perform" />
+								<textarea type="textarea" name="srj[{{ $r5++ }}][job_perform]" value="{!! (!empty($srj->job_perform))?$srj->job_perform:@$value !!}" id="job_perform_{{ $r6++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Job Perform" />{{ $srj->job_perform }}</textarea>
 							</div>
 
 							<div class="form-group {{ $errors->has('srj.*.working_time_start') ? 'has-error' : '' }}">
@@ -427,7 +429,7 @@ $r71 = 1;
 						<br />
 @foreach( $srj->hasmanysrjobdetail()->where('return', '<>', 1)->get() as $srjd )
 						<div class="row col-sm-12 form-inline">
-							<div class="col-sm-1 text-primary"><small>Trip <i class="fas fa-arrow-right"></i> <i class="fas fa-map-marker-alt"></i></small></div>
+							<div class="col-sm-1 text-primary"><small>To <i class="fas fa-arrow-right"></i> <i class="fas fa-map-marker-alt"></i></small></div>
 
 							<div class="form-group {{ $errors->has('srj.*.*.date') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{!! $r56++ !!}][1][destination_start]" value="{!! (!empty($srjd->destination_start))?$srjd->destination_start:@$value !!}" id="ds_1_{{ $r11++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Destination Start" />
@@ -524,7 +526,7 @@ $r71 = 1;
 											<td>)</td>
 											<td>/</td>
 											<td class="form-group {{ $errors->has('srj.*.working_type_value') ? ' has-error' : '' }}">
-												<select name="srj[$r31++][working_type_value]" id="wtv_{!! $r70++ !!}" class="form-control form-control-sm workingtypevalue">
+												<select name="srj[{{ $r31++ }}][working_type_value]" id="wtv_{!! $r70++ !!}" class="form-control form-control-sm workingtypevalue">
 													<option value="">Please choose</option>
 @foreach( ICSWorkingType::all() as $wt )
 													<option value="{!! $wt->value !!}" {!! ($wt->value == $srj->working_type_value)?'selected':NULL !!} data-value="{!! $wt->value !!}">{!! $wt->working_type !!}</option>
@@ -647,6 +649,25 @@ $r71 = 1;
 +
 (($srj->labour_leader + (($srj->labour_non_leader)*($srj->labour - 1)) / ($srj->working_type_value)) * $srj->travel_hour_constant * $srj->travel_hour)
 													!!}
+<?php
+$gt += ($srj->labour * $srj->food_rate)
++
+($srj->labour_leader + (($srj->labour_non_leader)*($srj->labour - 1)) / ($srj->working_type_value))
++
+(($srj->labour_leader + (($srj->labour_non_leader)*($srj->labour - 1)) / ($srj->working_type_value)) * $srj->overtime_constant_1 * $srj->overtime_constant_2 * $srj->overtime_hour)
++
+($srj->accommodation * $srj->accommodation_rate)
++
+(
+	(
+		($srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_end - $srj->hasmanysrjobdetail()->where('return', '<>', 1)->first()->meter_start) + 
+		($srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_end - $srj->hasmanysrjobdetail()->where('return', 1)->first()->meter_start)
+		) * $srj->travel_meter_rate
+)
++
+(($srj->labour_leader + (($srj->labour_non_leader)*($srj->labour - 1)) / ($srj->working_type_value)) * $srj->travel_hour_constant * $srj->travel_hour);
+
+?>
 												</span>
 											</td>
 										</tr>
@@ -659,8 +680,8 @@ $r71 = 1;
 						<hr />
 					</div>
 @endforeach
-				<div class="col-sm-12">Grand Total <span class="float-right font-weight-bold">RM <span id="grandtotal"></span></span></div>
 				</div>
+				<div class="col-sm-12">Grand Total <span class="float-right font-weight-bold text-primary">RM <span id="grandtotal">{{ $gt }}</span></span></div>
 				<div class="row col-lg-12 add_job">
 					<span class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Job</span>
 				</div>
@@ -668,6 +689,180 @@ $r71 = 1;
 		</div>
 	</div>
 </div>
+
+<br />
+
+<div class="row">
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-header">Problem Detect On Site</div>
+			<div class="card-body">
+
+				<div class="container-fluid feedProb_wrap">
+<?php
+$p1 = 1;
+$p2 = 1;
+$p3 = 1;
+$p4 = 1;
+?>
+@if( $serviceReport->hasmanyfeedproblem()->get()->count() > 0 )
+@foreach($serviceReport->hasmanyfeedproblem()->get() as $srfP)
+					<div class="rowfeedProb">
+						<div class="row col-sm-12 form-inline">
+
+							<div class="col-sm-1 text-danger">
+									<i class="fas fa-trash delete_feedProb" aria-hidden="true" id="delete_feedProb_{!! $srfP->id !!}" data-id="{!! $srfP->id !!}"></i>
+							</div>
+							<div class="form-group {{ $errors->has('srfP.*.problem') ? 'has-error' : '' }}">
+								<textarea name="srfP[{{ $p1++ }}][problem]" value="{!! (!empty($srfP->problem))?$srfP->problem:@$value !!}" id="problem_{{ $p2++ }}" class="form-control" autocomplete="off" placeholder="Problem" />{{ $srfP->problem }}</textarea>
+							</div>
+							<div class="form-group {{ $errors->has('srfP.*.solution') ? 'has-error' : '' }}">
+								<textarea name="srfP[{{ $p3++ }}][solution]" value="{!! (!empty($srfP->solution))?$srfP->solution:@$value !!}" id="solution_{{ $p4++ }}" class="form-control" autocomplete="off" placeholder="Solution" />{{ $srfP->solution }}</textarea>
+							</div>
+						</div>
+					</div>
+@endforeach
+@else
+					<div class="rowfeedProb">
+						<div class="row col-sm-12 form-inline">
+
+							<div class="col-sm-1 text-danger">
+									<i class="fas fa-trash" aria-hidden="true" id="delete_feedProb_1" data-id="1"></i>
+							</div>
+							<div class="form-group {{ $errors->has('srfP.*.problem') ? 'has-error' : '' }}">
+								<textarea name="srfP[1][problem]" value="{!! @$value !!}" id="problem_1" class="form-control" autocomplete="off" placeholder="Problem" /></textarea>
+							</div>
+							<div class="form-group {{ $errors->has('srfP.*.solution') ? 'has-error' : '' }}">
+								<textarea name="srfP[1][solution]" value="{!! @$value !!}" id="solution_1" class="form-control" autocomplete="off" placeholder="Solution" /></textarea>
+							</div>
+						</div>
+					</div>
+@endif
+				</div>
+				<div class="row col-lg-12 add_feedProb">
+					<span class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add More Columns</span>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-header">Additional Request (Order Part, Request For Next Service)</div>
+			<div class="card-body">
+
+				<div class="container-fluid feedReq_wrap">
+<?php
+$p1 = 1;
+$p2 = 1;
+$p3 = 1;
+$p4 = 1;
+?>
+@if( $serviceReport->hasmanyfeedrequest()->get()->count() > 0 )
+@foreach($serviceReport->hasmanyfeedrequest()->get() as $srfR)
+					<div class="rowfeedReq">
+						<div class="row col-sm-12 form-inline">
+							<div class="col-sm-1 text-danger">
+									<i class="fas fa-trash delete_feedReq" aria-hidden="true" id="delete_feedReq_{!! $srfR->id !!}" data-id="{!! $srfR->id !!}"></i>
+							</div>
+							<div class="form-group {{ $errors->has('srfR.*.request') ? 'has-error' : '' }}">
+								<input type="text" name="srfR[{{ $p1++ }}][request]" value="{!! (!empty($srfR->request))?$srfR->request:@$value !!}" id="request_{{ $p2++ }}" class="form-control" autocomplete="off" placeholder="Additional Request" />
+							</div>
+							<div class="form-group {{ $errors->has('srfR.*.action') ? 'has-error' : '' }}">
+								<input type="text" name="srfR[{{ $p3++ }}][action]" value="{!! (!empty($srfR->action))?$srfR->action:@$value !!}" id="action_{{ $p4++ }}" class="form-control" autocomplete="off" placeholder="Action (Fill By Management)" />
+							</div>
+						</div>
+					</div>
+@endforeach
+@else
+					<div class="rowfeedReq">
+						<div class="row col-sm-12 form-inline">
+							<div class="col-sm-1 text-danger">
+									<i class="fas fa-trash " aria-hidden="true" id="delete_feedReq" data-id="1"></i>
+							</div>
+							<div class="form-group {{ $errors->has('srfR.*.problem') ? 'has-error' : '' }}">
+								<input type="text" name="srfR[1][problem]" value="{!! @$value !!}" id="request_1" class="form-control" autocomplete="off" placeholder="Additional Request" />
+							</div>
+							<div class="form-group {{ $errors->has('srfR.*.action') ? 'has-error' : '' }}">
+								<input type="text" name="srfR[1][action]" value="{!! @$value !!}" id="action_1" class="form-control" autocomplete="off" placeholder="Action (Fill By Management)" />
+							</div>
+						</div>
+					</div>
+@endif
+				</div>
+				<div class="row col-lg-12 add_feedReq">
+					<span class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add More Request</span>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<br />
+
+<div class="row">
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-header">Item Brought Back To IPMA</div>
+			<div class="card-body">
+
+				<div class="container-fluid feedItem_wrap">
+<?php
+$item1 = 1;
+$item2 = 1;
+$item3 = 1;
+$item4 = 1;
+?>
+@if( $serviceReport->hasmanyfeeditem()->get()->count() > 0 )
+@foreach($serviceReport->hasmanyfeeditem()->get() as $srfI)
+					<div class="rowfeedItem">
+						<div class="row col-sm-12 form-inline">
+							<div class="col-sm-1 text-danger">
+									<i class="fas fa-trash delete_feedItem" aria-hidden="true" id="delete_feedItem_{!! $srfI->id !!}" data-id="{!! $srfI->id !!}"></i>
+							</div>
+							<div class="form-group {{ $errors->has('srfI.*.item') ? 'has-error' : '' }}">
+								<input type="text" name="srfI[{{ $item1++ }}][item]" value="{!! (!empty($srfI->item))?$srfI->item:@$value !!}" id="item_{{ $item2++ }}" class="form-control" autocomplete="off" placeholder="Item" />
+							</div>
+							<div class="form-group {{ $errors->has('srfI.*.item_action') ? 'has-error' : '' }}">
+								<input type="text" name="srfI[{{ $item3++ }}][item_action]" value="{!! (!empty($srfI->item_action))?$srfI->item_action:@$value !!}" id="item_action_{{ $item4++ }}" class="form-control" autocomplete="off" placeholder="Action (Fill By Management)" />
+							</div>
+						</div>
+					</div>
+@endforeach
+@else
+					<div class="rowfeedItem">
+						<div class="row col-sm-12 form-inline">
+							<div class="col-sm-1 text-danger">
+									<i class="fas fa-trash " aria-hidden="true" id="delete_feedReq" data-id="1"></i>
+							</div>
+							<div class="form-group {{ $errors->has('srfI.*.item') ? 'has-error' : '' }}">
+								<input type="text" name="srfI[1][item]" value="{!! @$value !!}" id="item_1" class="form-control" autocomplete="off" placeholder="Item" />
+							</div>
+							<div class="form-group {{ $errors->has('srfI.*.item_action') ? 'has-error' : '' }}">
+								<input type="text" name="srfI[1][item_action]" value="{!! @$value !!}" id="item_action_1" class="form-control" autocomplete="off" placeholder="Action (Fill By Management)" />
+							</div>
+						</div>
+					</div>
+@endif
+				</div>
+				<div class="row col-lg-12 add_feedReq">
+					<span class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add More Request</span>
+				</div>
+
+			</div>	
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-header">Misc</div>
+			<div class="card-body">
+			</div>	
+		</div>
+	</div>
+</div>
+
 
 <br />
 <div class="form-group row">

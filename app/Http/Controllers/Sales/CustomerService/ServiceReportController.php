@@ -32,7 +32,7 @@ class ServiceReportController extends Controller
 	{
 		print_r($request->all());
 		$sr = \Auth::user()->belongtostaff->hasmanyservicereport()->create(
-			array_add($request->only(['date', 'charge_id', 'customer_id']), 'active', 1)
+			array_add($request->only(['date', 'charge_id', 'customer_id', 'inform_by']), 'active', 1)
 		);
 		$sr->hasmanycomplaint()->create( $request->only(['complaint', 'complaint_by']) );
 		$sr->hasmanyserial()->create( $request->only(['serial']) );

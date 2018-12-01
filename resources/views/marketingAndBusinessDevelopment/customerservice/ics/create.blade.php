@@ -87,6 +87,13 @@ $('#staff_id_1').select2({
 	width: '100%',
 });
 
+$('#inlineRadio2').select2({
+	placeholder: 'Please choose',
+	allowClear: true,
+	closeOnSelect: true,
+	width: '100%',
+});
+
 /////////////////////////////////////////////////////////////////////////////////////////
 // add position : add and remove row
 <?php
@@ -172,15 +179,19 @@ $('#form').bootstrapValidator({
 		},
 		serial: {
 			validators : {
-				notEmpty: {
-					message: 'This value cannot be empty. '
-				},
 				integer: {
 					message: 'The value is not an integer. '
 				},
 			}
 		},
 		customer_id: {
+			validators : {
+				notEmpty: {
+					message: 'Please choose. '
+				},
+			}
+		},
+		inform_by: {
 			validators : {
 				notEmpty: {
 					message: 'Please choose. '

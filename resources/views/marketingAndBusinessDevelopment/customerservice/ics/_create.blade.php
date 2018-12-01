@@ -23,22 +23,40 @@ $staff = Staff::where('active', 1)->get();
 				</div>
 			</div>
 
-			<div class="form-group">
-				<div class="form-check form-check-inline">
-					<label class="form-check-label" for="inlineRadio1">Charge : </label>
+			<div class="row">
+				<div class="col-6">
+					<div class="form-group">
+						<div class="form-check form-check-inline">
+							<label class="form-check-label" for="inlineRadio1">Charge : </label>
+						</div>
+					
+					@foreach($ch as $ci)
+						<div class="form-check form-check-inline">
+							<div class="pretty p-icon p-round p-smooth">
+								{{ Form::radio('charge_id', $ci->id, @$value, ['class' => 'form-control']) }}
+								<div class="state p-success">
+									<i class="icon mdi mdi-check"></i>
+									<label>{{ $ci->charge }}</label>
+								</div>
+							</div>
+						</div>
+					@endforeach
+					</div>
 				</div>
 
-@foreach($ch as $ci)
-				<div class="form-check form-check-inline">
-					<div class="pretty p-icon p-round p-smooth">
-						{{ Form::radio('charge_id', $ci->id, @$value, ['class' => 'form-control']) }}
-						<div class="state p-success">
-							<i class="icon mdi mdi-check"></i>
-							<label>{{ $ci->charge }}</label>
+				<div class="col-6">
+					<div class="row form-group">
+						<label class="col-4" for="inlineRadio2">This SR was informed by : </label>
+						<div class="col-8">
+							<select name="inform_by" id="inlineRadio2" class="form-control" placeholder="Please choose">
+								<option value="">Please choose</option>
+@foreach($staff as $st)
+								<option value="{!! $st->id !!}">{!! $st->hasmanylogin()->where('active', 1)->first()->username !!} {!! $st->name !!}</option>
+@endforeach
+							</select>
 						</div>
 					</div>
 				</div>
-@endforeach
 			</div>
 
 		</div>

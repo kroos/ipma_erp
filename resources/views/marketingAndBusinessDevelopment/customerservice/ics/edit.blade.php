@@ -30,7 +30,6 @@
 					<div class="card-header">Update Service Report</div>
 					<div class="card-body">
 {!! Form::model( $serviceReport, ['route' => ['serviceReport.update', $serviceReport->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
-
 @include('marketingAndBusinessDevelopment.customerservice.ics._edit')
 {{ Form::close() }}
 					</div>
@@ -81,10 +80,8 @@ $('#cust').select2({
 	width: '100%',
 });
 
-<?php
-$iiii = 1;
-?>
-@foreach( $serviceReport->hasmanyattendees()->get() as $sra )
+<?php $iiii = 1 ?>
+@foreach($serviceReport->hasmanyattendees()->get() as $sra)
 $('#staff_id_{!! $iiii++ !!}').select2({
 	placeholder: 'Please choose',
 	allowClear: true,
@@ -93,37 +90,30 @@ $('#staff_id_{!! $iiii++ !!}').select2({
 });
 @endforeach
 
-<?php
-$iiiii = 1;
-$iiiiii = 1;
-$iiiiiii = 1;
-$iiiiiiii = 1;
-$iiiiiiiii = 1;
-?>
-@foreach( $serviceReport->hasmanymodel()->get() as $srmo )
-$('#model_{!! $iiiii++ !!}').select2({
+@for ($iiiiii = ($serviceReport->hasmanymodel()->get()->count() > 0)?$serviceReport->hasmanymodel()->get()->count():1; $iiiiii <= $serviceReport->hasmanymodel()->get()->count() + 1; $iiiiii++)
+$('#model_{!! $iiiiii !!}').select2({
 	placeholder: 'Please choose',
 	allowClear: true,
 	closeOnSelect: true,
 	width: '100%',
 });
 
-$("#test_run_machine_{{ $iiiiii++ }}").keyup(function() {
+$("#test_run_machine_{{ $iiiiii }}").keyup(function() {
 	tch(this);
 });
 
-$("#serial_no_{{ $iiiiiii++ }}").keyup(function() {
+$("#serial_no_{{ $iiiiii }}").keyup(function() {
 	tch(this);
 });
 
-$("#test_capacity_{{ $iiiiiiii++ }}").keyup(function() {
+$("#test_capacity_{{ $iiiiii }}").keyup(function() {
 	tch(this);
 });
 
-$("#duration_{{ $iiiiiiiii++ }}").keyup(function() {
+$("#duration_{{ $iiiiii }}").keyup(function() {
 	tch(this);
 });
-@endforeach
+@endfor
 
 <?php
 $t = 1;
@@ -177,8 +167,24 @@ $('#fr_{{ $r14++ }}, #wtv_{{ $r15++ }}, #accommodation_{{ $r16++ }}').select2({
 	closeOnSelect: true,
 	width: '100%',
 });
-
 @endforeach
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// problem solution
+@for ($pf1 = ($serviceReport->hasmanyfeedproblem()->get()->count() > 0)?$serviceReport->hasmanyfeedproblem()->get()->count():1; $pf1 <= $serviceReport->hasmanyfeedproblem()->get()->count() + 1; $pf1++)
+$("#problem_{{ $pf1 }}, #solution_{{ $pf1 }}").keyup(function() {
+	tch(this);
+});
+@endfor
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// request action
+@for ($pfr2 = ($serviceReport->hasmanyfeedrequest()->get()->count() > 0)?$serviceReport->hasmanyfeedrequest()->get()->count():1; $pfr2 <= $serviceReport->hasmanyfeedrequest()->get()->count() + 1; $pfr2++)
+$("#request_{{ $pfr2 }}, #action_{{ $pfr2 }}").keyup(function() {
+	tch(this);
+});
+@endfor
+
 /////////////////////////////////////////////////////////////////////////////////////////
 // add serial : add and remove row
 
@@ -436,8 +442,8 @@ $(addbtnpart).click(function(){
 		});
 
 		//bootstrap validate
-		$('#form').bootstrapValidator('addField',	$('.rowmodel')	.find('[name="srp[' + xpart + '][part_accessory]"]'));
-		$('#form').bootstrapValidator('addField',	$('.rowmodel')	.find('[name="srp[' + xpart + '][qty]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowpart')	.find('[name="srp[' + xpart + '][part_accessory]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowpart')	.find('[name="srp[' + xpart + '][qty]"]'));
 	}
 });
 
@@ -445,7 +451,7 @@ $(wrappart).on("click",".remove_part", function(e){
 	var modelId = $(this).data('id');
 	//user click on remove text
 	e.preventDefault();
-	//var $row = $(this).parent('.rowmodel');
+	//var $row = $(this).parent('.rowpart');
 	var $row = $(this).parent().parent().parent();
 	var $option1 = $row.find('[name="srp[' + modelId + '][part_accessory]"]');
 	var $option2 = $row.find('[name="srp[' + modelId + '][qty]"]');
@@ -455,6 +461,422 @@ $(wrappart).on("click",".remove_part", function(e){
 	$('#form').bootstrapValidator('removeField', $option2);
 	console.log(xpart);
 	xpart--;
+})
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// add Job & Job Details : add and remove row
+var maxfjobnd	= 2000; //maximum input boxes allowed
+var addbtnjobn	= $(".add_job");
+var wrapjobnd	= $(".job_wrap");
+
+var xj = <?= ($serviceReport->hasmanyjob()->get()->count() == 0)?0:$serviceReport->hasmanyjob()->get()->count() ?>;
+$(addbtnjobn).click(function(){
+	// e.preventDefault();
+
+	//max input box allowed
+	if(xj < maxfjobnd){
+		xj++;
+		wrapjobnd.append(
+					'<div class="rowjob">' +
+						'<div class="row col-sm-12 form-inline">' +
+							'<div class="col-sm-1 text-danger">' +
+								'<i class="fas fa-trash remove_job" aria-hidden="true" id="remove_job_' + xj + '" data-id="' + xj + '"></i>' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srj.*.date') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srj[' + xj + '][date]" value="{!! @$value !!}" id="date_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Date" />' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srj.*.labour') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srj[' + xj + '][labour]" value="{!! @$value !!}" id="labour_' + xj + '" class="form-control form-control-sm labour_" autocomplete="off" placeholder="Labour Count" />' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srj.*.job_perform') ? 'has-error' : '' }}">' +
+								'<textarea name="srj[' + xj + '][job_perform]" value="{!! @$value !!}" id="job_perform_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Job Perform" /></textarea>' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srj.*.working_time_start') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srj[' + xj + '][working_time_start]" value="{!! @$value !!}" id="wts_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Working Time Start" />' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srj.*.working_time_end') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srj[' + xj + '][working_time_end]" value="{!! @$value !!}" id="wte_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Working Time End" />' +
+							'</div>' +
+						'</div>' +
+						'<br />' +
+						'<div class="row col-sm-12 form-inline">' +
+							'<div class="col-sm-1 text-primary"><small>To <i class="fas fa-arrow-right"></i> <i class="fas fa-map-marker-alt"></i></small></div>' +
+							'<div class="form-group {{ $errors->has('srj.*.*.date') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srj[' + xj + '][1][destination_start]" value="{!! @$value !!}" id="ds_1_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Destination Start" />' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srj.*.*.destination_end') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srj[' + xj + '][1][destination_end]" value="{!! @$value !!}" id="de_1_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Destination End" />' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srj.*.*.meter_start') ? 'has-error' : '' }}">' +
+								'<input type="textarea" name="srj[' + xj + '][1][meter_start]" value="{!! @$value !!}" id="ms_1_' + xj + '" class="form-control form-control-sm meterstart1" autocomplete="off" placeholder="Meter Start" />' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srj.*.*.meter_end') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srj[' + xj + '][1][meter_end]" value="{!! @$value !!}" id="me_1_' + xj + '" class="form-control form-control-sm meterend1" autocomplete="off" placeholder="Meter End" />' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srj.*.*.time_start') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srj[' + xj + '][1][time_start]" value="{!! @$value !!}" id="ts_1_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Time Start" />' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srj.*.*.time_end') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srj[' + xj + '][1][time_end]" value="{!! @$value !!}" id="te_1_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Time End" />' +
+							'</div>' +
+							'<input type="hidden" name="srj[' + xj + '][1][return]" value="0">' +
+						'</div>' +
+						'<div class="row col-sm-12 form-inline">' +
+							'<div class="col-sm-1 text-primary"><small>Return <i class="fas fa-map-marker-alt"></i> <i class="fas fa-undo"></i></small></div>' +
+							'<div class="form-group {{ $errors->has('srjd.*.date') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srj[' + xj + '][2][destination_start]" value="{!! @$value !!}" id="ds_2_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Destination Start" />' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srjd.*.destination_end') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srj[' + xj + '][2][destination_end]" value="{!! @$value !!}" id="de_2_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Destination End" />' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srjd.*.meter_start') ? 'has-error' : '' }}">' +
+								'<input type="textarea" name="srj[' + xj + '][2][meter_start]" value="{!! @$value !!}" id="ms_2_' + xj + '" class="form-control form-control-sm meterstart2" autocomplete="off" placeholder="Meter Start" />' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srjd.*.meter_end') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srj[' + xj + '][2][meter_end]" value="{!! @$value !!}" id="me_2_' + xj + '" class="form-control form-control-sm meterend2" autocomplete="off" placeholder="Meter End" />' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srjd.*.time_start') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srj[' + xj + '][2][time_start]" value="{!! @$value !!}" id="ts_2_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Time Start" />' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srjd.*.time_end') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srj[' + xj + '][2][time_end]" value="{!! @$value !!}" id="te_2_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Time End" />' +
+							'</div>' +
+							'<input type="hidden" name="srj[' + xj + '][2][return]" value="1">' +
+						'</div>' +
+						'<br />' +
+'<!-- inserting FLOAT TH -->' +
+						'<div class="col-sm-12">' +
+						'<!-- <div class="col-sm-12 border border-primary"> -->' +
+							'<small>' +
+								'<!-- insert food -->' +
+								'<table class="table table-hover" style="font-size:12px">' +
+									'<tbody>' +
+										'<tr>' +
+											'<td>Food : </td>' +
+											'<td class="form-group {{ $errors->has('srj.*.food_rate') ? ' has-error' : '' }}">' +
+												'<select name="srj[' + xj + '][food_rate]" id="fr_' + xj + '" class="form-control form-control-sm fr_" placeholder="Please choose">' +
+													'<option value="">Please choose</option>' +
+@foreach( \App\Model\ICSFoodRate::all() as $fr )
+													'<option value="{!! $fr->value !!}" data-value="{{ $fr->value }}">{!! $fr->food_rate !!}</option>' +
+@endforeach
+												'</select>' +
+											'</td>' +
+											'<td>X</td>' +
+											'<td><span class="labourfr" id="lab_' + xj + '">0</span> Person</td>' +
+											'<td colspan="6">&nbsp;</td>' +
+											'<td>=</td>' +
+											'<td class="font-weight-bold">RM <span class="tlabourf" id="total_food_' + xj + '">0.00</span></td>' +
+										'</tr>' +
+										'<tr>' +
+											'<td>Labour :</td>' +
+											'<td class="form-group {{ $errors->has('srj.*.labour_leader') ? ' has-error' : '' }}">' +
+												'<input type="text" name="srj[' + xj + '][labour_leader]" value="{{ @$value }}" class="form-control form-control-sm allowanceleaderlabour" id="leadership_' + xj + '" placeholder="Leader Rate (MYR)">' +
+											'</td>' +
+											'<td>+</td>' +
+											'<td>(</td>' +
+											'<td class="form-group {{ $errors->has('srj.*.labour_non_leader') ? ' has-error' : '' }}">' +
+												'<input type="text" name="srj[' + xj + '][labour_non_leader]" value="{{ @$value }}" class="form-control form-control-sm allowancenonleaderlabour" id="non_leadership_' + xj + '" placeholder="Non Leader Rate (RM)">' +
+											'</td>' +
+											'<td>X</td>' +
+											'<td><span class="allowancenonleader" id="non_leader_count_' + xj + '">0</span> Person</td>' +
+											'<td>)</td>' +
+											'<td>/</td>' +
+											'<td class="form-group {{ $errors->has('srj.*.working_type_value') ? ' has-error' : '' }}">' +
+												'<select name="srj[' + xj + '][working_type_value]" id="wtv_' + xj + '" class="form-control form-control-sm workingtypevalue">' +
+													'<option value="">Please choose</option>' +
+@foreach( \App\Model\ICSWorkingType::all() as $wt )
+													'<option value="{!! $wt->value !!}" data-value="{!! $wt->value !!}">{!! $wt->working_type !!}</option>' +
+@endforeach
+												'</select>' +
+											'</td>' +
+											'<td>=</td>' +
+											'<td class="font-weight-bold">' +
+												'RM <span class="totallabourallowance" id="total_labour_' + xj + '">0.00</span>' +
+											'</td>' +
+										'</tr>' +
+										'<tr>' +
+											'<td>Overtime :</td>' +
+											'<td>' +
+												'RM <span class="totallabourallowance1" id="total_labour_' + xj + '">0.00</span>' +
+											'</td>' +
+											'<td>X</td>' +
+											'<td><span class="overtimeconstant1">{{ \App\Model\ICSFloatthConstant::where('active', 1)->first()->overtime_constant_1 }}</span> X <span class="overtimeconstant2">{{ \App\Model\ICSFloatthConstant::where('active', 1)->first()->overtime_constant_2 }}</span></td>' +
+											'<td>X</td>' +
+											'<td class="form-group {{ $errors->has('srj.*.overtime_hour') ? ' has-error' : '' }}">' +
+												'<input type="text" name="srj[' + xj + '][overtime_hour]" value="{{ @$value }}" class="form-control form-control-sm overtimehour" id="overtime_hour_' + xj + '" placeholder="Hour">' +
+											'</td>' +
+											'<td>hour</td>' +
+											'<td colspan="3">&nbsp;</td>' +
+											'<td>=</td>' +
+											'<td class="font-weight-bold">' +
+												'RM <span class="totalovertime" id="total_overtime_' + xj + '">0.00</span>' +
+											'</td>' +
+										'</tr>' +
+										'<tr>' +
+											'<td>Accommodation :</td>' +
+											'<td class="form-group {{ $errors->has('srj.*.accommodation_rate') ? ' has-error' : '' }}">' +
+												'<input type="text" name="srj[' + xj + '][accommodation_rate]" value="{{ @$value }}" class="form-control form-control-sm accommodationrate" id="accommodation_rate_' + xj + '" placeholder="Accommodation Rate (RM)">' +
+											'</td>' +
+											'<td>X</td>' +
+											'<td>' +
+												'<select name="srj[' + xj + '][accommodation]" id="accommodation_' + xj + '" class="form-control form-control-sm accommodation" placeholder="Please choose">' +
+													'<option value="">Please choose</option>' +
+@foreach( \App\Model\ICSAccommodationRate::all() as $acr )
+													'<option value="{!! $acr->value !!}" data-value="{!! $acr->value !!}">{!! $acr->accommodation_rate !!}</option>' +
+@endforeach
+												'</select>' +
+											'</td>' +
+											'<td colspan="6">&nbsp;</td>' +
+											'<td>=</td>' +
+											'<td class="font-weight-bold">RM <span class="totalaccommodation" id="total_accommodation_' + xj + '">0.00</span></td>' +
+										'</tr>' +
+										'<tr>' +
+											'<td>Travel :</td>' +
+											'<td colspan="2">' +
+												'Meter Calculator:<br />' +
+												'Trip : <span class="meterend11" id="ms_1_' + xj + '">0</span> - <span class="meterstart11" id="me_1_' + xj + '">0</span> = <span class="km1" id="total_go_1_' + xj + '">0</span> KM<br />' +
+												'Return : <span class="meterend22" id="ms_2_' + xj + '">0</span> - <span class="meterstart22" id="me_2_' + xj + '">0</span> = <span class="km2" id="total_go_2_' + xj + '">0</span> KM<br />' +
+												'Total = <span class="totalkm" id="total_km_1_' + xj + '">0</span> KM' +
+											'</td>' +
+											'<td>X</td>' +
+											'<td><span class="travelmeterrate" id="tmr_' + xj + '">{!! \App\Model\ICSFloatthConstant::where('active', 1)->first()->travel_meter_rate !!}</span></td>' +
+											'<td colspan="5"></td>' +
+											'<td>=</td>' +
+											'<td class="font-weight-bold">' +
+												'RM <span class="totaltravel" id="total_meter_' + xj + '">0.00</span>' +
+											'</td>' +
+										'</tr>' +
+										'<tr>' +
+											'<td>Travel Hour :</td>' +
+											'<td>RM' +
+												 '<span class="totallabourallowance2" id="total_labour_th_' + xj + '">0.00</span>' +
+											'</td>' +
+											'<td>X</td>' +
+											'<td>' +
+												'<span class="travelhourconstant" id="th_constant_' + xj + '">{{ \App\Model\ICSFloatthConstant::where('active', 1)->first()->travel_hour_rate }}</span>' +
+											'</td>' +
+											'<td>X</td>' +
+											'<td class="form-group {{ $errors->has('srj.*.travel_hour') ? ' has-error' : '' }}">' +
+												'<input type="text" name="srj[' + xj + '][travel_hour]" value="{!! @$value !!}" id="travel_hour_' + xj + '" class="form-control form-control-sm travelhour" placeholder="Travel Hour">' +
+											'</td>' +
+											'<td>hour</td>' +
+											'<td colspan="3">&nbsp;</td>' +
+											'<td>=</td>' +
+											'<td class="font-weight-bold">RM ' +
+												'<span class="totaltravelhour" id="total_th_' + xj + '">0.00</span>' +
+											'</td>' +
+										'</tr>' +
+									'</tbody>' +
+									'<tfoot>' +
+										'<tr>' +
+											'<td colspan="10">Total Per Day :</td>' +
+											'<td>=</td>' +
+											'<td>RM ' +
+												'<span class="text-primary font-weight-bold totalperday" id="total_per_day_' + xj + '">0.00</span>' +
+											'</td>' +
+										'</tr>' +
+									'</tfoot>' +
+								'</table>' +
+							'</small>' +
+						'</div>' +
+						'<hr />' +
+					'</div>'
+		); //add input box
+
+		$('#date_' + xj ).datetimepicker({
+			format:'YYYY-MM-DD',
+			useCurrent: false,
+		})
+		.on('dp.change dp.show dp.update', function() {
+			$('#form').bootstrapValidator('revalidateField', 'srj[' + xj + '][date]');
+		});
+		
+		$('#wts_' + xj + ', #wte_' + xj + ', #ts_1_' + xj + ', #te_1_' + xj + ', #ts_2_' + xj + ', #te_2_' + xj).datetimepicker({
+			format: 'h:mm A',
+			useCurrent: false,
+		});
+		
+		$('#job_perform_' + xj + ', #ds_1_' + xj + ', #de_1_' + xj + ', #ds_2_' + xj + ', #de_2_' + xj ).keyup(function() {
+			uch(this);
+		});
+		
+		$('#fr_' + xj + ', #wtv_' + xj + ', #accommodation_' + xj ).select2({
+			placeholder: 'Please choose',
+			allowClear: true,
+			closeOnSelect: true,
+			width: '100%',
+		});
+
+		//bootstrap validate
+		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][date]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][labour]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][1][meter_start]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][2][meter_start]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][1][meter_end]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][2][meter_end]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][food_rate]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][labour_leader]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][labour_non_leader]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][working_type_value]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][overtime_hour]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][accommodation_rate]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][accommodation]"]'));
+		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][travel_hour]"]'));
+	}
+});
+
+$(wrapjobnd).on("click",".remove_job", function(e){
+	var jobndId = $(this).data('id');
+
+	//user click on remove text
+	e.preventDefault();
+
+	var $row = $(this).parent().parent().parent();
+	var $option1 = $row.find('[name="srj[' + jobndId + '][date]"]');
+	var $option2 = $row.find('[name="srj[' + jobndId + '][labour]"]');
+	var $option3 = $row.find('[name="srj[' + jobndId + '][1][meter_start]"]');
+	var $option4 = $row.find('[name="srj[' + jobndId + '][2][meter_start]"]');
+	var $option5 = $row.find('[name="srj[' + jobndId + '][1][meter_end]"]');
+	var $option6 = $row.find('[name="srj[' + jobndId + '][2][meter_end]"]');
+	var $option7 = $row.find('[name="srj[' + jobndId + '][food_rate]"]');
+	var $option8 = $row.find('[name="srj[' + jobndId + '][labour_leader]"]');
+	var $option9 = $row.find('[name="srj[' + jobndId + '][labour_non_leader]"]');
+	var $option10 = $row.find('[name="srj[' + jobndId + '][working_type_value]"]');
+	var $option11 = $row.find('[name="srj[' + jobndId + '][overtime_hour]"]');
+	var $option12 = $row.find('[name="srj[' + jobndId + '][accommodation_rate]"]');
+	var $option13 = $row.find('[name="srj[' + jobndId + '][accommodation]"]');
+	var $option14 = $row.find('[name="srj[' + jobndId + '][travel_hour]"]');
+
+	// $($row).css({"color": "red", "border": "2px solid red"});
+
+	$('#form').bootstrapValidator('removeField', $option1);
+	$('#form').bootstrapValidator('removeField', $option2);
+	$('#form').bootstrapValidator('removeField', $option3);
+	$('#form').bootstrapValidator('removeField', $option4);
+	$('#form').bootstrapValidator('removeField', $option5);
+	$('#form').bootstrapValidator('removeField', $option6);
+	$('#form').bootstrapValidator('removeField', $option7);
+	$('#form').bootstrapValidator('removeField', $option8);
+	$('#form').bootstrapValidator('removeField', $option9);
+	$('#form').bootstrapValidator('removeField', $option10);
+	$('#form').bootstrapValidator('removeField', $option11);
+	$('#form').bootstrapValidator('removeField', $option12);
+	$('#form').bootstrapValidator('removeField', $option13);
+	$('#form').bootstrapValidator('removeField', $option14);
+	$row.remove();
+	xj--;
+})
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// add problem and solution : add and remove row
+
+var maxffeedProb	= 10; //maximum input boxes allowed
+var addbtnfeedProb	= $(".add_feedProb");
+var wrapfeedProb	= $(".feedProb_wrap");
+
+var xfp = <?=($serviceReport->hasmanyfeedproblem()->get()->count() == 0)?1:$serviceReport->hasmanyfeedproblem()->get()->count() ?>;
+$(addbtnfeedProb).click(function(){
+	// e.preventDefault();
+
+	//max input box allowed
+	if(xfp < maxffeedProb){
+		xfp++;
+		wrapfeedProb.append(
+					'<div class="rowfeedProb">' +
+						'<div class="row col-sm-12 form-inline">' +
+							'<div class="col-sm-1 text-danger">' +
+									'<i class="fas fa-trash remove_feedProb" aria-hidden="true" id="delete_feedProb_' + xfp + '" data-id="' + xfp + '"></i>' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srfP.*.problem') ? 'has-error' : '' }}">' +
+								'<textarea name="srfP[' + xfp + '][problem]" value="{!! @$value !!}" id="problem_' + xfp + '" class="form-control" autocomplete="off" placeholder="Problem" /></textarea>' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srfP.*.solution') ? 'has-error' : '' }}">' +
+								'<textarea name="srfP[' + xfp + '][solution]" value="{!! @$value !!}" id="solution_' + xfp + '" class="form-control" autocomplete="off" placeholder="Solution" /></textarea>' +
+							'</div>' +
+						'</div>' +
+					'</div>'
+		); //add input box
+		$('#problem_' + xfp + ', #solution_' + xfp).keyup(function() {
+			tch(this);
+		});
+
+		//bootstrap validate
+		$('#form').bootstrapValidator('addField', $('.rowfeedProb').find('[name="srfP[' + xfp + '][problem]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowfeedProb').find('[name="srfP[' + xfp + '][solution]"]'));
+	}
+});
+
+$(wrapfeedProb).on("click",".remove_feedProb", function(e){
+	//user click on remove text
+	var fprobId = $(this).data('id');
+	e.preventDefault();
+	var $row = $(this).parent().parent();
+
+	var $optsfprob1 = $row.find('[name="srfP[' + fprobId + '][problem]"]');
+	var $optsfprob2 = $row.find('[name="srfP[' + fprobId + '][solution]"]');
+
+	// $($optsfprob1).css({"color": "red", "border": "2px solid red"});
+
+	$('#form').bootstrapValidator('removeField', $optsfprob1 );
+	$('#form').bootstrapValidator('removeField', $optsfprob2 );
+	$row.remove();
+	xfp--;
+})
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// add request and action : add and remove row
+
+var maxffeedReq	= 10; //maximum input boxes allowed
+var addbtnfeedReq	= $(".add_feedReq");
+var wrapfeedReq	= $(".feedReq_wrap");
+
+var xfr = <?=($serviceReport->hasmanyfeedrequest()->get()->count() == 0)?1:$serviceReport->hasmanyfeedrequest()->get()->count() ?>;
+$(addbtnfeedReq).click(function(){
+	// e.preventDefault();
+
+	//max input box allowed
+	if(xfr < maxffeedReq){
+		xfr++;
+		wrapfeedReq.append(
+					'<div class="rowfeedReq">' +
+						'<div class="row col-sm-12 form-inline">' +
+							'<div class="col-sm-1 text-danger">' +
+									'<i class="fas fa-trash remove_feedReq" aria-hidden="true" id="delete_feedReq_' + xfr + '" data-id="' + xfr + '"></i>' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srfR.*.request') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srfR[' + xfr + '][request]" value="{!! @$value !!}" id="request_' + xfr + '" class="form-control" autocomplete="off" placeholder="Additional Request" />' +
+							'</div>' +
+							'<div class="form-group {{ $errors->has('srfR.*.action') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srfR[' + xfr + '][action]" value="{!! @$value !!}" id="action_' + xfr + '" class="form-control" autocomplete="off" placeholder="Action (Fill By Management)" />' +
+							'</div>' +
+						'</div>' +
+					'</div>'
+		); //add input box
+		$('#request_' + xfr + ', #action_' + xfr).keyup(function() {
+			tch(this);
+		});
+
+		//bootstrap validate
+		$('#form').bootstrapValidator('addField', $('.rowfeedReq').find('[name="srfR[' + xfr + '][request]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowfeedReq').find('[name="srfR[' + xfr + '][action]"]'));
+	}
+});
+
+$(wrapfeedReq).on("click",".remove_feedReq", function(e){
+	//user click on remove text
+	var fReqId = $(this).data('id');
+	e.preventDefault();
+	var $row = $(this).parent().parent();
+
+	var $optsfReq1 = $row.find('[name="srfR[' + fReqId + '][request]"]');
+	var $optsfReq2 = $row.find('[name="srfR[' + fReqId + '][action]"]');
+
+	// $($optsfReq1).css({"color": "red", "border": "2px solid red"});
+
+	$('#form').bootstrapValidator('removeField', $optsfReq1 );
+	$('#form').bootstrapValidator('removeField', $optsfReq2 );
+	$row.remove();
+    xfr--;
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -712,6 +1134,108 @@ function SwalDeleteJob(jobId){
 	});
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row job feed prob
+$(document).on('click', '.delete_feedProb', function(e){
+	var feedProbId = $(this).data('id');
+	SwalDeleteFeedProblem(feedProbId);
+	e.preventDefault();
+});
+
+function SwalDeleteFeedProblem(feedProbId){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('srFeedProb') }}' + '/' + feedProbId,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: feedProbId,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_feedProb_' + feedProbId).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row job feed request
+$(document).on('click', '.delete_feedReq', function(e){
+	var feedReqId = $(this).data('id');
+	SwalDeleteFeedRequest(feedReqId);
+	e.preventDefault();
+});
+
+function SwalDeleteFeedRequest(feedReqId){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('srFeedReq') }}' + '/' + feedReqId,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: feedReqId,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_feedReq_' + feedReqId).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // counting on service report job
 // get all the variable -> start with labour
@@ -947,11 +1471,35 @@ $(document).on('keyup', '.allowanceleaderlabour', function () {
 	var wtv = $(this).parent().parent().parent().children().children().children('.workingtypevalue');
 	var tla = $(this).parent().parent().parent().children().children().children('.totallabourallowance');
 
-	// $(anll).css({"color": "red", "border": "2px solid red"});
+	var tla1 = $(this).parent().parent().parent().children().children().children('.totallabourallowance1');
+	var tla2 = $(this).parent().parent().parent().children().children().children('.totallabourallowance2');
+
+	// $(tla1).css({"color": "red", "border": "2px solid red"});
+	// $(tla2).css({"color": "red", "border": "2px solid red"});
 	// console.log($(this).val());
 
 	var tlanew = ( (($(this).val() * 100) / 100) + ((($(anll).val() * 100) / 100) * (($(anl).text() * 100) / 100)) ) / (($(wtv).val() * 100) / 100);
 	$(tla).text(tlanew.toFixed(2));
+	$(tla1).text(tlanew.toFixed(2));
+	$(tla2).text(tlanew.toFixed(2));
+
+	// overtime section
+	var oc1 = $(this).parent().parent().parent().children().children().children('.overtimeconstant1');
+	var oc1 = $(this).parent().parent().parent().children().children().children('.overtimeconstant1');
+	var oc2 = $(this).parent().parent().parent().children().children().children('.overtimeconstant2');
+	var oh = $(this).parent().parent().parent().children().children().children('.overtimehour');
+	var to = $(this).parent().parent().parent().children().children().children('.totalovertime');
+
+	var totalovertimee = ((($(tla1).text() * 100)/100) * ((( $(oc1).text() ) * 100 ) /100) * ((( $(oc2).text() ) * 100 ) /100) * (( $(oh).val() * 100) / 100))
+	$(to).text(totalovertimee.toFixed(2));
+
+	// travel hour section
+	var thc = $(this).parent().parent().parent().children().children().children('.travelhourconstant');
+	var th = $(this).parent().parent().parent().children().children().children('.travelhour');
+	var tth = $(this).parent().parent().parent().children().children().children('.totaltravelhour');
+
+	var totaltravho = ((($(tla2).text() * 100) / 100) * (($(thc).text() * 100) / 100) * (($(th).val() * 100) / 100));
+	$(tth).text(totaltravho.toFixed(2));
 
 	//total per day section
 	var tlf = $(this).parent().parent().parent().children().children().children('.tlabourf');
@@ -975,12 +1523,34 @@ $(document).on('keyup', '.allowancenonleaderlabour', function () {
 	var anl = $(this).parent().parent().parent().children().children().children('.allowancenonleader');
 	var wtv = $(this).parent().parent().parent().children().children().children('.workingtypevalue');
 	var tla = $(this).parent().parent().parent().children().children().children('.totallabourallowance');
+	var tla1 = $(this).parent().parent().parent().children().children().children('.totallabourallowance1');
+	var tla2 = $(this).parent().parent().parent().children().children().children('.totallabourallowance2');
 
 	// $(anll).css({"color": "red", "border": "2px solid red"});
 	// console.log($(this).val());
 
 	var tlanew = ( (($(all).val() * 100) / 100) + ((($(this).val() * 100) / 100) * (($(anl).text() * 100) / 100)) ) / (($(wtv).val() * 100) / 100);
 	$(tla).text(tlanew.toFixed(2));
+	$(tla1).text(tlanew.toFixed(2));
+	$(tla2).text(tlanew.toFixed(2));
+
+	// overtime section
+	var oc1 = $(this).parent().parent().parent().children().children().children('.overtimeconstant1');
+	var oc1 = $(this).parent().parent().parent().children().children().children('.overtimeconstant1');
+	var oc2 = $(this).parent().parent().parent().children().children().children('.overtimeconstant2');
+	var oh = $(this).parent().parent().parent().children().children().children('.overtimehour');
+	var to = $(this).parent().parent().parent().children().children().children('.totalovertime');
+
+	var totalovertimee = ((($(tla1).text() * 100)/100) * ((( $(oc1).text() ) * 100 ) /100) * ((( $(oc2).text() ) * 100 ) /100) * (( $(oh).val() * 100) / 100))
+	$(to).text(totalovertimee.toFixed(2));
+
+	// travel hour section
+	var thc = $(this).parent().parent().parent().children().children().children('.travelhourconstant');
+	var th = $(this).parent().parent().parent().children().children().children('.travelhour');
+	var tth = $(this).parent().parent().parent().children().children().children('.totaltravelhour');
+
+	var totaltravho = ((($(tla2).text() * 100) / 100) * (($(thc).text() * 100) / 100) * (($(th).val() * 100) / 100));
+	$(tth).text(totaltravho.toFixed(2));
 
 	//total per day section
 	var tlf = $(this).parent().parent().parent().children().children().children('.tlabourf');
@@ -1004,12 +1574,34 @@ $(document).on('change', '.workingtypevalue', function () {
 	var anl = $(this).parent().parent().parent().children().children().children('.allowancenonleader');
 	var anll = $(this).parent().parent().parent().children().children().children('.allowancenonleaderlabour');
 	var tla = $(this).parent().parent().parent().children().children().children('.totallabourallowance');
+	var tla1 = $(this).parent().parent().parent().children().children().children('.totallabourallowance1');
+	var tla2 = $(this).parent().parent().parent().children().children().children('.totallabourallowance2');
 
 	// $(anll).css({"color": "red", "border": "2px solid red"});
 	// console.log($(this).val());
 
 	var tlanew = ( (($(all).val() * 100) / 100) + ((($(anll).val() * 100) / 100) * (($(anl).text() * 100) / 100)) ) / (($(this).val() * 100) / 100);
 	$(tla).text(tlanew.toFixed(2));
+	$(tla1).text(tlanew.toFixed(2));
+	$(tla2).text(tlanew.toFixed(2));
+
+	// overtime section
+	var oc1 = $(this).parent().parent().parent().children().children().children('.overtimeconstant1');
+	var oc1 = $(this).parent().parent().parent().children().children().children('.overtimeconstant1');
+	var oc2 = $(this).parent().parent().parent().children().children().children('.overtimeconstant2');
+	var oh = $(this).parent().parent().parent().children().children().children('.overtimehour');
+	var to = $(this).parent().parent().parent().children().children().children('.totalovertime');
+
+	var totalovertimee = ((($(tla1).text() * 100)/100) * ((( $(oc1).text() ) * 100 ) /100) * ((( $(oc2).text() ) * 100 ) /100) * (( $(oh).val() * 100) / 100))
+	$(to).text(totalovertimee.toFixed(2));
+
+	// travel hour section
+	var thc = $(this).parent().parent().parent().children().children().children('.travelhourconstant');
+	var th = $(this).parent().parent().parent().children().children().children('.travelhour');
+	var tth = $(this).parent().parent().parent().children().children().children('.totaltravelhour');
+
+	var totaltravho = ((($(tla2).text() * 100) / 100) * (($(thc).text() * 100) / 100) * (($(th).val() * 100) / 100));
+	$(tth).text(totaltravho.toFixed(2));
 
 	//total per day section
 	var tlf = $(this).parent().parent().parent().children().children().children('.tlabourf');
@@ -1164,7 +1756,7 @@ $('#form').bootstrapValidator({
 				},
 			}
 		},
-@for($q=1; $q < 501; $q++)
+@for($q=1; $q < 51; $q++)
 		'srs[{!! $q !!}][serial]': {
 			validators : {
 				notEmpty: {
@@ -1190,7 +1782,7 @@ $('#form').bootstrapValidator({
 				},
 			}
 		},
-@for ($u=1; $u < 10; $u++)
+@for ($u=1; $u < 100; $u++)
 
 		'sr[{{ $u }}][attended_by]': {
 			validators: {
@@ -1272,7 +1864,7 @@ $('#form').bootstrapValidator({
 		},
 @endfor
 
-@for($xc = 1; $xc < 2000; $xc++)
+@for($xc = 1; $xc < 500; $xc++)
 		'srj[{{ $xc }}][date]': {
 			validators : {
 				notEmpty: {
@@ -1287,6 +1879,168 @@ $('#form').bootstrapValidator({
 				},
 				integer: {
 					message: 'The value is not an integer. '
+				},
+			}
+		},
+		'srj[{{ $xc }}][1][meter_start]': {
+			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+				integer: {
+					message: 'The value is not an integer. '
+				},
+				greaterThan: {
+					// value: 'srj[{{ $xc }}][1][meter_end]',
+					value: 1,
+					inclusive: false,
+					message: 'The meter has to be greater than 1. '
+				},
+			}
+		},
+		'srj[{{ $xc }}][1][meter_end]': {
+			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+				integer: {
+					message: 'The value is not an integer. '
+				},
+				greaterThan: {
+					value: 'srj[{{ $xc }}][1][meter_start]',
+					inclusive: false,
+					message: 'The meter has to be greater than Meter Start. '
+				},
+			}
+		},
+		'srj[{{ $xc }}][2][meter_start]': {
+			validators : {
+				integer: {
+					message: 'The value is not an integer. '
+				},
+				greaterThan: {
+					value: 'srj[{{ $xc }}][1][meter_end]',
+					inclusive: true,
+					message: 'The meter has to be less than Meter End. '
+				},
+			}
+		},
+		'srj[{{ $xc }}][2][meter_end]': {
+			validators : {
+				integer: {
+					message: 'The value is not an integer. '
+				},
+				greaterThan: {
+					value: 'srj[{{ $xc }}][2][meter_start]',
+					inclusive: false,
+					message: 'The meter has to be greater than Meter Start. '
+				},
+			}
+		},
+		'srj[{{ $xc }}][food_rate]': {
+			validators : {
+				notEmpty: {
+					message: 'Please choose. '
+				},
+			}
+		},
+		'srj[{{ $xc }}][labour_leader]': {
+			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+				integer: {
+					message: 'Invalid value. '
+				},
+			}
+		},
+		'srj[{{ $xc }}][labour_non_leader]': {
+			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+				integer: {
+					message: 'Invalid value. '
+				},
+			}
+		},
+		'srj[{{ $xc }}][working_type_value]': {
+			validators : {
+				notEmpty: {
+					message: 'Please choose. '
+				},
+			}
+		},
+		'srj[{{ $xc }}][overtime_hour]': {
+			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+				greaterThan: {
+					value: 0,
+					inclusive: true,
+					message: 'The hour has to be greater or equal to 0. '
+				},
+			}
+		},
+		'srj[{{ $xc }}][accommodation_rate]': {
+			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+				greaterThan: {
+					value: 100,
+					inclusive: true,
+					message: 'The accommodation rate has to be greater or equal to 100. '
+				},
+			}
+		},
+		'srj[{{ $xc }}][accommodation]': {
+			validators : {
+				notEmpty: {
+					message: 'Please choose. '
+				},
+			}
+		},
+		'srj[{{ $xc }}][travel_hour]': {
+			validators : {
+				notEmpty: {
+					message: 'This field cant be empty. '
+				},
+				integer: {
+					message: 'Invalid input. '
+				},
+			}
+		},
+@endfor
+@for($xfprob = 1; $xfprob < 10; $xfprob++)
+		'srfP[{{ $xfprob }}][problem]': {
+			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+			}
+		},
+		'srfP[{{ $xfprob }}][solution]': {
+			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+			}
+		},
+@endfor
+@for($xfReq = 1; $xfReq < 10; $xfReq++)
+		'srfR[{{ $xfReq }}][request]': {
+			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+			}
+		},
+		'srfR[{{ $xfReq }}][action]': {
+			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
 				},
 			}
 		},
