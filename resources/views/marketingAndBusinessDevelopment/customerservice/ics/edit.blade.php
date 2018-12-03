@@ -80,9 +80,12 @@ $('#cust').select2({
 	width: '100%',
 });
 
-<?php $iiii = 1 ?>
-@foreach($serviceReport->hasmanyattendees()->get() as $sra)
-$('#staff_id_{!! $iiii++ !!}').select2({
+
+///////////////////////////////////////////////////////////////////////////////////////////
+// attendees
+<?php $attend = 1 ?>
+@foreach($serviceReport->hasmanyattendees()->get() as $ftg)
+$('#staff_id_{!! $attend++ !!}').select2({
 	placeholder: 'Please choose',
 	allowClear: true,
 	closeOnSelect: true,
@@ -90,6 +93,8 @@ $('#staff_id_{!! $iiii++ !!}').select2({
 });
 @endforeach
 
+///////////////////////////////////////////////////////////////////////////////////////////
+// model
 @for ($iiiiii = ($serviceReport->hasmanymodel()->get()->count() > 0)?$serviceReport->hasmanymodel()->get()->count():1; $iiiiii <= $serviceReport->hasmanymodel()->get()->count() + 1; $iiiiii++)
 $('#model_{!! $iiiiii !!}').select2({
 	placeholder: 'Please choose',
@@ -98,28 +103,53 @@ $('#model_{!! $iiiiii !!}').select2({
 	width: '100%',
 });
 
-$("#test_run_machine_{{ $iiiiii }}").keyup(function() {
-	tch(this);
-});
-
-$("#serial_no_{{ $iiiiii }}").keyup(function() {
-	tch(this);
-});
-
-$("#test_capacity_{{ $iiiiii }}").keyup(function() {
-	tch(this);
-});
-
-$("#duration_{{ $iiiiii }}").keyup(function() {
+$("#test_run_machine_{{ $iiiiii }} , #serial_no_{{ $iiiiii }}, #test_capacity_{{ $iiiiii }}, #duration_{{ $iiiiii }}").keyup(function() {
 	tch(this);
 });
 @endfor
 
+///////////////////////////////////////////////////////////////////////////////////////////
+// logistic
+@for ($srlo = ($serviceReport->hasmanylogistic()->get()->count() > 0)?$serviceReport->hasmanylogistic()->get()->count():1; $srlo <= $serviceReport->hasmanylogistic()->get()->count() + 1; $srlo++)
+$('#vc_{!! $srlo !!}, #v_{{ $srlo }}').select2({
+	placeholder: 'Please choose',
+	allowClear: true,
+	closeOnSelect: true,
+	width: '100%',
+});
+
+$('#v_{{ $srlo }}').chainedTo('#vc_{{ $srlo }}');
+
+$("#description_{{ $srlo }}").keyup(function() {
+	tch(this);
+});
+@endfor
+
+///////////////////////////////////////////////////////////////////////////////////////////
 <?php
 $t = 1;
 ?>
 @foreach($serviceReport->hasmanypart()->get() as $srp)
 $("#part_accessory_{{ $t++ }}").keyup(function() {
+	tch(this);
+});
+@endforeach
+
+///////////////////////////////////////////////////////////////////////////////////////////
+// additional charges
+<?php
+$addc1 = 1;
+$addc2 = 1;
+?>
+@foreach($serviceReport->hasmanyadditionalcharge()->get() as $sraddc)
+$('#aid_{!! $addc1++ !!}').select2({
+	placeholder: 'Please choose',
+	allowClear: true,
+	closeOnSelect: true,
+	width: '100%',
+});
+
+$("#description_amount_{{ $addc2++ }}").keyup(function() {
 	tch(this);
 });
 @endforeach
@@ -181,6 +211,14 @@ $("#problem_{{ $pf1 }}, #solution_{{ $pf1 }}").keyup(function() {
 // request action
 @for ($pfr2 = ($serviceReport->hasmanyfeedrequest()->get()->count() > 0)?$serviceReport->hasmanyfeedrequest()->get()->count():1; $pfr2 <= $serviceReport->hasmanyfeedrequest()->get()->count() + 1; $pfr2++)
 $("#request_{{ $pfr2 }}, #action_{{ $pfr2 }}").keyup(function() {
+	tch(this);
+});
+@endfor
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// request action
+@for ($pfr3 = ($serviceReport->hasmanyfeeditem()->get()->count() > 0)?$serviceReport->hasmanyfeeditem()->get()->count():1; $pfr3 <= $serviceReport->hasmanyfeeditem()->get()->count() + 1; $pfr3++)
+$("#item_{{ $pfr3 }}, #item_action_{{ $pfr3 }}").keyup(function() {
 	tch(this);
 });
 @endfor
@@ -570,12 +608,12 @@ $(addbtnjobn).click(function(){
 										'<tr>' +
 											'<td>Labour :</td>' +
 											'<td class="form-group {{ $errors->has('srj.*.labour_leader') ? ' has-error' : '' }}">' +
-												'<input type="text" name="srj[' + xj + '][labour_leader]" value="{{ @$value }}" class="form-control form-control-sm allowanceleaderlabour" id="leadership_' + xj + '" placeholder="Leader Rate (MYR)">' +
+												'<input type="text" name="srj[' + xj + '][labour_leader]" value="150.00" class="form-control form-control-sm allowanceleaderlabour" id="leadership_' + xj + '" placeholder="Leader Rate (MYR)">' +
 											'</td>' +
 											'<td>+</td>' +
 											'<td>(</td>' +
 											'<td class="form-group {{ $errors->has('srj.*.labour_non_leader') ? ' has-error' : '' }}">' +
-												'<input type="text" name="srj[' + xj + '][labour_non_leader]" value="{{ @$value }}" class="form-control form-control-sm allowancenonleaderlabour" id="non_leadership_' + xj + '" placeholder="Non Leader Rate (RM)">' +
+												'<input type="text" name="srj[' + xj + '][labour_non_leader]" value="100.00" class="form-control form-control-sm allowancenonleaderlabour" id="non_leadership_' + xj + '" placeholder="Non Leader Rate (RM)">' +
 											'</td>' +
 											'<td>X</td>' +
 											'<td><span class="allowancenonleader" id="non_leader_count_' + xj + '">0</span> Person</td>' +
@@ -877,6 +915,235 @@ $(wrapfeedReq).on("click",".remove_feedReq", function(e){
 	$('#form').bootstrapValidator('removeField', $optsfReq2 );
 	$row.remove();
     xfr--;
+})
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// add item, quantity and action : add and remove row
+
+var maxffeedItem	= 10; //maximum input boxes allowed
+var addbtnfeedItem	= $(".add_feedItem");
+var wrapfeedItem	= $(".feedItem_wrap");
+
+var xfi = <?=($serviceReport->hasmanyfeeditem()->get()->count() == 0)?1:$serviceReport->hasmanyfeeditem()->get()->count() ?>;
+$(addbtnfeedItem).click(function(){
+	// e.preventDefault();
+
+	//max input box allowed
+	if(xfi < maxffeedItem){
+		xfi++;
+		wrapfeedItem.append(
+					'<div class="rowfeedItem">' +
+						'<div class="form-row col-sm-12">' +
+							'<div class="col-sm-1 text-danger">' +
+									'<i class="fas fa-trash remove_feedItem" aria-hidden="true" id="delete_feedReq" data-id="' + xfi + '"></i>' +
+							'</div>' +
+							'<div class="form-group col-3 {{ $errors->has('srfI.*.item') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srfI[' + xfi + '][item]" value="{!! @$value !!}" id="item_' + xfi + '" class="form-control" autocomplete="off" placeholder="Item" />' +
+							'</div>' +
+							'<div class="form-group col-3 {{ $errors->has('srfI.*.quantity') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srfI[' + xfi + '][quantity]" value="{!! @$value !!}" id="quantity_' + xfi + '" class="form-control" autocomplete="off" placeholder="Quantity" />' +
+							'</div>' +
+							'<div class="form-group col-3 {{ $errors->has('srfI.*.item_action') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srfI[' + xfi + '][item_action]" value="{!! @$value !!}" id="item_action_' + xfi + '" class="form-control" autocomplete="off" placeholder="Action (Fill By Management)" />' +
+							'</div>' +
+						'</div>' +
+					'</div>'
+		); //add input box
+		$('#request_' + xfi + ', #action_' + xfi).keyup(function() {
+			tch(this);
+		});
+
+		//bootstrap validate
+		$('#form').bootstrapValidator('addField', $('.rowfeedItem').find('[name="srfI[' + xfi + '][item]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowfeedItem').find('[name="srfI[' + xfi + '][quantity]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowfeedItem').find('[name="srfI[' + xfi + '][item_action]"]'));
+	}
+});
+
+$(wrapfeedItem).on("click",".remove_feedItem", function(e){
+	//user click on remove text
+	var fItemId = $(this).data('id');
+	e.preventDefault();
+	var $row = $(this).parent().parent();
+
+	var $optsfItem1 = $row.find('[name="srfI[' + fItemId + '][item]"]');
+	var $optsfItem2 = $row.find('[name="srfI[' + fItemId + '][quantity]"]');
+	var $optsfItem3 = $row.find('[name="srfI[' + fItemId + '][item_action]"]');
+
+	// $($optsfItem1).css({"color": "red", "border": "2px solid red"});
+
+	$('#form').bootstrapValidator('removeField', $optsfItem1 );
+	$('#form').bootstrapValidator('removeField', $optsfItem2 );
+	$('#form').bootstrapValidator('removeField', $optsfItem3 );
+	$row.remove();
+	xfi--;
+})
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// add logistic and price : add and remove row
+
+var maxsrlogistic	= 10; //maximum input boxes allowed
+var addbtnsrlogistic	= $(".add_logistic");
+var wrapsrLogistic	= $(".logistic_wrap");
+
+var xL = <?=($serviceReport->hasmanylogistic()->get()->count() == 0)?1:$serviceReport->hasmanylogistic()->get()->count() ?>;
+$(addbtnsrlogistic).click(function(){
+	// e.preventDefault();
+
+	//max input box allowed
+	if(xL < maxsrlogistic){
+		xL++;
+		wrapsrLogistic.append(
+					'<div class="rowsrlogistic">' +
+						'<div class="form-row col-sm-12">' +
+							'<div class="col-sm-1 text-danger">' +
+									'<i class="fas fa-trash remove_logistic" aria-hidden="true" id="delete_feedProb_' + xL + '" data-id="' + xL + '"></i>' +
+							'</div>' +
+							'<div class="form-group col-3 {{ $errors->has('srL.*.vehicle_category') ? 'has-error' : '' }}">' +
+								'<select name="srL[' + xL + ']vehicle_category" id="vc_' + xL + '" class="form-control form-control-sm" placeholder="Please choose">' +
+									'<option value="">Please choose</option>' +
+@foreach( \App\Model\VehicleCategory::all() as $vc )
+									'<option value="{{ $vc->id }}" >{{ $vc->category }}</option>' +
+@endforeach
+								'</select>' +
+							'</div>' +
+							'<div class="form-group col-3 {{ $errors->has('srL.*.solution') ? 'has-error' : '' }}">' +
+								'<select name="srL[' + xL + '][vehicle_id]" id="v_' + xL + '" class="form-control form-control-sm" placeholder="Please choose">' +
+									'<option value="" data-chained="">Please choose</option>' +
+@foreach( \App\Model\Vehicle::all() as $v )
+									'<option value="{{ $v->id }}"  data-chained="{{ $v->vehicle_category_id }}" >{{ $v->vehicle }}</option>' +
+@endforeach
+								'</select>' +
+							'</div>' +
+							'<div class="form-group col-3 {{ $errors->has('srL.*.description') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srL[' + xL + '][description]" value="{{ @$value }}" id="description_' + xL + '" class="form-control form-control-sm" placeholder="Description">' +
+							'</div>' +
+							'<div class="form-group col-2 {{ $errors->has('srL.*.charge') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srL[' + xL + '][charge]" value="{{ @$value }}" id="charge_' + xL + '" class="form-control form-control-sm logistic_charge" placeholder="Charge (MYR)">' +
+							'</div>' +
+						'</div>' +
+					'</div>'
+		); //add input box
+
+		$('#vc_' + xL + ', #v_' + xL ).select2({
+			placeholder: 'Please choose',
+			allowClear: true,
+			closeOnSelect: true,
+			width: '100%',
+		});
+		
+		$('#v_' + xL).chainedTo('#vc_' + xL);
+		
+		$('#description_' + xL).keyup(function() {
+			tch(this);
+		});
+		//bootstrap validate
+		$('#form').bootstrapValidator('addField', $('.rowsrlogistic').find('[name="srL[' + xL + '][vehicle_id]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowsrlogistic').find('[name="srL[' + xL + '][description]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowsrlogistic').find('[name="srL[' + xL + '][charge]"]'));
+	}
+});
+
+$(wrapsrLogistic).on("click",".remove_logistic", function(e){
+	//user click on remove text
+	var srlogist = $(this).data('id');
+	e.preventDefault();
+	var $row = $(this).parent().parent();
+
+	var $optsrlogist1 = $row.find('[name="srL[' + srlogist + '][vehicle_id]"]');
+	var $optsrlogist2 = $row.find('[name="srL[' + srlogist + '][description]"]');
+	var $optsrlogist3 = $row.find('[name="srL[' + srlogist + '][charge]"]');
+
+	// $($optsfItem1).css({"color": "red", "border": "2px solid red"});
+
+	$('#form').bootstrapValidator('removeField', $optsrlogist1 );
+	$('#form').bootstrapValidator('removeField', $optsrlogist2 );
+	$('#form').bootstrapValidator('removeField', $optsrlogist3 );
+	$row.remove();
+    xL--;
+
+    // update logistic grand total
+    update_grandtotal_logistic();
+})
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// add logistic and price : add and remove row
+
+var maxsrlogistic	= 10; //maximum input boxes allowed
+var addbtnsrlogistic	= $(".add_logistic");
+var wrapsrLogistic	= $(".logistic_wrap");
+
+var xL = <?=($serviceReport->hasmanylogistic()->get()->count() == 0)?1:$serviceReport->hasmanylogistic()->get()->count() ?>;
+$(addbtnsrlogistic).click(function(){
+	// e.preventDefault();
+
+	//max input box allowed
+	if(xL < maxsrlogistic){
+		xL++;
+		wrapsrLogistic.append(
+					<div class="rowsraddcharges">
+						<div class="form-row col-sm-12">
+
+							<div class="col-sm-1 text-danger">
+									<i class="fas fa-trash delete_addcharge" aria-hidden="true" id="delete_addcharge_{!! $srAC->id !!}" data-id="{!! $srAC->id !!}"></i>
+							</div>
+							<div class="form-group col-3 {{ $errors->has('srAC.*.amount_id') ? 'has-error' : '' }}">
+								<select name="srAC[{{ $ac1++ }}][amount_id]" id="aid_{{ $ac2++ }}" class="form-control form-control-sm" placeholder="Please choose">
+									<option value="">Please choose</option>
+@foreach( \App\Model\Amount::all() as $am )
+									<option value="{{ $am->id }}" {{ ($am->id == $srAC->amount_id)?'selected':NULL }} >{{ $am->amount }}</option>
+@endforeach
+								</select>
+							</div>
+							<div class="form-group col-6 {{ $errors->has('srAC.*.description') ? 'has-error' : '' }}">
+								<input type="text" name="srAC[{{ $ac3++ }}][description]" value="{!! (!is_null($srAC->description))?$srAC->description:@$value !!}" class="form-control form-control-sm" id="description_amount_{{ $ac4++ }}" placeholder="Description" >
+							</div>
+							<div class="form-group col-2 {{ $errors->has('srAC.*.value') ? 'has-error' : '' }}">
+								<input type="text" name="srAC[{{ $ac5++ }}][value]" value="{{ ( !is_null($srAC->value) )?$srAC->value:@$value }}" id="value_{{ $ac6++ }}" class="form-control form-control-sm value" placeholder="Amount (MYR)">
+							</div>
+						</div>
+					</div>
+		); //add input box
+
+		$('#vc_' + xL + ', #v_' + xL ).select2({
+			placeholder: 'Please choose',
+			allowClear: true,
+			closeOnSelect: true,
+			width: '100%',
+		});
+		
+		$('#v_' + xL).chainedTo('#vc_' + xL);
+		
+		$('#description_' + xL).keyup(function() {
+			tch(this);
+		});
+		//bootstrap validate
+		$('#form').bootstrapValidator('addField', $('.rowsrlogistic').find('[name="srL[' + xL + '][vehicle_id]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowsrlogistic').find('[name="srL[' + xL + '][description]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowsrlogistic').find('[name="srL[' + xL + '][charge]"]'));
+	}
+});
+
+$(wrapsrLogistic).on("click",".remove_logistic", function(e){
+	//user click on remove text
+	var srlogist = $(this).data('id');
+	e.preventDefault();
+	var $row = $(this).parent().parent();
+
+	var $optsrlogist1 = $row.find('[name="srL[' + srlogist + '][vehicle_id]"]');
+	var $optsrlogist2 = $row.find('[name="srL[' + srlogist + '][description]"]');
+	var $optsrlogist3 = $row.find('[name="srL[' + srlogist + '][charge]"]');
+
+	// $($optsfItem1).css({"color": "red", "border": "2px solid red"});
+
+	$('#form').bootstrapValidator('removeField', $optsrlogist1 );
+	$('#form').bootstrapValidator('removeField', $optsrlogist2 );
+	$('#form').bootstrapValidator('removeField', $optsrlogist3 );
+	$row.remove();
+    xL--;
+
+    // update logistic grand total
+    update_grandtotal_logistic();
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -1221,6 +1488,57 @@ function SwalDeleteFeedRequest(feedReqId){
 						window.location.reload(true);
 					});
 					//$('#delete_feedReq_' + feedReqId).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row sr logistic
+$(document).on('click', '.delete_logistic', function(e){
+	var srlogistik = $(this).data('id');
+	SwalDeleteSRLogistic(srlogistik);
+	e.preventDefault();
+});
+
+function SwalDeleteSRLogistic(srlogistik){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('srLogistic') }}' + '/' + srlogistik,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: srlogistik,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_logistic_' + srlogistik).parent().parent().remove();
 				})
 				.fail(function(){
 					swal('Oops...', 'Something went wrong with ajax !', 'error');
@@ -1721,6 +2039,10 @@ $(document).on('keyup', '.travelhour', function () {
 	update_grandtotal();
 });
 
+$(document).on('keyup', '.logistic_charge', function () {
+	update_grandtotal_logistic();
+});
+
 // update grand total
 function update_grandtotal() {
 	var myNodelistp = $(".totalperday");
@@ -1734,6 +2056,21 @@ function update_grandtotal() {
 		// console.log(psum);
 	}
 	$('#grandtotal').text( psum.toFixed(2) );
+};
+
+// update grand total logistic
+function update_grandtotal_logistic() {
+	var Nodelistlogist = $(".logistic_charge");
+	var logisticSum = 0;
+	for (var node = Nodelistlogist.length - 1; node >= 0; node--) {
+		// Nodelistlogist[node].style.backgroundColor = "red";
+
+		logisticSum = ( (logisticSum * 10000) + (Nodelistlogist[node].value * 10000) ) / 10000;
+
+		// console.log(Nodelistlogist[node].innerHTML);
+		// console.log(logisticSum);
+	}
+	$('#grandtotallogistic').text( logisticSum.toFixed(2) );
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2045,6 +2382,100 @@ $('#form').bootstrapValidator({
 			}
 		},
 @endfor
+@for($xfItem = 1; $xfItem < 10; $xfItem++)
+		'srfI[{{ $xfItem }}][item]': {
+			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+			}
+		},
+		'srfI[{{ $xfItem }}][quantity]': {
+			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+				integer: {
+					message: 'Invalid input value. '
+				}
+			}
+		},
+		'srfI[{{ $xfItem }}][item_action]': {
+			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+			}
+		},
+@endfor
+		feed_new_machine: {
+			validators: {
+				notEmpty: {
+					message: 'Please choose. '
+				},
+			}
+		},
+		feed_problem_customer_site: {
+			validators: {
+				notEmpty: {
+					message: 'Please choose. '
+				},
+			}
+		},
+@for($xlogistic = 1; $xlogistic < 10; $xlogistic++)
+		'srL[{{ $xlogistic }}][vehicle_id]': {
+			validators : {
+				notEmpty: {
+					message: 'Please choose. '
+				},
+			}
+		},
+		'srL[{{ $xlogistic }}][charge]': {
+			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+				numeric: {
+					separator : '.',
+					message: 'Invalid input value. '
+				}
+			}
+		},
+		'srL[{{ $xlogistic }}][description]': {
+			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+			}
+		},
+@endfor
+@for($xaddcharges = 1; $xaddcharges < 10; $xaddcharges++)
+		'srAC[{{ $xaddcharges }}][amount_id]': {
+			validators : {
+				notEmpty: {
+					message: 'Please choose. '
+				},
+			}
+		},
+		'srAC[{{ $xaddcharges }}][description]': {
+			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+			}
+		},
+		'srAC[{{ $xaddcharges }}][value]': {
+			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+				numeric: {
+					separator : '.',
+					message: 'Invalid input value. '
+				},
+			}
+		},
+@endfor
 	}
 })
 .find('[name="reason"]')
@@ -2055,7 +2486,6 @@ $('#form').bootstrapValidator({
 	$('#form').bootstrapValidator('revalidateField', 'reason');
 	// console.log($('#reason').val());
 });
-
 
 /////////////////////////////////////////////////////////////////////////////////////////
 @endsection

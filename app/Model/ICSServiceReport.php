@@ -39,6 +39,21 @@ class ICSServiceReport extends Model
 		return $this->hasMany('App\Model\ICSServiceReportPart', 'service_report_id');
 	}
 
+	public function hasmanylogistic()
+	{
+		return $this->hasMany('App\Model\ICSServiceReportLogistic', 'service_report_id');
+	}
+
+	public function hasmanyadditionalcharge()
+	{
+		return $this->hasMany('App\Model\ICSServiceReportAdditionalCharge', 'service_report_id');
+	}
+
+	public function hasmanydiscount()
+	{
+		return $this->hasMany('App\Model\ICSServiceReportDiscount', 'service_report_id');
+	}
+
 	public function hasmanyfeedcall()
 	{
 		return $this->hasMany('App\Model\ICSServiceReportFeedCall', 'service_report_id');

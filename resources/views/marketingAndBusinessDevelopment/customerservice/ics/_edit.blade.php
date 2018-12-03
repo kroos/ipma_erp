@@ -187,14 +187,16 @@ $iii = 1;
 			<div class="card-body">
 
 				<div class="container-fluid model_wrap">
-					<div class="row col-sm-12 form-inline">
-						<div class="col-sm-1 text-danger">&nbsp;</div>
-						<div class=""><input type="text" name="" placeholder="Select Model" class="form-control" disabled></div>
-						<div class=""><input type="text" name="" placeholder="Test Run Machine" class="form-control" disabled></div>
-						<div class=""><input type="text" name="" placeholder="Serial No." class="form-control" disabled></div>
-						<div class=""><input type="text" name="" placeholder="Test Capacity" class="form-control" disabled></div>
-						<div class=""><input type="text" name="" placeholder="Duration" class="form-control" disabled></div>
-					</div>
+<div class="">
+	<div class="col-sm-12 form-row">
+		<div class="col-1 text-danger">&nbsp;</div>
+		<div class="col-3"><input type="text" name="" placeholder="Select Model" class="form-control" disabled></div>
+		<div class="col-2"><input type="text" name="" placeholder="Test Run Machine" class="form-control" disabled></div>
+		<div class="col-2"><input type="text" name="" placeholder="Serial No." class="form-control" disabled></div>
+		<div class="col-2"><input type="text" name="" placeholder="Test Capacity" class="form-control" disabled></div>
+		<div class="col-2"><input type="text" name="" placeholder="Duration" class="form-control" disabled></div>
+	</div>
+</div>
 <?php
 $model = \App\Model\ICSMachineModel::all();
 $e = 1;
@@ -693,6 +695,182 @@ $gt += ($srj->labour * $srj->food_rate)
 <br />
 
 <div class="row">
+	<div class="col-sm-12">
+		<div class="card">
+			<div class="card-header">Logistic</div>
+			<div class="card-body">
+				<div class="container-fluid logistic_wrap">
+<?php
+$l1 = 1;
+$l2 = 1;
+$l3 = 1;
+$l4 = 1;
+$l5 = 1;
+$l6 = 1;
+$l7 = 1;
+$l8 = 1;
+$tl = 0;
+?>
+@if( $serviceReport->hasmanylogistic()->get()->count() > 0 )
+@foreach($serviceReport->hasmanylogistic()->get() as $srL)
+					<div class="rowsrlogistic">
+						<div class="form-row col-sm-12">
+
+							<div class="col-sm-1 text-danger">
+									<i class="fas fa-trash delete_logistic" aria-hidden="true" id="delete_logistic_{!! $srL->id !!}" data-id="{!! $srL->id !!}"></i>
+							</div>
+							<div class="form-group col-3 {{ $errors->has('srL.*.vehicle_category') ? 'has-error' : '' }}">
+								<select name="srL[{{ $l1++ }}][vehicle_category]" id="vc_{{ $l2++ }}" class="form-control form-control-sm" placeholder="Please choose">
+									<option value="">Please choose</option>
+@foreach( \App\Model\VehicleCategory::all() as $vc )
+									<option value="{{ $vc->id }}" {{ ($vc->id == $srL->belongtovehicle->belongtovehiclecategory->id)?'selected':NULL }} >{{ $vc->category }}</option>
+@endforeach
+								</select>
+							</div>
+							<div class="form-group col-3 {{ $errors->has('srL.*.vehicle_id') ? 'has-error' : '' }}">
+								<select name="srL[{{ $l3++ }}][vehicle_id]" id="v_{{ $l4++ }}" class="form-control form-control-sm" placeholder="Please choose">
+									<option value="" data-chained="">Please choose</option>
+@foreach( \App\Model\Vehicle::all() as $v )
+									<option value="{{ $v->id }}"  data-chained="{{ $v->vehicle_category_id }}" {{ ($v->id == $srL->vehicle_id)?'selected':NULL }} >{{ $v->vehicle }}</option>
+@endforeach
+								</select>
+							</div>
+							<div class="form-group col-3 {{ $errors->has('srL.*.description') ? 'has-error' : '' }}">
+								<input type="text" name="srL[{{ $l5++ }}][description]" value="{{ ( !is_null($srL->description) )?$srL->description:@$value }}" id="description_{{ $l6++ }}" class="form-control form-control-sm" placeholder="Description">
+							</div>
+							<div class="form-group col-2 {{ $errors->has('srL.*.charge') ? 'has-error' : '' }}">
+								<input type="text" name="srL[{{ $l7++ }}][charge]" value="{{ ( !is_null($srL->charge) )?$srL->charge:@$value }}" id="charge_{{ $l8++ }}" class="form-control form-control-sm logistic_charge" placeholder="Charge (MYR)">
+							</div>
+						</div>
+					</div>
+<?php $tl += $srL->charge; ?>
+@endforeach
+@else
+					<div class="rowsrlogistic">
+						<div class="form-row col-sm-12">
+							<div class="col-sm-1 text-danger">
+									<i class="fas fa-trash" aria-hidden="true" id="delete_feedProb_1" data-id="1"></i>
+							</div>
+							<div class="form-group col-3 {{ $errors->has('srL.*.vehicle_category') ? 'has-error' : '' }}">
+								<select name="srL[1]vehicle_category" id="vc_1" class="form-control form-control-sm" placeholder="Please choose">
+									<option value="">Please choose</option>
+@foreach( \App\Model\VehicleCategory::all() as $vc )
+									<option value="{{ $vc->id }}" >{{ $vc->category }}</option>
+@endforeach
+								</select>
+							</div>
+							<div class="form-group col-3 {{ $errors->has('srL.*.solution') ? 'has-error' : '' }}">
+								<select name="srL[1][vehicle_id]" id="v_1" class="form-control form-control-sm" placeholder="Please choose">
+									<option value="" data-chained="">Please choose</option>
+@foreach( \App\Model\Vehicle::all() as $v )
+									<option value="{{ $v->id }}"  data-chained="{{ $v->vehicle_category_id }}" >{{ $v->vehicle }}</option>
+@endforeach
+								</select>
+							</div>
+							<div class="form-group col-3 {{ $errors->has('srL.*.description') ? 'has-error' : '' }}">
+								<input type="text" name="srL[1][description]" value="{{ @$value }}" id="description_1" class="form-control form-control-sm" placeholder="Description">
+							</div>
+							<div class="form-group col-2 {{ $errors->has('srL.*.charge') ? 'has-error' : '' }}">
+								<input type="text" name="srL[1][charge]" value="{{ @$value }}" id="charge_1" class="form-control form-control-sm logistic_charge" placeholder="Charge (MYR)">
+							</div>
+						</div>
+					</div>
+@endif
+				</div>
+				<div class="col-sm-12">Grand Total Logistic<span class="float-right font-weight-bold text-primary">RM <span id="grandtotallogistic">{{ $tl }}</span></span></div>
+				<div class="row col-lg-12 add_logistic">
+					<span class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add More Transport</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<br />
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="card">
+			<div class="card-header">Additional Charges</div>
+			<div class="card-body">
+
+				<div class="container-fluid addcharges_wrap">
+<?php
+$ac1 = 1;
+$ac2 = 1;
+$ac3 = 1;
+$ac4 = 1;
+$ac5 = 1;
+$ac6 = 1;
+$tac = 0;
+?>
+@if( $serviceReport->hasmanyadditionalcharge()->get()->count() > 0 )
+@foreach($serviceReport->hasmanyadditionalcharge()->get() as $srAC)
+					<div class="rowsraddcharges">
+						<div class="form-row col-sm-12">
+
+							<div class="col-sm-1 text-danger">
+									<i class="fas fa-trash delete_addcharge" aria-hidden="true" id="delete_addcharge_{!! $srAC->id !!}" data-id="{!! $srAC->id !!}"></i>
+							</div>
+							<div class="form-group col-3 {{ $errors->has('srAC.*.amount_id') ? 'has-error' : '' }}">
+								<select name="srAC[{{ $ac1++ }}][amount_id]" id="aid_{{ $ac2++ }}" class="form-control form-control-sm" placeholder="Please choose">
+									<option value="">Please choose</option>
+@foreach( \App\Model\Amount::all() as $am )
+									<option value="{{ $am->id }}" {{ ($am->id == $srAC->amount_id)?'selected':NULL }} >{{ $am->amount }}</option>
+@endforeach
+								</select>
+							</div>
+							<div class="form-group col-6 {{ $errors->has('srAC.*.description') ? 'has-error' : '' }}">
+								<input type="text" name="srAC[{{ $ac3++ }}][description]" value="{!! (!is_null($srAC->description))?$srAC->description:@$value !!}" class="form-control form-control-sm" id="description_amount_{{ $ac4++ }}" placeholder="Description" >
+							</div>
+							<div class="form-group col-2 {{ $errors->has('srAC.*.value') ? 'has-error' : '' }}">
+								<input type="text" name="srAC[{{ $ac5++ }}][value]" value="{{ ( !is_null($srAC->value) )?$srAC->value:@$value }}" id="value_{{ $ac6++ }}" class="form-control form-control-sm value" placeholder="Amount (MYR)">
+							</div>
+						</div>
+					</div>
+<?php $tac += $srAC->value; ?>
+@endforeach
+@endif
+				</div>
+				<div class="col-sm-12">Grand Total Additional Charges<span class="float-right font-weight-bold text-primary">RM <span id="grandtotaladdcharges">{{ @$tac }}</span></span></div>
+				<div class="row col-lg-12 add_addchrages">
+					<span class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Additional Charges</span>
+				</div>
+
+
+
+
+
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<br />
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="card">
+			<div class="card-header">Discount</div>
+			<div class="card-body">
+
+
+
+
+
+
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<br />
+
+<div class="row">
 	<div class="col-sm-6">
 		<div class="card">
 			<div class="card-header">Problem Detect On Site</div>
@@ -818,14 +996,17 @@ $item4 = 1;
 @if( $serviceReport->hasmanyfeeditem()->get()->count() > 0 )
 @foreach($serviceReport->hasmanyfeeditem()->get() as $srfI)
 					<div class="rowfeedItem">
-						<div class="row col-sm-12 form-inline">
+						<div class="form-row col-sm-12">
 							<div class="col-sm-1 text-danger">
 									<i class="fas fa-trash delete_feedItem" aria-hidden="true" id="delete_feedItem_{!! $srfI->id !!}" data-id="{!! $srfI->id !!}"></i>
 							</div>
-							<div class="form-group {{ $errors->has('srfI.*.item') ? 'has-error' : '' }}">
+							<div class="form-group col-3 {{ $errors->has('srfI.*.item') ? 'has-error' : '' }}">
 								<input type="text" name="srfI[{{ $item1++ }}][item]" value="{!! (!empty($srfI->item))?$srfI->item:@$value !!}" id="item_{{ $item2++ }}" class="form-control" autocomplete="off" placeholder="Item" />
 							</div>
-							<div class="form-group {{ $errors->has('srfI.*.item_action') ? 'has-error' : '' }}">
+							<div class="form-group col-3 {{ $errors->has('srfI.*.quantity') ? 'has-error' : '' }}">
+								<input type="text" name="srfI[{{ $item1++ }}][quantity]" value="{!! (!empty($srfI->quantity))?$srfI->quantity:@$value !!}" id="quantity_{{ $item2++ }}" class="form-control" autocomplete="off" placeholder="Quantity" />
+							</div>
+							<div class="form-group col-3 {{ $errors->has('srfI.*.item_action') ? 'has-error' : '' }}">
 								<input type="text" name="srfI[{{ $item3++ }}][item_action]" value="{!! (!empty($srfI->item_action))?$srfI->item_action:@$value !!}" id="item_action_{{ $item4++ }}" class="form-control" autocomplete="off" placeholder="Action (Fill By Management)" />
 							</div>
 						</div>
@@ -833,21 +1014,24 @@ $item4 = 1;
 @endforeach
 @else
 					<div class="rowfeedItem">
-						<div class="row col-sm-12 form-inline">
+						<div class="form-row col-sm-12">
 							<div class="col-sm-1 text-danger">
 									<i class="fas fa-trash " aria-hidden="true" id="delete_feedReq" data-id="1"></i>
 							</div>
-							<div class="form-group {{ $errors->has('srfI.*.item') ? 'has-error' : '' }}">
+							<div class="form-group col-3 {{ $errors->has('srfI.*.item') ? 'has-error' : '' }}">
 								<input type="text" name="srfI[1][item]" value="{!! @$value !!}" id="item_1" class="form-control" autocomplete="off" placeholder="Item" />
 							</div>
-							<div class="form-group {{ $errors->has('srfI.*.item_action') ? 'has-error' : '' }}">
+							<div class="form-group col-3 {{ $errors->has('srfI.*.quantity') ? 'has-error' : '' }}">
+								<input type="text" name="srfI[1][quantity]" value="{!! @$value !!}" id="quantity_1" class="form-control" autocomplete="off" placeholder="Quantity" />
+							</div>
+							<div class="form-group col-3 {{ $errors->has('srfI.*.item_action') ? 'has-error' : '' }}">
 								<input type="text" name="srfI[1][item_action]" value="{!! @$value !!}" id="item_action_1" class="form-control" autocomplete="off" placeholder="Action (Fill By Management)" />
 							</div>
 						</div>
 					</div>
 @endif
 				</div>
-				<div class="row col-lg-12 add_feedReq">
+				<div class="row col-lg-12 add_feedItem">
 					<span class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add More Request</span>
 				</div>
 
@@ -858,6 +1042,37 @@ $item4 = 1;
 		<div class="card">
 			<div class="card-header">Misc</div>
 			<div class="card-body">
+
+				<div class="form-group {{ $errors->has('feed_new_machine') ? 'has-error' : '' }}">
+					{{ Form::label( 'feed_new_machine', 'New Machine Found On Site : ', ['class' => 'col-sm-6 col-form-label'] ) }}
+@foreach( \App\Model\YesNoLabel::all() as $ynl )
+					<div class="form-check form-check-inline">
+						<div class="pretty p-icon p-round p-smooth">
+							{{ Form::radio('feed_new_machine', $ynl->value, @$value, ['class' => 'form-control']) }}
+							<div class="state p-success">
+								<i class="icon mdi mdi-check"></i>
+								<label>{{ $ynl->label }}</label>
+							</div>
+						</div>
+					</div>
+@endforeach
+				</div>
+
+				<div class="form-group {{ $errors->has('feed_problem_customer_site') ? 'has-error' : '' }}">
+					{{ Form::label( 'feed_problem_customer_site', 'Problem At Customer Site : ', ['class' => 'col-sm-6 col-form-label'] ) }}
+@foreach( \App\Model\YesNoLabel::all() as $ynl )
+					<div class="form-check form-check-inline">
+						<div class="pretty p-icon p-round p-smooth">
+							{{ Form::radio('feed_problem_customer_site', $ynl->value, @$value, ['class' => 'form-control']) }}
+							<div class="state p-success">
+								<i class="icon mdi mdi-check"></i>
+								<label>{{ $ynl->label }}</label>
+							</div>
+						</div>
+					</div>
+@endforeach
+				</div>
+
 			</div>	
 		</div>
 	</div>
