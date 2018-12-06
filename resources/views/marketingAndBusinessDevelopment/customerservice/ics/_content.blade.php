@@ -216,9 +216,6 @@ $sr0 = ICSServiceReport::where([['date', '>=', $year], ['active', 1]])->get();
 			<td>{!! Carbon::parse($sr->date)->format('D, j M Y') !!}</td>
 			<td>{!! $sr->belongtoinformby->name !!}</td>
 			<td>
-<?php
-// $sr->hasmanyserial()->get();
-?>
 @foreach( $sr->hasmanyserial()->get() as $srno )
 				{!! $srno->serial !!}<br />
 @endforeach
