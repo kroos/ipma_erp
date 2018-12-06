@@ -44,6 +44,7 @@ class ServiceReportController extends Controller
 			$sr->hasmanyserial()->create( $request->only(['serial']) );
 		}
 		// $sr->hasmanyattendees()->create( $request->only('sr') );
+
 		// attendees
 		if ($request->has('sr')) {
 			$serviceReport->hasmanyattendees()->delete();

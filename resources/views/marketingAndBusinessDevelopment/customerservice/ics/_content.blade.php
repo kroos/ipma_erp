@@ -209,7 +209,8 @@ $sr0 = ICSServiceReport::where([['date', '>=', $year], ['active', 1]])->get();
 	</thead>
 	<tbody>
 @foreach($srp as $sr)
-@if(is_null($sr->hasmanyserial()))
+
+@if( $sr->hasmanyserial()->whereNull('serial')->first() )
 		<tr>
 			<td>{!! $sr->id !!}</td>
 			<td>{!! Carbon::parse($sr->date)->format('D, j M Y') !!}</td>
