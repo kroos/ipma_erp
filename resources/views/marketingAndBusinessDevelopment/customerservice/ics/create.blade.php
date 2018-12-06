@@ -48,7 +48,7 @@
 @section('js')
 /////////////////////////////////////////////////////////////////////////////////////////
 //ucwords
-$("#compby, #compl").keyup(function() {
+$("#compby, #compl, #rem").keyup(function() {
 	tch(this);
 });
 
@@ -230,14 +230,7 @@ $('#form').bootstrapValidator({
 				},
 			}
 		},
-		department_id: {
-			validators : {
-				notEmpty: {
-					message: 'Please choose. '
-				},
-			}
-		},
-		position_id: {
+		remarks: {
 			validators : {
 				notEmpty: {
 					message: 'Please choose. '

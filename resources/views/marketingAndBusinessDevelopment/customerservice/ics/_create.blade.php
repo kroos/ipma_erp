@@ -157,10 +157,30 @@ $staff = Staff::where('active', 1)->get();
 			</div>
 		</div>
 	</div>
-
 </div>
 
 <br />
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="card">
+			<div class="div card-header">Remarks</div>
+			<div class="card-body">
+
+				<div class="form-group row {{ $errors->has('remarks')?'has-error':'' }}">
+					{{ Form::label( 'rem', 'Remarks :', ['class' => 'col-sm-3 col-form-label'] ) }}
+					<div class="col-sm-9">
+						{!! Form::textarea('remarks', @$value, ['class' => 'form-control', 'id' => 'rem', 'placeholder' => 'Remarks', 'autocomplete' => 'off']) !!}
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<br />
+
 <div class="form-group row">
 	<div class="col-sm-10 offset-sm-2">
 		{!! Form::button('Save', ['class' => 'btn btn-primary btn-block', 'type' => 'submit']) !!}

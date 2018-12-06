@@ -7,10 +7,6 @@ namespace App\Model;
 class ICSProceed extends Model
 {
 	protected $connection = 'mysql';
-	protected $table = 'ics_charges';
+	protected $table = 'ics_proceeds';
 
-	public function hasoneservicereport()
-	{
-		return $this->hasOne('App\Model\ICSServiceReport', 'proceed_id');
-	}
 }

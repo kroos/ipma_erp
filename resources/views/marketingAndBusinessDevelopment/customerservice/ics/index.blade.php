@@ -53,7 +53,19 @@ $("#username").keyup(function() {
 /////////////////////////////////////////////////////////////////////////////////////////
 // table
 $.fn.dataTable.moment( 'ddd, D MMM YYYY' );
-$('#servicereport').DataTable({
+$('#servicereport1').DataTable({
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	"order": [[1, "desc" ]],	// sorting the 2nd column descending
+	// responsive: true
+});
+
+$('#servicereport2').DataTable({
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	"order": [[1, "desc" ]],	// sorting the 2nd column descending
+	// responsive: true
+});
+
+$('#servicereport3').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
 	"order": [[1, "desc" ]],	// sorting the 2nd column descending
 	// responsive: true

@@ -55,6 +55,8 @@ Route::resources([
 	'srFeedProb' => 'Sales\CustomerService\ServiceReportFeedbackProblemController',
 	'srFeedReq' => 'Sales\CustomerService\ServiceReportFeedbackRequestController',
 	'srLogistic' => 'Sales\CustomerService\ServiceReportLogisticController',
+	'srAddCharge' => 'Sales\CustomerService\ServiceReportAdditionalChargesController',
+	'srDiscount' => 'Sales\CustomerService\ServiceReportDiscountController',
 ]);
 // received hardcopy
 Route::post('/staffTCMS/storeODBC', [

@@ -199,16 +199,16 @@ $iii = 1;
 </div>
 <?php
 $model = \App\Model\ICSMachineModel::all();
-$e = 1;
-$ee = 1;
-$eee = 1;
-$eeee = 1;
-$eeeee = 1;
-$eeeeee = 1;
-$eeeeeee = 1;
-$eeeeeeee = 1;
-$eeeeeeeee = 1;
-$eeeeeeeeee = 1;
+$e1 = 1;
+$e2 = 1;
+$e3 = 1;
+$e4 = 1;
+$e5 = 1;
+$e6 = 1;
+$e7 = 1;
+$e8 = 1;
+$e9 = 1;
+$e10 = 1;
 ?>
 @foreach( $serviceReport->hasmanymodel()->get() as $srmo )
 					<div class="rowmodel">
@@ -219,7 +219,7 @@ $eeeeeeeeee = 1;
 							</div>
 							<div class="">
 								<div class="form-group {{ $errors->has('srmo.*.model_id') ? 'has-error' : '' }}">
-									<select name="srmo[{{ $ee++ }}][model_id]" id="model_{{ $e++ }}" class="form-control" autocomplete="off" placeholder="Please choose">
+									<select name="srmo[{{ $e2++ }}][model_id]" id="model_{{ $e1++ }}" class="form-control" autocomplete="off" placeholder="Please choose">
 										<option value="">Please choose</option>
 @foreach( $model as $mod )
 										<option value="{!! $mod->id !!}" {!! ($srmo->model_id == $mod->id)?'selected':NULL !!}>{!! $mod->model !!}</option>
@@ -229,22 +229,22 @@ $eeeeeeeeee = 1;
 							</div>
 							<div class="">
 								<div class="form-group {{ $errors->has('srmo.*.test_run_machine') ? 'has-error' : '' }}">
-									{!! Form::text('srmo['. $eee++ .'][test_run_machine]', (!is_null($srmo->test_run_machine))?$srmo->test_run_machine:@$value,['id'=>'test_run_machine_'.$eeee++, 'class' => "form-control", 'autocomplete' => "off", 'placeholder' => "Test Run Machine"] ) !!}
+									{!! Form::text('srmo['. $e3++ .'][test_run_machine]', (!is_null($srmo->test_run_machine))?$srmo->test_run_machine:@$value,['id'=>'test_run_machine_'.$e4++, 'class' => "form-control", 'autocomplete' => "off", 'placeholder' => "Test Run Machine"] ) !!}
 								</div>
 							</div>
 							<div class="">
 								<div class="form-group {{ $errors->has('srmo.*.serial_no') ? 'has-error' : '' }}">
-									<input type="text" name="srmo[{{ $eeeee++ }}][serial_no]" value="{!! (!empty($srmo->serial_no))?$srmo->serial_no:@$value !!}" id="serial_no_{{ $eeeeee++ }}" class="form-control" autocomplete="off" placeholder="Serial No." />
+									<input type="text" name="srmo[{{ $e5++ }}][serial_no]" value="{!! (!empty($srmo->serial_no))?$srmo->serial_no:@$value !!}" id="serial_no_{{ $e6++ }}" class="form-control" autocomplete="off" placeholder="Serial No." />
 								</div>
 							</div>
 							<div class="">
 								<div class="form-group {{ $errors->has('srmo.*.test_capacity') ? 'has-error' : '' }}">
-									<input type="text" name="srmo[{{ $eeeeeee++ }}][test_capacity]" value="{!! (!empty($srmo->test_capacity))?$srmo->test_capacity:@$value !!}" id="test_capacity_{{ $eeeeeeee++ }}" class="form-control" autocomplete="off" placeholder="Test Capacity" />
+									<input type="text" name="srmo[{{ $e7++ }}][test_capacity]" value="{!! (!empty($srmo->test_capacity))?$srmo->test_capacity:@$value !!}" id="test_capacity_{{ $e8++ }}" class="form-control" autocomplete="off" placeholder="Test Capacity" />
 								</div>
 							</div>
 							<div class="">
 								<div class="form-group {{ $errors->has('srmo.*.duration') ? 'has-error' : '' }}">
-									<input type="text" name="srmo[{{ $eeeeeeee++ }}][duration]" value="{!! (!empty($srmo->duration))?$srmo->duration:@$value !!}" id="duration_{{ $eeeeeeeee++ }}" class="form-control" autocomplete="off" placeholder="Duration" />
+									<input type="text" name="srmo[{{ $e9++ }}][duration]" value="{!! (!empty($srmo->duration))?$srmo->duration:@$value !!}" id="duration_{{ $e10++ }}" class="form-control" autocomplete="off" placeholder="Duration" />
 								</div>
 							</div>
 						</div>
@@ -398,6 +398,7 @@ $r69 = 1;
 $r70 = 1;
 
 $r71 = 1;
+$r72 = 1;
 
 $gt = 0;
 ?>
@@ -433,60 +434,60 @@ $gt = 0;
 						<div class="row col-sm-12 form-inline">
 							<div class="col-sm-1 text-primary"><small>To <i class="fas fa-arrow-right"></i> <i class="fas fa-map-marker-alt"></i></small></div>
 
-							<div class="form-group {{ $errors->has('srj.*.*.date') ? 'has-error' : '' }}">
-								<input type="text" name="srj[{!! $r56++ !!}][1][destination_start]" value="{!! (!empty($srjd->destination_start))?$srjd->destination_start:@$value !!}" id="ds_1_{{ $r11++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Destination Start" />
+							<div class="form-group {{ $errors->has('srj.*.srjde.*.date') ? 'has-error' : '' }}">
+								<input type="text" name="srj[{!! $r56++ !!}][srjde][1][destination_start]" value="{!! (!empty($srjd->destination_start))?$srjd->destination_start:@$value !!}" id="ds_1_{{ $r11++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Destination Start" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.*.destination_end') ? 'has-error' : '' }}">
-								<input type="text" name="srj[{!! $r57++ !!}][1][destination_end]" value="{!! (!empty($srjd->destination_end))?$srjd->destination_end:@$value !!}" id="de_1_{{ $r12++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Destination End" />
+							<div class="form-group {{ $errors->has('srj.*.srjde.*.destination_end') ? 'has-error' : '' }}">
+								<input type="text" name="srj[{!! $r57++ !!}][srjde][1][destination_end]" value="{!! (!empty($srjd->destination_end))?$srjd->destination_end:@$value !!}" id="de_1_{{ $r12++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Destination End" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.*.meter_start') ? 'has-error' : '' }}">
-								<input type="textarea" name="srj[{!! $r58++ !!}][1][meter_start]" value="{!! (!empty($srjd->meter_start))?$srjd->meter_start:@$value !!}" id="ms_1_{{ $r13++ }}" class="form-control form-control-sm meterstart1" autocomplete="off" placeholder="Meter Start" />
+							<div class="form-group {{ $errors->has('srj.*.srjde.*.meter_start') ? 'has-error' : '' }}">
+								<input type="textarea" name="srj[{!! $r58++ !!}][srjde][1][meter_start]" value="{!! (!empty($srjd->meter_start))?$srjd->meter_start:@$value !!}" id="ms_1_{{ $r13++ }}" class="form-control form-control-sm meterstart1" autocomplete="off" placeholder="Meter Start" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.*.meter_end') ? 'has-error' : '' }}">
-								<input type="text" name="srj[{!! $r59++ !!}][1][meter_end]" value="{!! (!empty($srjd->meter_end))?$srjd->meter_end:@$value !!}" id="me_1_{{ $r14++ }}" class="form-control form-control-sm meterend1" autocomplete="off" placeholder="Meter End" />
+							<div class="form-group {{ $errors->has('srj.*.srjde.*.meter_end') ? 'has-error' : '' }}">
+								<input type="text" name="srj[{!! $r59++ !!}][srjde][1][meter_end]" value="{!! (!empty($srjd->meter_end))?$srjd->meter_end:@$value !!}" id="me_1_{{ $r14++ }}" class="form-control form-control-sm meterend1" autocomplete="off" placeholder="Meter End" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.*.time_start') ? 'has-error' : '' }}">
-								<input type="text" name="srj[{!! $r60++ !!}][1][time_start]" value="{!! (!empty($srjd->time_start))?$srjd->time_start:@$value !!}" id="ts_1_{{ $r15++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Time Start" />
+							<div class="form-group {{ $errors->has('srj.*.srjde.*.time_start') ? 'has-error' : '' }}">
+								<input type="text" name="srj[{!! $r60++ !!}][srjde][1][time_start]" value="{!! (!empty($srjd->time_start))?$srjd->time_start:@$value !!}" id="ts_1_{{ $r15++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Travel Time Start" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.*.time_end') ? 'has-error' : '' }}">
-								<input type="text" name="srj[{!! $r61++ !!}][1][time_end]" value="{!! (!empty($srjd->time_end))?$srjd->time_end:@$value !!}" id="te_1_{{ $r16++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Time End" />
+							<div class="form-group {{ $errors->has('srj.*.srjde.*.time_end') ? 'has-error' : '' }}">
+								<input type="text" name="srj[{!! $r61++ !!}][srjde][1][time_end]" value="{!! (!empty($srjd->time_end))?$srjd->time_end:@$value !!}" id="te_1_{{ $r16++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Travel Time End" />
 							</div>
-							<input type="hidden" name="srj[{!! $r62++ !!}][1][return]" value="0">
+							<input type="hidden" name="srj[{!! $r62++ !!}][srjde][1][return]" value="0">
 						</div>
 @endforeach
 @foreach( $srj->hasmanysrjobdetail()->where('return', 1)->get() as $srjd )
 						<div class="row col-sm-12 form-inline">
 							<div class="col-sm-1 text-primary"><small>Return <i class="fas fa-map-marker-alt"></i> <i class="fas fa-undo"></i></small></div>
 
-							<div class="form-group {{ $errors->has('srjd.*.date') ? 'has-error' : '' }}">
-								<input type="text" name="srj[{!! $r63++ !!}][2][destination_start]" value="{!! (!empty($srjd->destination_start))?$srjd->destination_start:@$value !!}" id="ds_2_{{ $r17++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Destination Start" />
+							<div class="form-group {{ $errors->has('srj.*.srjde.*.date') ? 'has-error' : '' }}">
+								<input type="text" name="srj[{!! $r63++ !!}][srjde][2][destination_start]" value="{!! (!empty($srjd->destination_start))?$srjd->destination_start:@$value !!}" id="ds_2_{{ $r17++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Destination Start" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srjd.*.destination_end') ? 'has-error' : '' }}">
-								<input type="text" name="srj[{!! $r64++ !!}][2][destination_end]" value="{!! (!empty($srjd->destination_end))?$srjd->destination_end:@$value !!}" id="de_2_{{ $r18++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Destination End" />
+							<div class="form-group {{ $errors->has('srj.*.srjde.*.destination_end') ? 'has-error' : '' }}">
+								<input type="text" name="srj[{!! $r64++ !!}][srjde][2][destination_end]" value="{!! (!empty($srjd->destination_end))?$srjd->destination_end:@$value !!}" id="de_2_{{ $r18++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Destination End" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srjd.*.meter_start') ? 'has-error' : '' }}">
-								<input type="textarea" name="srj[{!! $r65++ !!}][2][meter_start]" value="{!! (!empty($srjd->meter_start))?$srjd->meter_start:@$value !!}" id="ms_2_{{ $r19++ }}" class="form-control form-control-sm meterstart2" autocomplete="off" placeholder="Meter Start" />
+							<div class="form-group {{ $errors->has('srj.*.srjde.*.meter_start') ? 'has-error' : '' }}">
+								<input type="textarea" name="srj[{!! $r65++ !!}][srjde][2][meter_start]" value="{!! (!empty($srjd->meter_start))?$srjd->meter_start:@$value !!}" id="ms_2_{{ $r19++ }}" class="form-control form-control-sm meterstart2" autocomplete="off" placeholder="Meter Start" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srjd.*.meter_end') ? 'has-error' : '' }}">
-								<input type="text" name="srj[{!! $r66++ !!}][2][meter_end]" value="{!! (!empty($srjd->meter_end))?$srjd->meter_end:@$value !!}" id="me_2_{{ $r20++ }}" class="form-control form-control-sm meterend2" autocomplete="off" placeholder="Meter End" />
+							<div class="form-group {{ $errors->has('srj.*.srjde.*.meter_end') ? 'has-error' : '' }}">
+								<input type="text" name="srj[{!! $r66++ !!}][srjde][2][meter_end]" value="{!! (!empty($srjd->meter_end))?$srjd->meter_end:@$value !!}" id="me_2_{{ $r20++ }}" class="form-control form-control-sm meterend2" autocomplete="off" placeholder="Meter End" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srjd.*.time_start') ? 'has-error' : '' }}">
-								<input type="text" name="srj[{!! $r67++ !!}][2][time_start]" value="{!! (!empty($srjd->time_start))?$srjd->time_start:@$value !!}" id="ts_2_{{ $r21++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Time Start" />
+							<div class="form-group {{ $errors->has('srj.*.srjde.*.time_start') ? 'has-error' : '' }}">
+								<input type="text" name="srj[{!! $r67++ !!}][srjde][2][time_start]" value="{!! (!empty($srjd->time_start))?$srjd->time_start:@$value !!}" id="ts_2_{{ $r21++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Travel Time Start" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srjd.*.time_end') ? 'has-error' : '' }}">
-								<input type="text" name="srj[{!! $r68++ !!}][2][time_end]" value="{!! (!empty($srjd->time_end))?$srjd->time_end:@$value !!}" id="te_2_{{ $r22++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Time End" />
+							<div class="form-group {{ $errors->has('srj.*.srjde.*.time_end') ? 'has-error' : '' }}">
+								<input type="text" name="srj[{!! $r68++ !!}][srjde][2][time_end]" value="{!! (!empty($srjd->time_end))?$srjd->time_end:@$value !!}" id="te_2_{{ $r22++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Travel Time End" />
 							</div>
-							<input type="hidden" name="srj[{!! $r69++ !!}][2][return]" value="1">
+							<input type="hidden" name="srj[{!! $r69++ !!}][srjde][2][return]" value="1">
 						</div>
 						<br />
 @endforeach
@@ -500,7 +501,7 @@ $gt = 0;
 										<tr>
 											<td>Food : </td>
 											<td class="form-group {{ $errors->has('srj.*.food_rate') ? ' has-error' : '' }}">
-												<select name="srj[{{ $r++ }}][food_rate]" id="fr_{!! $r23++ !!}" class="form-control form-control-sm fr_" placeholder="Please choose">
+												<select name="srj[{{ $r72++ }}][food_rate]" id="fr_{!! $r23++ !!}" class="form-control form-control-sm fr_" placeholder="Please choose">
 													<option value="">Please choose</option>
 @foreach( ICSFoodRate::all() as $fr )
 													<option value="{!! $fr->value !!}" {!! ($srj->food_rate == $fr->value)?'selected':NULL !!} data-value="{{ $fr->value }}">{!! $fr->food_rate !!}</option>
@@ -561,7 +562,7 @@ $gt = 0;
 										<tr>
 											<td>Accommodation :</td>
 											<td class="form-group {{ $errors->has('srj.*.accommodation_rate') ? ' has-error' : '' }}">
-												<input type="text" name="srj[{{ $r37++ }}][accommodation_rate]" value="{{ (!is_null($srj->accommodation_rate))?$srj->accommodation_rate:NULL }}" class="form-control form-control-sm accommodationrate" id="accommodation_rate_{!! $r38++ !!}" placeholder="Accommodation Rate (RM)">
+												<input type="text" name="srj[{{ $r37++ }}][accommodation_rate]" value="{{ (!is_null($srj->accommodation_rate))?$srj->accommodation_rate:\App\Model\ICSFloatthConstant::where('active', 1)->first()->accommodation_rate }}" class="form-control form-control-sm accommodationrate" id="accommodation_rate_{!! $r38++ !!}" placeholder="Accommodation Rate (RM)">
 											</td>
 											<td>X</td>
 											<td>
@@ -837,12 +838,6 @@ $tac = 0;
 					<span class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Additional Charges</span>
 				</div>
 
-
-
-
-
-
-
 			</div>
 		</div>
 	</div>
@@ -856,12 +851,52 @@ $tac = 0;
 			<div class="card-header">Discount</div>
 			<div class="card-body">
 
+				<div class="container-fluid discount_wrap">
+<?php
+$dis1 = 1;
+$dis2 = 1;
+$dis3 = 1;
+$dis4 = 1;
+$tdisx = 0;
+?>
+@if( $serviceReport->hasonediscount()->get()->count() > 0 )
+@foreach($serviceReport->hasonediscount()->get() as $srDisc)
+					<div class="rowsrdiscount">
+						<div class="form-row col-sm-12">
 
-
-
-
-
-
+							<div class="col-sm-1 text-danger">
+									<i class="fas fa-trash delete_discount" aria-hidden="true" id="delete_discount_{!! $srDisc->id !!}" data-id="{!! $srDisc->id !!}"></i>
+							</div>
+							<div class="form-group col-3 {{ $errors->has('srDisc.*.discount_id') ? 'has-error' : '' }}">
+								<select name="srDisc[{{ $dis1++ }}][discount_id]" id="srdisc_{{ $dis2++ }}" class="form-control form-control-sm discount_id" placeholder="Please choose">
+									<option value="">Please choose</option>
+@foreach( \App\Model\Discount::all() as $disc )
+									<option value="{{ $disc->id }}" {{ ($disc->id == $srDisc->discount_id)?'selected':NULL }} >{{ $disc->discount_type }}</option>
+@endforeach
+								</select>
+							</div>
+							<div class="form-group col-2 {{ $errors->has('srDisc.*.value') ? 'has-error' : '' }}">
+								<input type="text" name="srDisc[{{ $dis3++ }}][value]" value="{{ ( !is_null($srDisc->value) )?$srDisc->value:@$value }}" id="value_{{ $dis4++ }}" class="form-control form-control-sm value_disc" placeholder="Value">
+							</div>
+							<div class="col-3">
+							&nbsp;
+							</div>
+							<div class="col-1">
+							=
+							</div>
+							<div class="col-2">
+							RM <span id="discount_value">{{ $tdisx }}</span>
+							</div>
+						</div>
+					</div>
+<?php $tdisx += $srDisc->value; ?>
+@endforeach
+@endif
+				</div>
+				<div class="col-sm-12">Grand Total Service Report<span class="float-right font-weight-bold text-primary">RM <span id="grandtotaldiscount">{{ @$tac }}</span></span></div>
+				<div class="row col-lg-12 add_discount">
+					<span class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Discount</span>
+				</div>
 
 			</div>
 		</div>
@@ -959,8 +994,8 @@ $p4 = 1;
 							<div class="col-sm-1 text-danger">
 									<i class="fas fa-trash " aria-hidden="true" id="delete_feedReq" data-id="1"></i>
 							</div>
-							<div class="form-group {{ $errors->has('srfR.*.problem') ? 'has-error' : '' }}">
-								<input type="text" name="srfR[1][problem]" value="{!! @$value !!}" id="request_1" class="form-control" autocomplete="off" placeholder="Additional Request" />
+							<div class="form-group {{ $errors->has('srfR.*.request') ? 'has-error' : '' }}">
+								<input type="text" name="srfR[1][request]" value="{!! @$value !!}" id="request_1" class="form-control" autocomplete="off" placeholder="Additional Request" />
 							</div>
 							<div class="form-group {{ $errors->has('srfR.*.action') ? 'has-error' : '' }}">
 								<input type="text" name="srfR[1][action]" value="{!! @$value !!}" id="action_1" class="form-control" autocomplete="off" placeholder="Action (Fill By Management)" />
@@ -992,6 +1027,8 @@ $item1 = 1;
 $item2 = 1;
 $item3 = 1;
 $item4 = 1;
+$item5 = 1;
+$item6 = 1;
 ?>
 @if( $serviceReport->hasmanyfeeditem()->get()->count() > 0 )
 @foreach($serviceReport->hasmanyfeeditem()->get() as $srfI)
@@ -1004,10 +1041,10 @@ $item4 = 1;
 								<input type="text" name="srfI[{{ $item1++ }}][item]" value="{!! (!empty($srfI->item))?$srfI->item:@$value !!}" id="item_{{ $item2++ }}" class="form-control" autocomplete="off" placeholder="Item" />
 							</div>
 							<div class="form-group col-3 {{ $errors->has('srfI.*.quantity') ? 'has-error' : '' }}">
-								<input type="text" name="srfI[{{ $item1++ }}][quantity]" value="{!! (!empty($srfI->quantity))?$srfI->quantity:@$value !!}" id="quantity_{{ $item2++ }}" class="form-control" autocomplete="off" placeholder="Quantity" />
+								<input type="text" name="srfI[{{ $item3++ }}][quantity]" value="{!! (!empty($srfI->quantity))?$srfI->quantity:@$value !!}" id="quantity_{{ $item4++ }}" class="form-control" autocomplete="off" placeholder="Quantity" />
 							</div>
 							<div class="form-group col-3 {{ $errors->has('srfI.*.item_action') ? 'has-error' : '' }}">
-								<input type="text" name="srfI[{{ $item3++ }}][item_action]" value="{!! (!empty($srfI->item_action))?$srfI->item_action:@$value !!}" id="item_action_{{ $item4++ }}" class="form-control" autocomplete="off" placeholder="Action (Fill By Management)" />
+								<input type="text" name="srfI[{{ $item5++ }}][item_action]" value="{!! (!empty($srfI->item_action))?$srfI->item_action:@$value !!}" id="item_action_{{ $item6++ }}" class="form-control" autocomplete="off" placeholder="Action (Fill By Management)" />
 							</div>
 						</div>
 					</div>
@@ -1042,13 +1079,23 @@ $item4 = 1;
 		<div class="card">
 			<div class="card-header">Misc</div>
 			<div class="card-body">
-
-				<div class="form-group {{ $errors->has('feed_new_machine') ? 'has-error' : '' }}">
+<?php
+if (!is_null($serviceReport->hasmanyfeedback()->first())) {
+	$nm = $serviceReport->hasmanyfeedback()->first()->new_machine;
+	$be = $serviceReport->hasmanyfeedback()->first()->building_expansion;
+	$pacs = $serviceReport->hasmanyfeedback()->first()->problem_at_client_site;
+} else {
+	$nm = NULL;
+	$be = NULL;
+	$pacs = NULL;
+}
+?>
+				<div class="form-group {{ $errors->has('new_machine') ? 'has-error' : '' }}">
 					{{ Form::label( 'feed_new_machine', 'New Machine Found On Site : ', ['class' => 'col-sm-6 col-form-label'] ) }}
 @foreach( \App\Model\YesNoLabel::all() as $ynl )
 					<div class="form-check form-check-inline">
 						<div class="pretty p-icon p-round p-smooth">
-							{{ Form::radio('feed_new_machine', $ynl->value, @$value, ['class' => 'form-control']) }}
+							{{ Form::radio('new_machine', $ynl->value, ($ynl->value == $nm)?true:@$value, ['class' => 'form-control']) }}
 							<div class="state p-success">
 								<i class="icon mdi mdi-check"></i>
 								<label>{{ $ynl->label }}</label>
@@ -1058,12 +1105,27 @@ $item4 = 1;
 @endforeach
 				</div>
 
-				<div class="form-group {{ $errors->has('feed_problem_customer_site') ? 'has-error' : '' }}">
+				<div class="form-group {{ $errors->has('building_expansion') ? 'has-error' : '' }}">
+					{{ Form::label( 'feed_building_machine', 'Building Expansion : ', ['class' => 'col-sm-6 col-form-label'] ) }}
+@foreach( \App\Model\YesNoLabel::all() as $ynl )
+					<div class="form-check form-check-inline">
+						<div class="pretty p-icon p-round p-smooth">
+							{{ Form::radio('building_expansion', $ynl->value, ($ynl->value == $be)?true:@$value, ['class' => 'form-control']) }}
+							<div class="state p-success">
+								<i class="icon mdi mdi-check"></i>
+								<label>{{ $ynl->label }}</label>
+							</div>
+						</div>
+					</div>
+@endforeach
+				</div>
+
+				<div class="form-group {{ $errors->has('problem_at_client_site') ? 'has-error' : '' }}">
 					{{ Form::label( 'feed_problem_customer_site', 'Problem At Customer Site : ', ['class' => 'col-sm-6 col-form-label'] ) }}
 @foreach( \App\Model\YesNoLabel::all() as $ynl )
 					<div class="form-check form-check-inline">
 						<div class="pretty p-icon p-round p-smooth">
-							{{ Form::radio('feed_problem_customer_site', $ynl->value, @$value, ['class' => 'form-control']) }}
+							{{ Form::radio('problem_at_client_site', $ynl->value, ($ynl->value == $pacs)?true:@$value, ['class' => 'form-control']) }}
 							<div class="state p-success">
 								<i class="icon mdi mdi-check"></i>
 								<label>{{ $ynl->label }}</label>
@@ -1078,8 +1140,42 @@ $item4 = 1;
 	</div>
 </div>
 
+<br />
+
+<div class="row">
+	<div class="col-sm-12">
+		<div class="card">
+			<div class="card-header">Proceed With :</div>
+			<div class="card-body">
+<?php
+if(!is_null($serviceReport->hasmanyfeedback()->first())) {
+	$pid = $serviceReport->hasmanyfeedback()->first()->proceed_id;
+} else {
+	$pid = NULL;
+}
+?>
+				<div class="form-group {{ $errors->has('proceed_id') ? 'has-error' : '' }}">
+					{{ Form::label( 'proceed', 'Proceed With : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+@foreach( \App\Model\ICSProceed::all() as $pro )
+					<div class="form-check form-check-inline">
+						<div class="pretty p-icon p-round p-smooth">
+							{{ Form::radio('proceed_id', $pro->id, @$value, ['class' => 'form-control']) }}
+							<div class="state p-success">
+								<i class="icon mdi mdi-check"></i>
+								<label>{{ $pro->proceed }}</label>
+							</div>
+						</div>
+					</div>
+@endforeach
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
 
 <br />
+
 <div class="form-group row">
 	<div class="col-sm-10 offset-sm-2">
 		{!! Form::button('Save', ['class' => 'btn btn-primary btn-block', 'type' => 'submit']) !!}

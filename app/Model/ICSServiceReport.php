@@ -49,9 +49,9 @@ class ICSServiceReport extends Model
 		return $this->hasMany('App\Model\ICSServiceReportAdditionalCharge', 'service_report_id');
 	}
 
-	public function hasmanydiscount()
+	public function hasonediscount()
 	{
-		return $this->hasMany('App\Model\ICSServiceReportDiscount', 'service_report_id');
+		return $this->hasOne('App\Model\ICSServiceReportDiscount', 'service_report_id');
 	}
 
 	public function hasmanyfeedcall()
@@ -86,6 +86,16 @@ class ICSServiceReport extends Model
 		return $this->belongsTo('App\Model\Staff', 'staff_id');
 	}
 
+	public function belongtoinformby()
+	{
+		return $this->belongsTo('App\Model\Staff', 'inform_by');
+	}
+
+	public function belongtoupdatedby()
+	{
+		return $this->belongsTo('App\Model\Staff', 'updated_by');
+	}
+
 	public function belongtoapproval()
 	{
 		return $this->belongsTo('App\Model\Staff', 'approved_by');
@@ -99,11 +109,6 @@ class ICSServiceReport extends Model
 	public function belongtocharge()
 	{
 		return $this->belongsTo('App\Model\ICSCharge', 'charge_id');
-	}
-
-	public function belongtovehicle()
-	{
-		return $this->belongsTo('App\Model\Vehicle', 'vehicle_id');
 	}
 
 	public function belongtoproceed()
