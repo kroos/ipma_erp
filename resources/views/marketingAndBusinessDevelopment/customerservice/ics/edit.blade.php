@@ -48,7 +48,7 @@
 @section('js')
 /////////////////////////////////////////////////////////////////////////////////////////
 //ucwords
-$("#compby, #compl").keyup(function() {
+$("#compby, #compl, #remarks").keyup(function() {
 	tch(this);
 });
 
@@ -2412,6 +2412,13 @@ $('#form').bootstrapValidator({
 		},
 
 @endfor
+		remarks: {
+			validators : {
+				notEmpty: {
+					message: 'This field cannot be empty. '
+				},
+			}
+		},
 		complaint: {
 			validators : {
 				notEmpty: {

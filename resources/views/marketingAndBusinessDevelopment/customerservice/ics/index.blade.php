@@ -28,7 +28,7 @@
 			<div class="card-body">
 				<div class="card">
 					<div class="card-header">Service Report List</div>
-					<div class="card-body">
+					<div class="card-body table-responsive">
 @include('marketingAndBusinessDevelopment.customerservice.ics._content')
 					</div>
 					<div class="card-footer">
@@ -55,22 +55,137 @@ $("#username").keyup(function() {
 $.fn.dataTable.moment( 'ddd, D MMM YYYY' );
 $('#servicereport1').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	"order": [[1, "desc" ]],	// sorting the 2nd column descending
+	"order": [[1, "asc" ]],	// sorting the 2nd column ascending
 	// responsive: true
 });
 
 $('#servicereport2').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	"order": [[1, "desc" ]],	// sorting the 2nd column descending
+	"order": [[1, "asc" ]],	// sorting the 2nd column ascending
 	// responsive: true
 });
 
 $('#servicereport3').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	"order": [[1, "desc" ]],	// sorting the 2nd column descending
+	"order": [[1, "asc" ]],	// sorting the 2nd column ascending
+	// responsive: true
+});
+
+$('#servicereport4').DataTable({
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	"order": [[1, "asc" ]],	// sorting the 2nd column ascending
+	// responsive: true
+});
+
+$('#servicereport5').DataTable({
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	"order": [[1, "asc" ]],	// sorting the 2nd column ascending
 	// responsive: true
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ajax post approval
+$(document).on('click', '.approval', function(e){
+	var srDisc = $(this).data('id');
+	SwalApproveSR(srDisc);
+	e.preventDefault();
+});
+
+function SwalApproveSR(srDisc){
+	swal({
+		title: 'Service Report Approval',
+		text: 'Approve This Service Report?',
+		type: 'question',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Approve',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('serviceReport') }}' + '/' + srDisc + '/updateApproveSR',
+					type: 'PATCH',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: srDisc,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Approved!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_logistic_' + srDisc).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Service Report Not Approve', 'info')
+		}
+	});
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ajax post inactive
+$(document).on('click', '.inactivate', function(e){
+	var srDisc = $(this).data('id');
+	SwalApproveSR(srDisc);
+	e.preventDefault();
+});
+
+function SwalApproveSR(srDisc){
+	swal({
+		title: 'Service Report Approval',
+		text: 'Approve This Service Report?',
+		type: 'question',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Approve',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('serviceReport') }}' + '/' + srDisc + '/updateApproveSR',
+					type: 'PATCH',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: srDisc,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Approved!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_logistic_' + srDisc).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Service Report Not Approve', 'info')
+		}
+	});
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @endsection
 

@@ -304,10 +304,17 @@ $rrrr = 1;
 		</div>
 	</div>
 	<div class="col-sm-6">
-<!-- 		<div class="card">
-			<div class="card-header"></div>
-			<div class="card-body"></div>
-		</div> -->
+		<div class="card">
+			<div class="card-header">Remarks</div>
+			<div class="card-body">
+				<div class="form-group row {{ $errors->has('remarks') ? 'has-error' : '' }}">
+					{!! Form::label('remarks', 'Remarks : ', ['class' => 'col-form-label col-3']) !!}
+					<div class="col-9">
+						{!! Form::textarea('remarks', @$value, ['id' => 'remarks', 'class' => 'form-control form-control-sm', 'placeholder' => 'Remarks']) !!}
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 

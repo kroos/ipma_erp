@@ -96,7 +96,7 @@ class ICSServiceReport extends Model
 		return $this->belongsTo('App\Model\Staff', 'updated_by');
 	}
 
-	public function belongtoapproval()
+	public function belongtoapprovedby()
 	{
 		return $this->belongsTo('App\Model\Staff', 'approved_by');
 	}

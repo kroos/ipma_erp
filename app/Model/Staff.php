@@ -87,9 +87,20 @@ class Staff extends Model
         return $this->hasMany('\App\Model\StaffTCMS', 'staff_id');
     }
 
+// service report
     public function hasmanyservicereport()
     {
         return $this->hasMany('\App\Model\ICSServiceReport', 'staff_id');
+    }
+
+    public function hasmanysrupdater()
+    {
+        return $this->hasMany('\App\Model\ICSServiceReport', 'updated_by');
+    }
+
+    public function hasmanysrapproval()
+    {
+        return $this->hasMany('\App\Model\ICSServiceReport', 'approved_by');
     }
 
     public function hasmanysrattendees()

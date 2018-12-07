@@ -134,6 +134,14 @@ Route::post('/staffAnnualMCLeave/storeALMCML', [
 	'uses' => 'Administrative\HumanResource\LeaveEditing\StaffAnnualMCLeaveController@storeALMCML'
 ]);
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+## service report section
+// approve sr
+Route::patch('/serviceReport/{serviceReport}/updateApproveSR', [
+		'as' => 'serviceReport.updateApproveSR',
+		'uses' => 'Sales\CustomerService\ServiceReportController@updateApproveSR'
+	]);
+
 ############################################################################
 // Division Page Controller
 Route::resources([

@@ -47,9 +47,8 @@ class ServiceReportController extends Controller
 
 		// attendees
 		if ($request->has('sr')) {
-			$serviceReport->hasmanyattendees()->delete();
 			foreach( $request->sr as $key => $val ) {
-				$serviceReport->hasmanyattendees()->create([
+				$sr->hasmanyattendees()->create([
 					'attended_by' => $val['attended_by']
 				]);
 			}
@@ -73,7 +72,7 @@ class ServiceReportController extends Controller
 		// print_r($request->all());
 		// echo '<br />';
 
-		$serviceReport->update( array_add($request->only(['date', 'charge_id', 'customer_id', 'proceed_id']), 'updated_by', \Auth::user()->belongtostaff->id) );
+		$serviceReport->update( array_add($request->only(['date', 'charge_id', 'customer_id', 'proceed_id', 'reamrks']), 'updated_by', \Auth::user()->belongtostaff->id) );
 
 		// serial
 		if ($request->has('srs')) {
@@ -268,6 +267,31 @@ class ServiceReportController extends Controller
 		return redirect( route('serviceReport.index') );
 	}
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+	// addition
+	// update approval
+	public function updateApproveSR(Request $request, ICSServiceReport $serviceReport) {
+		// \Auth::user()->belongtostaff->hasmanysrapproval()->update(['id' => $serviceReport->id], []);
+		$serviceReport->update(['approved_by' => \Auth::user()->belongtostaff->id]);
+
+		return response()->json([
+			'message' => 'Service Report Approve',
+			'status' => 'success'
+		]);
+	}
+
+	// update approval
+	public function updatecheckSR(Request $request, ICSServiceReport $serviceReport) {
+		// \Auth::user()->belongtostaff->hasmanysrapproval()->update(['id' => $serviceReport->id], []);
+		$serviceReport->update(['approved_by' => \Auth::user()->belongtostaff->id]);
+
+		return response()->json([
+			'message' => 'Service Report Approve',
+			'status' => 'success'
+		]);
+	}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 	public function destroy(ICSServiceReport $serviceReport)
 	{
 	//
