@@ -102,7 +102,7 @@ $di = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1
 @endif
 			</td>
 			<td>
-				<a href="{!! route('serviceReport.show', $sr->id) !!}" title="Show"><i class="far fa-eye"></i></a>
+				<a href="{!! route('serviceReport.show', $sr->id) !!}" target="_blank" title="Show"><i class="far fa-eye"></i></a>
 				<a href="{!! route('serviceReport.edit', $sr->id) !!}" title="Update"><i class="far fa-edit"></i></a>
 				<span class="text-danger inactivate" data-id="{!! $sr->id !!}" title="Delete"><i class="far fa-trash-alt"></i></span>
 			</td>
@@ -188,7 +188,7 @@ $di = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1
 @endif
 			</td>
 			<td>
-				<a href="{!! route('serviceReport.show', $sr->id) !!}" title="Show"><i class="far fa-eye"></i></a>
+				<a href="{!! route('serviceReport.show', $sr->id) !!}" target="_blank" title="Show"><i class="far fa-eye"></i></a>
 				<a href="{!! route('serviceReport.edit', $sr->id) !!}" title="Update"><i class="far fa-edit"></i></a>
 				<span class="text-danger inactivate" data-id="{!! $sr->id !!}"><i class="far fa-trash-alt"></i></span>
 			</td>
@@ -280,7 +280,7 @@ $di = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1
 @endif
 			</td>
 			<td>
-				<a href="{!! route('serviceReport.show', $sr->id) !!}" title="Show"><i class="far fa-eye"></i></a>
+				<a href="{!! route('serviceReport.show', $sr->id) !!}" target="_blank" title="Show"><i class="far fa-eye"></i></a>
 				<a href="{!! route('serviceReport.edit', $sr->id) !!}" title="Update"><i class="far fa-edit"></i></a>
 				<span class="text-danger inactivate" data-id="{!! $sr->id !!}"><i class="far fa-trash-alt"></i></span>
 			</td>
@@ -374,7 +374,7 @@ $di = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1
 @endif
 			</td>
 			<td>
-				<a href="{!! route('serviceReport.show', $sr->id) !!}" title="Show"><i class="far fa-eye"></i></a>
+				<a href="{!! route('serviceReport.show', $sr->id) !!}" target="_blank" title="Show"><i class="far fa-eye"></i></a>
 				<a href="{!! route('serviceReport.edit', $sr->id) !!}" title="Update"><i class="far fa-edit"></i></a>
 				<span class="text-danger inactivate" data-id="{!! $sr->id !!}"><i class="far fa-trash-alt"></i></span>
 			</td>
@@ -468,7 +468,7 @@ $di = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1
 @endif
 			</td>
 			<td>
-				<a href="{!! route('serviceReport.show', $sr->id) !!}" title="Show"><i class="far fa-eye"></i></a>
+				<a href="{!! route('serviceReport.show', $sr->id) !!}" target="_blank" title="Show"><i class="far fa-eye"></i></a>
 				<a href="{!! route('serviceReport.edit', $sr->id) !!}" title="Update"><i class="far fa-edit"></i></a>
 				<span class="text-danger inactivate" data-id="{!! $sr->id !!}"><i class="far fa-trash-alt"></i></span>
 			</td>

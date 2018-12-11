@@ -59,7 +59,7 @@ class ServiceReportController extends Controller
 
 	public function show(ICSServiceReport $serviceReport)
 	{
-	//
+		return view('marketingAndBusinessDevelopment.customerservice.ics.show', compact(['serviceReport']));
 	}
 
 	public function edit(ICSServiceReport $serviceReport)
