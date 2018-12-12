@@ -138,15 +138,15 @@ function SwalApproveSR(srDisc){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ajax post inactive
 $(document).on('click', '.inactivate', function(e){
-	var srDisc = $(this).data('id');
-	SwalApproveSR(srDisc);
+	var sRinact = $(this).data('id');
+	SwalInactiveSR(sRinact);
 	e.preventDefault();
 });
 
-function SwalApproveSR(srDisc){
+function SwalInactiveSR(sRinact){
 	swal({
-		title: 'Service Report Approval',
-		text: 'Approve This Service Report?',
+		title: 'Deactivate Service Report',
+		text: 'Deactivate This Service Report?',
 		type: 'question',
 		showCancelButton: true,
 		confirmButtonColor: '#3085d6',
@@ -157,11 +157,11 @@ function SwalApproveSR(srDisc){
 		preConfirm: function() {
 			return new Promise(function(resolve) {
 				$.ajax({
-					url: '{{ url('serviceReport') }}' + '/' + srDisc + '/updateApproveSR',
+					url: '{{ url('serviceReport') }}' + '/' + sRinact + '/updateApproveSR',
 					type: 'PATCH',
 					data: {
 							_token : $('meta[name=csrf-token]').attr('content'),
-							id: srDisc,
+							id: sRinact,
 					},
 					dataType: 'json'
 				})
@@ -170,7 +170,7 @@ function SwalApproveSR(srDisc){
 					.then(function(){
 						window.location.reload(true);
 					});
-					//$('#delete_logistic_' + srDisc).parent().parent().remove();
+					//$('#delete_logistic_' + sRinact).parent().parent().remove();
 				})
 				.fail(function(){
 					swal('Oops...', 'Something went wrong with ajax !', 'error');

@@ -160,7 +160,7 @@ class ServiceReportController extends Controller
 					'overtime_constant_1' => $floatth->overtime_constant_1,
 					'overtime_constant_2' => $floatth->overtime_constant_2,
 					'travel_meter_rate' => $floatth->travel_meter_rate,
-					'travel_hour_constant' => $floatth->travel_hour_constant,
+					'travel_hour_constant' => $floatth->travel_hour_rate,
 				]);
 					foreach($val['srjde'] as $k => $v) {
 						if( is_null($v['time_start']) ) {		// checking for NULL time

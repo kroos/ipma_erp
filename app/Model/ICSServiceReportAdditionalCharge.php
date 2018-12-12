@@ -19,4 +19,9 @@ class ICSServiceReportAdditionalCharge extends Model
 	{
 		return $this->belongsTo('App\Model\ICSServiceReport', 'service_report_id');
 	}
+
+	public function belongtoamount()
+	{
+		return $this->belongsTo('App\Model\Amount', 'amount_id');
+	}
 }

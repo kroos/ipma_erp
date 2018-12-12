@@ -1773,13 +1773,14 @@ $(document).on('keyup', '.labour_', function () {
 	$(anl).text( countnonleader );
 
 	if( $(this).val() > 0 ) {
-			var totalallowancelabour = ((($(all).val()*100)/100) + ((($(anll).val()*100)/100) * ((countnonleader * 100)/100))) / ( (( $(wtv).val() )*100) /100 );
+			var totalallowancelabour = ((($(all).val()*100)/100) + ((($(anll).val()*100)/100) * ((countnonleader * 100)/100))) / ( (( $(wtv).val() )*100) / 100 );
+			var totalallowancelabour0 = ((totalallowancelabour * 100)/100) * (($(wtv).val() * 100) / 100);
 	} else {
 		var totalallowancelabour = 0;
 	}
 	$(tla).text( totalallowancelabour.toFixed(2) );
-	$(tla1).text( totalallowancelabour.toFixed(2) );
-	$(tla2).text( totalallowancelabour.toFixed(2) );
+	$(tla1).text( totalallowancelabour0.toFixed(2) );
+	$(tla2).text( totalallowancelabour0.toFixed(2) );
 
 	// overtime section
 	var oc1 = $(this).parent().parent().parent().children().children().children().children().children().children().children('.overtimeconstant1');
@@ -1992,9 +1993,11 @@ $(document).on('keyup', '.allowanceleaderlabour', function () {
 	// console.log($(this).val());
 
 	var tlanew = ( (($(this).val() * 100) / 100) + ((($(anll).val() * 100) / 100) * (($(anl).text() * 100) / 100)) ) / (($(wtv).val() * 100) / 100);
+	var tlanew0 = ((tlanew * 100)/ 100) * (($(wtv).val() * 100) / 100);
+
 	$(tla).text(tlanew.toFixed(2));
-	$(tla1).text(tlanew.toFixed(2));
-	$(tla2).text(tlanew.toFixed(2));
+	$(tla1).text(tlanew0.toFixed(2));
+	$(tla2).text(tlanew0.toFixed(2));
 
 	// overtime section
 	var oc1 = $(this).parent().parent().parent().children().children().children('.overtimeconstant1');
@@ -2044,9 +2047,11 @@ $(document).on('keyup', '.allowancenonleaderlabour', function () {
 	// console.log($(this).val());
 
 	var tlanew = ( (($(all).val() * 100) / 100) + ((($(this).val() * 100) / 100) * (($(anl).text() * 100) / 100)) ) / (($(wtv).val() * 100) / 100);
+	var tlanew0 = ((tlanew * 100) / 100) * (($(wtv).val() * 100) / 100);
+
 	$(tla).text(tlanew.toFixed(2));
-	$(tla1).text(tlanew.toFixed(2));
-	$(tla2).text(tlanew.toFixed(2));
+	$(tla1).text(tlanew0.toFixed(2));
+	$(tla2).text(tlanew0.toFixed(2));
 
 	// overtime section
 	var oc1 = $(this).parent().parent().parent().children().children().children('.overtimeconstant1');
@@ -2096,9 +2101,11 @@ $(document).on('change', '.workingtypevalue', function () {
 	// console.log($(this).val());
 
 	var tlanew = ( (($(all).val() * 100) / 100) + ((($(anll).val() * 100) / 100) * (($(anl).text() * 100) / 100)) ) / (($(this).val() * 100) / 100);
+	var tlanew0 = ((tlanew * 100)/ 100) * (($(this).val() * 100) / 100);
+
 	$(tla).text(tlanew.toFixed(2));
-	$(tla1).text(tlanew.toFixed(2));
-	$(tla2).text(tlanew.toFixed(2));
+	$(tla1).text(tlanew0.toFixed(2));
+	$(tla2).text(tlanew0.toFixed(2));
 
 	// overtime section
 	var oc1 = $(this).parent().parent().parent().children().children().children('.overtimeconstant1');
