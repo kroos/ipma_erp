@@ -38,6 +38,27 @@ use \Carbon\CarbonPeriod;
 			max-width: 100%;
 			height: auto;
 		}
+		table {
+			font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+			border-collapse: collapse;
+		}
+
+		table td, table th {
+			border: 1px solid #ddd;
+			padding: 8px;
+		}
+
+		table tr:nth-child(even){background-color: #f2f2f2;}
+
+		table tr:hover {background-color: #ddd;}
+
+		table th {
+			padding-top: 12px;
+			padding-bottom: 12px;
+			text-align: left;
+			background-color: #4CAF50;
+			color: white;
+		}
 	</style>
 
 </head>
@@ -50,31 +71,31 @@ use \Carbon\CarbonPeriod;
 				<table width="90%" border="1" cellspacing="1" cellpadding="1">
 					<tbody>
 						<tr>
-							<td colspan="10" width="70%">
+							<th colspan="10" width="70%">
 								<center><h1><u>Service Report</u></h1></center>
-							</td>
+							</th>
 							<td colspan="2" width="30%">
 								<table width="100%" cellspacing="1" cellpadding="1">
 									<tbody>
 @if ($serviceReport->hasmanyserial()->get()->count() > 0)
 @foreach($serviceReport->hasmanyserial()->get() as $srs)
 										<tr>
-											<td>No : </td>
+											<th>No : </th>
 											<td>{!! $srs->serial !!}</td>
 										</tr>
 @endforeach
 @else
 										<tr>
-											<td>No : </td>
+											<th>No : </th>
 											<td></td>
 										</tr>
 @endif
 										<tr>
-											<td>Date : </td>
+											<th>Date : </th>
 											<td>{{ Carbon::parse($serviceReport->date)->format('D, j M Y') }}</td>
 										</tr>
 										<tr>
-											<td>Informed By : </td>
+											<th>Informed By : </th>
 											<td>Mr. {{ $serviceReport->belongtoinformby->name }}</td>
 										</tr>
 									</tbody>
@@ -95,13 +116,13 @@ use \Carbon\CarbonPeriod;
 								<table width="100%" cellpadding="1" cellspacing="1" border="0">
 									<tbody>
 										<tr>
-											<td colspan="3">
+											<th colspan="3">
 												<label for="n1"><input type="checkbox" name="" value="1" id="n1" {!! (!is_null($serviceReport->charge_id))?(($serviceReport->charge_id == 1)?'checked':NULL):NULL !!} disabled>&nbsp;Charge Parts</label>&nbsp;&nbsp;&nbsp;
 												<label for="n2"><input type="checkbox" disabled="disabled" {!! (!is_null($serviceReport->charge_id))?(($serviceReport->charge_id == 2)?'checked':NULL):NULL !!} >&nbsp;Full Charge</label>
-											</td>
+											</th>
 										</tr>
 										<tr>
-											<td colspan="3">Service attended by : </td>
+											<th colspan="3">Service attended by : </th>
 										</tr>
 <?php $i = 1 ?>
 @if($serviceReport->hasmanyattendees()->get()->count() > 0)
@@ -147,23 +168,23 @@ use \Carbon\CarbonPeriod;
 @if($serviceReport->hasmanymodel()->get()->count() > 0)
 @foreach($serviceReport->hasmanymodel()->get() as $srm)
 										<tr>
-											<td>Model :</td>
+											<th>Model :</th>
 											<td>{!! $srm->belongtomachinemodel->model !!}</td>
 										</tr>
 										<tr>
-											<td>Test Run Machine :</td>
+											<th>Test Run Machine :</th>
 											<td>{!! $srm->test_run_machine !!}</td>
 										</tr>
 										<tr>
-											<td>Serial No :</td>
+											<th>Serial No :</th>
 											<td>{!! $srm->serial_no !!}</td>
 										</tr>
 										<tr>
-											<td>Test Capacity :</td>
+											<th>Test Capacity :</th>
 											<td>{!! $srm->test_capacity !!}</td>
 										</tr>
 										<tr>
-											<td>Duration :</td>
+											<th>Duration :</th>
 											<td>{!! $srm->duration !!}</td>
 										</tr>
 										<tr>
@@ -173,23 +194,23 @@ use \Carbon\CarbonPeriod;
 @endforeach
 @else
 										<tr>
-											<td>Model :</td>
+											<th>Model :</th>
 											<td></td>
 										</tr>
 										<tr>
-											<td>Test Run Machine :</td>
+											<th>Test Run Machine :</th>
 											<td></td>
 										</tr>
 										<tr>
-											<td>Serial No :</td>
+											<th>Serial No :</th>
 											<td></td>
 										</tr>
 										<tr>
-											<td>Test Capacity :</td>
+											<th>Test Capacity :</th>
 											<td></td>
 										</tr>
 										<tr>
-											<td>Duration :</td>
+											<th>Duration :</th>
 											<td></td>
 										</tr>
 @endif
@@ -213,8 +234,8 @@ use \Carbon\CarbonPeriod;
 								<table width="100%" border="1" cellspacing="1" cellpadding="1">
 									<tbody>
 										<tr>
-											<td colspan="3" width="30%">Parts & Accessories</td>
-											<td colspan="1" width="10%">Quantity</td>
+											<th colspan="3" width="30%">Parts & Accessories</th>
+											<th colspan="1" width="10%">Quantity</th>
 										</tr>
 @if($serviceReport->hasmanypart()->get()->count() > 0)
 @foreach($serviceReport->hasmanypart()->get() as $srp)
@@ -236,14 +257,14 @@ use \Carbon\CarbonPeriod;
 								<table width="100%" border="1" cellspacing="1" cellpadding="1">
 									<tbody>
 										<tr>
-											<td colspan="5" align="center">Time Spent</td>
+											<th colspan="5" align="center">Time Spent</th>
 										</tr>
 										<tr>
-											<td width="20%">Date</td>
-											<td width="20%">No. Of Labour</td>
-											<td width="20%">Travel Time</td>
-											<td width="20%">Working Time</td>
-											<td width="20%">Total</td>
+											<th width="20%">Date</th>
+											<th width="20%">No. Of Labour</th>
+											<th width="20%">Travel Time</th>
+											<th width="20%">Working Time</th>
+											<th width="20%">Total</th>
 										</tr>
 @if($serviceReport->hasmanyjob()->get()->count() > 0)
 @foreach($serviceReport->hasmanyjob()->get() as $srj1)
@@ -346,14 +367,14 @@ $thours = floor($th / 60).' hours '.($th -   floor($th / 60) * 60).' minutes';
 			<table width="90%" border="1" cellspacing="1" cellpadding="1">
 				<tbody>
 					<tr>
-						<td colspan="3" width="10%">Date</td>
-						<td width="10%">Trip</td>
-						<td width="10%">From</td>
-						<td width="10%">To</td>
-						<td width="10%">Meter Reading Start</td>
-						<td width="10%">Meter Reading End</td>
-						<td colspan="2" width="20%">Travel Time</td>
-						<td colspan="2" width="20%">Working Time</td>
+						<th colspan="3" width="10%">Date</th>
+						<th width="10%">Trip</th>
+						<th width="10%">From</th>
+						<th width="10%">To</th>
+						<th width="10%">Meter Reading Start</th>
+						<th width="10%">Meter Reading End</th>
+						<th colspan="2" width="20%">Travel Time</th>
+						<th colspan="2" width="20%">Working Time</th>
 					</tr>
 						
 <?php $r = 1 ?>
@@ -388,7 +409,23 @@ $thours = floor($th / 60).' hours '.($th -   floor($th / 60) * 60).' minutes';
 @endif
 @endforeach
 @else
-
+					<tr>
+						<td colspan="7">&nbsp;</td>
+					</tr>
+@endif
+					<tr>
+						<td colspan="7">&nbsp;</td>
+					</tr>
+					<tr>
+						<td colspan="7">&nbsp;</td>
+					</tr>
+@if( !is_null( $serviceReport->proceed_id ) )
+					<tr>
+						<th colspan="2">Proceed With :</th>
+@foreach( \App\Model\ICSProceed::all() as $p )
+						<t{!! ( $serviceReport->proceed_id == $p->id )?'h':'d' !!}>{{ $p->proceed }}</t{!! ($serviceReport->proceed_id == $p->id)?'h':'d' !!}>
+@endforeach
+					</tr>
 @endif
 					</tbody>
 				</table>
@@ -417,15 +454,12 @@ $thours = floor($th / 60).' hours '.($th -   floor($th / 60) * 60).' minutes';
 				<tr>
 					<td colspan="14">&nbsp;</td>
 				</tr>
-@if($serviceReport->hasmanyjob()->get()->count() > 0)
 <?php $count = 0 ?>
+@if($serviceReport->hasmanyjob()->get()->count() > 0)
 @foreach($serviceReport->hasmanyjob()->get() as $srj5)
 				<tr>
-					<th>Date : </th>
-					<th colspan="14" align="left">{{ Carbon::parse($srj5->date)->format('D, j F Y') }}</th>
-				</tr>
-				<tr>
-					<td colspan="14">&nbsp;</td>
+					<th align="left">Date : </th>
+					<td colspan="14" align="left">{{ Carbon::parse($srj5->date)->format('D, j F Y') }}</td>
 				</tr>
 				<tr>
 <?php
@@ -453,7 +487,7 @@ $f6 = ( $f2 * $srj5->working_type_value ) * $srj5->travel_hour_constant * $srj5-
 $total = $f1 + $f2 + $f3 + $f4 + $f5 + $f6;
 $count += $total;
 ?>
-					<th>Food :</th>
+					<th align="left">Food :</th>
 					<td align="center">RM</td>
 					<td align="center">{{ $srj5->food_rate }}</td>
 					<td align="center">X</td>
@@ -464,7 +498,7 @@ $count += $total;
 					<td align="right">{{ number_format($f1, 2) }}</td>
 				</tr>
 				<tr>
-					<th>Labour :</th>
+					<th align="left">Labour :</th>
 					<td align="center">( RM</td>
 					<td align="center">{{ $srj5->labour_leader }}</td>
 					<td align="center">+</td>
@@ -480,7 +514,7 @@ $count += $total;
 					<td align="right">{{ number_format($f2, 2) }}</td>
 				</tr>
 				<tr>
-					<th>Overtime :</th>
+					<th align="left">Overtime :</th>
 					<td align="center">RM</td>
 					<td align="center">{{ $f2 * $srj5->working_type_value }}</td>
 					<td align="center">X</td>
@@ -495,7 +529,7 @@ $count += $total;
 					<td align="right">{{ number_format($f3, 2) }}</td>
 				</tr>
 				<tr>
-					<th>Accommodation :</th>
+					<th align="left">Accommodation :</th>
 					<td align="center">RM</td>
 					<td align="center">{{ $srj5->accommodation_rate }}</td>
 					<td align="center">X</td>
@@ -506,7 +540,7 @@ $count += $total;
 					<td align="right">{{ number_format($f4, 2) }}</td>
 				</tr>
 				<tr>
-					<th>Travel :</th>
+					<th align="left">Travel :</th>
 					<td align="center">{{ ($m1 + $m2) }}</td>
 					<td align="center">KM</td>
 					<td align="center">X</td>
@@ -518,7 +552,7 @@ $count += $total;
 					<td align="right">{{ number_format($f5, 2) }}</td>
 				</tr>
 				<tr>
-					<th>Travel Hour : </th>
+					<th align="left">Travel Hour : </th>
 					<td align="center">RM</td>
 					<td align="center">{{ $f2 * $srj5->working_type_value }}</td>
 					<td align="center">X</td>
@@ -532,21 +566,18 @@ $count += $total;
 					<td align="right">{{ number_format($f6, 2) }}</td>
 				</tr>
 				<tr>
-					<th>Total :</th>
-					<th align="center" colspan="11"></th>
+					<th align="left">Total :</th>
+					<td align="center" colspan="11"></td>
 					<th align="center">RM</th>
 					<th align="right">{{ number_format($total, 2) }}</th>
 				</tr>
 				<tr>
 					<td colspan="14">&nbsp;</td>
 				</tr>
-				<tr>
-					<td colspan="14">&nbsp;</td>
-				</tr>
 @endforeach
 				<tr>
-					<th>Total All :</th>
-					<th align="center" colspan="11"></th>
+					<th align="left">Total All :</th>
+					<td align="center" colspan="11"></td>
 					<th align="center">RM</th>
 					<th align="right">{{ number_format($count, 2) }}</th>
 				</tr>
@@ -565,15 +596,15 @@ $count += $total;
 					<th>{{ $srl->belongtovehicle->vehicle }}</th>
 					<td align="center">{{ $srl->description }}</td>
 					<td align="center" colspan="10"></td>
-					<th align="center">RM</th>
-					<th align="right">{{ $srl->charge }}</th>
+					<td align="center">RM</td>
+					<td align="right">{{ $srl->charge }}</td>
 				</tr>
 @endforeach
 				<tr>
 					<td colspan="14">&nbsp;</td>
 				</tr>
 				<tr>
-					<th>Total Logistic :</th>
+					<th align="left">Total Logistic :</th>
 					<th align="center" colspan="11"></th>
 					<th align="center">RM</th>
 					<th align="right">{{ number_format($countl, 2) }}</th>
@@ -588,24 +619,193 @@ $count += $total;
 					<th colspan="14" align="center">Additional Charges</th>
 				</tr>
 @foreach( $serviceReport->hasmanyadditionalcharge()->get() as $srac )
+<?php $countac += $srac->value ?>
 				<tr>
-					<th>{{ $srac->belongtoamount->amount }}</th>
+					<th align="left">{{ $srac->belongtoamount->amount }}</th>
 					<td align="center">{{ $srac->description }}</td>
 					<td align="center" colspan="10">&nbsp;</td>
-					<th align="center">RM</th>
-					<th align="right">{{ $srac->value }}</th>
+					<td align="center">RM</td>
+					<td align="right">{{ $srac->value }}</td>
 				</tr>
 @endforeach
 				<tr>
-					<th>Total :</th>
+					<th align="left">Total :</th>
 					<th align="center" colspan="11"></th>
 					<th align="center">RM</th>
 					<th align="right">{{ number_format($countac, 2) }}</th>
+				</tr>
+				<tr>
+					<td colspan="14">&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="14">&nbsp;</td>
+				</tr>
+@endif
+<?php $countdis = 0 ?>
+@if( !is_null($serviceReport->hasonediscount) )
+<?php
+// got 2 type of value
+// 1. discount value
+// 2. percentage value
+// get all total
+
+$call = $count + $countl + $countac;
+if($serviceReport->hasonediscount->discount_id == 1) {		// 1 = percentage
+	$countdis = ($serviceReport->hasonediscount->value * $call) / 100;
+} elseif ($serviceReport->hasonediscount->discount_id == 2) {		// 2 = discount value
+	$countdis = $serviceReport->hasonediscount->value;
+}
+?>
+				<tr>
+					<th colspan="14">Discount</th>
+				</tr>
+				<tr>
+					<th align="left">{!! $serviceReport->hasonediscount->belongtodiscount->discount_type !!}</th>
+					<td align="center">
+						{!! ($serviceReport->hasonediscount->discount_id == 2)?'RM':NULL !!}
+						{!! $serviceReport->hasonediscount->value !!}
+						{!! ($serviceReport->hasonediscount->discount_id == 1)?'%':NULL !!}
+					</td>
+					<td colspan="10">&nbsp;</td>
+					<th >RM</th>
+					<th align="right">{!! number_format($countdis, 2) !!}</th>
+				</tr>
+
+@endif
+				<tr>
+					<th align="left">Grand Total</th>
+					<td colspan="11">&nbsp;</td>
+					<th>RM</th>
+					<th align="right">{{ number_format((($count + $countl + $countac) - $countdis), 2) }}</th>
+				</tr>
+			</tbody>
+		</table>
+	</center>
+<p style="page-break-before: always">
+	<h1>POST SERVICE FEEDBACK FORM</h1>
+	<center>
+		<table width="90%" cellspacing="1" cellpadding="1" border="1">
+			<tbody>
+@if($serviceReport->hasmanyfeedcall()->get()->count() > 0)
+				<tr>
+					<th colspan="14">Courtesy Call</th>
+				</tr>
+				<tr>
+					<th>Date Called</th>
+					<th>Person In Charge</th>
+					<th>Remarks</th>
+				</tr>
+@foreach($serviceReport->hasmanyfeedcall()->get() as $srcc)
+				<tr>
+					<td>{!! Carbon::parse($srcc->date)->format('D, j f Y') !!}</td>
+					<td>{!! $srcc->pic !!}</td>
+					<td>{!! $srcc->remarks !!}</td>
+				</tr>
+@endforeach
+@endif
+@if($serviceReport->hasmanyfeedproblem()->get()->count() > 0)
+				<tr>
+					<th colspan="14">Problem Detect On Site</th>
+				</tr>
+				<tr>
+					<th colspan="7" width="50%">Problem</th>
+					<th colspan="7" width="50%">Solution</th>
+				</tr>
+@foreach($serviceReport->hasmanyfeedproblem()->get() as $srfp )
+				<tr>
+					<td colspan="7" width="50%">{{ $srfp->problem }}</td>
+					<td colspan="7" width="50%">{{ $srfp->solution }}</td>
+				</tr>
+@endforeach
+				<tr>
+					<td colspan="14">&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="14">&nbsp;</td>
+				</tr>
+@endif
+@if($serviceReport->hasmanyfeedrequest()->get()->count() > 0)
+				<tr>
+					<th colspan="14">Additional Request (Order Part, Request For Next Service)</th>
+				</tr>
+				<tr>
+					<th colspan="7" width="50%">Description</th>
+					<th colspan="7" width="50%">Action (Fill By Management)</th>
+				</tr>
+@foreach($serviceReport->hasmanyfeedrequest()->get() as $srr)
+				<tr>
+					<td colspan="7" width="50%">{!! $srr->request !!}</td>
+					<td colspan="7" width="50%">{!! $srr->action !!}</td>
+				</tr>
+@endforeach
+				<tr>
+					<td colspan="14">&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="14">&nbsp;</td>
+				</tr>
+@endif
+@if($serviceReport->hasmanyfeeditem()->get()->count() > 0)
+				<tr>
+					<th colspan="14">Item Bring Back To IPMA</th>
+				</tr>
+				<tr>
+					<th colspan="7" width="50%">Description</th>
+					<th colspan="7" width="50%">Action (Fill By Management)</th>
+				</tr>
+@foreach($serviceReport->hasmanyfeeditem()->get() as $sri)
+				<tr>
+					<td colspan="5" width="36%">{{ $sri->item }}</td>
+					<td colspan="2" width="14%">{{ $sri->quantity }}</td>
+					<td colspan="7" width="50%">{{ $sri->item_action }}</td>
+				</tr>
+@endforeach
+				<tr>
+					<td colspan="14">&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="14">&nbsp;</td>
+				</tr>
+@endif
+@if( $serviceReport->hasmanyfeedback()->get()->count() > 0 )
+				<tr>
+					<th colspan="14">Info</th>
+				</tr>
+				<tr>
+					<td colspan="5">
+						<table width="100%">
+							<tbody>
+								<tr>
+									<th>New Machine Found On Site :</th>
+									<td>{{ ($serviceReport->hasmanyfeedback()->first()->new_machine == 1)?'Yes':'No' }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+					<td colspan="5">
+						<table width="100%">
+							<tbody>
+								<tr>
+									<th>Any Building Expansion?</th>
+									<td>{{ ($serviceReport->hasmanyfeedback()->first()->building_expansion == 1)?'Yes':'No' }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
+					<td colspan="4">
+						<table width="100%">
+							<tbody>
+								<tr>
+									<th>Problem At Client Site?</th>
+									<td>{{ ($serviceReport->hasmanyfeedback()->first()->problem_at_client_site == 1)?'Yes':'No' }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</td>
 				</tr>
 @endif
 			</tbody>
 		</table>
 	</center>
-<p style="page-break-before: always">
 	</body>
 </html>

@@ -19,4 +19,9 @@ class ICSServiceReportDiscount extends Model
 	{
 		return $this->belongsTo('App\Model\ICSServiceReport', 'service_report_id');
 	}
+
+	public function belongtodiscount()
+	{
+		return $this->belongsTo('App\Model\Discount', 'discount_id');
+	}
 }
