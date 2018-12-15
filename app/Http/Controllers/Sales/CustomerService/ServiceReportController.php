@@ -57,6 +57,36 @@ class ServiceReportController extends Controller
 		return redirect( route('serviceReport.index') );
 	}
 
+////////////////////////////////////////////
+// additional updatekiv
+	public function editkiv(ICSServiceReport $serviceReport)
+	{
+		return view('marketingAndBusinessDevelopment.customerservice.ics.editkiv', compact(['serviceReport']));
+	}
+
+	public function updatekiv(Request $request, ICSServiceReport $serviceReport)
+	{
+		// dd($request->all());
+		$serviceReport->update( array_add($request->only(['date', 'charge_id', 'customer_id', 'proceed_id', 'remarks', 'inform_by']), 'updated_by', \Auth::user()->belongtostaff->id) );
+
+		if ($request->has('serial')) {
+			$serviceReport->hasmanyserial()->delete();
+			$serviceReport->hasmanyserial()->create($request->only('serial'));
+		}
+
+		// attendees
+		if ($request->has('sr')) {
+			$serviceReport->hasmanyattendees()->delete();
+			foreach( $request->sr as $key => $val ) {
+				$serviceReport->hasmanyattendees()->create([
+					'attended_by' => $val['attended_by']
+				]);
+			}
+		}
+		Session::flash('flash_message', 'Data successfully stored!');
+		return redirect( route('serviceReport.index') );
+	}
+///////////////////////////////////////////
 	public function show(ICSServiceReport $serviceReport)
 	{
 		return view('marketingAndBusinessDevelopment.customerservice.ics.show', compact(['serviceReport']));
@@ -72,7 +102,7 @@ class ServiceReportController extends Controller
 		// print_r($request->all());
 		// echo '<br />';
 
-		$serviceReport->update( array_add($request->only(['date', 'charge_id', 'customer_id', 'proceed_id', 'reamrks']), 'updated_by', \Auth::user()->belongtostaff->id) );
+		$serviceReport->update( array_add($request->only(['date', 'charge_id', 'customer_id', 'proceed_id', 'remarks', 'inform_by']), 'updated_by', \Auth::user()->belongtostaff->id) );
 
 		// serial
 		if ($request->has('srs')) {

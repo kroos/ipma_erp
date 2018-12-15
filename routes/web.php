@@ -60,6 +60,19 @@ Route::resources([
 
 // customer
 	'customer' => 'CustomerController',
+
+// ics machine model
+	'machine_model' => 'Sales\CustomerService\MachineModelController',
+]);
+// edit kiv service report
+Route::get('/serviceReport/{serviceReport}/editkiv', [
+	'as' => 'serviceReport.editkiv',
+	'uses' => 'Sales\CustomerService\ServiceReportController@editkiv'
+]);
+// update kiv service report
+Route::patch('/serviceReport/{serviceReport}/updatekiv', [
+	'as' => 'serviceReport.updatekiv',
+	'uses' => 'Sales\CustomerService\ServiceReportController@updatekiv'
 ]);
 // received hardcopy
 Route::post('/staffTCMS/storeODBC', [

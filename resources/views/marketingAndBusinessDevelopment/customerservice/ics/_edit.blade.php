@@ -258,7 +258,7 @@ $e10 = 1;
 
 			</div>
 			<div class="card-footer">
-				<a href="" class="btn btn-primary float-right">Add Model</a>
+				<a href="{{ route('machine_model.create', 'id='.$serviceReport->id) }}" class="btn btn-primary float-right">Add Model</a>
 			</div>
 		</div>
 	</div>

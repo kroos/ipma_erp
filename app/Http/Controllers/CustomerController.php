@@ -26,11 +26,18 @@ class CustomerController extends Controller
 
 	public function store(Request $request)
 	{
-		var_dump($request->all());
+		// var_dump($request->all());
 // die();
 		Customer::create($request->only(['customer', 'pc', 'address1', 'address2', 'address3', 'address4', 'phone', 'fax']));
 		Session::flash('flash_message', 'Data successfully save!');
-		return redirect( route('serviceReport.edit', $request->id) );
+
+		if($request->id == 0) {
+			return redirect( route('serviceReport.create') );
+		} elseif ($request->kiv == 00) {
+			return redirect( route('serviceReport.editkiv', $request->id) );
+		} else {
+			return redirect( route('serviceReport.edit', $request->id) );
+		}
 	}
 
 	public function show(Department $department)

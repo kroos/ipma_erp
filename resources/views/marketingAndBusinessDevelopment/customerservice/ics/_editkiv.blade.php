@@ -51,7 +51,7 @@ $staff = Staff::where('active', 1)->get();
 							<select name="inform_by" id="inlineRadio2" class="form-control" placeholder="Please choose">
 								<option value="">Please choose</option>
 @foreach($staff as $st)
-								<option value="{!! $st->id !!}">{!! $st->hasmanylogin()->where('active', 1)->first()->username !!} {!! $st->name !!}</option>
+								<option value="{!! $st->id !!}" {!! ($st->id == $serviceReport->inform_by)?'selected':NULL !!}>{!! $st->hasmanylogin()->where('active', 1)->first()->username !!} {!! $st->name !!}</option>
 @endforeach
 							</select>
 						</div>
@@ -75,7 +75,7 @@ $staff = Staff::where('active', 1)->get();
 						<select name="customer_id" id="cust" class="form-control col-sm-12" autocomplete="off">
 							<option value="" data-pc="" data-phone="">Please choose</option>
 @foreach($cust as $cu)
-							<option value="{!! $cu->id !!}" data-pc="{!! $cu->pc !!}" data-phone="{!! $cu->phone !!}">{!! $cu->customer !!}</option>
+							<option value="{!! $cu->id !!}" data-pc="{!! $cu->pc !!}" data-phone="{!! $cu->phone !!}" {!! ($cu->id == $serviceReport->customer_id)?'selected':NULL !!} >{!! $cu->customer !!}</option>
 @endforeach
 						</select>
 					</div>
@@ -84,14 +84,14 @@ $staff = Staff::where('active', 1)->get();
 
 				<dl class="row">
 					<dt class="col-sm-5">Attention To :</dt>
-					<dd class="col-sm-7" id="attn"></dd>
+					<dd class="col-sm-7" id="attn">{!! $serviceReport->belongtocustomer->pc !!}</dd>
 
 					<dt class="col-sm-5">Phone :</dt>
-					<dd class="col-sm-7" id="phone"></dd>
+					<dd class="col-sm-7" id="phone">{!! $serviceReport->belongtocustomer->phone !!}</dd>
 				</dl>
 
 			</div>
-			<div class="card-footer"><a href="{{ route('customer.create', 'id=0') }}" class="btn btn-primary float-right">Add Customer</a></div>
+			<div class="card-footer"><a href="{{ route('customer.create', 'kiv=00&id='.$serviceReport->id) }}" class="btn btn-primary float-right">Add Customer</a></div>
 		</div>
 	</div>
 
@@ -143,14 +143,14 @@ $staff = Staff::where('active', 1)->get();
 				<div class="form-group row {{ $errors->has('complaints')?'has-error':'' }}">
 					{{ Form::label( 'compl', 'Complaints :', ['class' => 'col-sm-3 col-form-label'] ) }}
 					<div class="col-sm-9">
-						{!! Form::textarea('complaint', @$value, ['class' => 'form-control', 'id' => 'compl', 'placeholder' => 'Complaints', 'autocomplete' => 'off']) !!}
+						{!! Form::textarea('complaint', $serviceReport->hasmanycomplaint()->first()->complaint, ['class' => 'form-control', 'id' => 'compl', 'placeholder' => 'Complaints', 'autocomplete' => 'off']) !!}
 					</div>
 				</div>
 
 				<div class="form-group row {{ $errors->has('status_id')?'has-error':'' }}">
 					{{ Form::label( 'compby', 'Requested By :', ['class' => 'col-sm-3 col-form-label'] ) }}
 					<div class="col-sm-9">
-						{!! Form::text('complaint_by', @$value, ['class' => 'form-control', 'id' => 'compby', 'placeholder' => 'Complaint By', 'autocomplete' => 'off']) !!}
+						{!! Form::text('complaint_by', $serviceReport->hasmanycomplaint()->first()->complaint_by, ['class' => 'form-control', 'id' => 'compby', 'placeholder' => 'Complaint By', 'autocomplete' => 'off']) !!}
 					</div>
 				</div>
 
