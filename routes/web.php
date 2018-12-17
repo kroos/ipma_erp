@@ -64,16 +64,6 @@ Route::resources([
 // ics machine model
 	'machine_model' => 'Sales\CustomerService\MachineModelController',
 ]);
-// edit kiv service report
-Route::get('/serviceReport/{serviceReport}/editkiv', [
-	'as' => 'serviceReport.editkiv',
-	'uses' => 'Sales\CustomerService\ServiceReportController@editkiv'
-]);
-// update kiv service report
-Route::patch('/serviceReport/{serviceReport}/updatekiv', [
-	'as' => 'serviceReport.updatekiv',
-	'uses' => 'Sales\CustomerService\ServiceReportController@updatekiv'
-]);
 // received hardcopy
 Route::post('/staffTCMS/storeODBC', [
 	'as' => 'staffTCMS.storeODBC',
@@ -152,11 +142,42 @@ Route::post('/staffAnnualMCLeave/storeALMCML', [
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ## service report section
+// index costing service report
+Route::get('/ics/costing', [
+	'as' => 'ics.costing',
+	'uses' => 'Sales\CustomerService\ServiceReportController@costing'
+]);
 // approve sr
 Route::patch('/serviceReport/{serviceReport}/updateApproveSR', [
 		'as' => 'serviceReport.updateApproveSR',
 		'uses' => 'Sales\CustomerService\ServiceReportController@updateApproveSR'
 	]);
+// edit kiv service report
+Route::get('/serviceReport/{serviceReport}/editkiv', [
+	'as' => 'serviceReport.editkiv',
+	'uses' => 'Sales\CustomerService\ServiceReportController@editkiv'
+]);
+// update kiv service report
+Route::patch('/serviceReport/{serviceReport}/updatekiv', [
+	'as' => 'serviceReport.updatekiv',
+	'uses' => 'Sales\CustomerService\ServiceReportController@updatekiv'
+]);
+// update unapproved service report
+Route::post('/serviceReport/updateunapprove', [
+	'as' => 'serviceReport.updateunapprove',
+	'uses' => 'Sales\CustomerService\ServiceReportController@updateunapprove'
+]);
+// update send SR service report
+Route::patch('/serviceReport/{serviceReport}/sendSR', [
+	'as' => 'serviceReport.sendSR',
+	'uses' => 'Sales\CustomerService\ServiceReportController@updatesendSR'
+]);
+
+// update send SR service report
+Route::patch('/serviceReport/{serviceReport}/checkSR', [
+	'as' => 'serviceReport.checkSR',
+	'uses' => 'Sales\CustomerService\ServiceReportController@updatecheckbySR'
+]);
 
 ############################################################################
 // Division Page Controller

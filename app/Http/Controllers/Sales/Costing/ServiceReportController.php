@@ -26,7 +26,7 @@ class ServiceReportController extends Controller
 		return view('marketingAndBusinessDevelopment.customerservice.ics.index');
 	}
 
-	public function costing()
+	public function indexcosting()
 	{
 		return view('marketingAndBusinessDevelopment.costing.ics.costing');
 	}
@@ -350,15 +350,6 @@ class ServiceReportController extends Controller
 		$serviceReport->update(['send_by' => \Auth::user()->belongtostaff->id, 'send_date' => today()]);
 		return response()->json([
 			'message' => 'Service Report Approve',
-			'status' => 'success'
-		]);
-	}
-
-	public function updatecheckbySR(Request $request, ICSServiceReport $serviceReport)
-	{
-		$serviceReport->update(['checked_by' => \Auth::user()->belongtostaff->id, 'checked_date' => today()]);
-		return response()->json([
-			'message' => 'Service Report Checked',
 			'status' => 'success'
 		]);
 	}

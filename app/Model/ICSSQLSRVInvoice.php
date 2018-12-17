@@ -14,4 +14,9 @@ class ICSSQLSRVInvoice extends Model
 	{
 		return $this->hasOne('App\Model\ICSServiceReport', 'invoice_id');
 	}
+
+	public function hasmanyivdtl()
+	{
+		return $this->hasMany('App\Model\ICSSQLSRVInvoiceDTL', 'DocKey');
+	}
 }

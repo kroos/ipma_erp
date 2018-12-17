@@ -67,7 +67,7 @@ $('#servicereport2').DataTable({
 
 $('#servicereport3').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	"order": [[1, "asc" ]],	// sorting the 2nd column ascending
+	"order": [[2, "asc" ]],	// sorting the 2nd column ascending
 	// responsive: true
 });
 
@@ -84,6 +84,19 @@ $('#servicereport5').DataTable({
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+// update unapproved
+$('#selectAll').on('click',function(){
+	if(this.checked){
+		$('.checkbox1').each(function(){
+			this.checked = true;
+		});
+	}else{
+		$('.checkbox1').each(function(){
+			this.checked = false;
+		});
+	}
+});
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ajax post approval
 $(document).on('click', '.approval', function(e){
@@ -182,6 +195,58 @@ function SwalInactiveSR(sRinact){
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
 			swal('Cancelled', 'Service Report Not Approve', 'info')
+		}
+	});
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ajax post send to account
+$(document).on('click', '.send', function(e){
+	var sRsend = $(this).data('id');
+	SwalSendSR(sRsend);
+	e.preventDefault();
+});
+
+function SwalSendSR(sRsend){
+	swal({
+		title: 'Service Report Transfer To Account',
+		text: 'Send This Service Report To Account?',
+		type: 'question',
+		showCancelButton: true,
+		cancelButtonText: 'No',
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('serviceReport') }}' + '/' + sRsend + '/sendSR',
+					type: 'PATCH',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: sRsend,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Approved!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_logistic_' + sRsend).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Service Report Not Send', 'info')
 		}
 	});
 }

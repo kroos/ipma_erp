@@ -101,6 +101,16 @@ class ICSServiceReport extends Model
 		return $this->belongsTo('App\Model\Staff', 'approved_by');
 	}
 
+	public function belongtocheckedby()
+	{
+		return $this->belongsTo('App\Model\Staff', 'checked_by');
+	}
+
+	public function belongtosendby()
+	{
+		return $this->belongsTo('App\Model\Staff', 'send_by');
+	}
+
 	public function belongtocustomer()
 	{
 		return $this->belongsTo('App\Model\Customer', 'customer_id');

@@ -585,10 +585,14 @@ $count += $total;
 				<tr>
 					<td colspan="14">&nbsp;</td>
 				</tr>
+				<tr>
+					<td colspan="14">&nbsp;</td>
+				</tr>
 <?php $countl = 0 ?>
 @if( $serviceReport->hasmanylogistic()->get()->count() > 0 )
 				<tr>
-					<th colspan="14" align="center">Logistic</th>
+					<th align="center">Logistic</th>
+					<td colspan="13" align="center">&nbsp;</td>
 				</tr>
 @foreach( $serviceReport->hasmanylogistic()->get() as $srl )
 <?php $countl += $srl->charge ?>
@@ -605,9 +609,12 @@ $count += $total;
 				</tr>
 				<tr>
 					<th align="left">Total Logistic :</th>
-					<th align="center" colspan="11"></th>
+					<td align="center" colspan="11"></td>
 					<th align="center">RM</th>
 					<th align="right">{{ number_format($countl, 2) }}</th>
+				</tr>
+				<tr>
+					<td colspan="14">&nbsp;</td>
 				</tr>
 				<tr>
 					<td colspan="14">&nbsp;</td>
@@ -616,7 +623,8 @@ $count += $total;
 <?php $countac = 0; ?>
 @if( $serviceReport->hasmanyadditionalcharge()->get()->count() > 0 )
 				<tr>
-					<th colspan="14" align="center">Additional Charges</th>
+					<th align="center">Additional Charges</th>
+					<td colspan="13" align="center">&nbsp;</td>
 				</tr>
 @foreach( $serviceReport->hasmanyadditionalcharge()->get() as $srac )
 <?php $countac += $srac->value ?>
@@ -629,8 +637,11 @@ $count += $total;
 				</tr>
 @endforeach
 				<tr>
+					<td colspan="14">&nbsp;</td>
+				</tr>
+				<tr>
 					<th align="left">Total :</th>
-					<th align="center" colspan="11"></th>
+					<td align="center" colspan="11"></td>
 					<th align="center">RM</th>
 					<th align="right">{{ number_format($countac, 2) }}</th>
 				</tr>

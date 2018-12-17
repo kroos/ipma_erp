@@ -15,6 +15,17 @@
 @endforeach
 		</ul>
 
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a class="nav-link" href="{{ route('ics.costing') }}">Intelligence Customer Service</a>
+			</li>
+		</ul>
+
+		<div class="card">
+			<div class="card-header">costing main page</div>
+			<div class="card-body"></div>
+		</div>
+
 	</div>
 </div>
 @endsection
