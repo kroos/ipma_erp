@@ -8,9 +8,9 @@
 		@include('layouts.errorform')
 
 		<ul class="nav nav-tabs">
-@foreach( App\Model\Division::find(3)->hasmanydepartment()->whereNotIn('id', [22, 23, 24])->get() as $key)
+@foreach( App\Model\Division::find(1)->hasmanydepartment()->whereNotIn('id', [22, 23, 24])->get() as $key)
 			<li class="nav-item">
-				<a class="nav-link {{ ($key->id == 7)? 'active' : 'disabled' }}" href="{{ route("$key->route.index") }}">{{ $key->department }}</a>
+				<a class="nav-link {{ ($key->id == 1)? 'active' : 'disabled' }}" href="{{ route("$key->route.index") }}">{{ $key->department }}</a>
 			</li>
 @endforeach
 		</ul>
@@ -26,7 +26,7 @@
 				<div class="card">
 					<div class="card-header">Service Report List</div>
 					<div class="card-body table-responsive">
-@include('marketingAndBusinessDevelopment.costing.ics._content')
+@include('generalAndAdministrative.account.ics._account')
 					</div>
 				</div>
 			</div>
@@ -49,7 +49,13 @@ $("#username").keyup(function() {
 $.fn.dataTable.moment( 'ddd, D MMM YYYY' );
 $('#servicereport5').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	"order": [[1, "asc" ]],	// sorting the 2nd column ascending
+	"order": [[7, "asc" ]],	// sorting the 2nd column ascending
+	// responsive: true
+});
+
+$('#servicereport6').DataTable({
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	"order": [[7, "asc" ]],	// sorting the 2nd column ascending
 	// responsive: true
 });
 

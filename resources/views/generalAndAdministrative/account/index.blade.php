@@ -15,6 +15,17 @@
 @endforeach
 		</ul>
 
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a class="nav-link" href="{!! route('ics.account') !!}">Intelligence Customer Service</a>
+			</li>
+		</ul>
+
+		<div class="card">
+			<div class="card-header">Account Dashboard</div>
+			<div class="card-body"></div>
+		</div>
+
 	</div>
 </div>
 @endsection

@@ -31,9 +31,9 @@ class ServiceReportController extends Controller
 		return view('marketingAndBusinessDevelopment.costing.ics.costing');
 	}
 
-	public function indexaccount()
+	public function account()
 	{
-		return view('marketingAndBusinessDevelopment.customerservice.ics.index');
+		return view('generalAndAdministrative.account.ics.account');
 	}
 
 	public function create()
@@ -108,6 +108,19 @@ class ServiceReportController extends Controller
 		}
 		Session::flash('flash_message', 'Data successfully stored!');
 		return redirect( route('serviceReport.index') );
+	}
+
+	// additional update invoice for SR
+	public function editinvoiceSR(ICSServiceReport $serviceReport)
+	{
+		return view('generalAndAdministrative.account.ics.edit', compact(['serviceReport']));
+	}
+
+	public function updateinvoiceSR(Request $request, ICSServiceReport $serviceReport)
+	{
+		$serviceReport->update(array_add($request->only(['invoice_id', 'invoice_remarks']), 'invoice_date', today()));
+		Session::flash('flash_message', 'Data successfully stored!');
+		return redirect( route('ics.account') );
 	}
 
 ///////////////////////////////////////////

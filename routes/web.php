@@ -147,6 +147,21 @@ Route::get('/ics/costing', [
 	'as' => 'ics.costing',
 	'uses' => 'Sales\CustomerService\ServiceReportController@costing'
 ]);
+// index costing service report
+Route::get('/ics/account', [
+	'as' => 'ics.account',
+	'uses' => 'Sales\CustomerService\ServiceReportController@account'
+]);
+// edit update invoice sr
+Route::get('/serviceReport/{serviceReport}/editinvoiceSR', [
+		'as' => 'serviceReport.editinvoiceSR',
+		'uses' => 'Sales\CustomerService\ServiceReportController@editinvoiceSR'
+	]);
+// edit update invoice sr
+Route::patch('/serviceReport/{serviceReport}/updateinvoiceSR', [
+		'as' => 'serviceReport.updateinvoiceSR',
+		'uses' => 'Sales\CustomerService\ServiceReportController@updateinvoiceSR'
+	]);
 // approve sr
 Route::patch('/serviceReport/{serviceReport}/updateApproveSR', [
 		'as' => 'serviceReport.updateApproveSR',
