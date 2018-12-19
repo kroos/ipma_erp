@@ -171,6 +171,7 @@ return [
 
         Collective\Html\HtmlServiceProvider::class,
 
+
     ],
 
     /*
@@ -230,6 +231,9 @@ return [
         //     "intervention/image": "dev-master"
         // },
         'Image' => Intervention\Image\Facades\Image::class,
+
+        // https://github.com/HTMLMin/Laravel-HTMLMin
+        'HTMLMin' => HTMLMin\HTMLMin\Facades\HTMLMin::class,
 
     ],
 

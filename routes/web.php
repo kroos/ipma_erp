@@ -44,6 +44,7 @@ Route::resources([
 	'staffTCMS' => 'Administrative\HumanResource\TCMS\StaffTCMSController',
 	'staffOvertime' => 'Administrative\HumanResource\StaffManagement\StaffOvertimeController',
 	'staffAvailability' => 'Administrative\HumanResource\StaffManagement\StaffAvailabilityController',
+	'staffDis' => 'Administrative\HumanResource\StaffManagement\StaffDisciplineController',
 
 // sales
 	'serviceReport' => 'Sales\CustomerService\ServiceReportController',
@@ -73,16 +74,6 @@ Route::post('/staffTCMS/storeODBC', [
 Route::get('/staffHR/{staffHR}/showReport', [
 	'as' => 'staffHR.showReport',
 	'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@showReport',
-]);
-// staffHR discipline1
-Route::get('/staffHR/{staffHR}/merit', [
-	'as' => 'staffHR.merit',
-	'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@merit',
-]);
-// staffHR discipline2
-Route::post('/staffHR/{staffHR}', [
-	'as' => 'staffHR.meritstore',
-	'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@meritstore',
 ]);
 // staffHR discipline2 delete
 Route::delete('/staffHRdiscipline/{staffHR}', [

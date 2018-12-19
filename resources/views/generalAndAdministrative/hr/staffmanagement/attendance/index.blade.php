@@ -32,20 +32,21 @@
 
 		<div class="card">
 			<div class="card-header">Staff Management</div>
-			<div class="card-body">
+			<div class="card-body table-responsive">
 
 				<ul class="nav nav-pills">
 					<li class="nav-item">
-						<a class="nav-link active" href="{{ route('staffHR.merit', $staffHR->id) }}">Discipline</a>
+						<a class="nav-link" href="{{ route('staffOvertime.index') }}">Overtime</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('staffAvailability.index') }}">Staff Availability Report</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link active" href="{!! route('staffDis.index') !!}">Staff Attendance & Discipline</a>
 					</li>
 				</ul>
 
-		@include('layouts.info')
-		@include('layouts.errorform')
-
-{!! Form::model($staffHR, ['route' => ['staffHR.meritstore', $staffHR->id], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
-	@include('generalAndAdministrative.hr.staffmanagement.staffHR._merit')
-{{ Form::close() }}
+				@include('generalAndAdministrative.hr.staffmanagement.attendance._index')
 
 			</div>
 		</div>
@@ -55,54 +56,15 @@
 
 @section('js')
 /////////////////////////////////////////////////////////////////////////////////////////
-//ucwords
-$(document).on('keyup', '#rem ', function () {
-	tch(this);
+/////////////////////////////////////////////////////////////////////////////////////////
+// table
+// $.fn.dataTable.moment( 'ddd, D MMM YYYY' );
+$("#staffdiscoff, #staffdiscprod").DataTable({
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	// "order": [[3, "asc" ]],	// sorting the 4th column descending
+	// responsive: true
 });
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//select2
-$('#sid').select2({
-	placeholder: 'Please choose',
-	ajax: {
-		url: '{{ route('workinghour.discipline') }}',
-		data: { '_token': '{!! csrf_token() !!}' },
-		type: 'GET',
-		dataType: 'json',
-	},
-	allowClear: true,
-	closeOnSelect: true,
-	width: '100%',
-});
-
-/////////////////////////////////////////////////////////////////////////////////////////
-// validator
-$('#form').bootstrapValidator({
-	feedbackIcons: {
-		valid: '',
-		invalid: '',
-		validating: ''
-	},
-	fields: {
-		discipline_id: {
-			validators : {
-				notEmpty: {
-					message: 'Please choose. '
-				},
-			}
-		},
-		remarks: {
-			validators : {
-				notEmpty: {
-					message: 'Please insert some remarks. '
-				},
-			}
-		},
-	}
-});
-
-/////////////////////////////////////////////////////////////////////////////////////////
-
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @endsection
 

@@ -45,12 +45,6 @@ $leaveALMC = $staffHR->hasmanystaffannualmcleave()->where('year', date('Y'))->fi
 			<div class="card-header">Staff Management</div>
 			<div class="card-body">
 
-				<ul class="nav nav-pills">
-					<li class="nav-item">
-						<a class="nav-link" href="{{ route('staffHR.merit', $staffHR->id) }}">Discipline</a>
-					</li>
-				</ul>
-
 				<div class="card">
 					<div class="card-header">
 						<h1>{{ $staffHR->name }} Reports</h1>
@@ -160,46 +154,6 @@ $oi = $staffHR->hasmanystaffleavereplacement()->where('leave_balance', '<>', 0)-
 											</dl>
 
 
-<?php
-$disc = $staffHR->belongtomanydiscipline()->get();
-?>
-@if( $disc->count() < 1 )
-											<h5>No Discipline Record</h5>
-@else
-											<h5>Discipline Record</h5>
-
-											<table class="table table-hover">
-												<thead>
-													<tr>
-														<th>Description</th>
-														<th>Remarks</th>
-														<th>Date</th>
-														<th>Point</th>
-														<th>&nbsp;</th>
-													</tr>
-												</thead>
-												<tbody>
-@foreach( $disc as $di )
-													<tr>
-														<td>{{ $di->description }}</td>
-														<td>{{ $di->pivot->remarks }}</td>
-														<td>{{ Carbon::parse($di->pivot->created_at)->format('l, j F Y') }}</td>
-														<td>{{ $di->merit_point }}</td>
-														<td>
-															<span class="text-danger disable_user" id="disable_user_{{ $di->pivot->id }}" data-id="{{ $di->pivot->id }}" ><i class="far fa-trash-alt"></i></span>
-														</td>
-													</tr>
-@endforeach
-												</tbody>
-												<tfoot>
-													<tr>
-														<th colspan="3">Total Point</th>
-														<th>{{ $disc->sum('merit_point') }} point{{ $disc->sum('merit_point') >= 2?'s':'' }}</th>
-														<th>&nbsp;</th>
-													</tr>
-												</tfoot>
-											</table>
-@endif
 										</div>
 									</div>
 								</div>

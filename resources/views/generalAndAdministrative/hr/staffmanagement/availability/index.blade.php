@@ -44,6 +44,9 @@ ini_set('max_execution_time', 180); //3 minutes
 					<li class="nav-item">
 						<a class="nav-link active" href="{{ route('staffAvailability.index') }}">Staff Availability Report</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{!! route('staffDis.index') !!}">Staff Attendance & Discipline</a>
+					</li>
 				</ul>
 
 				@include('generalAndAdministrative.hr.staffmanagement.availability.content')

@@ -124,12 +124,6 @@ class Staff extends Model
     }
 
 // https://laravel.com/docs/5.6/eloquent-relationships#many-to-many
-    public function belongtomanydiscipline()
-    {
-        return $this->belongsToMany('\App\Model\Discipline', 'staff_disciplines', 'staff_id', 'discipline_id')->withPivot('remarks')->withPivot('id')->withTimestamps();
-    }
-
-// https://laravel.com/docs/5.6/eloquent-relationships#many-to-many
     public function belongtomanyposition()
     {
         return $this->belongsToMany('App\Model\Position', 'staff_positions', 'staff_id', 'position_id' )->withPivot('main')->withPivot('id')->withTimestamps();

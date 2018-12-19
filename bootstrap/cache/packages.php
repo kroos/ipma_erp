@@ -31,6 +31,17 @@
       0 => 'Fideloper\\Proxy\\TrustedProxyServiceProvider',
     ),
   ),
+  'htmlmin/htmlmin' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'HTMLMin\\HTMLMin\\HTMLMinServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'HTMLMin' => 'HTMLMin\\HTMLMin\\Facades\\HTMLMin',
+    ),
+  ),
   'intervention/image' => 
   array (
     'providers' => 
