@@ -47,6 +47,7 @@
 	<script type="text/javascript" src="{{ asset('js/ucwords.js') }}" ></script>
 
 	<script type="text/javascript" src="{{ asset('js/datetime-moment.js') }}" ></script>
+	<script type="text/javascript" src="{{ asset('js/dataTable-any-number.js') }}" ></script>
 
 	@include('layouts.jscript')
 </body>

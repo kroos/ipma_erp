@@ -62,7 +62,10 @@
 $("#staffdiscoff, #staffdiscprod").DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
 	// "order": [[3, "asc" ]],	// sorting the 4th column descending
-	// responsive: true
+	// responsive: true,
+	columnDefs: [
+		{ type: 'any-number', targets : 0 }
+	],
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
