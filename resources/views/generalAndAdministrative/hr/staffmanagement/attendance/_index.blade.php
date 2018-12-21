@@ -93,12 +93,26 @@ $lm = Discipline::where('id', 1)->first();
 // freq UPL
 $sl1 = StaffLeave::where('staff_id', $sf->id)->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [3, 6])->whereIn('active', [1, 2])->get()->sum('period');
 $lm1 = Discipline::where('id', 2)->first();
+if(0 >= $sl1 && $sl1 <= 4){
+	$sl1m = 0;
+} elseif (5 >= $sl1 && $sl1 <= 9) {
+	$sl1m = 1;
+} elseif ($sl1 >= 9) {
+	$sl1m = 2;
+}
 ////////////////////////////////////////////////////////////////////////////
 // freq MC
 $sl2 = StaffLeave::where('staff_id', $sf->id)->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [11])->whereIn('active', [1, 2])->get()->sum('period');
 $leaveALMC = StaffAnnualMCLeave::where('staff_id', $sf->id)->where('year', date('Y'))->first();
 $mc = $sl2 + ($leaveALMC->medical_leave + $leaveALMC->medical_leave_adjustment) - ($leaveALMC->medical_leave_balance);
 $lm2 = Discipline::where('id', 3)->first();
+if(0 >= $mc && $mc <= 7){
+	$mcm = 0;
+} elseif (8 >= $mc && $mc <= 13) {
+	$mcm = 1;
+} elseif ($mc >= 14) {
+	$mcm = 2;
+}
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
@@ -114,9 +128,9 @@ $lm2 = Discipline::where('id', 3)->first();
 					<td>{!! $i1late !!}</td>
 					<td>{!! $i1late * $lm->merit_point !!}<?php $count += $i1late * $lm->merit_point ?> m</td>
 					<td>{!! $sl1 !!}</td>
-					<td>{!! $sl1 * $lm1->merit_point  !!}<?php $count1 += $sl1 * $lm1->merit_point ?> m</td>
+					<td>{!! $sl1m  !!}<?php $count1 += $sl1m ?> m</td>
 					<td>{!! $mc !!}</td>
-					<td>{!! $mc * $lm2->merit_point !!}<?php $count2 += $mc * $lm2->merit_point ?> m</td>
+					<td>{!! $mcm !!}<?php $count2 += $mcm ?> m</td>
 					<td></td>
 					<td></td>
 					<td></td>
