@@ -91,12 +91,7 @@ foreach ($stcms as $tc) {
 ////////////////////////////////////////////////////////////////////////////
 	// Absent / Absent w/ Reject Or Cancelled
 	if($tc->in == '00:00:00' && $tc->break == '00:00:00' && $tc->resume == '00:00:00' && $tc->out == '00:00:00' && $tc->leave_taken != 'Outstation') {
-		$sl5 = StaffLeave::where([['staff_id', $sf->id]])->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
-		foreach ($sl5 as $k) {
-			if($k->active == 3) {
-				echo $k->date_time_start.' date time start<br />';
-			}
-		}
+		$sl5 = StaffLeave::where([['staff_id', $tc->staff_id]])->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
 	}
 }
 $lm = Discipline::where('id', 1)->first();
@@ -230,6 +225,14 @@ foreach ($stcms as $tc) {
 			$i1late++;
 		}
 	}
+// ////////////////////////////////////////////////////////////////////////////
+// 	// Absent / Absent w/ Reject Or Cancelled
+// 	if($tc->in == '00:00:00' && $tc->break == '00:00:00' && $tc->resume == '00:00:00' && $tc->out == '00:00:00' && $tc->leave_taken != 'Outstation') {
+// 		$sl5 = StaffLeave::where([['staff_id', $tc->staff_id]])->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
+// 		if(is_null($sl5)) {
+// 			echo $tc->name.' '.$tc->date.' '.$tc->in.' '.$tc->break.' '.$tc->resume.' '.$tc->out.' absent<br />';
+// 		}
+// 	}
 }
 $lm = Discipline::where('id', 1)->first();
 ////////////////////////////////////////////////////////////////////////////
@@ -265,6 +268,14 @@ $lm3 = Discipline::where('id', 4)->first();
 $sl4 = StaffLeave::where('staff_id', $sf->id)->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [5, 6])->whereIn('active', [1, 2])->get()->count();
 $lm4 = Discipline::where('id', 7)->first();
 ////////////////////////////////////////////////////////////////////////////
+// absent
+$stcms1 = StaffTCMS::where([['staff_id', $sf->id]])->whereNull('exception')->whereBetween('date', [$n->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->where([['in', '00:00:00'], ['break', '00:00:00'], ['resume', '00:00:00'], ['out', '00:00:00'], ['leave_taken', '<>', 'Outstation'] ])->get();
+foreach($stcms1 as $ke) {
+	$sl5 = StaffLeave::where([['staff_id', $ke->staff_id]])->whereRaw('"'.$ke->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
+	echo $sl5.' <br />';
+	echo $ke->name.' '.$ke->date.' '.$ke->in.' '.$ke->break.' '.$ke->resume.' '.$ke->out.' '.$ke->leave_taken.' absent<br />';
+}
+
 
 ?>
 				<tr>
