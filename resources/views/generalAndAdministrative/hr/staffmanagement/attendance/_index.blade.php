@@ -12,20 +12,18 @@ use \App\Model\Discipline;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
-$i1 = 1;
-$i2 = 1;
-$i2late = 0;
-
 $n = Carbon::now();
 ?>
 <div class="card">
 	<div class="card-header">Staff Attendance & Discipline</div>
 	<div class="card-body">
 
-		<table class="table table-hover" style="font-size:12px" id="staffdiscoff">
+		<table class="table table-hover" style="font-size:10px" id="staffdiscoff">
 			<thead>
 				<tr>
-					<th rowspan="2">&nbsp;</th>
+					<th colspan="18" class="text-center text-primary">Office</th>
+				</tr>
+				<tr>
 					<th rowspan="2">ID Staff</th>
 					<th rowspan="2">Name</th>
 					<th rowspan="2">Location</th>
@@ -34,7 +32,7 @@ $n = Carbon::now();
 					<th colspan="2" >Freq. UPL</th>
 					<th colspan="2" >Freq MC</th>
 					<th colspan="2" >EL w/o Supporting Doc</th>
-					<th colspan="2" >Absent / Absent w/ Reject Or Cancelled</th>
+					<th colspan="3" >Absent / Absent w/ Reject Or Cancelled</th>
 					<th colspan="2" >EL (Below Than 3 Days)</th>
 					<th rowspan="2">Total Merit</th>
 				</tr>
@@ -45,9 +43,10 @@ $n = Carbon::now();
 					<th>Merit</th>
 					<th>Count</th>
 					<th>Merit</th>
-					<th>Count</th>
 					<th>Merit</th>
 					<th>Count</th>
+					<th>Absent Count</th>
+					<th>Absent w/ Reject Count</th>
 					<th>Merit</th>
 					<th>Count</th>
 					<th>Merit</th>
@@ -65,6 +64,8 @@ $i1late = 0;
 $count = 0;
 $count1 = 0;
 $count2 = 0;
+$count3 = 0;
+$count4 = 0;
 foreach ($stcms as $tc) {
 		// time constant
 	$userposition = $tc->pos_id;
@@ -87,18 +88,30 @@ foreach ($stcms as $tc) {
 			$i1late++;
 		}
 	}
+////////////////////////////////////////////////////////////////////////////
+	// Absent / Absent w/ Reject Or Cancelled
+	if($tc->in == '00:00:00' && $tc->break == '00:00:00' && $tc->resume == '00:00:00' && $tc->out == '00:00:00' && $tc->leave_taken != 'Outstation') {
+		$sl5 = StaffLeave::where([['staff_id', $sf->id]])->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
+		foreach ($sl5 as $k) {
+			if($k->active == 3) {
+				echo $k->date_time_start.' date time start<br />';
+			}
+		}
+	}
 }
 $lm = Discipline::where('id', 1)->first();
 ////////////////////////////////////////////////////////////////////////////
 // freq UPL
 $sl1 = StaffLeave::where('staff_id', $sf->id)->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [3, 6])->whereIn('active', [1, 2])->get()->sum('period');
 $lm1 = Discipline::where('id', 2)->first();
-if(0 >= $sl1 && $sl1 <= 4){
+if($sl1 < 5){
 	$sl1m = 0;
-} elseif (5 >= $sl1 && $sl1 <= 9) {
+} elseif ($sl1 >= 5 && $sl1 < 10) {
 	$sl1m = 1;
-} elseif ($sl1 >= 9) {
+} elseif ($sl1 >= 10) {
 	$sl1m = 2;
+} else {
+			$sl1m = 3;
 }
 ////////////////////////////////////////////////////////////////////////////
 // freq MC
@@ -106,21 +119,26 @@ $sl2 = StaffLeave::where('staff_id', $sf->id)->whereYear( 'date_time_start', dat
 $leaveALMC = StaffAnnualMCLeave::where('staff_id', $sf->id)->where('year', date('Y'))->first();
 $mc = $sl2 + ($leaveALMC->medical_leave + $leaveALMC->medical_leave_adjustment) - ($leaveALMC->medical_leave_balance);
 $lm2 = Discipline::where('id', 3)->first();
-if(0 >= $mc && $mc <= 7){
+if($mc < 8){
 	$mcm = 0;
-} elseif (8 >= $mc && $mc <= 13) {
+} elseif ($mc >= 8 && $mc < 14) {
 	$mcm = 1;
 } elseif ($mc >= 14) {
 	$mcm = 2;
 }
 ////////////////////////////////////////////////////////////////////////////
+// EL w/o Supporting Doc
+$sl3 = StaffLeave::where('staff_id', $sf->id)->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [5, 6])->whereIn('active', [1, 2])->whereNull('document')->whereNull('hardcopy')->get()->count();
+$lm3 = Discipline::where('id', 4)->first();
 ////////////////////////////////////////////////////////////////////////////
+// EL (Below Than 3 Days)
+$sl4 = StaffLeave::where('staff_id', $sf->id)->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [5, 6])->whereIn('active', [1, 2])->get()->count();
+$lm4 = Discipline::where('id', 7)->first();
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
 ?>
 				<tr>
-					<td>{!! $i1++ !!}</td>
 					<td>{!! $sf->username !!}</td>
 					<td>{!! $sf->name !!}</td>
 					<td>{!! $sf->location !!}</td>
@@ -131,22 +149,26 @@ if(0 >= $mc && $mc <= 7){
 					<td>{!! $sl1m  !!}<?php $count1 += $sl1m ?> m</td>
 					<td>{!! $mc !!}</td>
 					<td>{!! $mcm !!}<?php $count2 += $mcm ?> m</td>
+					<td>{!! $sl3 !!}</td>
+					<td>{!! $sl3 * $lm3->merit_point !!}<?php $count3 = $sl3 * $lm3->merit_point ?> m</td>
 					<td></td>
 					<td></td>
 					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td>{!! number_format($count + $count1 + $count2 , 2) !!}</td>
+					<td>{!! $sl4 !!}</td>
+					<td>{!! $sl4 * $lm4->merit_point !!}<?php $count4 = $sl4 * $lm4->merit_point ?> m</td>
+					<td>{!! number_format($count + $count1 + $count2 + $count3 + $count4 , 2) !!}</td>
 				</tr>
 @endforeach
 			</tbody>
 		</table>
 <p>&nbsp;</p>
-		<table class="table table-hover" style="font-size:12px" id="staffdiscprod">
+<p>&nbsp;</p>
+		<table class="table table-hover" style="font-size:10px" id="staffdiscprod">
 			<thead>
 				<tr>
-					<th rowspan="2">&nbsp;</th>
+					<th colspan="18" class="text-center text-primary">Production</th>
+				</tr>
+				<tr>
 					<th rowspan="2">ID Staff</th>
 					<th rowspan="2">Name</th>
 					<th rowspan="2">Location</th>
@@ -155,7 +177,7 @@ if(0 >= $mc && $mc <= 7){
 					<th colspan="2" >Freq. UPL</th>
 					<th colspan="2" >Freq MC</th>
 					<th colspan="2" >EL w/o Supporting Doc</th>
-					<th colspan="2" >Absent / Absent w/ Reject Or Cancelled</th>
+					<th colspan="3" >Absent / Absent w/ Reject Or Cancelled</th>
 					<th colspan="2" >EL (Below Than 3 Days)</th>
 					<th rowspan="2">Total Merit</th>
 				</tr>
@@ -168,7 +190,8 @@ if(0 >= $mc && $mc <= 7){
 					<th>Merit</th>
 					<th>Count</th>
 					<th>Merit</th>
-					<th>Count</th>
+					<th>Absent Count</th>
+					<th>Absent w/ Reject Count</th>
 					<th>Merit</th>
 					<th>Count</th>
 					<th>Merit</th>
@@ -184,6 +207,8 @@ $i1late = 0;
 $count = 0;
 $count1 = 0;
 $count2 = 0;
+$count3 = 0;
+$count4 = 0;
 foreach ($stcms as $tc) {
 
 	$userposition = $tc->pos_id;;
@@ -211,19 +236,38 @@ $lm = Discipline::where('id', 1)->first();
 // freq UPL
 $sl1 = StaffLeave::where('staff_id', $sf->id)->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [3, 6])->whereIn('active', [1, 2])->get()->sum('period');
 $lm1 = Discipline::where('id', 2)->first();
+if($sl1 < 5){
+	$sl1m = 0;
+} elseif ($sl1 >= 5 && $sl1 < 10) {
+	$sl1m = 1;
+} elseif ($sl1 >= 10) {
+	$sl1m = 2;
+}
 ////////////////////////////////////////////////////////////////////////////
 // freq MC
 $sl2 = StaffLeave::where('staff_id', $sf->id)->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [11])->whereIn('active', [1, 2])->get()->sum('period');
 $leaveALMC = StaffAnnualMCLeave::where('staff_id', $sf->id)->where('year', date('Y'))->first();
 $mc = $sl2 + ($leaveALMC->medical_leave + $leaveALMC->medical_leave_adjustment) - ($leaveALMC->medical_leave_balance);
 $lm2 = Discipline::where('id', 3)->first();
+if($mc < 8){
+	$mcm = 0;
+} elseif ($mc >= 8 && $mc < 14) {
+	$mcm = 1;
+} elseif ($mc >= 14) {
+	$mcm = 2;
+}
 ////////////////////////////////////////////////////////////////////////////
+// EL w/o Supporting Doc
+$sl3 = StaffLeave::where('staff_id', $sf->id)->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [5, 6])->whereIn('active', [1, 2])->whereNull('document')->whereNull('hardcopy')->get()->count();
+$lm3 = Discipline::where('id', 4)->first();
 ////////////////////////////////////////////////////////////////////////////
+// EL (Below Than 3 Days)
+$sl4 = StaffLeave::where('staff_id', $sf->id)->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [5, 6])->whereIn('active', [1, 2])->get()->count();
+$lm4 = Discipline::where('id', 7)->first();
 ////////////////////////////////////////////////////////////////////////////
 
 ?>
 				<tr>
-					<td>{!! $i2++ !!}</td>
 					<td>{!! $sf->username !!}</td>
 					<td>{!! $sf->name !!}</td>
 					<td>{!! $sf->location !!}</td>
@@ -231,16 +275,17 @@ $lm2 = Discipline::where('id', 3)->first();
 					<td>{!! $i1late !!}</td>
 					<td>{!! $i1late * $lm->merit_point !!}<?php $count += $i1late * $lm->merit_point ?> m</td>
 					<td>{!! $sl1 !!}</td>
-					<td>{!! $sl1 * $lm1->merit_point !!}<?php $count1 += $sl1 * $lm1->merit_point ?> m</td>
+					<td>{!! $sl1m !!}<?php $count1 += $sl1m ?> m</td>
 					<td>{!! $mc !!}</td>
-					<td>{!! $mc * $lm2->merit_point !!}<?php $count2 += $mc * $lm2->merit_point ?> m</td>
+					<td>{!! $mcm !!}<?php $count2 += $mcm ?> m</td>
+					<td>{!! $sl3 !!}</td>
+					<td>{!! $sl3 * $lm3->merit_point !!}<?php $count3 = $sl3 * $lm3->merit_point ?> m</td>
 					<td></td>
 					<td></td>
 					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td>{!! number_format($count + $count1 + $count2, 2) !!}</td>
+					<td>{!! $sl4 !!}</td>
+					<td>{!! $sl4 * $lm4->merit_point !!}<?php $count4 = $sl4 * $lm4->merit_point ?> m</td>
+					<td>{!! number_format($count + $count1 + $count2 + $count3 + $count4, 2) !!}</td>
 				</tr>
 @endforeach
 			</tbody>
