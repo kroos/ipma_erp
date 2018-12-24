@@ -2,14 +2,19 @@
 // load model
 use \App\Model\Customer;
 use \App\Model\ICSCharge;
+use \App\Model\ICSCategory;
 use \App\Model\Staff;
 use \App\Model\ICSFoodRate;
 use \App\Model\ICSWorkingType;
 use \App\Model\ICSAccommodationRate;
+use \App\Model\ICSProceed;
+use \App\Model\ICSStatus;
+use \App\Model\YesNoLabel;
 
 
 $cust = Customer::all();
 $ch = ICSCharge::all();
+$cate = ICSCategory::all();
 $staff = Staff::where('active', 1)->get();
 ?>
 <div class="row">
@@ -18,13 +23,14 @@ $staff = Staff::where('active', 1)->get();
 			<div class="card-header">Service Report</div>
 			<div class="card-body">
 	
-				<div class="row">
-					<div class="col form-group {{ $errors->has('date')?'has-error':'' }}">
-						{!! Form::text('date', @$value, ['class' => 'form-control', 'id' => 'date', 'placeholder' => 'Date', 'autocomplete' => 'off']) !!}
+					<div class="form-group row {{ $errors->has('date')?'has-error':'' }}">
+						{{ Form::label( 'cust', 'Date : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+						<div class="col-sm-8">
+							{!! Form::text('date', @$value, ['class' => 'form-control col', 'id' => 'date', 'placeholder' => 'Date', 'autocomplete' => 'off']) !!}
+						</div>
 					</div>
-				</div>
 	
-				<div class="form-group">
+				<div class="form-group {{ $errors->has('charge_id')?'has-error':'' }}">
 					<div class="form-check form-check-inline">
 						<label class="form-check-label" for="inlineRadio1">Charge : </label>
 					</div>
@@ -40,6 +46,23 @@ $staff = Staff::where('active', 1)->get();
 						</div>
 					</div>
 @endforeach
+				</div>
+
+				<div class="form-group row {{ $errors->has('category_id')?'has-error':'' }}">
+					{{ Form::label( 'cat', 'Service Report Category :', ['class' => 'col-2 col-form-label'] ) }}
+					<div class="col">
+@foreach($cate as $ca)
+						<div class="form-check form-check-inline">
+							<div class="pretty p-icon p-round p-smooth">
+								{{ Form::radio('category_id', $ca->id, @$value, ['class' => 'form-control']) }}
+								<div class="state p-success">
+									<i class="icon mdi mdi-check"></i>
+									<label>{{ $ca->sr_category }}</label>
+								</div>
+							</div>
+						</div>
+@endforeach
+					</div>
 				</div>
 	
 			</div>
@@ -187,7 +210,6 @@ $iii = 1;
 			<div class="card-body">
 
 				<div class="container-fluid model_wrap">
-<div class="">
 	<div class="col-sm-12 form-row">
 		<div class="col-1 text-danger">&nbsp;</div>
 		<div class="col-3"><input type="text" name="" placeholder="Select Model" class="form-control" disabled></div>
@@ -196,7 +218,6 @@ $iii = 1;
 		<div class="col-2"><input type="text" name="" placeholder="Test Capacity" class="form-control" disabled></div>
 		<div class="col-2"><input type="text" name="" placeholder="Duration" class="form-control" disabled></div>
 	</div>
-</div>
 <?php
 $model = \App\Model\ICSMachineModel::all();
 $e1 = 1;
@@ -282,7 +303,7 @@ $rrrr = 1;
 ?>
 @foreach($serviceReport->hasmanypart()->get() as $srp)
 					<div class="rowpart">
-						<div class="row col-sm-12 form-inline">
+						<div class="col-sm-12 form-row ">
 
 							<div class="col-sm-1 text-danger">
 									<i class="fas fa-trash delete_part" aria-hidden="true" id="delete_part_{!! $srp->id !!}" data-id="{!! $srp->id !!}"></i>
@@ -411,87 +432,87 @@ $gt = 0;
 ?>
 @foreach( $serviceReport->hasmanyjob()->get() as $srj )
 					<div class="rowjob">
-						<div class="row col-sm-12 form-inline">
+						<div class="col-sm-12 form-row ">
 
 							<div class="col-sm-1 text-danger">
 								<i class="fas fa-trash delete_job" aria-hidden="true" id="delete_job_{!! $srj->id !!}" data-id="{!! $srj->id !!}"></i>
 							</div>
-							<div class="form-group {{ $errors->has('srj.*.date') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srj.*.date') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{{ $r1++ }}][date]" value="{!! (!empty($srj->date))?$srj->date:@$value !!}" id="date_{{ $r2++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Date" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.labour') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srj.*.labour') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{{ $r3++ }}][labour]" value="{!! (!empty($srj->labour))?$srj->labour:@$value !!}" id="labour_{{ $r4++ }}" class="form-control form-control-sm labour_" autocomplete="off" placeholder="Labour Count" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.job_perform') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srj.*.job_perform') ? 'has-error' : '' }}">
 								<textarea type="textarea" name="srj[{{ $r5++ }}][job_perform]" value="{!! (!empty($srj->job_perform))?$srj->job_perform:@$value !!}" id="job_perform_{{ $r6++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Job Perform" />{{ $srj->job_perform }}</textarea>
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.working_time_start') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srj.*.working_time_start') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{{ $r7++ }}][working_time_start]" value="{!! (!empty($srj->working_time_start))?$srj->working_time_start:@$value !!}" id="wts_{{ $r8++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Working Time Start" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.working_time_end') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srj.*.working_time_end') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{{ $r9++ }}][working_time_end]" value="{!! (!empty($srj->working_time_end))?$srj->working_time_end:@$value !!}" id="wte_{{ $r10++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Working Time End" />
 							</div>
 						</div>
 						<br />
 @foreach( $srj->hasmanysrjobdetail()->where('return', '<>', 1)->get() as $srjd )
-						<div class="row col-sm-12 form-inline">
+						<div class="col-sm-12 form-row ">
 							<div class="col-sm-1 text-primary"><small>To <i class="fas fa-arrow-right"></i> <i class="fas fa-map-marker-alt"></i></small></div>
 
 							<div class="form-group {{ $errors->has('srj.*.srjde.*.date') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{!! $r56++ !!}][srjde][1][destination_start]" value="{!! (!empty($srjd->destination_start))?$srjd->destination_start:@$value !!}" id="ds_1_{{ $r11++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Destination Start" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.srjde.*.destination_end') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srj.*.srjde.*.destination_end') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{!! $r57++ !!}][srjde][1][destination_end]" value="{!! (!empty($srjd->destination_end))?$srjd->destination_end:@$value !!}" id="de_1_{{ $r12++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Destination End" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.srjde.*.meter_start') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srj.*.srjde.*.meter_start') ? 'has-error' : '' }}">
 								<input type="textarea" name="srj[{!! $r58++ !!}][srjde][1][meter_start]" value="{!! (!empty($srjd->meter_start))?$srjd->meter_start:@$value !!}" id="ms_1_{{ $r13++ }}" class="form-control form-control-sm meterstart1" autocomplete="off" placeholder="Meter Start" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.srjde.*.meter_end') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srj.*.srjde.*.meter_end') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{!! $r59++ !!}][srjde][1][meter_end]" value="{!! (!empty($srjd->meter_end))?$srjd->meter_end:@$value !!}" id="me_1_{{ $r14++ }}" class="form-control form-control-sm meterend1" autocomplete="off" placeholder="Meter End" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.srjde.*.time_start') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srj.*.srjde.*.time_start') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{!! $r60++ !!}][srjde][1][time_start]" value="{!! (!empty($srjd->time_start))?$srjd->time_start:@$value !!}" id="ts_1_{{ $r15++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Travel Time Start" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.srjde.*.time_end') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srj.*.srjde.*.time_end') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{!! $r61++ !!}][srjde][1][time_end]" value="{!! (!empty($srjd->time_end))?$srjd->time_end:@$value !!}" id="te_1_{{ $r16++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Travel Time End" />
 							</div>
 							<input type="hidden" name="srj[{!! $r62++ !!}][srjde][1][return]" value="0">
 						</div>
 @endforeach
 @foreach( $srj->hasmanysrjobdetail()->where('return', 1)->get() as $srjd )
-						<div class="row col-sm-12 form-inline">
+						<div class="col-sm-12 form-row ">
 							<div class="col-sm-1 text-primary"><small>Return <i class="fas fa-map-marker-alt"></i> <i class="fas fa-undo"></i></small></div>
 
-							<div class="form-group {{ $errors->has('srj.*.srjde.*.date') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srj.*.srjde.*.date') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{!! $r63++ !!}][srjde][2][destination_start]" value="{!! (!empty($srjd->destination_start))?$srjd->destination_start:@$value !!}" id="ds_2_{{ $r17++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Destination Start" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.srjde.*.destination_end') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srj.*.srjde.*.destination_end') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{!! $r64++ !!}][srjde][2][destination_end]" value="{!! (!empty($srjd->destination_end))?$srjd->destination_end:@$value !!}" id="de_2_{{ $r18++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Destination End" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.srjde.*.meter_start') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srj.*.srjde.*.meter_start') ? 'has-error' : '' }}">
 								<input type="textarea" name="srj[{!! $r65++ !!}][srjde][2][meter_start]" value="{!! (!empty($srjd->meter_start))?$srjd->meter_start:@$value !!}" id="ms_2_{{ $r19++ }}" class="form-control form-control-sm meterstart2" autocomplete="off" placeholder="Meter Start" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.srjde.*.meter_end') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srj.*.srjde.*.meter_end') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{!! $r66++ !!}][srjde][2][meter_end]" value="{!! (!empty($srjd->meter_end))?$srjd->meter_end:@$value !!}" id="me_2_{{ $r20++ }}" class="form-control form-control-sm meterend2" autocomplete="off" placeholder="Meter End" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.srjde.*.time_start') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srj.*.srjde.*.time_start') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{!! $r67++ !!}][srjde][2][time_start]" value="{!! (!empty($srjd->time_start))?$srjd->time_start:@$value !!}" id="ts_2_{{ $r21++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Travel Time Start" />
 							</div>
 
-							<div class="form-group {{ $errors->has('srj.*.srjde.*.time_end') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srj.*.srjde.*.time_end') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{!! $r68++ !!}][srjde][2][time_end]" value="{!! (!empty($srjd->time_end))?$srjd->time_end:@$value !!}" id="te_2_{{ $r22++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Travel Time End" />
 							</div>
 							<input type="hidden" name="srj[{!! $r69++ !!}][srjde][2][return]" value="1">
@@ -928,15 +949,15 @@ $p4 = 1;
 @if( $serviceReport->hasmanyfeedproblem()->get()->count() > 0 )
 @foreach($serviceReport->hasmanyfeedproblem()->get() as $srfP)
 					<div class="rowfeedProb">
-						<div class="row col-sm-12 form-inline">
+						<div class="col-sm-12 form-row ">
 
 							<div class="col-sm-1 text-danger">
 									<i class="fas fa-trash delete_feedProb" aria-hidden="true" id="delete_feedProb_{!! $srfP->id !!}" data-id="{!! $srfP->id !!}"></i>
 							</div>
-							<div class="form-group {{ $errors->has('srfP.*.problem') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srfP.*.problem') ? 'has-error' : '' }}">
 								<textarea name="srfP[{{ $p1++ }}][problem]" value="{!! (!empty($srfP->problem))?$srfP->problem:@$value !!}" id="problem_{{ $p2++ }}" class="form-control" autocomplete="off" placeholder="Problem" />{{ $srfP->problem }}</textarea>
 							</div>
-							<div class="form-group {{ $errors->has('srfP.*.solution') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srfP.*.solution') ? 'has-error' : '' }}">
 								<textarea name="srfP[{{ $p3++ }}][solution]" value="{!! (!empty($srfP->solution))?$srfP->solution:@$value !!}" id="solution_{{ $p4++ }}" class="form-control" autocomplete="off" placeholder="Solution" />{{ $srfP->solution }}</textarea>
 							</div>
 						</div>
@@ -944,15 +965,15 @@ $p4 = 1;
 @endforeach
 @else
 					<div class="rowfeedProb">
-						<div class="row col-sm-12 form-inline">
+						<div class="col-sm-12 form-row ">
 
 							<div class="col-sm-1 text-danger">
 									<i class="fas fa-trash" aria-hidden="true" id="delete_feedProb_1" data-id="1"></i>
 							</div>
-							<div class="form-group {{ $errors->has('srfP.*.problem') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srfP.*.problem') ? 'has-error' : '' }}">
 								<textarea name="srfP[1][problem]" value="{!! @$value !!}" id="problem_1" class="form-control" autocomplete="off" placeholder="Problem" /></textarea>
 							</div>
-							<div class="form-group {{ $errors->has('srfP.*.solution') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srfP.*.solution') ? 'has-error' : '' }}">
 								<textarea name="srfP[1][solution]" value="{!! @$value !!}" id="solution_1" class="form-control" autocomplete="off" placeholder="Solution" /></textarea>
 							</div>
 						</div>
@@ -982,14 +1003,14 @@ $p4 = 1;
 @if( $serviceReport->hasmanyfeedrequest()->get()->count() > 0 )
 @foreach($serviceReport->hasmanyfeedrequest()->get() as $srfR)
 					<div class="rowfeedReq">
-						<div class="row col-sm-12 form-inline">
+						<div class="col-sm-12 form-row ">
 							<div class="col-sm-1 text-danger">
 									<i class="fas fa-trash delete_feedReq" aria-hidden="true" id="delete_feedReq_{!! $srfR->id !!}" data-id="{!! $srfR->id !!}"></i>
 							</div>
-							<div class="form-group {{ $errors->has('srfR.*.request') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srfR.*.request') ? 'has-error' : '' }}">
 								<input type="text" name="srfR[{{ $p1++ }}][request]" value="{!! (!empty($srfR->request))?$srfR->request:@$value !!}" id="request_{{ $p2++ }}" class="form-control" autocomplete="off" placeholder="Additional Request" />
 							</div>
-							<div class="form-group {{ $errors->has('srfR.*.action') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srfR.*.action') ? 'has-error' : '' }}">
 								<input type="text" name="srfR[{{ $p3++ }}][action]" value="{!! (!empty($srfR->action))?$srfR->action:@$value !!}" id="action_{{ $p4++ }}" class="form-control" autocomplete="off" placeholder="Action (Fill By Management)" />
 							</div>
 						</div>
@@ -997,14 +1018,14 @@ $p4 = 1;
 @endforeach
 @else
 					<div class="rowfeedReq">
-						<div class="row col-sm-12 form-inline">
+						<div class="col-sm-12 form-row ">
 							<div class="col-sm-1 text-danger">
 									<i class="fas fa-trash " aria-hidden="true" id="delete_feedReq" data-id="1"></i>
 							</div>
-							<div class="form-group {{ $errors->has('srfR.*.request') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srfR.*.request') ? 'has-error' : '' }}">
 								<input type="text" name="srfR[1][request]" value="{!! @$value !!}" id="request_1" class="form-control" autocomplete="off" placeholder="Additional Request" />
 							</div>
-							<div class="form-group {{ $errors->has('srfR.*.action') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srfR.*.action') ? 'has-error' : '' }}">
 								<input type="text" name="srfR[1][action]" value="{!! @$value !!}" id="action_1" class="form-control" autocomplete="off" placeholder="Action (Fill By Management)" />
 							</div>
 						</div>
@@ -1084,7 +1105,7 @@ $item6 = 1;
 	</div>
 	<div class="col-sm-6">
 		<div class="card">
-			<div class="card-header">Misc</div>
+			<div class="card-header">Customer Site Survey</div>
 			<div class="card-body">
 <?php
 if (!is_null($serviceReport->hasmanyfeedback()->first())) {
@@ -1099,7 +1120,7 @@ if (!is_null($serviceReport->hasmanyfeedback()->first())) {
 ?>
 				<div class="form-group {{ $errors->has('new_machine') ? 'has-error' : '' }}">
 					{{ Form::label( 'feed_new_machine', 'New Machine Found On Site : ', ['class' => 'col-sm-6 col-form-label'] ) }}
-@foreach( \App\Model\YesNoLabel::all() as $ynl )
+@foreach( YesNoLabel::all() as $ynl )
 					<div class="form-check form-check-inline">
 						<div class="pretty p-icon p-round p-smooth">
 							{{ Form::radio('new_machine', $ynl->value, ($ynl->value == $nm)?true:@$value, ['class' => 'form-control']) }}
@@ -1114,7 +1135,7 @@ if (!is_null($serviceReport->hasmanyfeedback()->first())) {
 
 				<div class="form-group {{ $errors->has('building_expansion') ? 'has-error' : '' }}">
 					{{ Form::label( 'feed_building_machine', 'Building Expansion : ', ['class' => 'col-sm-6 col-form-label'] ) }}
-@foreach( \App\Model\YesNoLabel::all() as $ynl )
+@foreach( YesNoLabel::all() as $ynl )
 					<div class="form-check form-check-inline">
 						<div class="pretty p-icon p-round p-smooth">
 							{{ Form::radio('building_expansion', $ynl->value, ($ynl->value == $be)?true:@$value, ['class' => 'form-control']) }}
@@ -1129,7 +1150,7 @@ if (!is_null($serviceReport->hasmanyfeedback()->first())) {
 
 				<div class="form-group {{ $errors->has('problem_at_client_site') ? 'has-error' : '' }}">
 					{{ Form::label( 'feed_problem_customer_site', 'Problem At Customer Site : ', ['class' => 'col-sm-6 col-form-label'] ) }}
-@foreach( \App\Model\YesNoLabel::all() as $ynl )
+@foreach( YesNoLabel::all() as $ynl )
 					<div class="form-check form-check-inline">
 						<div class="pretty p-icon p-round p-smooth">
 							{{ Form::radio('problem_at_client_site', $ynl->value, ($ynl->value == $pacs)?true:@$value, ['class' => 'form-control']) }}
@@ -1150,9 +1171,9 @@ if (!is_null($serviceReport->hasmanyfeedback()->first())) {
 <br />
 
 <div class="row">
-	<div class="col-sm-12">
+	<div class="col-sm-6">
 		<div class="card">
-			<div class="card-header">Proceed With :</div>
+			<div class="card-header">Service Report Proceed With :</div>
 			<div class="card-body">
 <?php
 if(!is_null($serviceReport->hasmanyfeedback()->first())) {
@@ -1161,9 +1182,9 @@ if(!is_null($serviceReport->hasmanyfeedback()->first())) {
 	$pid = NULL;
 }
 ?>
-				<div class="form-group {{ $errors->has('proceed_id') ? 'has-error' : '' }}">
+				<div class="form-group row {{ $errors->has('proceed_id') ? 'has-error' : '' }}">
 					{{ Form::label( 'proceed', 'Proceed With : ', ['class' => 'col-sm-4 col-form-label'] ) }}
-@foreach( \App\Model\ICSProceed::all() as $pro )
+@foreach( ICSProceed::all() as $pro )
 					<div class="form-check form-check-inline">
 						<div class="pretty p-icon p-round p-smooth">
 							{{ Form::radio('proceed_id', $pro->id, @$value, ['class' => 'form-control']) }}
@@ -1176,6 +1197,27 @@ if(!is_null($serviceReport->hasmanyfeedback()->first())) {
 @endforeach
 				</div>
 
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-header">Status</div>
+			<div class="card-body">
+				<div class="form-group row {{ $errors->has('status_id') ? 'has-error' : '' }}">
+					{{ Form::label( 'status', 'Status : ', ['class' => 'col-sm-4 col-form-label'] ) }}
+@foreach(ICSStatus::all() as $st1)
+					<div class="form-check form-check-inline">
+						<div class="pretty p-icon p-round p-smooth">
+							{{ Form::radio('status_id', $st1->id, @$value, ['class' => 'form-control']) }}
+							<div class="state p-success">
+								<i class="icon mdi mdi-check"></i>
+								<label>{{ $st1->sr_status }}</label>
+							</div>
+						</div>
+					</div>
+@endforeach
+				</div>
 			</div>
 		</div>
 	</div>

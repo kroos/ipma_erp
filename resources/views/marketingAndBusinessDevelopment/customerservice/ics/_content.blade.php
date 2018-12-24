@@ -29,7 +29,7 @@ if ( $bmonth != 1 ) {
 
 ?>
 <div class="card">
-	<div class="card-header"><h5>Keep In View Service Report</h5></div>
+	<div class="card-header"><h5>Appointment For Service</h5></div>
 	<div class="card-body">
 		<table class="table table-hover" style="font-size:12px" id="servicereport1">
 			<thead>
@@ -133,7 +133,7 @@ if ( $bmonth != 1 ) {
 <p>&nbsp;</p>
 
 <div class="card">
-	<div class="card-header"><h5>Pending Service Report</h5></div>
+	<div class="card-header"><h5>Service Report In Progress</h5></div>
 	<div class="card-body">
 		<table class="table table-hover" style="font-size:12px" id="servicereport4">
 			<thead>
@@ -156,15 +156,12 @@ if ( $bmonth != 1 ) {
 			</thead>
 			<tbody>
 		@foreach($sr0 as $sr)
-		@if( !$sr->hasmanyjob()->first() )
+		@if( !$sr->hasmanyjob()->first() && (!$sr->hasmanyserial()->first() || !$sr->hasmanyserial()->whereNull('serial')->first()) )
 				<tr>
 					<td>{!! $sr->id !!}</td>
 					<td>{!! Carbon::parse($sr->date)->format('D, j M Y') !!}</td>
 					<td>{!! $sr->belongtoinformby->name !!}</td>
 					<td>
-		<?php
-		// $sr->hasmanyserial()->get();
-		?>
 		@foreach( $sr->hasmanyserial()->get() as $srno )
 						{!! $srno->serial !!}<br />
 		@endforeach
@@ -222,6 +219,7 @@ if ( $bmonth != 1 ) {
 					<td>
 						<a href="{!! route('serviceReport.show', $sr->id) !!}" target="_blank" title="Show"><i class="far fa-eye"></i></a>
 						<a href="{!! route('serviceReport.edit', $sr->id) !!}" title="Update"><i class="far fa-edit"></i></a>
+						<a href="{!! route('printpdfsr.show', $sr->id) !!}" title="Print"><i class="fas fa-print"></i></a>
 						<span class="text-danger inactivate" data-id="{!! $sr->id !!}"><i class="far fa-trash-alt"></i></span>
 					</td>
 				</tr>
@@ -237,11 +235,12 @@ if ( $bmonth != 1 ) {
 <div class="card">
 	<div class="card-header"><h5>Completed Service Report for Customer Service Department</h5></div>
 	<div class="card-body">
-		<table class="table table-hover" style="font-size:12px" id="servicereport5">
+		<table class="table table-hover" style="font-size:10px" id="servicereport5">
 			<thead>
 				<tr>
 					<th>ID</th>
 					<th>Date</th>
+					<th>Category</th>
 					<th>Informed By</th>
 					<th>SR No</th>
 					<th>Customer</th>
@@ -249,6 +248,7 @@ if ( $bmonth != 1 ) {
 					<th>Complaints</th>
 					<th>Date Completed</th>
 					<th>Proceed</th>
+					<th>Status</th>
 					<th>Approve By</th>
 					<th>Checked By</th>
 					<th>Send By</th>
@@ -263,6 +263,7 @@ if ( $bmonth != 1 ) {
 				<tr>
 					<td>{!! $sr->id !!}</td>
 					<td>{!! Carbon::parse($sr->date)->format('D, j M Y') !!}</td>
+					<td>{!! $sr->belongtocategory->sr_category !!}</td>
 					<td>{!! $sr->belongtoinformby->name !!}</td>
 					<td>
 		@foreach( $sr->hasmanyserial()->get() as $srno )
@@ -290,6 +291,7 @@ if ( $bmonth != 1 ) {
 						{!! $sr->belongtoproceed->proceed !!}
 		@endif
 					</td>
+					<td>{!! $sr->belongtostatus->sr_status !!}</td>
 					<td>
 		<?php
 		$di = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
@@ -456,7 +458,7 @@ if ( $bmonth != 1 ) {
 
 <p>&nbsp;</p>
 
-<div class="card">
+<!-- <div class="card">
 	<div class="card-header"><h5>Approved Service Report</h5></div>
 	<div class="card-body">
 		<table class="table table-hover" style="font-size:12px" id="servicereport2">
@@ -540,5 +542,5 @@ if ( $bmonth != 1 ) {
 			</tbody>
 		</table>
 	</div>
-</div>
+</div> -->
 <p>&nbsp;</p>

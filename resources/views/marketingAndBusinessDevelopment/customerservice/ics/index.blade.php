@@ -27,12 +27,12 @@
 			<div class="card-header">Intelligence Customer Service</div>
 			<div class="card-body">
 				<div class="card">
-					<div class="card-header">Service Report List</div>
+					<div class="card-header">
+						Service Report List
+						<a href="{{ route('serviceReport.create') }}" class="btn btn-primary float-right">Add Service Report</a>
+					</div>
 					<div class="card-body table-responsive">
 @include('marketingAndBusinessDevelopment.customerservice.ics._content')
-					</div>
-					<div class="card-footer">
-						<a href="{{ route('serviceReport.create') }}" class="btn btn-primary float-right">Add Service Report</a>
 					</div>
 				</div>
 			</div>

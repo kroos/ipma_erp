@@ -13,6 +13,8 @@ use App\Model\StaffLeaveBackup;
 use App\Model\StaffLeaveReplacement;
 use App\Model\StaffLeaveApproval;
 
+use App\Model\ICSServiceReport;
+
 use Illuminate\Http\Request;
 
 class PrintPDFLeavesController extends Controller
@@ -49,5 +51,10 @@ class PrintPDFLeavesController extends Controller
 	{
 		$cate = $request->category;
 		echo view('pdfleave.availability', compact(['cate']));
+	}
+
+	public function srprintprev(ICSServiceReport $sr)
+	{
+		echo view('pdfleave.srprintprev', compact(['sr']));
 	}
 }

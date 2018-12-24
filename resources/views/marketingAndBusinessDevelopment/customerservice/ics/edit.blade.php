@@ -366,39 +366,29 @@ $(addbtnmod).click(function(){
 		xmod++;
 		wrapmodel.append(
 					'<div class="rowmodel">' +
-						'<div class="row col-sm-12 form-inline">' +
+						'<div class="col-sm-12 form-row ">' +
 							'<div class="col-sm-1 text-danger">' +
 									'<i class="fas fa-trash remove_model" aria-hidden="true" id="delete_model_' + xmod + '" data-id="' + xmod + '"></i>' +
 							'</div>' +
-							'<div class="">' +
-								'<div class="form-group {{ $errors->has('srmo.*.model_id') ? 'has-error' : '' }}">' +
-									'<select name="srmo[' + xmod + '][model_id]" id="model_' + xmod + '" class="form-control form-control-sm" autocomplete="off" placeholder="Please choose">' +
-										'<option value="">Please choose</option>' +
+							'<div class="form-group col {{ $errors->has('srmo.*.model_id') ? 'has-error' : '' }}">' +
+								'<select name="srmo[' + xmod + '][model_id]" id="model_' + xmod + '" class="form-control form-control-sm" autocomplete="off" placeholder="Please choose">' +
+									'<option value="">Please choose</option>' +
 @foreach( $model as $mod )
-										'<option value="{!! $mod->id !!}">{!! $mod->model !!}</option>' +
+									'<option value="{!! $mod->id !!}">{!! $mod->model !!}</option>' +
 @endforeach
-									'</select>' +
-								'</div>' +
+								'</select>' +
 							'</div>' +
-							'<div class="">' +
-								'<div class="form-group {{ $errors->has('srmo.*.test_run_machine') ? 'has-error' : '' }}">' +
-									'<input type="text" name="srmo[' + xmod + '][test_run_machine]" id="test_run_machine_' + xmod + '" class="form-control form-control-sm" autocomplete="off" placeholder="Test Run Machine" />' +
-								'</div>' +
+							'<div class="form-group col {{ $errors->has('srmo.*.test_run_machine') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srmo[' + xmod + '][test_run_machine]" id="test_run_machine_' + xmod + '" class="form-control form-control-sm" autocomplete="off" placeholder="Test Run Machine" />' +
 							'</div>' +
-							'<div class="">' +
-								'<div class="form-group {{ $errors->has('srmo.*.serial_no') ? 'has-error' : '' }}">' +
-									'<input type="text" name="srmo[' + xmod + '][serial_no]" id="serial_no_' + xmod + '" class="form-control form-control-sm" autocomplete="off" placeholder="Serial No" />' +
-								'</div>' +
+							'<div class="form-group col {{ $errors->has('srmo.*.serial_no') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srmo[' + xmod + '][serial_no]" id="serial_no_' + xmod + '" class="form-control form-control-sm" autocomplete="off" placeholder="Serial No" />' +
 							'</div>' +
-							'<div class="">' +
-								'<div class="form-group {{ $errors->has('srmo.*.test_capacity') ? 'has-error' : '' }}">' +
-									'<input type="text" name="srmo[' + xmod + '][test_capacity]" id="test_capacity_' + xmod + '" class="form-control form-control-sm" autocomplete="off" placeholder="Test Capacity" />' +
-								'</div>' +
+							'<div class="form-group col {{ $errors->has('srmo.*.test_capacity') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srmo[' + xmod + '][test_capacity]" id="test_capacity_' + xmod + '" class="form-control form-control-sm" autocomplete="off" placeholder="Test Capacity" />' +
 							'</div>' +
-							'<div class="">' +
-								'<div class="form-group {{ $errors->has('srmo.*.duration') ? 'has-error' : '' }}">' +
-									'<input type="text" name="srmo[' + xmod + '][duration]" id="duration_' + xmod + '" class="form-control form-control-sm" autocomplete="off" placeholder="Duration" />' +
-								'</div>' +
+							'<div class="form-group col {{ $errors->has('srmo.*.duration') ? 'has-error' : '' }}">' +
+								'<input type="text" name="srmo[' + xmod + '][duration]" id="duration_' + xmod + '" class="form-control form-control-sm" autocomplete="off" placeholder="Duration" />' +
 							'</div>' +
 						'</div>' +
 					'</div>'
@@ -473,14 +463,14 @@ $(addbtnpart).click(function(){
 		xpart++;
 		wrappart.append(
 					'<div class="rowpart">' +
-						'<div class="row col-sm-12 form-inline">' +
+						'<div class="col-sm-12 form-row ">' +
 							'<div class="col-sm-1 text-danger">' +
 									'<i class="fas fa-trash remove_part" aria-hidden="true" id="delete_part_' + xpart + '" data-id="' + xpart + '"></i>' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srp.*.part_accessory') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srp.*.part_accessory') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srp[' + xpart + '][part_accessory]" value="{!! (!empty($srp->part_accessory))?$srp->part_accessory:@$value !!}" id="part_accessory_' + xpart + '" class="form-control" autocomplete="off" placeholder="Parts & Accessories" />' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srp.*.qty') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srp.*.qty') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srp[' + xpart + '][qty]" value="{!! (!empty($srp->qty))?$srp->qty:@$value !!}" id="qty_' + xpart + '" class="form-control" autocomplete="off" placeholder="Quantity" />' +
 							'</div>' +
 						'</div>' +
@@ -528,67 +518,67 @@ $(addbtnjobn).click(function(){
 		xj++;
 		wrapjobnd.append(
 					'<div class="rowjob">' +
-						'<div class="row col-sm-12 form-inline">' +
+						'<div class="form-row col-sm-12">' +
 							'<div class="col-sm-1 text-danger">' +
 								'<i class="fas fa-trash remove_job" aria-hidden="true" id="remove_job_' + xj + '" data-id="' + xj + '"></i>' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srj.*.date') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srj.*.date') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srj[' + xj + '][date]" value="{!! @$value !!}" id="date_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Date" />' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srj.*.labour') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srj.*.labour') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srj[' + xj + '][labour]" value="{!! @$value !!}" id="labour_' + xj + '" class="form-control form-control-sm labour_" autocomplete="off" placeholder="Labour Count" />' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srj.*.job_perform') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srj.*.job_perform') ? 'has-error' : '' }}">' +
 								'<textarea name="srj[' + xj + '][job_perform]" value="{!! @$value !!}" id="job_perform_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Job Perform" /></textarea>' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srj.*.working_time_start') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srj.*.working_time_start') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srj[' + xj + '][working_time_start]" value="{!! @$value !!}" id="wts_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Working Time Start" />' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srj.*.working_time_end') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srj.*.working_time_end') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srj[' + xj + '][working_time_end]" value="{!! @$value !!}" id="wte_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Working Time End" />' +
 							'</div>' +
 						'</div>' +
 						'<br />' +
-						'<div class="row col-sm-12 form-inline">' +
+						'<div class="col-sm-12 form-row ">' +
 							'<div class="col-sm-1 text-primary"><small>To <i class="fas fa-arrow-right"></i> <i class="fas fa-map-marker-alt"></i></small></div>' +
 							'<div class="form-group {{ $errors->has('srj.*.*.date') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srj[' + xj + '][srjde][1][destination_start]" value="{!! @$value !!}" id="ds_1_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Destination Start" />' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srj.*.*.destination_end') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srj.*.*.destination_end') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srj[' + xj + '][srjde][1][destination_end]" value="{!! @$value !!}" id="de_1_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Destination End" />' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srj.*.*.meter_start') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srj.*.*.meter_start') ? 'has-error' : '' }}">' +
 								'<input type="textarea" name="srj[' + xj + '][srjde][1][meter_start]" value="{!! @$value !!}" id="ms_1_' + xj + '" class="form-control form-control-sm meterstart1" autocomplete="off" placeholder="Meter Start" />' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srj.*.*.meter_end') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srj.*.*.meter_end') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srj[' + xj + '][srjde][1][meter_end]" value="{!! @$value !!}" id="me_1_' + xj + '" class="form-control form-control-sm meterend1" autocomplete="off" placeholder="Meter End" />' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srj.*.*.time_start') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srj.*.*.time_start') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srj[' + xj + '][srjde][1][time_start]" value="{!! @$value !!}" id="ts_1_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Travel Time Start" />' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srj.*.*.time_end') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srj.*.*.time_end') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srj[' + xj + '][srjde][1][time_end]" value="{!! @$value !!}" id="te_1_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Travel Time End" />' +
 							'</div>' +
 							'<input type="hidden" name="srj[' + xj + '][srjde][1][return]" value="0">' +
 						'</div>' +
-						'<div class="row col-sm-12 form-inline">' +
+						'<div class="col-sm-12 form-row ">' +
 							'<div class="col-sm-1 text-primary"><small>Return <i class="fas fa-map-marker-alt"></i> <i class="fas fa-undo"></i></small></div>' +
 							'<div class="form-group {{ $errors->has('srjd.*.date') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srj[' + xj + '][srjde][2][destination_start]" value="{!! @$value !!}" id="ds_2_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Destination Start" />' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srjd.*.destination_end') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srjd.*.destination_end') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srj[' + xj + '][srjde][2][destination_end]" value="{!! @$value !!}" id="de_2_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Destination End" />' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srjd.*.meter_start') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srjd.*.meter_start') ? 'has-error' : '' }}">' +
 								'<input type="textarea" name="srj[' + xj + '][srjde][2][meter_start]" value="{!! @$value !!}" id="ms_2_' + xj + '" class="form-control form-control-sm meterstart2" autocomplete="off" placeholder="Meter Start" />' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srjd.*.meter_end') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srjd.*.meter_end') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srj[' + xj + '][srjde][2][meter_end]" value="{!! @$value !!}" id="me_2_' + xj + '" class="form-control form-control-sm meterend2" autocomplete="off" placeholder="Meter End" />' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srjd.*.time_start') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srjd.*.time_start') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srj[' + xj + '][srjde][2][time_start]" value="{!! @$value !!}" id="ts_2_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Travel Time Start" />' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srjd.*.time_end') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srjd.*.time_end') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srj[' + xj + '][srjde][2][time_end]" value="{!! @$value !!}" id="te_2_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Travel Time End" />' +
 							'</div>' +
 							'<input type="hidden" name="srj[' + xj + '][srjde][2][return]" value="1">' +
@@ -833,14 +823,14 @@ $(addbtnfeedProb).click(function(){
 		xfp++;
 		wrapfeedProb.append(
 					'<div class="rowfeedProb">' +
-						'<div class="row col-sm-12 form-inline">' +
+						'<div class="col-sm-12 form-row ">' +
 							'<div class="col-sm-1 text-danger">' +
 									'<i class="fas fa-trash remove_feedProb" aria-hidden="true" id="delete_feedProb_' + xfp + '" data-id="' + xfp + '"></i>' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srfP.*.problem') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srfP.*.problem') ? 'has-error' : '' }}">' +
 								'<textarea name="srfP[' + xfp + '][problem]" value="{!! @$value !!}" id="problem_' + xfp + '" class="form-control" autocomplete="off" placeholder="Problem" /></textarea>' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srfP.*.solution') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srfP.*.solution') ? 'has-error' : '' }}">' +
 								'<textarea name="srfP[' + xfp + '][solution]" value="{!! @$value !!}" id="solution_' + xfp + '" class="form-control" autocomplete="off" placeholder="Solution" /></textarea>' +
 							'</div>' +
 						'</div>' +
@@ -889,14 +879,14 @@ $(addbtnfeedReq).click(function(){
 		xfr++;
 		wrapfeedReq.append(
 					'<div class="rowfeedReq">' +
-						'<div class="row col-sm-12 form-inline">' +
+						'<div class="col-sm-12 form-row ">' +
 							'<div class="col-sm-1 text-danger">' +
 									'<i class="fas fa-trash remove_feedReq" aria-hidden="true" id="delete_feedReq_' + xfr + '" data-id="' + xfr + '"></i>' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srfR.*.request') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srfR.*.request') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srfR[' + xfr + '][request]" value="{!! @$value !!}" id="request_' + xfr + '" class="form-control" autocomplete="off" placeholder="Additional Request" />' +
 							'</div>' +
-							'<div class="form-group {{ $errors->has('srfR.*.action') ? 'has-error' : '' }}">' +
+							'<div class="form-group col {{ $errors->has('srfR.*.action') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srfR[' + xfr + '][action]" value="{!! @$value !!}" id="action_' + xfr + '" class="form-control" autocomplete="off" placeholder="Action (Fill By Management)" />' +
 							'</div>' +
 						'</div>' +
@@ -2739,13 +2729,13 @@ $('#form').bootstrapValidator({
 				}
 			}
 		},
-		'srL[{{ $xlogistic }}][description]': {
-			validators : {
-				notEmpty: {
-					message: 'Please insert this field. '
-				},
-			}
-		},
+		// 'srL[{{ $xlogistic }}][description]': {
+		// 	validators : {
+		// 		notEmpty: {
+		// 			message: 'Please insert this field. '
+		// 		},
+		// 	}
+		// },
 @endfor
 @for($xaddcharges = 1; $xaddcharges < 10; $xaddcharges++)
 		'srAC[{{ $xaddcharges }}][amount_id]': {
@@ -2793,6 +2783,20 @@ $('#form').bootstrapValidator({
 			}
 		},
 		proceed_id: {
+			validators : {
+				// notEmpty: {
+				// 	message: 'Please choose. '
+				// },
+			}
+		},
+		category_id: {
+			validators : {
+				notEmpty: {
+					message: 'Please choose. '
+				},
+			}
+		},
+		status_id: {
 			validators : {
 				notEmpty: {
 					message: 'Please choose. '

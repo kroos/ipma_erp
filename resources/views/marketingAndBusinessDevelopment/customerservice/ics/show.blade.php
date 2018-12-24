@@ -73,6 +73,9 @@ use \Carbon\CarbonPeriod;
 						<tr>
 							<th colspan="10" width="70%">
 								<center><h1><u>Service Report</u></h1></center>
+@if( !is_null( $serviceReport->category_id ) )
+								<center>{!! $serviceReport->belongtocategory->sr_category !!}</center>
+@endif
 							</th>
 							<td colspan="2" width="30%">
 								<table width="100%" cellspacing="1" cellpadding="1">
@@ -116,10 +119,10 @@ use \Carbon\CarbonPeriod;
 								<table width="100%" cellpadding="1" cellspacing="1" border="0">
 									<tbody>
 										<tr>
-											<th colspan="3">
+											<td colspan="3">
 												<label for="n1"><input type="checkbox" name="" value="1" id="n1" {!! (!is_null($serviceReport->charge_id))?(($serviceReport->charge_id == 1)?'checked':NULL):NULL !!} disabled>&nbsp;Charge Parts</label>&nbsp;&nbsp;&nbsp;
 												<label for="n2"><input type="checkbox" disabled="disabled" {!! (!is_null($serviceReport->charge_id))?(($serviceReport->charge_id == 2)?'checked':NULL):NULL !!} >&nbsp;Full Charge</label>
-											</th>
+											</td>
 										</tr>
 										<tr>
 											<th colspan="3">Service attended by : </th>
@@ -192,27 +195,6 @@ use \Carbon\CarbonPeriod;
 											<td></td>
 										</tr>
 @endforeach
-@else
-										<tr>
-											<th>Model :</th>
-											<td></td>
-										</tr>
-										<tr>
-											<th>Test Run Machine :</th>
-											<td></td>
-										</tr>
-										<tr>
-											<th>Serial No :</th>
-											<td></td>
-										</tr>
-										<tr>
-											<th>Test Capacity :</th>
-											<td></td>
-										</tr>
-										<tr>
-											<th>Duration :</th>
-											<td></td>
-										</tr>
 @endif
 									</tbody>
 								</table>
@@ -408,28 +390,32 @@ $thours = floor($th / 60).' hours '.($th -   floor($th / 60) * 60).' minutes';
 @endforeach
 @endif
 @endforeach
-@else
-					<tr>
-						<td colspan="7">&nbsp;</td>
-					</tr>
+
 @endif
 					<tr>
-						<td colspan="7">&nbsp;</td>
+						<td colspan="12">&nbsp;</td>
 					</tr>
 					<tr>
-						<td colspan="7">&nbsp;</td>
+						<td colspan="12">&nbsp;</td>
 					</tr>
 @if( !is_null( $serviceReport->proceed_id ) )
 					<tr>
 						<th colspan="2">Proceed With :</th>
-@foreach( \App\Model\ICSProceed::all() as $p )
-						<t{!! ( $serviceReport->proceed_id == $p->id )?'h':'d' !!}>{{ $p->proceed }}</t{!! ($serviceReport->proceed_id == $p->id)?'h':'d' !!}>
-@endforeach
+						<td colspan="10">{!! $serviceReport->belongtoproceed->proceed !!}</td>
 					</tr>
 @endif
-					</tbody>
-				</table>
-			</center>
+					<tr>
+						<td colspan="12">&nbsp;</td>
+					</tr>
+@if( !is_null($serviceReport->status_id) )
+					<tr>
+						<th>Status</th>
+						<td colspan="11">{!! $serviceReport->belongtostatus->sr_status !!}</td>
+					</tr>
+@endif
+				</tbody>
+			</table>
+		</center>
 <p style="page-break-before: always">
 	<h1>FLOAT TH</h1>
 	<center>
@@ -447,9 +433,6 @@ $thours = floor($th / 60).' hours '.($th -   floor($th / 60) * 60).' minutes';
 					<th colspan="14" align="center">
 						Customer : {!! (!is_null($serviceReport->belongtocustomer()))?$serviceReport->belongtocustomer->customer:NULL !!}
 					</th>
-				</tr>
-				<tr>
-					<td colspan="14">&nbsp;</td>
 				</tr>
 				<tr>
 					<td colspan="14">&nbsp;</td>
@@ -576,7 +559,7 @@ $count += $total;
 				</tr>
 @endforeach
 				<tr>
-					<th align="left">Total All :</th>
+					<th align="left">Total FLOAT TH :</th>
 					<td align="center" colspan="11"></td>
 					<th align="center">RM</th>
 					<th align="right">{{ number_format($count, 2) }}</th>
@@ -585,14 +568,10 @@ $count += $total;
 				<tr>
 					<td colspan="14">&nbsp;</td>
 				</tr>
-				<tr>
-					<td colspan="14">&nbsp;</td>
-				</tr>
 <?php $countl = 0 ?>
 @if( $serviceReport->hasmanylogistic()->get()->count() > 0 )
 				<tr>
-					<th align="center">Logistic</th>
-					<td colspan="13" align="center">&nbsp;</td>
+					<th align="center" colspan="14">Logistic</th>
 				</tr>
 @foreach( $serviceReport->hasmanylogistic()->get() as $srl )
 <?php $countl += $srl->charge ?>
@@ -616,15 +595,12 @@ $count += $total;
 				<tr>
 					<td colspan="14">&nbsp;</td>
 				</tr>
-				<tr>
-					<td colspan="14">&nbsp;</td>
-				</tr>
+
 @endif
 <?php $countac = 0; ?>
 @if( $serviceReport->hasmanyadditionalcharge()->get()->count() > 0 )
 				<tr>
-					<th align="center">Additional Charges</th>
-					<td colspan="13" align="center">&nbsp;</td>
+					<th align="center" colspan="14">Additional Charges</th>
 				</tr>
 @foreach( $serviceReport->hasmanyadditionalcharge()->get() as $srac )
 <?php $countac += $srac->value ?>
@@ -640,13 +616,10 @@ $count += $total;
 					<td colspan="14">&nbsp;</td>
 				</tr>
 				<tr>
-					<th align="left">Total :</th>
+					<th align="left">Total Additional Charges :</th>
 					<td align="center" colspan="11"></td>
 					<th align="center">RM</th>
 					<th align="right">{{ number_format($countac, 2) }}</th>
-				</tr>
-				<tr>
-					<td colspan="14">&nbsp;</td>
 				</tr>
 				<tr>
 					<td colspan="14">&nbsp;</td>
@@ -780,7 +753,7 @@ if($serviceReport->hasonediscount->discount_id == 1) {		// 1 = percentage
 @endif
 @if( $serviceReport->hasmanyfeedback()->get()->count() > 0 )
 				<tr>
-					<th colspan="14">Info</th>
+					<th colspan="14">Customer Site Survey</th>
 				</tr>
 				<tr>
 					<td colspan="5">

@@ -425,6 +425,12 @@ Route::post('printpdfavailability', [
 	]);
 
 ############################################################################
+Route::get('printpdfsr/{sr}/srprintprev', [
+		'as' => 'printpdfsr.show',
+		'uses' => 'PDFController\PrintPDFLeavesController@srprintprev'
+	]);
+
+############################################################################
 // Ajax Controller
 Route::apiResources([
 	'ajax' => 'API\AjaxController'
