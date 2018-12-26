@@ -6,11 +6,10 @@
 		<h1>Welcome To IPMA Industry Sdn Bhd</h1>
 	</div>
 	<div class="card-body">
-		<div class="container">
+<!-- 		<div class="container">
 			<div class="row">
 				<div class="col-sm-12 jumbotron">
 					test
-					<!--brand icon-->
 					<i class="fas fa-user"></i>
 					<i class="far fa-user"></i>
 					<i class="fab fa-github-square"></i>
@@ -151,7 +150,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 </div>
 @endsection

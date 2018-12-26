@@ -64,8 +64,9 @@ if ( $bmonth != 1 ) {
 					</td>
 					<td>{!! $sr->belongtocustomer->customer !!}</td>
 					<td>
+		<?php $i1 = 1; ?>
 		@foreach( $sr->hasmanyattendees()->get() as $sra )
-						{!! $sra->belongtostaff->name !!}<br />
+						{!! $i1++ !!}. {!! $sra->belongtostaff->name !!}<br />
 		@endforeach
 					</td>
 					<td>
@@ -168,8 +169,9 @@ if ( $bmonth != 1 ) {
 					</td>
 					<td>{!! $sr->belongtocustomer->customer !!}</td>
 					<td>
+		<?php $i2 = 1 ?>
 		@foreach( $sr->hasmanyattendees()->get() as $sra )
-						{!! $sra->belongtostaff->name !!}<br />
+						{!! $i2++ !!}. {!! $sra->belongtostaff->name !!}<br />
 		@endforeach
 					</td>
 					<td>
@@ -219,7 +221,7 @@ if ( $bmonth != 1 ) {
 					<td>
 						<a href="{!! route('serviceReport.show', $sr->id) !!}" target="_blank" title="Show"><i class="far fa-eye"></i></a>
 						<a href="{!! route('serviceReport.edit', $sr->id) !!}" title="Update"><i class="far fa-edit"></i></a>
-						<a href="{!! route('printpdfsr.show', $sr->id) !!}" title="Print"><i class="fas fa-print"></i></a>
+						<a href="{!! route('printpdfsr.show', $sr->id) !!}" title="Print" target="_blank"><i class="fas fa-print"></i></a>
 						<span class="text-danger inactivate" data-id="{!! $sr->id !!}"><i class="far fa-trash-alt"></i></span>
 					</td>
 				</tr>
@@ -272,8 +274,9 @@ if ( $bmonth != 1 ) {
 					</td>
 					<td>{!! $sr->belongtocustomer->customer !!}</td>
 					<td>
+		<?php $i3 = 1 ?>
 		@foreach( $sr->hasmanyattendees()->get() as $sra )
-						{!! $sra->belongtostaff->name !!}<br />
+						{!! $i3++ !!}. {!! $sra->belongtostaff->name !!}<br />
 		@endforeach
 					</td>
 					<td>
@@ -392,8 +395,9 @@ if ( $bmonth != 1 ) {
 					</td>
 					<td>{!! $sr->belongtocustomer->customer !!}</td>
 					<td>
+		<?php $i4 = 1 ?>
 		@foreach( $sr->hasmanyattendees()->get() as $sra )
-						{!! $sra->belongtostaff->name !!}<br />
+						{!! $i4++ !!}. {!! $sra->belongtostaff->name !!}<br />
 		@endforeach
 					</td>
 					<td>

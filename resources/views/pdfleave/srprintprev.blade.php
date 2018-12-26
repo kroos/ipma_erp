@@ -11,6 +11,7 @@ use App\Model\StaffLeaveApproval;
 
 use Crabbly\FPDF\FPDF as Fpdf;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 // class PDF extends Fpdf
 // {
@@ -60,19 +61,64 @@ use Carbon\Carbon;
 // }
 
 // Instanciation of inherited class
-	$pdf = new Fpdf('L','mm', array(221, 296));
+	$pdf = new Fpdf('P','mm', array(215, 279));
 	$pdf->AliasNbPages();
 	$pdf->AddPage();
-	$pdf->SetTitle('Service Report');
+	$pdf->SetTitle('Printing Service Report In Progress');
 	
 	// $pdf->Cell(0, 5, $pdf->GetPageHeight(), 0, 1, 'C'); // 148
 	// $pdf->Cell(0, 5, $pdf->GetPageWidth(), 0, 0, 'C'); // 210
 
-	$pdf->SetRightMargin(180);
-	$pdf->SetFont('Arial',NULL,10);
+	// $pdf->SetLeftMargin(180);
+	$pdf->SetFont('Arial', NULL, 8);
+
+	// date
+	$pdf->SetXY(155, 43);
+	$pdf->Cell(35, 5, Carbon::parse($sr->date)->format('D, j M Y'), 0, 1, 'L');
+
+	// customer
+	$pdf->SetXY(23, 53);
+	$pdf->Cell(100, 5, $sr->belongtocustomer->customer, 0, 1, 'L');
+	$pdf->SetX(2);
+	$pdf->Cell(100, 5, $sr->belongtocustomer->address1, 0, 1, 'L');
+	$pdf->SetX(2);
+	$pdf->Cell(100, 5, $sr->belongtocustomer->address2, 0, 1, 'L');
+	$pdf->SetX(2);
+	$pdf->Cell(100, 5, $sr->belongtocustomer->address3, 0, 1, 'L');
+	$pdf->SetX(2);
+	$pdf->Cell(100, 5, $sr->belongtocustomer->address4, 0, 1, 'L');
+
+	// attn to:
+	$pdf->SetXY(15, 80);
+	$pdf->Cell(44, 5, $sr->belongtocustomer->pc, 0, 1, 'L');
+	// $pdf->Cell(44, 5, 'Test PC', 0, 1, 'L');
+
+	// phone
+	$pdf->SetX(17);
+	$pdf->Cell(44, 5, $sr->belongtocustomer->phone, 0, 1, 'L');
+
+	$pdf->SetXY(110, 70);
+	$i = 1;
+	foreach ($sr->hasmanyattendees()->get() as $key) {
+		$pdf->Cell(44, 5,$i++.') '. $key->belongtostaff->name, 0, 1, 'L');
+		$pdf->SetX(110);
+	}
+
+	$pdf->SetXY(2, 96);
+	$pdf->MultiCell(80, 5, $sr->hasmanycomplaint()->first()->complaint, 0, 'L');
+
+	// $pdf->SetXY(20, 103);
+	$pdf->SetX(2);
+	$pdf->MultiCell(80, 5, $sr->hasmanycomplaint()->first()->complaint_by, 0, 'L');
 
 
-	$filename = 'Staff Leave Form.pdf';
+	// for($i=1;$i<=300;$i++)
+	// $pdf->Cell(0,5,"Line $i",0,1);
+
+	// $pdf->SetY(-26);
+	// $pdf->Cell(0, 5, 'Bottom', 0, 1, 'L');
+
+	$filename = 'Service Report Print Prelimenery.pdf';
 
 	// use ob_get_clean() to make sure that the correct header is sent to the server so the correct pdf is being output
 	ob_get_clean();
