@@ -355,7 +355,7 @@ if ( $bmonth != 1 ) {
 					<td>
 						<a href="{!! route('serviceReport.show', $sr->id) !!}" target="_blank" title="Show"><i class="far fa-eye"></i></a>
 						<a href="{!! route('serviceReport.edit', $sr->id) !!}" title="Update"><i class="far fa-edit"></i></a>
-						<span class="text-primary courtesycall" title="Courtesy Calls" data-id="{!! $sr->id !!}"><i class="fas fa-mobile-alt"></i></span>
+						<span class="text-primary courtesycall" title="Courtesy Calls" data-id="{!! $sr->id !!}"><i class="fas fa-phone-volume"></i></span>
 						<span class="text-danger inactivate" data-id="{!! $sr->id !!}"><i class="far fa-trash-alt"></i></span>
 					</td>
 				</tr>

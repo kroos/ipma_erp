@@ -34,12 +34,10 @@ class ServiceReportFeedbackCallController extends Controller
 	{
 		// var_dump($request->all());
 		$r = ICSServiceReportFeedCall::create($request->except(['_token']));
-		if($r) {
-			return response()->json([
-				'message' => 'Data Saved',
-				'status' => 'success'
-			]);
-		}
+		return response()->json([
+			'message' => 'Data Saved',
+			'status' => 'success'
+		]);
 	}
 
 	public function show(ICSServiceReportFeedCall $srAddCharge)

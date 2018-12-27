@@ -288,12 +288,13 @@ foreach($h1 as $h2) {
 // }
 
 $stcms1 = StaffTCMS::where([['staff_id', $sf->id]])->whereNull('exception')->whereBetween('date', [$n->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->where([['in', '00:00:00'], ['break', '00:00:00'], ['resume', '00:00:00'], ['out', '00:00:00'], ['leave_taken', '<>', 'Outstation'], ['daytype', 'WORKDAY'] ])->whereNotIn('date', $h4)->get();
-$m = 1;
-	$v2 = 0;
+$m = 0;
+$v2 = 0;
 foreach($stcms1 as $ke) {
 	$sl5 = StaffLeave::where([['staff_id', $ke->staff_id]])->whereRaw('"'.$ke->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
 	if($sl5->isEmpty()){
-		echo $m++.' count absent<br />';
+		$m = $m+1;
+		echo $m.' count absent<br />';
 	} else {
 		echo $sl5.' <br />';
 		$v = 0;
@@ -307,20 +308,20 @@ foreach($stcms1 as $ke) {
 			}
 		}
 			$v += $p - $b;
-			echo $v.' absent count<br />';
+			// echo $v.' absent count<br />';
 			if($v == -1) {
 				$v1 = 0;
 			} else {
 				$v1 = $v;
 			}
 			$v2 += $v1;
-			echo $v2.' v2 absent count<br />';
+			// echo $v2.' v2 absent count<br />';
 	}
-	echo $m + $v2.' = m+v2 <br />';
-	echo $ke->name.' '.$ke->date.' '.$ke->in.' '.$ke->break.' '.$ke->resume.' '.$ke->out.' '.$ke->leave_taken.' absent<br />';
-	echo '---------------------------------<br />';
+	// echo $m + $v2.' = m+v2 <br />';
+	// echo $ke->name.' '.$ke->date.' '.$ke->in.' '.$ke->break.' '.$ke->resume.' '.$ke->out.' '.$ke->leave_taken.' absent<br />';
+	// echo '---------------------------------<br />';
 }
-
+$lm5 = Discipline::where('id', 5)->first();
 ?>
 				<tr>
 					<td>{!! $sf->username !!}</td>
@@ -335,12 +336,12 @@ foreach($stcms1 as $ke) {
 					<td>{!! $mcm !!}<?php $count2 += $mcm ?> m</td>
 					<td>{!! $sl3 !!}</td>
 					<td>{!! $sl3 * $lm3->merit_point !!}<?php $count3 = $sl3 * $lm3->merit_point ?> m</td>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td>{!! $m + $v2 !!}</td>
+					<td>{!! $v2 !!}</td>
+					<td>{!! ($m + $v2) * $lm5->merit_point !!}<?php $count5 = ($m + $v2) * $lm5->merit_point ?></td>
 					<td>{!! $sl4 !!}</td>
 					<td>{!! $sl4 * $lm4->merit_point !!}<?php $count4 = $sl4 * $lm4->merit_point ?> m</td>
-					<td>{!! number_format($count + $count1 + $count2 + $count3 + $count4, 2) !!}</td>
+					<td>{!! number_format($count + $count1 + $count2 + $count3 + $count4 + $count5, 2) !!}</td>
 				</tr>
 @endforeach
 			</tbody>
