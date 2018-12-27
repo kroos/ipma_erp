@@ -19,9 +19,9 @@
 			<li class="nav-item">
 				<a class="nav-link active" href="{{ route('serviceReport.index') }}">Intelligence Customer Service</a>
 			</li>
-			<li class="nav-item">
+<!-- 			<li class="nav-item">
 				<a class="nav-link" href="">Cost Planning System</a>
-			</li>
+			</li> -->
 		</ul>
 		<div class="card">
 			<div class="card-header">Intelligence Customer Service</div>

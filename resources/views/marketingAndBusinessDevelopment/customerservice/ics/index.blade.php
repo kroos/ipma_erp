@@ -19,9 +19,9 @@
 			<li class="nav-item">
 				<a class="nav-link active" href="{{ route('serviceReport.index') }}">Intelligence Customer Service</a>
 			</li>
-			<li class="nav-item">
+<!-- 			<li class="nav-item">
 				<a class="nav-link" href="">Cost Planning System</a>
-			</li>
+			</li> -->
 		</ul>
 		<div class="card">
 			<div class="card-header">Intelligence Customer Service</div>
@@ -44,6 +44,104 @@
 @endsection
 
 @section('js')
+/////////////////////////////////////////////////////////////////////////////////////////
+// date for ajax
+$('#date').datetimepicker({
+	format:'YYYY-MM-DD',
+	useCurrent: false,
+})
+// .on('dp.change dp.show dp.update', function() {
+	// $('#form').bootstrapValidator('revalidateField', 'date');
+// })
+;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ajax post courtesy call
+$(document).on('click', '.courtesycall', function(e){
+	var srCCall = $(this).data('id');
+	SwalCCallSR(srCCall);
+	e.preventDefault();
+});
+
+function SwalCCallSR(srCCall){
+	swal({
+		title: 'Service Report Feedback Courtesy Call',
+		text: 'Courtesy Call Feedback',
+		type: 'question',
+		html:
+			'<div class="form-group row">' +
+				'{!! Form::label('date', 'Date :', ['class' => 'col-sm-4 col-form-label']) !!}' +
+				'<div class="col-sm-8">' +
+					'{!! Form::text('date', @$value, ['class' => 'form-control form-control-sm', 'id' => 'date', 'placeholder' => 'YYYY-MM-DD', 'required' => 'required']) !!}' +
+				'</div>' +
+			'</div>' +
+			'<div class="form-group row">' +
+				'{!! Form::label('date', 'Customer PIC :', ['class' => 'col-sm-4 col-form-label']) !!}' +
+				'<div class="col-sm-8">' +
+					'{!! Form::text('pic', @$value, ['class' => 'form-control form-control-sm', 'id' => 'pic', 'placeholder' => 'Person In Charge', 'required' => 'required']) !!}' +
+				'</div>' +
+			'</div>' +
+			'<div class="form-group row">' +
+				'{!! Form::label('rem', 'Remarks :', ['class' => 'col-sm-4 col-form-label']) !!}' +
+				'<div class="col-sm-8">' +
+					'{!! Form::textarea('remarks', @$value, ['class' => 'form-control form-control-sm', 'id' => 'rem', 'placeholder' => 'Remarks', 'required' => 'required']) !!}' +
+				'</div>' +
+			'</div>',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Save',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				var date = document.getElementById('date').value;
+				var pic = document.getElementById('pic').value;
+				var remarks = document.getElementById('rem').value;
+				$.ajax({
+					url: '{{ route('srCCall.store') }}',
+					type: 'POST',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							service_report_id: srCCall,
+							date: date,
+							pic: pic,
+							remarks: remarks,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Courtesy Call Saved!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_logistic_' + srCCall).parent().parent().remove();
+				})
+				.fail(function(responser){
+					var resp = responser.responseJSON;
+					// console.log(resp.errors);
+					var x = "";
+ 					for(i in resp.errors) {
+						x += '<p class="text-danger">' + resp.errors[i] + '</p>';
+					};
+					swal({
+						title: resp.message,
+						html: x,
+						type: 'error',
+					});
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Unsaved Service Report Courtesy Call', 'info')
+		}
+	});
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 //ucwords
 $("#username").keyup(function() {
@@ -164,7 +262,7 @@ function SwalInactiveSR(sRinact){
 		showCancelButton: true,
 		confirmButtonColor: '#3085d6',
 		cancelButtonColor: '#d33',
-		confirmButtonText: 'Approve',
+		confirmButtonText: 'Deactivate',
 		showLoaderOnConfirm: true,
 
 		preConfirm: function() {
@@ -194,7 +292,7 @@ function SwalInactiveSR(sRinact){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Service Report Not Approve', 'info')
+			swal('Cancelled', 'Service Report Active', 'info')
 		}
 	});
 }

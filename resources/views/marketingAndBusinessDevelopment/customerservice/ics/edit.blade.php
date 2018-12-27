@@ -19,9 +19,9 @@
 			<li class="nav-item">
 				<a class="nav-link active" href="{{ route('serviceReport.index') }}">Intelligence Customer Service</a>
 			</li>
-			<li class="nav-item">
+<!-- 			<li class="nav-item">
 				<a class="nav-link" href="">Cost Planning System</a>
-			</li>
+			</li> -->
 		</ul>
 		<div class="card">
 			<div class="card-header">Intelligence Customer Service</div>
@@ -468,10 +468,10 @@ $(addbtnpart).click(function(){
 									'<i class="fas fa-trash remove_part" aria-hidden="true" id="delete_part_' + xpart + '" data-id="' + xpart + '"></i>' +
 							'</div>' +
 							'<div class="form-group col {{ $errors->has('srp.*.part_accessory') ? 'has-error' : '' }}">' +
-								'<input type="text" name="srp[' + xpart + '][part_accessory]" value="{!! (!empty($srp->part_accessory))?$srp->part_accessory:@$value !!}" id="part_accessory_' + xpart + '" class="form-control" autocomplete="off" placeholder="Parts & Accessories" />' +
+								'<input type="text" name="srp[' + xpart + '][part_accessory]" value="{!! @$value !!}" id="part_accessory_' + xpart + '" class="form-control" autocomplete="off" placeholder="Parts & Accessories" />' +
 							'</div>' +
 							'<div class="form-group col {{ $errors->has('srp.*.qty') ? 'has-error' : '' }}">' +
-								'<input type="text" name="srp[' + xpart + '][qty]" value="{!! (!empty($srp->qty))?$srp->qty:@$value !!}" id="qty_' + xpart + '" class="form-control" autocomplete="off" placeholder="Quantity" />' +
+								'<input type="text" name="srp[' + xpart + '][qty]" value="{!! @$value !!}" id="qty_' + xpart + '" class="form-control" autocomplete="off" placeholder="Quantity" />' +
 							'</div>' +
 						'</div>' +
 					'</div>'

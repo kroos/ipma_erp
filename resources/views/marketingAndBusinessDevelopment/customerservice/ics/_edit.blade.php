@@ -308,10 +308,10 @@ $rrrr = 1;
 							<div class="col-sm-1 text-danger">
 									<i class="fas fa-trash delete_part" aria-hidden="true" id="delete_part_{!! $srp->id !!}" data-id="{!! $srp->id !!}"></i>
 							</div>
-							<div class="form-group {{ $errors->has('srp.*.part_accessory') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srp.*.part_accessory') ? 'has-error' : '' }}">
 								<input type="text" name="srp[{{ $r++ }}][part_accessory]" value="{!! (!empty($srp->part_accessory))?$srp->part_accessory:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Parts & Accessories" />
 							</div>
-							<div class="form-group {{ $errors->has('srp.*.qty') ? 'has-error' : '' }}">
+							<div class="form-group col {{ $errors->has('srp.*.qty') ? 'has-error' : '' }}">
 								<input type="text" name="srp[{{ $rrr++ }}][qty]" value="{!! (!empty($srp->qty))?$srp->qty:@$value !!}" id="qty_{{ $rrrr++ }}" class="form-control" autocomplete="off" placeholder="Quantity" />
 							</div>
 						</div>

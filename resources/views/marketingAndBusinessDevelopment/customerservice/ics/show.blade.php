@@ -168,31 +168,21 @@ use \Carbon\CarbonPeriod;
 							<td colspan="6" valign="top">
 								<table width="100%" cellspacing="1" cellpadding="1">
 									<tbody>
+										<tr>
+											<th>Model :</th>
+											<th>Test Run Machine :</th>
+											<th>Serial No :</th>
+											<th>Test Capacity :</th>
+											<th>Duration :</th>
+										</tr>
 @if($serviceReport->hasmanymodel()->get()->count() > 0)
 @foreach($serviceReport->hasmanymodel()->get() as $srm)
 										<tr>
-											<th>Model :</th>
 											<td>{!! $srm->belongtomachinemodel->model !!}</td>
-										</tr>
-										<tr>
-											<th>Test Run Machine :</th>
 											<td>{!! $srm->test_run_machine !!}</td>
-										</tr>
-										<tr>
-											<th>Serial No :</th>
 											<td>{!! $srm->serial_no !!}</td>
-										</tr>
-										<tr>
-											<th>Test Capacity :</th>
 											<td>{!! $srm->test_capacity !!}</td>
-										</tr>
-										<tr>
-											<th>Duration :</th>
 											<td>{!! $srm->duration !!}</td>
-										</tr>
-										<tr>
-											<td></td>
-											<td></td>
 										</tr>
 @endforeach
 @endif
@@ -788,6 +778,29 @@ if($serviceReport->hasonediscount->discount_id == 1) {		// 1 = percentage
 					</td>
 				</tr>
 @endif
+				<tr>
+					<td colspan="14">&nbsp;</td>
+				</tr>
+@if($serviceReport->hasmanyfeedcall()->get()->count() > 0)
+				<tr>
+					<th>Courtesy Call</th>
+				</tr>
+				<tr>
+					<th colspan="3">Date</th>
+					<th colspan="5">Customer Person In Charge</th>
+					<th colspan="6">Description</th>
+				</tr>
+@foreach($serviceReport->hasmanyfeedcall()->get() as $srcc)
+				<tr>
+					<td colspan="3">{!! Carbon::parse()->format('D, j F Y') !!}</td>
+					<td colspan="5">{!! $srcc->pic !!}</td>
+					<td colspan="6">{!! $srcc->remarks !!}</td>
+				</tr>
+@endforeach
+@endif
+				<tr>
+					<td colspan="14">&nbsp;</td>
+				</tr>
 			</tbody>
 		</table>
 	</center>

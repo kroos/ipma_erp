@@ -163,8 +163,9 @@ if ( $bmonth != 1 ) {
 					<td>{!! Carbon::parse($sr->date)->format('D, j M Y') !!}</td>
 					<td>{!! $sr->belongtoinformby->name !!}</td>
 					<td>
+		<?php $i4 = 1?>
 		@foreach( $sr->hasmanyserial()->get() as $srno )
-						{!! $srno->serial !!}<br />
+						{!! $i4++ !!}) {!! $srno->serial !!}<br />
 		@endforeach
 					</td>
 					<td>{!! $sr->belongtocustomer->customer !!}</td>
@@ -237,7 +238,7 @@ if ( $bmonth != 1 ) {
 <div class="card">
 	<div class="card-header"><h5>Completed Service Report for Customer Service Department</h5></div>
 	<div class="card-body">
-		<table class="table table-hover" style="font-size:10px" id="servicereport5">
+		<table class="table table-hover" style="font-size:9px" id="servicereport5">
 			<thead>
 				<tr>
 					<th>ID</th>
@@ -256,6 +257,7 @@ if ( $bmonth != 1 ) {
 					<th>Send By</th>
 					<th>Remarks</th>
 					<th>Invoice</th>
+					<th>Calls</th>
 					<th>&nbsp</th>
 				</tr>
 			</thead>
@@ -268,8 +270,9 @@ if ( $bmonth != 1 ) {
 					<td>{!! $sr->belongtocategory->sr_category !!}</td>
 					<td>{!! $sr->belongtoinformby->name !!}</td>
 					<td>
+		<?php $i5 = 1 ?>
 		@foreach( $sr->hasmanyserial()->get() as $srno )
-						{!! $srno->serial !!}<br />
+						{!! $i5++ !!}) {!! $srno->serial !!}<br />
 		@endforeach
 					</td>
 					<td>{!! $sr->belongtocustomer->customer !!}</td>
@@ -340,8 +343,19 @@ if ( $bmonth != 1 ) {
 		@endif
 					</td>
 					<td>
+		@if($sr->hasmanyfeedcall()->get()->count() > 0)
+		<?php $i10 = 1 ?>
+		@foreach($sr->hasmanyfeedcall()->get() as $sccallc)
+						{!! $i10++ !!}) {!! Carbon::parse($sccallc->date)->format('j M Y') !!}<br />
+		@endforeach
+		@else
+						{!! __('No Courtesy Call Yet') !!}
+		@endif
+					</td>
+					<td>
 						<a href="{!! route('serviceReport.show', $sr->id) !!}" target="_blank" title="Show"><i class="far fa-eye"></i></a>
 						<a href="{!! route('serviceReport.edit', $sr->id) !!}" title="Update"><i class="far fa-edit"></i></a>
+						<span class="text-primary courtesycall" title="Courtesy Calls" data-id="{!! $sr->id !!}"><i class="fas fa-mobile-alt"></i></span>
 						<span class="text-danger inactivate" data-id="{!! $sr->id !!}"><i class="far fa-trash-alt"></i></span>
 					</td>
 				</tr>
@@ -389,8 +403,9 @@ if ( $bmonth != 1 ) {
 					<td>{!! Carbon::parse($sr->date)->format('D, j M Y') !!}</td>
 					<td>{!! $sr->belongtoinformby->name !!}</td>
 					<td>
+		<?php $i6 = 1 ?>
 		@foreach( $sr->hasmanyserial()->get() as $srno )
-						{!! $srno->serial !!}<br />
+						{!! $i6++ !!}) {!! $srno->serial !!}<br />
 		@endforeach
 					</td>
 					<td>{!! $sr->belongtocustomer->customer !!}</td>

@@ -58,6 +58,7 @@ Route::resources([
 	'srLogistic' => 'Sales\CustomerService\ServiceReportLogisticController',
 	'srAddCharge' => 'Sales\CustomerService\ServiceReportAdditionalChargesController',
 	'srDiscount' => 'Sales\CustomerService\ServiceReportDiscountController',
+	'srCCall' => 'Sales\CustomerService\ServiceReportFeedbackCallController',
 
 // customer
 	'customer' => 'CustomerController',
