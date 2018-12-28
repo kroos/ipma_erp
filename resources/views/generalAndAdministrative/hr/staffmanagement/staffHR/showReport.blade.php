@@ -1,7 +1,14 @@
 @extends('layouts.app')
 <?php
-use App\Model\StaffLeave;
-use App\Model\HolidayCalendar;
+ini_set('max_execution_time', 300); //5 minutes
+
+// load Model
+use \App\Model\StaffLeave;
+use \App\Model\HolidayCalendar;
+use \App\Model\StaffTCMS;
+use \App\Model\StaffAnnualMCLeave;
+use \App\Model\WorkingHour;
+
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
@@ -10,7 +17,6 @@ $dn = $n->today();
 // echo $dn.' today<br />';
 $leaveALMC = $staffHR->hasmanystaffannualmcleave()->where('year', date('Y'))->first();
 ?>
-
 @section('content')
 <div class="card">
 	<div class="card-header"><h1>Human Resource Department</h1></div>
@@ -390,86 +396,128 @@ if( !empty($sd->hasonestaffleavebackup) ) {
 							</thead>
 							<tbody>
 <?php
-// $tcms = $staffHR->hasmanystafftcms()->where('leave_taken', 'ABSENT')->get();
-$tcms = $staffHR->hasmanystafftcms()->whereBetween('date', [$dn->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->whereNULL('exception')->get(); ?>
-@foreach($tcms as $tc)
-	@if(Carbon::parse($tc->date)->dayOfWeek != 0)
-		<?php
 
-		// all of this are for checking sunday and holiday
-		$hol = [];
-		// echo $tc->date.' date<br />';
-		if( Carbon::parse($tc->date)->dayOfWeek != 0 ) {
-			// echo $tc->date.' kerja <br />';
-			$cuti = HolidayCalendar::all();
-			foreach ($cuti as $cu) {
-				$co = CarbonPeriod::create($cu->date_start, '1 days', $cu->date_end);
-				// echo $co.' array or string<br />';
-				foreach ($co as $key) {
-					if (Carbon::parse($key)->format('Y-m-d') == $tc->date) {
-						$hol[Carbon::parse($key)->format('Y-m-d')] = 'a';
-						// echo $key.' key<br />';
-					}
-				}
-			}
-		}
+if ( !empty( $lea ) ) {
+	$dts = Carbon::parse($lea->created_at)->format('Y');
+	$arr = str_split( $dts, 2 );
+	$leaid = 'HR9-'.str_pad( $lea->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
+} else {
+	$leaid = NULL;
+}
 
-		// print_r($hol);
-		// echo '<br />';
-		// if( array_has($hol, '2018-10-22') ) {
-		// 	echo 'success<br />';
-		// } else {
-		// 	echo 'tak jumpa<br />';
-		// }
+////////////////////////////////////////////////////////////////////////////
+// absent
+// find public holiday
+$h1 = HolidayCalendar::whereYear('date_start', $n->format('Y'))->get();
+$h4 = [];
+foreach($h1 as $h2) {
+	// echo $h2->date_start.' '.$h2->date_end.' hoilday calendar<br />';
+	$h3 = CarbonPeriod::create($h2->date_start, '1 days', $h2->date_end);
+	foreach ($h3 as $key => $value) {
+		$h4[] = $value->format('Y-m-d');
+		// echo $value->format('Y-m-d').' iterate<br />';
+	}
+}
 
-		$in = Carbon::createFromTimeString($tc->in);
-		$break = Carbon::createFromTimeString($tc->break);
-		$resume = Carbon::createFromTimeString($tc->resume);
-		$out = Carbon::createFromTimeString($tc->out);
+// checking if the array is correct
+// foreach($h4 as $h5){
+// 	echo $h5.' iterate h4<br />';
+// }
 
-		// looking for appropriate leaves for user and the status of the leave is "cancelled" or "rejected"
-		$lea = $staffHR->hasmanystaffleave()->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->whereIn('active', [3, 4])->first();
-		// echo $lea.'<br />';
-
-		// looking for appropriate leaves for user and the status of the leave is "active" or "closed"
-		$lea1 = $staffHR->hasmanystaffleave()->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->whereIn('active', [1, 2])->first();
-
-		if ( !empty( $lea ) ) {
-			$dts = Carbon::parse($lea->created_at)->format('Y');
-			$arr = str_split( $dts, 2 );
-			$leaid = 'HR9-'.str_pad( $lea->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
-		} else {
-			$leaid = NULL;
-		}
-
-		if ( !empty( $lea1 ) ) {
-			$dts = Carbon::parse($lea1->created_at)->format('Y');
-			$arr = str_split( $dts, 2 );
-			$leaid1 = 'HR9-'.str_pad( $lea1->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
-		} else {
-			$leaid1 = NULL;
-		}
-		?>
-		@if( !array_has($hol, $tc->date) )
-			@if( $tc->leave_taken == 'ABSENT' && is_null($lea1) )
+$stcms1 = $staffHR->hasmanystafftcms()->whereNull('exception')->whereBetween('date', [$n->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->where([['in', '00:00:00'], ['break', '00:00:00'], ['resume', '00:00:00'], ['out', '00:00:00'], ['leave_taken', '<>', 'Outstation'], ['daytype', 'WORKDAY'] ])->whereNotIn('date', $h4)->get();
+//	foreach($stcms1 as $ke) {
+//		$sl5 = $staffHR->hasmanystaffleave()->whereRaw('"'.$ke->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
+//		if($sl5->isEmpty()){
+//			$m = $m + 1;
+//			// echo $m.' count absent<br />';
+//		} else {
+//			// echo $sl5.' <br />';
+//			$v = 0;
+//			foreach ($sl5 as $nq) {
+//				$b = 0;
+//				$p = 0;
+//				if($nq->active == 1) {
+//					$b = 1;
+//				} else {
+//					$p = 1;
+//				}
+//			}
+//				$v += $p - $b;
+//				// echo $v.' absent count<br />';
+//				if($v == -1) {
+//					$v1 = 0;
+//				} else {
+//					$v1 = $v;
+//				}
+//				$v2 += $v1;
+//				// echo $v2.' v2 absent count<br />';
+//		}
+//		// echo $m + $v2.' = m+v2 <br />';
+//		// echo $ke->name.' '.$ke->date.' '.$ke->in.' '.$ke->break.' '.$ke->resume.' '.$ke->out.' '.$ke->leave_taken.' absent<br />';
+//		// echo '---------------------------------<br />';
+//	}
+?>
+@foreach($stcms1 as $tc)
+<?php
+$sl5 = $staffHR->hasmanystaffleave()->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
+?>
+@if( $sl5->isEmpty() )
 									<tr>
 										<td>{!! Carbon::parse($tc->date)->format('D, j F Y') !!}</td>
 										<td>{{ $tc->daytype }}</td>
-										<td>{{ ($tc->in == '00:00:00')?NULL:$in->format('h:i a') }}</td>
-										<td>{{ ($tc->break == '00:00:00')?NULL:$break->format('h:i a') }}</td>
-										<td>{!! ($tc->resume == '00:00:00')?NULL:$resume->format('h:i a') !!}</td>
-										<td>{{ ($tc->out == '00:00:00')?NULL:$out->format('h:i a') }}</td>
+										<td>{{ $tc->in }}</td>
+										<td>{{ $tc->break }}</td>
+										<td>{!! $tc->resume !!}</td>
+										<td>{{ $tc->out }}</td>
 										<td>{!! $tc->work_hour !!}</td>
 										<td>{!! ($tc->short_hour > 0)?'<span class="text-danger">'.$tc->short_hour.'</span>':$tc->short_hour !!}</td>
 										<td>{!! $tc->leave_taken !!}</td>
-										<td>{!! $leaid !!}&nbsp;{!! $leaid1 !!}</td>
+										<td>&nbsp;</td>
 										<td>{!! (is_null($tc->exception) || $tc->exception == 0)?'<i class="fas fa-times"></i>':'<i class="fas fa-check"></i>' !!}</td>
 									</tr>
-			@endif
-		@endif	
-	@endif
+@else
+<?php
+$v = 0;
+$dt = NULL;
+foreach($sl5 as $nq1) {
+	$t = 0;
+	if($nq1->active == 3 || $nq1->active == 4) {
+		$t = 1;
+	} else {
+		$t = 0;
+		$dt = $tc->date;
+	}
+	echo $dt.' date aprove<br />';
+}
+?>
+@if($tc->date != $dt)
+									<tr>
+										<td>{!! Carbon::parse($tc->date)->format('D, j F Y') !!}</td>
+										<td>{{ $tc->daytype }}</td>
+										<td>{{ $tc->in }}</td>
+										<td>{{ $tc->break }}</td>
+										<td>{!! $tc->resume !!}</td>
+										<td>{{ $tc->out }}</td>
+										<td>{!! $tc->work_hour !!}</td>
+										<td>{!! ($tc->short_hour > 0)?'<span class="text-danger">'.$tc->short_hour.'</span>':$tc->short_hour !!}</td>
+										<td>{!! $tc->leave_taken !!}</td>
+										<td>
+											<table class="table table-hover table-sm" style="font-size:12px">
+												<tbody>	
+@foreach($sl5 as $nq)
+													<tr>
+														<td>{!! $nq->leave_no !!} => {!! $tc->date !!}</td>
+														<td>{!! ($nq->belongtoleavestatus->status) !!}</td>
+													</tr>
 @endforeach
-
+												</tbody>
+											</table>
+										</td>
+										<td>{!! (is_null($tc->exception) || $tc->exception == 0)?'<i class="fas fa-times"></i>':'<i class="fas fa-check"></i>' !!}</td>
+									</tr>
+@endif
+@endif
+@endforeach
 							</tbody>
 						</table>
 
@@ -585,7 +633,7 @@ $(document).on('keyup', '#hol', function () {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
-$.fn.dataTable.moment( 'ddd, D MMM YYYY' );
+$.fn.dataTable.moment( 'ddd, D MMMM YYYY' );
 
 $('#leaves').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],

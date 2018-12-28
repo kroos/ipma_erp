@@ -44,8 +44,8 @@ $n = Carbon::now();
 					<th>Merit</th>
 					<th>Count</th>
 					<th>Merit</th>
-					<th>Merit</th>
 					<th>Count</th>
+					<th>Merit</th>
 					<th>Absent Count</th>
 					<th>Absent w/ Reject Count</th>
 					<th>Merit</th>
@@ -131,8 +131,60 @@ $lm3 = Discipline::where('id', 4)->first();
 $sl4 = StaffLeave::where('staff_id', $sf->id)->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [5, 6])->whereIn('active', [1, 2])->get()->count();
 $lm4 = Discipline::where('id', 7)->first();
 ////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
+// absent
+// find public holiday
+$h1 = HolidayCalendar::whereYear('date_start', $n->format('Y'))->get();
+$h4 = [];
+foreach($h1 as $h2) {
+	// echo $h2->date_start.' '.$h2->date_end.' hoilday calendar<br />';
+	$h3 = CarbonPeriod::create($h2->date_start, '1 days', $h2->date_end);
+	foreach ($h3 as $key => $value) {
+		$h4[] = $value->format('Y-m-d');
+		// echo $value->format('Y-m-d').' iterate<br />';
+	}
+}
 
+// checking if the array is correct
+// foreach($h4 as $h5){
+// 	echo $h5.' iterate h4<br />';
+// }
+
+$stcms1 = StaffTCMS::where([['staff_id', $sf->id]])->whereNull('exception')->whereBetween('date', [$n->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->where([['in', '00:00:00'], ['break', '00:00:00'], ['resume', '00:00:00'], ['out', '00:00:00'], ['leave_taken', '<>', 'Outstation'], ['daytype', 'WORKDAY'] ])->whereNotIn('date', $h4)->get();
+$m = 0;
+$v2 = 0;
+foreach($stcms1 as $ke) {
+	$sl5 = StaffLeave::where([['staff_id', $ke->staff_id]])->whereRaw('"'.$ke->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
+	if($sl5->isEmpty()){
+		$m = $m+1;
+		// echo $m.' count absent<br />';
+	} else {
+		// echo $sl5.' <br />';
+		$v = 0;
+		foreach ($sl5 as $nq) {
+			$b = 0;
+			$p = 0;
+			if($nq->active == 1 || $nq->active == 2) {
+				$b = 1;
+			} else {
+				$p = 1;
+			}
+		}
+			$v += $p - $b;
+			// echo $v.' absent count<br />';
+			if($v == -1) {
+				$v1 = 0;
+			} else {
+				$v1 = $v;
+			}
+			$v2 += $v1;
+			// echo $v2.' v2 absent count<br />';
+	}
+	// echo $m + $v2.' = m+v2 <br />';
+	// echo $ke->name.' '.$ke->date.' '.$ke->in.' '.$ke->break.' '.$ke->resume.' '.$ke->out.' '.$ke->leave_taken.' absent<br />';
+	// echo '---------------------------------<br />';
+}
+$lm5 = Discipline::where('id', 5)->first();
+////////////////////////////////////////////////////////////////////////////
 ?>
 				<tr>
 					<td>{!! $sf->username !!}</td>
@@ -147,9 +199,9 @@ $lm4 = Discipline::where('id', 7)->first();
 					<td>{!! $mcm !!}<?php $count2 += $mcm ?> m</td>
 					<td>{!! $sl3 !!}</td>
 					<td>{!! $sl3 * $lm3->merit_point !!}<?php $count3 = $sl3 * $lm3->merit_point ?> m</td>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td>{!! $m + $v2 !!}</td>
+					<td>{!! $v2 !!}</td>
+					<td>{!! ($m + $v2) * $lm5->merit_point !!}<?php $count5 = ($m + $v2) * $lm5->merit_point ?> m</td>
 					<td>{!! $sl4 !!}</td>
 					<td>{!! $sl4 * $lm4->merit_point !!}<?php $count4 = $sl4 * $lm4->merit_point ?> m</td>
 					<td>{!! number_format($count + $count1 + $count2 + $count3 + $count4 , 2) !!}</td>
@@ -294,9 +346,9 @@ foreach($stcms1 as $ke) {
 	$sl5 = StaffLeave::where([['staff_id', $ke->staff_id]])->whereRaw('"'.$ke->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
 	if($sl5->isEmpty()){
 		$m = $m+1;
-		echo $m.' count absent<br />';
+		// echo $m.' count absent<br />';
 	} else {
-		echo $sl5.' <br />';
+		// echo $sl5.' <br />';
 		$v = 0;
 		foreach ($sl5 as $nq) {
 			$b = 0;
@@ -338,7 +390,7 @@ $lm5 = Discipline::where('id', 5)->first();
 					<td>{!! $sl3 * $lm3->merit_point !!}<?php $count3 = $sl3 * $lm3->merit_point ?> m</td>
 					<td>{!! $m + $v2 !!}</td>
 					<td>{!! $v2 !!}</td>
-					<td>{!! ($m + $v2) * $lm5->merit_point !!}<?php $count5 = ($m + $v2) * $lm5->merit_point ?></td>
+					<td>{!! ($m + $v2) * $lm5->merit_point !!}<?php $count5 = ($m + $v2) * $lm5->merit_point ?> m</td>
 					<td>{!! $sl4 !!}</td>
 					<td>{!! $sl4 * $lm4->merit_point !!}<?php $count4 = $sl4 * $lm4->merit_point ?> m</td>
 					<td>{!! number_format($count + $count1 + $count2 + $count3 + $count4 + $count5, 2) !!}</td>

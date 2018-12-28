@@ -349,13 +349,17 @@ if ( $bmonth != 1 ) {
 						{!! $i10++ !!}) {!! Carbon::parse($sccallc->date)->format('j M Y') !!}<br />
 		@endforeach
 		@else
+			@if($sr->status_id == 1)
 						{!! __('No Courtesy Call Yet') !!}
+			@endif
 		@endif
 					</td>
 					<td>
 						<a href="{!! route('serviceReport.show', $sr->id) !!}" target="_blank" title="Show"><i class="far fa-eye"></i></a>
 						<a href="{!! route('serviceReport.edit', $sr->id) !!}" title="Update"><i class="far fa-edit"></i></a>
+		@if($sr->status_id == 1)
 						<span class="text-primary courtesycall" title="Courtesy Calls" data-id="{!! $sr->id !!}"><i class="fas fa-phone-volume"></i></span>
+		@endif
 						<span class="text-danger inactivate" data-id="{!! $sr->id !!}"><i class="far fa-trash-alt"></i></span>
 					</td>
 				</tr>
