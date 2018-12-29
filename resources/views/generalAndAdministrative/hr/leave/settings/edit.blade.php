@@ -49,6 +49,22 @@ $("#rem").keyup(function() {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+// auto for balance
+$(document).on('keyup', '#al', function () {
+	$('#alb').val( $(this).val() );
+});
+
+// auto for balance
+$(document).on('keyup', '#mc', function () {
+	$('#mcb').val( $(this).val() );
+});
+
+// auto for balance
+$(document).on('keyup', '#ml', function () {
+	$('#mlb').val( $(this).val() );
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
 $('#form').bootstrapValidator({
 	feedbackIcons: {
 		valid: '',

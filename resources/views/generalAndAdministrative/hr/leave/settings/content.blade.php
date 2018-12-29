@@ -38,7 +38,7 @@ $s2 = StaffAnnualMCLeave::where('year', $n->copy()->addYear()->year)->get();
 		<table class="table table-hover table-sm" id="almcml1" style="font-size:12px">
 			<thead>
 				<tr>
-					<th colspan="10"><h3>List of Staff Annual Leave, Medical Certificate Leave and Maternity Leave Year {!! $n->year !!}.</h3></th>
+					<th colspan="11"><h3>List of Staff Annual Leave, Medical Certificate Leave and Maternity Leave Year {!! $n->year !!}.</h3></th>
 				</tr>
 				<tr>
 					<th>Staff ID</th>
@@ -82,7 +82,7 @@ $s2 = StaffAnnualMCLeave::where('year', $n->copy()->addYear()->year)->get();
 		<table class="table table-hover table-sm" id="almcml2" style="font-size:12px">
 			<thead>
 				<tr>
-					<th colspan="10"><h3>List of Staff Annual Leave, Medical Certificate Leave and Maternity Leave Year {!! $n->copy()->addYear()->year !!}.</h3></th>
+					<th colspan="11"><h3>List of Staff Annual Leave, Medical Certificate Leave and Maternity Leave Year {!! $n->copy()->addYear()->year !!}.</h3></th>
 				</tr>
 				<tr>
 					<th>Staff ID</th>
@@ -113,7 +113,7 @@ $s2 = StaffAnnualMCLeave::where('year', $n->copy()->addYear()->year)->get();
 ?>
 				<tr>
 					<td>{{ $k->belomgtostaff->hasmanylogin()->where('active', 1)->first()->username }}</td>
-					<td>{{ $k->name }}</td>
+					<td>{{ $k->belomgtostaff->name }}</td>
 					<td>{{ $year }}</td>
 					<td>{{ $annual_leave }}</td>
 					<td>{{ $annual_leave_balance }}</td>

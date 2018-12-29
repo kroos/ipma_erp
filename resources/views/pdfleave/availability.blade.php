@@ -136,35 +136,60 @@ switch ($ca) {
 			$uplu = $st->hasmanystaffleave()->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [3, 6])->whereIn('active', [1, 2])->get()->sum('period'); // upl utilize
 
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			$absent = $st->hasmanystafftcms()->where('leave_taken', 'ABSENT')->whereBetween('date', [$dn->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->whereNull('exception')->get();
-			$b = 0;
-			foreach($absent as $ab) {
-				$lea1 = $st->hasmanystaffleave()->whereRaw('"'.$ab->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->whereIn('active', [1, 2])->first();
+////////////////////////////////////////////////////////////////////////////
+// absent
+// find public holiday
+$h1 = HolidayCalendar::whereYear('date_start', $n->format('Y'))->get();
+$h4 = [];
+foreach($h1 as $h2) {
+	// echo $h2->date_start.' '.$h2->date_end.' hoilday calendar<br />';
+	$h3 = CarbonPeriod::create($h2->date_start, '1 days', $h2->date_end);
+	foreach ($h3 as $key => $value) {
+		$h4[] = $value->format('Y-m-d');
+		// echo $value->format('Y-m-d').' iterate<br />';
+	}
+}
 
-				// all of this are for checking sunday and holiday
-				$hol = [];
-				// echo $tc->date.' date<br />';
-				if( Carbon::parse($ab->date)->dayOfWeek != 0 ) {
-					// echo $tc->date.' kerja <br />';
-					$cuti = HolidayCalendar::all();
-					foreach ($cuti as $cu) {
-						$co = CarbonPeriod::create($cu->date_start, '1 days', $cu->date_end);
-						// echo $co.' array or string<br />';
-						foreach ($co as $key) {
-							if (Carbon::parse($key)->format('Y-m-d') == $ab->date) {
-								$hol[Carbon::parse($key)->format('Y-m-d')] = 'a';
-								// echo $key.' key<br />';
-							}
-						}
-					}
-					if( !array_has($hol, $ab->date) ) {
-						if( $ab->leave_taken == 'ABSENT' && is_null($lea1) ) {
-							$b++;
-						}
-					}
-				}
+// checking if the array is correct
+// foreach($h4 as $h5){
+// 	echo $h5.' iterate h4<br />';
+// }
+
+$stcms1 = $st->hasmanystafftcms()->whereNull('exception')->whereBetween('date', [$n->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->where([['in', '00:00:00'], ['break', '00:00:00'], ['resume', '00:00:00'], ['out', '00:00:00'], ['leave_taken', '<>', 'Outstation'], ['daytype', 'WORKDAY'] ])->whereNotIn('date', $h4)->get();
+$m = 0;
+$v2 = 0;
+foreach($stcms1 as $ke) {
+	$sl5 = $st->hasmanystaffleave()->whereRaw('"'.$ke->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
+	if($sl5->isEmpty()){
+		$m = $m+1;
+		// echo $m.' count absent<br />';
+	} else {
+		// echo $sl5.' <br />';
+		$v = 0;
+		foreach ($sl5 as $nq) {
+			$b = 0;
+			$p = 0;
+			if($nq->active == 1) {
+				$b = 1;
+			} else {
+				$p = 1;
 			}
-			$abs = $b;	// absent
+		}
+			$v += $p - $b;
+			// echo $v.' absent count<br />';
+			if($v == -1) {
+				$v1 = 0;
+			} else {
+				$v1 = $v;
+			}
+			$v2 += $v1;
+			// echo $v2.' v2 absent count<br />';
+	}
+	// echo $m + $v2.' = m+v2 <br />';
+	// echo $ke->name.' '.$ke->date.' '.$ke->in.' '.$ke->break.' '.$ke->resume.' '.$ke->out.' '.$ke->leave_taken.' absent<br />';
+	// echo '---------------------------------<br />';
+}
+			$abs = $m + $v2;	// absent
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			$total = $alu + $mcu + $mcuplu + $uplu + $abs;
 			// $pdf->MultiCell(0, 7, $location.'|'.$dept.'|'.$alu.'|'.$mcu.'|'.$mcuplu.'|'.$uplu.'|'.'|'.$abs.'|'.$total.'|', 1, 'L');

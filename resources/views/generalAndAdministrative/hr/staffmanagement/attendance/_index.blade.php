@@ -278,14 +278,6 @@ foreach ($stcms as $tc) {
 			$i1late++;
 		}
 	}
-// ////////////////////////////////////////////////////////////////////////////
-// 	// Absent / Absent w/ Reject Or Cancelled
-// 	if($tc->in == '00:00:00' && $tc->break == '00:00:00' && $tc->resume == '00:00:00' && $tc->out == '00:00:00' && $tc->leave_taken != 'Outstation') {
-// 		$sl5 = StaffLeave::where([['staff_id', $tc->staff_id]])->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
-// 		if(is_null($sl5)) {
-// 			echo $tc->name.' '.$tc->date.' '.$tc->in.' '.$tc->break.' '.$tc->resume.' '.$tc->out.' absent<br />';
-// 		}
-// 	}
 }
 $lm = Discipline::where('id', 1)->first();
 ////////////////////////////////////////////////////////////////////////////
