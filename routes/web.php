@@ -16,6 +16,11 @@ Route::get('/', [
 		'uses' => 'MainController@index',
 	]);
 
+Route::get('/test', [
+		'as' => 'main.test',
+		'uses' => 'MainController@test',
+	]);
+
 Auth::routes();
 
 Route::get('/home', [

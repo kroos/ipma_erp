@@ -6,83 +6,53 @@ use Illuminate\Http\Request;
 
 class MainController extends Controller
 {
-    function __construct()
-    {
-        $this->middleware('guest');
-    }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return view('welcome');
-    }
+	function __construct()
+	{
+		$this->middleware('guest');
+	}
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+	public function index()
+	{
+		return view('welcome');
+	}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+	public function test()
+	{
+		$staff = \App\Model\Staff::where('active', 1)->get();
+		$s = [];
+		foreach ($staff as $st) {
+			$s[] = ['id' => $st->id, 'name' => $st->name];
+		}
+		return response()->json($s);
+	}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+	public function create()
+	{
+		//
+	}
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+	public function store(Request $request)
+	{
+		//
+	}
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+	public function show($id)
+	{
+		//
+	}
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+	public function edit($id)
+	{
+		//
+	}
+
+	public function update(Request $request, $id)
+	{
+		//
+	}
+
+	public function destroy($id)
+	{
+		//
+	}
 }
