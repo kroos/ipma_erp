@@ -423,26 +423,26 @@ $gt = 0;
 					<div class="rowjob">
 						<div class="col-sm-12 form-row ">
 
-							<div class="col-sm-1 text-danger">
+							<div class="col-1 text-danger">
 								<i class="fas fa-trash delete_job" aria-hidden="true" id="delete_job_{!! $srj->id !!}" data-id="{!! $srj->id !!}"></i>
 							</div>
-							<div class="form-group col {{ $errors->has('srj.*.date') ? 'has-error' : '' }}">
+							<div class="form-group col-2 {{ $errors->has('srj.*.date') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{{ $r1++ }}][date]" value="{!! (!empty($srj->date))?$srj->date:@$value !!}" id="date_{{ $r2++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Date" />
 							</div>
 
-							<div class="form-group col {{ $errors->has('srj.*.labour') ? 'has-error' : '' }}">
+							<div class="form-group col-1 {{ $errors->has('srj.*.labour') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{{ $r3++ }}][labour]" value="{!! (!empty($srj->labour))?$srj->labour:@$value !!}" id="labour_{{ $r4++ }}" class="form-control form-control-sm labour_" autocomplete="off" placeholder="Labour Count" />
 							</div>
 
-							<div class="form-group col {{ $errors->has('srj.*.job_perform') ? 'has-error' : '' }}">
+							<div class="form-group col-4 {{ $errors->has('srj.*.job_perform') ? 'has-error' : '' }}">
 								<textarea type="textarea" name="srj[{{ $r5++ }}][job_perform]" value="{!! (!empty($srj->job_perform))?$srj->job_perform:@$value !!}" id="job_perform_{{ $r6++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Job Perform" />{{ $srj->job_perform }}</textarea>
 							</div>
 
-							<div class="form-group col {{ $errors->has('srj.*.working_time_start') ? 'has-error' : '' }}">
+							<div class="form-group col-2 {{ $errors->has('srj.*.working_time_start') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{{ $r7++ }}][working_time_start]" value="{!! (!empty($srj->working_time_start))?$srj->working_time_start:@$value !!}" id="wts_{{ $r8++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Working Time Start" />
 							</div>
 
-							<div class="form-group col {{ $errors->has('srj.*.working_time_end') ? 'has-error' : '' }}">
+							<div class="form-group col-2 {{ $errors->has('srj.*.working_time_end') ? 'has-error' : '' }}">
 								<input type="text" name="srj[{{ $r9++ }}][working_time_end]" value="{!! (!empty($srj->working_time_end))?$srj->working_time_end:@$value !!}" id="wte_{{ $r10++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Working Time End" />
 							</div>
 						</div>

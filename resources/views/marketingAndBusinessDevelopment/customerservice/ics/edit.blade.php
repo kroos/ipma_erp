@@ -519,22 +519,22 @@ $(addbtnjobn).click(function(){
 		wrapjobnd.append(
 					'<div class="rowjob">' +
 						'<div class="form-row col-sm-12">' +
-							'<div class="col-sm-1 text-danger">' +
+							'<div class="col-1 text-danger">' +
 								'<i class="fas fa-trash remove_job" aria-hidden="true" id="remove_job_' + xj + '" data-id="' + xj + '"></i>' +
 							'</div>' +
-							'<div class="form-group col {{ $errors->has('srj.*.date') ? 'has-error' : '' }}">' +
+							'<div class="form-group col-2 {{ $errors->has('srj.*.date') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srj[' + xj + '][date]" value="{!! @$value !!}" id="date_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Date" />' +
 							'</div>' +
-							'<div class="form-group col {{ $errors->has('srj.*.labour') ? 'has-error' : '' }}">' +
+							'<div class="form-group col-1 {{ $errors->has('srj.*.labour') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srj[' + xj + '][labour]" value="{!! @$value !!}" id="labour_' + xj + '" class="form-control form-control-sm labour_" autocomplete="off" placeholder="Labour Count" />' +
 							'</div>' +
-							'<div class="form-group col {{ $errors->has('srj.*.job_perform') ? 'has-error' : '' }}">' +
+							'<div class="form-group col-4 {{ $errors->has('srj.*.job_perform') ? 'has-error' : '' }}">' +
 								'<textarea name="srj[' + xj + '][job_perform]" value="{!! @$value !!}" id="job_perform_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Job Perform" /></textarea>' +
 							'</div>' +
-							'<div class="form-group col {{ $errors->has('srj.*.working_time_start') ? 'has-error' : '' }}">' +
+							'<div class="form-group col-2 {{ $errors->has('srj.*.working_time_start') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srj[' + xj + '][working_time_start]" value="{!! @$value !!}" id="wts_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Working Time Start" />' +
 							'</div>' +
-							'<div class="form-group col {{ $errors->has('srj.*.working_time_end') ? 'has-error' : '' }}">' +
+							'<div class="form-group col-2 {{ $errors->has('srj.*.working_time_end') ? 'has-error' : '' }}">' +
 								'<input type="text" name="srj[' + xj + '][working_time_end]" value="{!! @$value !!}" id="wte_' + xj + '" class="form-control form-control-sm" autocomplete="off" placeholder="Working Time End" />' +
 							'</div>' +
 						'</div>' +
