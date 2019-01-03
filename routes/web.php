@@ -16,10 +16,10 @@ Route::get('/', [
 		'uses' => 'MainController@index',
 	]);
 
-Route::get('/test', [
-		'as' => 'main.test',
-		'uses' => 'MainController@test',
-	]);
+// Route::get('/test', [
+// 		'as' => 'main.test',
+// 		'uses' => 'MainController@test',
+// 	]);
 
 Auth::routes();
 
@@ -70,6 +70,11 @@ Route::resources([
 
 // ics machine model
 	'machine_model' => 'Sales\CustomerService\MachineModelController',
+
+// todo schedule
+	'todoSchedule' => 'Admin\ToDoScheduleController',
+
+
 ]);
 // received hardcopy
 Route::post('/staffTCMS/storeODBC', [
@@ -191,6 +196,14 @@ Route::patch('/serviceReport/{serviceReport}/checkSR', [
 	'uses' => 'Sales\CustomerService\ServiceReportController@updatecheckbySR'
 ]);
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+## To do list
+// toggle task schedule
+Route::patch('/todoSchedule/{todoSchedule}/updatetoggle', [
+		'as' => 'todoSchedule.updatetoggle',
+		'uses' => 'Admin\ToDoScheduleController@updatetoggle'
+	]);
+
 ############################################################################
 // Division Page Controller
 Route::resources([
@@ -243,6 +256,11 @@ Route::resources([
 	'leaveSetting' => 'Administrative\HumanResource\LeaveEditing\Settings\LeaveSettingController',
 	'leaveNRL' => 'Administrative\HumanResource\LeaveEditing\NRL\LeaveNRLController',
 	'leaveList' => 'Administrative\HumanResource\LeaveEditing\LeaveList\LeaveListController',
+]);
+// admin page
+Route::get('/admindivision/index', [
+	'as' => 'admindivision.index',
+	'uses' => 'Admin\AdminController@index'
 ]);
 ############################################################################
 //remote

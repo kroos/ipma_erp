@@ -16,15 +16,15 @@ class MainController extends Controller
 		return view('welcome');
 	}
 
-	public function test()
-	{
-		$staff = \App\Model\Staff::where('active', 1)->get();
-		$s = [];
-		foreach ($staff as $st) {
-			$s[] = ['id' => $st->id, 'name' => $st->name];
-		}
-		return response()->json($s);
-	}
+// 	public function test()
+// 	{
+// 		$staff = \App\Model\Staff::where('active', 1)->get();
+// 		$s = [];
+// 		foreach ($staff as $st) {
+// 			$s[] = ['id' => $st->id, 'name' => $st->name];
+// 		}
+// 		return response()->json($s);
+// 	}
 
 	public function create()
 	{

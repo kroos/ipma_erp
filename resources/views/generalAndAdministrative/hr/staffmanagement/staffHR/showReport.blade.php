@@ -604,8 +604,8 @@ if( $tc->out != '00:00:00' ) {
 ?>
 												<tr>
 													<td>{!! $leaid1 !!}</td>
-													<td>{!! $nq->belongtoleave->leave !!}</td>
-													<td>{!! $nq->belongtoleavestatus->status !!}</td>
+													<td>{!! $ty->belongtoleave->leave !!}</td>
+													<td>{!! $ty->belongtoleavestatus->status !!}</td>
 												</tr>
 @endforeach
 											</tbody>

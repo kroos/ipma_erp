@@ -17,6 +17,7 @@
 			</li>
 @endforeach
 		</ul>
+		@include('generalAndAdministrative.admin._index')
 	</div>
 </div>
 @endsection

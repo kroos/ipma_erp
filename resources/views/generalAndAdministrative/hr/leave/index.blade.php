@@ -79,8 +79,8 @@ $('.name6').popover({
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // datatables
-$.fn.dataTable.moment( 'ddd, D MMM YYYY' );
-$.fn.dataTable.moment( 'ddd, D MMM YYYY h:mm a' );
+$.fn.dataTable.moment( 'dddd, D MMM YYYY' );
+$.fn.dataTable.moment( 'dddd, D MMM YYYY h:mm a' );
 $('#leaves').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
 	// "order": [[5, "desc" ]],	// sorting the 4th column descending

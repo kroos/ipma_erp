@@ -123,6 +123,17 @@ class Staff extends Model
         return $this->hasMany('\App\Model\ICSServiceReportAttendees', 'attended_by');
     }
 
+// todo list
+    public function hasmanytasker()
+    {
+        return $this->hasMany('\App\Model\ToDoStaff', 'staff_id');
+    }
+
+    public function hasmanytaskcreator()
+    {
+        return $this->hasMany('\App\Model\ToDoSchedule', 'created_by');
+    }
+
 // https://laravel.com/docs/5.6/eloquent-relationships#many-to-many
     public function belongtomanyposition()
     {
