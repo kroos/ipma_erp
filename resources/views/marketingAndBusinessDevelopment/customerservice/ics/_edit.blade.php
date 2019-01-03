@@ -233,40 +233,29 @@ $e10 = 1;
 ?>
 @foreach( $serviceReport->hasmanymodel()->get() as $srmo )
 					<div class="rowmodel">
-						<div class="row col-sm-12 form-inline">
-
+						<div class="form-row col-sm-12">
 							<div class="col-sm-1 text-danger">
 									<i class="fas fa-trash delete_model" aria-hidden="true" id="delete_model_{!! $srmo->id !!}" data-id="{!! $srmo->id !!}"></i>
 							</div>
-							<div class="">
-								<div class="form-group {{ $errors->has('srmo.*.model_id') ? 'has-error' : '' }}">
-									<select name="srmo[{{ $e2++ }}][model_id]" id="model_{{ $e1++ }}" class="form-control" autocomplete="off" placeholder="Please choose">
-										<option value="">Please choose</option>
+							<div class="form-group col {{ $errors->has('srmo.*.model_id') ? 'has-error' : '' }}">
+								<select name="srmo[{{ $e2++ }}][model_id]" id="model_{{ $e1++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Please choose">
+									<option value="">Please choose</option>
 @foreach( $model as $mod )
-										<option value="{!! $mod->id !!}" {!! ($srmo->model_id == $mod->id)?'selected':NULL !!}>{!! $mod->model !!}</option>
+									<option value="{!! $mod->id !!}" {!! ($srmo->model_id == $mod->id)?'selected':NULL !!}>{!! $mod->model !!}</option>
 @endforeach
-									</select>
-								</div>
+								</select>
 							</div>
-							<div class="">
-								<div class="form-group {{ $errors->has('srmo.*.test_run_machine') ? 'has-error' : '' }}">
-									{!! Form::text('srmo['. $e3++ .'][test_run_machine]', (!is_null($srmo->test_run_machine))?$srmo->test_run_machine:@$value,['id'=>'test_run_machine_'.$e4++, 'class' => "form-control", 'autocomplete' => "off", 'placeholder' => "Test Run Machine"] ) !!}
-								</div>
+							<div class="form-group col {{ $errors->has('srmo.*.test_run_machine') ? 'has-error' : '' }}">
+								{!! Form::text('srmo['. $e3++ .'][test_run_machine]', (!is_null($srmo->test_run_machine))?$srmo->test_run_machine:@$value,['id'=>'test_run_machine_'.$e4++, 'class' => "form-control form-control-sm", 'autocomplete' => "off", 'placeholder' => "Test Run Machine"] ) !!}
 							</div>
-							<div class="">
-								<div class="form-group {{ $errors->has('srmo.*.serial_no') ? 'has-error' : '' }}">
-									<input type="text" name="srmo[{{ $e5++ }}][serial_no]" value="{!! (!empty($srmo->serial_no))?$srmo->serial_no:@$value !!}" id="serial_no_{{ $e6++ }}" class="form-control" autocomplete="off" placeholder="Serial No." />
-								</div>
+							<div class="form-group col {{ $errors->has('srmo.*.serial_no') ? 'has-error' : '' }}">
+								<input type="text" name="srmo[{{ $e5++ }}][serial_no]" value="{!! (!empty($srmo->serial_no))?$srmo->serial_no:@$value !!}" id="serial_no_{{ $e6++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Serial No." />
 							</div>
-							<div class="">
-								<div class="form-group {{ $errors->has('srmo.*.test_capacity') ? 'has-error' : '' }}">
-									<input type="text" name="srmo[{{ $e7++ }}][test_capacity]" value="{!! (!empty($srmo->test_capacity))?$srmo->test_capacity:@$value !!}" id="test_capacity_{{ $e8++ }}" class="form-control" autocomplete="off" placeholder="Test Capacity" />
-								</div>
+							<div class="form-group col {{ $errors->has('srmo.*.test_capacity') ? 'has-error' : '' }}">
+								<input type="text" name="srmo[{{ $e7++ }}][test_capacity]" value="{!! (!empty($srmo->test_capacity))?$srmo->test_capacity:@$value !!}" id="test_capacity_{{ $e8++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Test Capacity" />
 							</div>
-							<div class="">
-								<div class="form-group {{ $errors->has('srmo.*.duration') ? 'has-error' : '' }}">
-									<input type="text" name="srmo[{{ $e9++ }}][duration]" value="{!! (!empty($srmo->duration))?$srmo->duration:@$value !!}" id="duration_{{ $e10++ }}" class="form-control" autocomplete="off" placeholder="Duration" />
-								</div>
+							<div class="form-group col {{ $errors->has('srmo.*.duration') ? 'has-error' : '' }}">
+								<input type="text" name="srmo[{{ $e9++ }}][duration]" value="{!! (!empty($srmo->duration))?$srmo->duration:@$value !!}" id="duration_{{ $e10++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Duration" />
 							</div>
 						</div>
 

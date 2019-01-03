@@ -2683,9 +2683,6 @@ $('#form').bootstrapValidator({
 				notEmpty: {
 					message: 'Please insert this field. '
 				},
-				integer: {
-					message: 'Invalid input value. '
-				}
 			}
 		},
 		'srfI[{{ $xfItem }}][item_action]': {
