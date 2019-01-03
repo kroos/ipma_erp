@@ -135,6 +135,7 @@ class PDF extends PDF_MC_Table
 	{
 		// Logo
 		$this->Image('images/sr_header.png', NULL, NULL, 181);
+		// just to round up the topMargin
 		$this->Ln(0.01175);
 	}
 
@@ -159,33 +160,64 @@ class PDF extends PDF_MC_Table
 // Instanciation of inherited class
 $pdf = new PDF('P', 'mm' , [210, 297]);	// A4 Paper
 // $pdf = new PDF_MC_Table();	// A4 Paper
-$pdf->AliasNbPages();
-$pdf->AddPage();
+
 $pdf->SetTitle('Service Report SAQ'.$serviceReport->id);
 
 $pdf->SetLeftMargin(10);
 $pdf->SetRightMargin(10);
 
+$pdf->SetFont('Arial', NULL, 8);
+
+// determine serial number count
+$servreport = $serviceReport->hasmanyserial()->get();
 
 
-$pdf->SetFont('Arial', NULL, 10);
-$pdf->Cell(0, 5, $pdf->GetX().' = getx, '.$pdf->GetY().' = gety', 0, 1, 'C');
 
-// kira count service number dulu
-$serviceReport->hasmanyserial()->get()->count();
-$pdf->Cell(0, 5, $serviceReport->hasmanyserial()->get()->count().' = serial number', 0, 1, 'C');
 
-if($serviceReport->hasmanyserial()->get()->count() > 1) {	// jika lebih dari 2 serial maka ada 2 service report
-	
+if ($servreport->count() == 1) {	// serial number always 1, need to check if its null or has a value
+
+	// start creating the page
+	foreach($servreport as $sr1) {
+
+		///////////////////////////////////////////////////////////////////
+		// make sure pages = serial number count
+		$pdf->AliasNbPages();
+		$pdf->AddPage();
+		///////////////////////////////////////////////////////////////////
+		// from top is 33, from left is 10 (according as marginLeft command)
+
+
+	}
+
+} elseif ($servreport->count() > 1) {	// jika lebih dari 2 serial maka ada 2 service report
+
+	// start creating the page
+	foreach ($servreport as $sr2) {	// means pages = serial number
+
+		///////////////////////////////////////////////////////////////////
+		// make sure pages = serial number count
+		$pdf->AliasNbPages();
+		$pdf->AddPage();
+		///////////////////////////////////////////////////////////////////
+		// from top is 33, from left is 10 (according as marginLeft command)
+
+		$pdf->Cell(0, 5, $pdf->GetX().' = getx, '.$pdf->GetY().' = gety', 0, 1, 'C');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	}
 }
-
-
-
-
-
-
-
-
 
 $filename = 'Service Report SAQ'.$serviceReport->id.'.pdf';
 
