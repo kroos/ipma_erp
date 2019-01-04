@@ -53,14 +53,13 @@ foreach ($shr as $po) {
 	$tshr += $po->belongtostaffleave()->where('active', 1)->get()->count();
 }
 
-$allleaves = $tsb + $tshod + $tshr;
+// for task list
+$tdl = 0;
+
+$allleaves = $tsb + $tshod + $tshr + $tdl;
 ?>
 				<li class="nav-item dropdown">
-					<a id="navbarDropdown" class="btn btn-sm
-					
-						btn-info text-white
-
-					nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+					<a id="navbarDropdown" class="btn btn-sm btn-info text-white nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
 						{{ Auth::user()->belongtostaff->name }}
 @if( $allleaves > 0 )
 						<span class="badge badge-danger">{{ $allleaves }}</span>
@@ -71,8 +70,15 @@ $allleaves = $tsb + $tshod + $tshr;
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 						<a class="dropdown-item" href="{{ route('staff.show', Auth::user()->staff_id ) }}">{{ __('Profile') }}</a>
 
+						<a class="dropdown-item" href="{{ route('todoList.index') }}">
+							{{ __('Task List') }}
+@if($tdl > 0)
+							<span class="badge badge-danger">{{ $tdl }}</span>
+@endif
+						</a>
+
 						<a class="dropdown-item" href="{{ route('staffLeave.index') }}">
-							{{ __('Leave Record') }}
+							{{ __('Apply Leave') }}
 						</a>
 
 <!-- not all have backup -->

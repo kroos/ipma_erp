@@ -40,7 +40,7 @@ class ToDoScheduleController extends Controller
 		if($request->category_id == 1) {
 			$d = Carbon::parse($request->dateline);
 			$reminder = $d->copy()->subDays($request->period_reminder)->format('Y-m-d');
-			$tds->hasonetask()->create( array_add($request->only(['dateline', 'priority_id']), 'reminder', $reminder) );
+			$tds->hasmanytask()->create( array_add($request->only(['dateline', 'priority_id']), 'reminder', $reminder) );
 		}
 
 		// assignee

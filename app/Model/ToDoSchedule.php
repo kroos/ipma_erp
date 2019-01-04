@@ -14,9 +14,9 @@ class ToDoSchedule extends Model
 		return $this->hasMany('App\Model\ToDoStaff', 'schedule_id');
 	}
 
-	public function hasonetask()
+	public function hasmanytask()	// hasonetask
 	{
-		return $this->hasOne('App\Model\ToDoList', 'schedule_id');
+		return $this->hasMany('App\Model\ToDoList', 'schedule_id');
 	}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

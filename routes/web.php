@@ -73,6 +73,7 @@ Route::resources([
 
 // todo schedule
 	'todoSchedule' => 'Admin\ToDoScheduleController',
+	'todoList' => 'Admin\ToDoListController',
 
 
 ]);
