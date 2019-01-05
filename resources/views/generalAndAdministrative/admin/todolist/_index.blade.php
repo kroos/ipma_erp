@@ -48,7 +48,7 @@ switch ($tds->category_id) {
 		break;
 }
 ?>
-		<tr>
+		<tr class="{!! ($tds->priority_id == 1)?'table-danger':(($tds->priority_id == 2)?'table-warning':'table-info') !!}">
 			<td>{!! $tds->id !!}</td>
 			<td>{!! $tds->belongtocreator->name !!}</td>
 			<td>{!! $tds->belongtocategory->category !!}</td>

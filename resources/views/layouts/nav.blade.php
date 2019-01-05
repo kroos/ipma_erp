@@ -1,3 +1,10 @@
+<?php
+use \App\Model\ToDoList;
+use \App\Model\ToDoStaff;
+
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
+?>
 <nav class="navbar navbar-expand-md navbar-light bg-light sticky-top navbar-laravel" style="background-color: #e3f2fd;">
 	<div class="container">
 		<a class="navbar-brand" href="{{ url('/') }}">
@@ -54,7 +61,16 @@ foreach ($shr as $po) {
 }
 
 // for task list
+$st = ToDoStaff::where('staff_id', \Auth::user()->belongtostaff->id)->get();
 $tdl = 0;
+foreach( $st as $key ) {
+	// echo $key->id.' id user<br />';
+	// echo $key->belongtoschedule.' schedule part<br />';
+	$tdl += $key->belongtoschedule->hasmanytask()->whereDate('reminder', '<=', today())->whereNull('completed')->get()->count();
+}
+
+
+
 
 $allleaves = $tsb + $tshod + $tshr + $tdl;
 ?>

@@ -6,19 +6,22 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 // load model
-use \App\Model\ToDoSchedule;
-use \App\Model\ToDoList;
+use App\Model\ToDoList;
 
 // load validation
-use \App\Http\Requests\ToDoScheduleRequest;
+use App\Http\Requests\ToDoListUpdateByUserRequest;
 
-use \Carbon\Carbon;
-use \Carbon\CarbonPeriod;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 use Session;
 
 class ToDoListController extends Controller
 {
+	function __construct()
+	{
+		$this->middleware('auth');
+	}
 
 	public function index()
 	{
@@ -30,32 +33,44 @@ class ToDoListController extends Controller
 		//
 	}
 
-	public function store(ToDoScheduleRequest $request)
+	public function store(Request $request)
 	{
 		//
 	}
 
-	public function show(ToDoSchedule $todoSchedule)
+	public function show(ToDoList $todoList)
 	{
 	//
 	}
 
-	public function edit(ToDoSchedule $todoSchedule)
+	public function edit(ToDoList $todoList)
 	{
 		//
 	}
 
-	public function update(ToDoScheduleRequest $request, ToDoSchedule $todoSchedule)
+	public function update(Request $request, ToDoList $todoList)
 	{
 		//
 	}
 
-	public function updatetoggle(Request $request, ToDoSchedule $todoSchedule)
+////////////////////////////////////////////////////////
+// additional function
+	public function updatetask(ToDoListUpdateByUserRequest $request, ToDoList $todoList)
+	{
+		// var_dump($request->all());
+		return response()->json([
+			'message' => 'Successfully update data',
+			'status' => 'info'
+		]);
+	}
+
+////////////////////////////////////////////////////////
+	public function updatetoggle(Request $request, ToDoList $todoList)
 	{
 		//
 	}
 
-	public function destroy(ToDoSchedule $todoSchedule)
+	public function destroy(ToDoList $todoList)
 	{
 		//
 	}

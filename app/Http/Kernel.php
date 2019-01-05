@@ -76,7 +76,6 @@ class Kernel extends HttpKernel
 
         'deptaccess' => \App\Http\Middleware\Department\RedirectIfNotDepartment::class,
 
-
         'leaveaccess' => \App\Http\Middleware\StaffLeave\RedirectIfNotOwnerLeave::class,
 
 

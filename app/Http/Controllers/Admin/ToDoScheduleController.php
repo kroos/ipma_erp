@@ -19,6 +19,11 @@ use Session;
 
 class ToDoScheduleController extends Controller
 {
+	function __construct()
+	{
+		$this->middleware('auth');
+		$this->middleware('deptaccess');
+	}
 
 	public function index()
 	{
@@ -37,11 +42,21 @@ class ToDoScheduleController extends Controller
 
 		$tds = ToDoSchedule::create( array_add(array_add($request->only(['category_id', 'task', 'description', 'period_reminder', 'dateline', 'priority_id']), 'created_by', \Auth::user()->belongtostaff->id), 'active', 1) );
 
-		if($request->category_id == 1) {
-			$d = Carbon::parse($request->dateline);
+		// getting the reminder
+		$d = Carbon::parse($request->dateline);
+
+		if($request->category_id == 1) {					// 1 time off
+
 			$reminder = $d->copy()->subDays($request->period_reminder)->format('Y-m-d');
-			$tds->hasmanytask()->create( array_add($request->only(['dateline', 'priority_id']), 'reminder', $reminder) );
+		} elseif ($request->category_id == 3) {				// monthly
+
+			$reminder = $d->copy()->subDays($request->period_reminder)->format('Y-m-d');
+		} elseif ($request->category_id == 6) {				// yearly
+
+			$reminder = $d->copy()->subDays($request->period_reminder)->format('Y-m-d');
 		}
+
+		$tds->hasmanytask()->create( array_add($request->only(['dateline', 'priority_id']), 'reminder', $reminder) );
 
 		// assignee
 		if ($request->has('td')) {

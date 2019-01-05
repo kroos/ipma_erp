@@ -132,7 +132,7 @@ Route::patch('/staffHR/{staffHR}/promoteupdateHR', [
 		'as' => 'staffHR.promoteupdateHR',
 		'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@promoteupdateHR'
 	]);
-
+// disable staff
 Route::delete('disableHR/{staffHR}', [
 		'as' => 'staffHR.disableHR',
 		'uses' => 'Administrative\HumanResource\StaffManagement\StaffHRController@disableHR'
@@ -203,6 +203,11 @@ Route::patch('/serviceReport/{serviceReport}/checkSR', [
 Route::patch('/todoSchedule/{todoSchedule}/updatetoggle', [
 		'as' => 'todoSchedule.updatetoggle',
 		'uses' => 'Admin\ToDoScheduleController@updatetoggle'
+	]);
+// update task list from user
+Route::patch('/todoList/{todoList}/updatetask', [
+		'as' => 'todoList.updatetask',
+		'uses' => 'Admin\ToDoListController@updatetask'
 	]);
 
 ############################################################################
