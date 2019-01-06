@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
@@ -57,11 +56,10 @@ class ToDoListController extends Controller
 // additional function
 	public function updatetask(ToDoListUpdateByUserRequest $request, ToDoList $todoList)
 	{
-		// var_dump($request->all());
-		return response()->json([
-			'message' => 'Successfully update data',
-			'status' => 'info'
-		]);
+		var_dump($request->all());
+		$todoList->update($request->only(['description', 'completed']));
+		Session::flash('flash_message', 'Data successfully stored!');
+		return redirect( route('todoList.index') );
 	}
 
 ////////////////////////////////////////////////////////
