@@ -29,7 +29,7 @@ use \Carbon\CarbonPeriod;
 		@page {
 					size 21cm 29.7cm;
 					/*margin: 3mm 5mm 3mm 5mm;*/
-					margin: 15mm auto;
+					margin: 10mm auto;
 		}
 		div.page {
 					page-break-after: always;
@@ -40,12 +40,14 @@ use \Carbon\CarbonPeriod;
 		}
 		table {
 			font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+			font-size: 12px;
 			border-collapse: collapse;
 		}
 
 		table td, table th {
 			border: 1px solid #ddd;
-			padding: 8px;
+			padding: 2px;
+			height: 10px;
 		}
 
 		table tr:nth-child(even){background-color: #f2f2f2;}
@@ -53,10 +55,11 @@ use \Carbon\CarbonPeriod;
 		table tr:hover {background-color: #ddd;}
 
 		table th {
-			padding-top: 12px;
-			padding-bottom: 12px;
+			padding-top: 3px;
+			padding-bottom: 3px;
 			text-align: left;
-			background-color: #4CAF50;
+			/*background-color: #4CAF50;*/
+			background-color: #A9A9A9;
 			color: white;
 		}
 	</style>
@@ -68,16 +71,16 @@ use \Carbon\CarbonPeriod;
 		</center>
 
 			<center>
-				<table width="90%" border="1" cellspacing="1" cellpadding="1">
+				<table width="100%" border="1" cellspacing="1" cellpadding="1">
 					<tbody>
 						<tr>
-							<th colspan="10" width="70%">
+							<th colspan="10" width="60%">
 								<center><h1><u>Service Report</u></h1></center>
 @if( !is_null( $serviceReport->category_id ) )
 								<center>{!! $serviceReport->belongtocategory->sr_category !!}</center>
 @endif
 							</th>
-							<td colspan="2" width="30%">
+							<td colspan="2" width="40%">
 								<table width="100%" cellspacing="1" cellpadding="1">
 									<tbody>
 @if ($serviceReport->hasmanyserial()->get()->count() > 0)
@@ -106,7 +109,7 @@ use \Carbon\CarbonPeriod;
 							</td>
 						</tr>
 						<tr>
-							<td colspan="6" width="50%">
+							<td colspan="6" width="50%" valign="top">
 								<p>
 									Customer : {!! (!is_null($serviceReport->belongtocustomer()))?$serviceReport->belongtocustomer->customer:NULL !!}
 									<br />
@@ -336,7 +339,7 @@ $thours = floor($th / 60).' hours '.($th -   floor($th / 60) * 60).' minutes';
 <p style="page-break-before: always">
 	<h1>ON-SITE SERVICE FEEDBACK</h1>
 		<center>
-			<table width="90%" border="1" cellspacing="1" cellpadding="1">
+			<table width="100%" border="1" cellspacing="1" cellpadding="1">
 				<tbody>
 					<tr>
 						<th colspan="3" width="10%">Date</th>
@@ -382,25 +385,25 @@ $thours = floor($th / 60).' hours '.($th -   floor($th / 60) * 60).' minutes';
 @endforeach
 
 @endif
-					<tr>
-						<td colspan="12">&nbsp;</td>
-					</tr>
-					<tr>
-						<td colspan="12">&nbsp;</td>
-					</tr>
+				</tbody>
+			</table>
+<!-- <p>&nbsp;</p> -->
+			<table width="50%" border="1" cellspacing="1" cellpadding="1">
+				<tbody>
 @if( !is_null( $serviceReport->proceed_id ) )
 					<tr>
-						<th colspan="2">Proceed With :</th>
-						<td colspan="10">{!! $serviceReport->belongtoproceed->proceed !!}</td>
+						<th width="50%">Proceed With :</th>
+						<td width="50%">{!! $serviceReport->belongtoproceed->proceed !!}</td>
 					</tr>
 @endif
-					<tr>
-						<td colspan="12">&nbsp;</td>
-					</tr>
+				</tbody>
+			</table>
+			<table width="50%" border="1" cellspacing="1" cellpadding="1">
+				<tbody>
 @if( !is_null($serviceReport->status_id) )
 					<tr>
-						<th>Status</th>
-						<td colspan="11">{!! $serviceReport->belongtostatus->sr_status !!}</td>
+						<th width="50%">Status</th>
+						<td width="50%">{!! $serviceReport->belongtostatus->sr_status !!}</td>
 					</tr>
 @endif
 				</tbody>
@@ -409,7 +412,7 @@ $thours = floor($th / 60).' hours '.($th -   floor($th / 60) * 60).' minutes';
 <p style="page-break-before: always">
 	<h1>FLOAT TH</h1>
 	<center>
-		<table width="90%" cellspacing="1" cellpadding="1" border="0">
+		<table width="100%" cellspacing="1" cellpadding="1" border="0">
 			<tbody>
 				<tr>
 					<th colspan="14" align="center">
@@ -658,7 +661,7 @@ if($serviceReport->hasonediscount->discount_id == 1) {		// 1 = percentage
 <p style="page-break-before: always">
 	<h1>POST SERVICE FEEDBACK FORM</h1>
 	<center>
-		<table width="90%" cellspacing="1" cellpadding="1" border="1">
+		<table width="100%" cellspacing="1" cellpadding="1" border="1">
 			<tbody>
 @if($serviceReport->hasmanyfeedcall()->get()->count() > 0)
 				<tr>
