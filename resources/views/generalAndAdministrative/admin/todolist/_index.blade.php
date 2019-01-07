@@ -1,9 +1,13 @@
 <?php
 use \App\Model\ToDoSchedule;
+use \App\Model\ToDoList;
 use Carbon\Carbon;
 ?>
-<table class="table table-hover" id="schedule1" style="font-size:12px">
+<table class="table table-hover table-sm" id="schedule1" style="font-size:12px">
 	<thead>
+		<tr>
+			<td colspan="11"><h3 class="text-center">Task Scheduler</h3></td>
+		</tr>
 		<tr>
 			<th>ID</th>
 			<th>Created By</th>
@@ -58,7 +62,7 @@ switch ($tds->category_id) {
 			<td>{!! $dl !!}</td>
 			<td>{!! $tds->belongtopriority->priority !!}</td>
 			<td>
-				<table class="table table-hover" id="schedule1" style="font-size:12px">
+				<table class="table table-hover table-sm" id="schedule1" style="font-size:12px">
 					<tbody>
 @foreach($tds->hasmanytasker()->get() as $t)
 						<tr>
@@ -76,6 +80,89 @@ switch ($tds->category_id) {
 				<span id="toggle_{!! $tds->id !!}" class="text-danger toggle" data-id="{!! $tds->id !!}" data-value="1"><i class="fa fa-toggle-off"></i></span>
 @endif
 			</td>
+		</tr>
+@endforeach
+	</tbody>
+</table>
+
+<p>&nbsp</p>
+
+<table class="table table-hover table-sm" id="schedule2" style="font-size:12px">
+	<thead>
+		<tr>
+			<th colspan="11">
+				<h3 class="text-center">Incomplete Task With Reply From Tasker</h3>
+			</th>
+		</tr>
+		<tr>
+			<th>ID Schedule</th>
+			<th>Category</th>
+			<th>Task</th>
+			<th>Description</th>
+			<th>Reminder On</th>
+			<th>Dateline On</th>
+			<th>Priority</th>
+			<th>Accomplished</th>
+			<th>Remarks</th>
+			<th>From</th>
+			<th>Updated At</th>
+		</tr>
+	</thead>
+	<tbody>
+@foreach( ToDoList::whereNotNull('remarks')->whereNull('completed')->get() as $y )
+		<tr class="{!! ($y->belongtoschedule->priority_id == 1)?'table-danger':(($y->belongtoschedule->priority_id == 2)?'table-warning':'table-info') !!}">
+			<td>{!! $y->belongtoschedule->id !!}</td>
+			<td>{!! $y->belongtoschedule->belongtocategory->category !!}</td>
+			<td>{!! $y->belongtoschedule->task !!}</td>
+			<td>{!! $y->belongtoschedule->description !!}</td>
+			<td>{!! Carbon::parse($y->reminder)->format('D, j F Y') !!}</td>
+			<td>{!! Carbon::parse($y->reminder)->format('D, j F Y') !!}</td>
+			<td>{!! $y->belongtoschedule->belongtopriority->priority !!}</td>
+			<td>{!! (!is_null($y->completed))?'Accomplished':'Incomplete' !!}</td>
+			<td>{!! $y->remarks !!}</td>
+			<td>{{ $y->belongtodoers->name }}</td>
+			<td>{!! Carbon::parse($y->updated_at)->format('D, j M Y') !!}</td>
+		</tr>
+@endforeach
+	</tbody>
+</table>
+<p>&nbsp;</p>
+
+<table class="table table-hover table-sm" id="schedule3" style="font-size:12px">
+	<thead>
+		<tr>
+			<th colspan="11">
+				<h3 class="text-center">Complete Task</h3>
+			</th>
+		</tr>
+		<tr>
+			<th>ID Schedule</th>
+			<th>Category</th>
+			<th>Task</th>
+			<th>Description</th>
+			<th>Reminder On</th>
+			<th>Dateline On</th>
+			<th>Priority</th>
+			<th>Accomplished</th>
+			<th>Remarks</th>
+			<th>From</th>
+			<th>Updated At</th>
+		</tr>
+	</thead>
+	<tbody>
+@foreach( ToDoList::whereNotNull('completed')->get() as $y )
+		<tr class="{!! ($y->belongtoschedule->priority_id == 1)?'table-danger':(($y->belongtoschedule->priority_id == 2)?'table-warning':'table-info') !!}">
+			<td>{!! $y->belongtoschedule->id !!}</td>
+			<td>{!! $y->belongtoschedule->belongtocategory->category !!}</td>
+			<td>{!! $y->belongtoschedule->task !!}</td>
+			<td>{!! $y->belongtoschedule->description !!}</td>
+			<td>{!! Carbon::parse($y->reminder)->format('D, j F Y') !!}</td>
+			<td>{!! Carbon::parse($y->reminder)->format('D, j F Y') !!}</td>
+			<td>{!! $y->belongtoschedule->belongtopriority->priority !!}</td>
+			<td>{!! (!is_null($y->completed))?'Accomplished':'Incomplete' !!}</td>
+			<td>{!! $y->remarks !!}</td>
+			<td>{{ $y->belongtodoers->name }}</td>
+			<td>{!! Carbon::parse($y->updated_at)->format('D, j M Y') !!}</td>
 		</tr>
 @endforeach
 	</tbody>

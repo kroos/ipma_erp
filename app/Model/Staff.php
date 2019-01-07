@@ -134,6 +134,10 @@ class Staff extends Model
         return $this->hasMany('\App\Model\ToDoSchedule', 'created_by');
     }
 
+    public function hasmanydoers()
+    {
+        return $this->hasMany('\App\Model\ToDoList', 'updated_by');
+    }
 // https://laravel.com/docs/5.6/eloquent-relationships#many-to-many
     public function belongtomanyposition()
     {

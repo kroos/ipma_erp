@@ -74,9 +74,18 @@ Route::resources([
 // todo schedule
 	'todoSchedule' => 'Admin\ToDoScheduleController',
 	'todoList' => 'Admin\ToDoListController',
-
-
 ]);
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// change password
+Route::get('/login/{login}', [
+	'as' => 'login.edit',
+	'uses' => 'Profile\LoginController@edit'
+]);
+Route::patch('/login/{login}', [
+	'as' => 'login.update',
+	'uses' => 'Profile\LoginController@update'
+]);
+//////////////////////////////////////////////////////////////////////////////////////////////////
 // received hardcopy
 Route::post('/staffTCMS/storeODBC', [
 	'as' => 'staffTCMS.storeODBC',

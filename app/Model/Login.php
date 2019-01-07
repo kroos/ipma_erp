@@ -199,16 +199,6 @@ class Login extends Authenticatable
 			}
 		}
 
-
-
-
-
-
-
-
-
-
-
 		// if( empty(\Auth::user()->belongtostaff->belongtoposition->belongtodepartment) ) {
 		// 	return true;
 		// } else {
@@ -224,4 +214,19 @@ class Login extends Authenticatable
 		// }
 	}
 
+	public function onlyOwnerChangePassword( $id )
+	{
+		$rt = \Auth::user()->id;
+		if ($rt == $id) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public function isoffice( $id )
+	{
+		$rt = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->get();
+		var_dump($rt);
+	}
 }

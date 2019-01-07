@@ -78,6 +78,6 @@ class Kernel extends HttpKernel
 
         'leaveaccess' => \App\Http\Middleware\StaffLeave\RedirectIfNotOwnerLeave::class,
 
-
+        'ownerchangepassword' => \App\Http\Middleware\StaffProfile\RedirectIfNotOwnerChangePassword::class,
     ];
 }

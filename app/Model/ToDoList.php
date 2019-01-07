@@ -20,4 +20,9 @@ class ToDoList extends Model
 	{
 		return $this->belongsTo('App\Model\ToDoSchedule', 'schedule_id');
 	}
+
+	public function belongtodoers()
+	{
+		return $this->belongsTo('App\Model\Staff', 'update_by');
+	}
 }

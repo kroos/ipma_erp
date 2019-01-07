@@ -31,7 +31,7 @@ if ( $bmonth != 1 ) {
 <div class="card">
 	<div class="card-header"><h5>Appointment For Service</h5></div>
 	<div class="card-body">
-		<table class="table table-hover" style="font-size:12px" id="servicereport1">
+		<table class="table table-hover table-sm" style="font-size:12px" id="servicereport1">
 			<thead>
 				<tr>
 					<th>ID</th>
@@ -136,7 +136,7 @@ if ( $bmonth != 1 ) {
 <div class="card">
 	<div class="card-header"><h5>Service Report In Progress</h5></div>
 	<div class="card-body">
-		<table class="table table-hover" style="font-size:12px" id="servicereport4">
+		<table class="table table-hover table-sm" style="font-size:12px" id="servicereport4">
 			<thead>
 				<tr>
 					<th>ID</th>
@@ -238,7 +238,7 @@ if ( $bmonth != 1 ) {
 <div class="card">
 	<div class="card-header"><h5>Completed Service Report for Customer Service Department</h5></div>
 	<div class="card-body">
-		<table class="table table-hover" style="font-size:9px" id="servicereport5">
+		<table class="table table-hover table-sm" style="font-size:12px" id="servicereport5">
 			<thead>
 				<tr>
 					<th>ID</th>
@@ -377,7 +377,7 @@ if ( $bmonth != 1 ) {
 	<div class="card-body">
 
 {!! Form::open(['route' => ['serviceReport.updateunapprove'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true,  'data-toggle' => 'validator']) !!}
-		<table class="table table-hover" style="font-size:12px" id="servicereport3">
+		<table class="table table-hover table-sm" style="font-size:12px" id="servicereport3">
 			<thead>
 				<tr>
 					<th><input type="checkbox" id="selectAll"><label for="selectAll">Approved All</label></th>

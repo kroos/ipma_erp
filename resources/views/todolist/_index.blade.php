@@ -81,6 +81,7 @@ foreach( $st as $key ) {
 				</div>
 			</div>
 		</div>
+<!-- modal end -->
 	@endforeach
 @endforeach
 	</tbody>

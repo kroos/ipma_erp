@@ -44,11 +44,25 @@ $("#username").keyup(function() {
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // datatables
-$.fn.dataTable.moment( 'dddd, D MMM YYYY' );
+$.fn.dataTable.moment( 'ddd, D MMM YYYY' );
 $.fn.dataTable.moment( 'dddd, D MMM YYYY h:mm a' );
 $('#schedule1').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
 	// "order": [[5, "desc" ]],	// sorting the 4th column descending
+	// responsive: true
+	// "ordering": false
+});
+
+$('#schedule2').DataTable({
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	"order": [[10, "desc" ]],	// sorting the 4th column descending
+	// responsive: true
+	// "ordering": false
+});
+
+$('#schedule3').DataTable({
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	"order": [[10, "desc" ]],	// sorting the 4th column descending
 	// responsive: true
 	// "ordering": false
 });
