@@ -202,14 +202,8 @@ if( $tc->out != '00:00:00' ) {
 }
 
 // looking for appropriate leaves for user.
-$lea = StaffLeave::where('staff_id', $tc->staff_id)->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->first();
-if ( !empty( $lea ) ) {
-	$dts = Carbon::parse($lea->created_at)->format('Y');
-	$arr = str_split( $dts, 2 );
-	$leaid = 'HR9-'.str_pad( $lea->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
-} else {
-	$leaid = NULL;
-}
+$lea = StaffLeave::where('staff_id', $tc->staff_id)->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
+
 
 $username = $tc->belongtostaff->hasmanylogin()->where('active', 1)->first()->username;
 ?>
@@ -230,7 +224,24 @@ $username = $tc->belongtostaff->hasmanylogin()->where('active', 1)->first()->use
 			<td>{!! $ot !!}</td>
 			<td>{!! $tc->leave_taken !!}</td>
 			<td>{!! $tc->remark !!}</td>
-			<td>{!! $leaid !!}</td>
+			<td>
+				<table class="table table-hover table-sm" style="font-size:12px">
+@foreach($lea as $key)
+<?php
+if ( !empty( $key ) ) {
+	$dts = Carbon::parse($key->created_at)->format('Y');
+	$arr = str_split( $dts, 2 );
+	$leaid = 'HR9-'.str_pad( $key->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
+} else {
+	$leaid = NULL;
+}
+?>
+					<tr>
+						<td>{!! $leaid !!}</td>
+					</tr>
+@endforeach
+				</table>
+			</td>
 			<td>{!! (is_null($tc->exception) || $tc->exception == 0)?'<i class="fas fa-times"></i>':'<i class="fas fa-check"></i>' !!}</td>
 			<td>
 				<a href="{!! route('staffTCMS.edit', [$tc->staff_id, 'date' => $tc->date]) !!}" class="btn btn-primary"><i class="far fa-edit"></i></a>
