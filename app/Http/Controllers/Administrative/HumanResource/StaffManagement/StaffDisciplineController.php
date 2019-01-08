@@ -29,6 +29,7 @@ class StaffDisciplineController extends Controller
 
 	public function index()
 	{
+		// office
 		$st1 = DB::table('staffs')->
 				leftJoin('staff_positions', 'staff_positions.staff_id', '=', 'staffs.id')->
 				leftJoin('positions', 'staff_positions.position_id', '=', 'positions.id')->
@@ -45,7 +46,8 @@ class StaffDisciplineController extends Controller
 				])->
 				orderBy('staffs.id', 'asc')->
 				get();
-		
+
+		// production
 		$st2 = DB::table('staffs')->
 				leftJoin('staff_positions', 'staff_positions.staff_id', '=', 'staffs.id')->
 				leftJoin('positions', 'staff_positions.position_id', '=', 'positions.id')->

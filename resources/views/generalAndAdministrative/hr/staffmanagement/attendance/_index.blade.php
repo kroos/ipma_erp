@@ -14,12 +14,29 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
 $n = Carbon::now();
+
+
+////////////////////////////////////////////////////////////////////////////
+// absent
+// find public holiday
+$h1 = HolidayCalendar::whereYear('date_start', $n->format('Y'))->get();
+$h4 = [];
+foreach($h1 as $h2) {
+	// echo $h2->date_start.' '.$h2->date_end.' hoilday calendar<br />';
+	$h3 = CarbonPeriod::create($h2->date_start, '1 days', $h2->date_end);
+	foreach ($h3 as $key => $value) {
+		$h4[] = $value->format('Y-m-d');
+		// echo $value->format('Y-m-d').' iterate<br />';
+	}
+}
+
+
 ?>
 <div class="card">
 	<div class="card-header">Staff Attendance & Discipline</div>
 	<div class="card-body">
 
-		<table class="table table-hover" style="font-size:10px" id="staffdiscoff">
+		<table class="table table-hover table-sm" style="font-size:12px" id="staffdiscoff">
 			<thead>
 				<tr>
 					<th colspan="18" class="text-center text-primary">Office</th>
@@ -58,9 +75,9 @@ $n = Carbon::now();
 <?php
 ////////////////////////////////////////////////////////////////////////////
 // lateness
-// echo $sf->id;
+// echo $sf->id.' start moola<br />';
 
-$stcms = StaffTCMS::where([['staff_id', $sf->id]])->whereNull('exception')->whereBetween('date', [$n->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->get();
+$stcms = StaffTCMS::where([['staff_id', $sf->id]])->whereNull('exception')->whereBetween('date', [$n->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->whereNotIn('date', $h4)->get();
 $i1late = 0;
 $count = 0;
 $count1 = 0;
@@ -211,7 +228,7 @@ $lm5 = Discipline::where('id', 5)->first();
 		</table>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-		<table class="table table-hover" style="font-size:10px" id="staffdiscprod">
+		<table class="table table-hover table-sm" style="font-size:12px" id="staffdiscprod">
 			<thead>
 				<tr>
 					<th colspan="18" class="text-center text-primary">Production</th>
@@ -246,12 +263,17 @@ $lm5 = Discipline::where('id', 5)->first();
 				</tr>
 			</thead>
 			<tbody>
+<!-- geng production -->
+<!-- $sf = id staff -->
 @foreach($st2 as $sf)
 <?php
 ////////////////////////////////////////////////////////////////////////////
+echo $sf->id.' start moola<br />';
 // lateness
 $stcms = StaffTCMS::where([['staff_id', $sf->id]])->whereNull('exception')->whereBetween('date', [$n->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->get();
 $i1late = 0;
+$i2late = 1;
+$i3late = 1;
 $count = 0;
 $count1 = 0;
 $count2 = 0;
@@ -269,14 +291,28 @@ foreach ($stcms as $tc) {
 	}
 	
 	$in = Carbon::createFromTimeString($tc->in);
+	// echo $time->first()->time_start_am.' time start <br />';
 	
 	if( $in->gt( Carbon::createFromTimeString($time->first()->time_start_am) ) ) {
 		// now checking if got tf leave form
 		$sl = StaffLeave::where([['staff_id', $sf->id], ['leave_id', 9]])->whereIn('active', [1, 2])->whereRaw('"'.$dt->format('Y-m-d').'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get()->count();
+		$sl6 = Staff::find($sf->id)->hasmanystaffleave()->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
 
 		if ( $sl == 0 ) {
 			$i1late++;
 		}
+		$notCount = '';
+		foreach ($sl6 as $k) {
+			if($k->leave_id == 9 && ($k->active == 1 || $k->active ==2)) {
+				// echo $k->leave_no.' <br />';
+				// echo $tc->date.' <br />';
+				$notCount = $tc->date;
+			}
+		}
+		if ($tc->date != $notCount) {
+			// echo $i2late++.' late<br />';
+		}
+		echo $i3late++.' all late<br />';
 	}
 }
 $lm = Discipline::where('id', 1)->first();

@@ -142,7 +142,14 @@ foreach($h1 as $h2) {
 // 	echo $h5.' iterate h4<br />';
 // }
 
+// not working at all
 $stcms1 = $staffHR->hasmanystafftcms()->whereNull('exception')->whereBetween('date', [$n->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->where([['in', '00:00:00'], ['break', '00:00:00'], ['resume', '00:00:00'], ['out', '00:00:00'], ['leave_taken', '<>', 'Outstation'], ['daytype', 'WORKDAY'] ])->whereNotIn('date', $h4)->get();
+
+// working in the evening
+$stcms2 = $staffHR->hasmanystafftcms()->whereNull('exception')->whereBetween('date', [$n->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->where([['in', '<>', '00:00:00'], ['break', '<>', '00:00:00'], ['resume', '00:00:00'], ['out', '00:00:00'], ['leave_taken', '<>', 'Outstation'], ['daytype', 'WORKDAY'] ])->whereNotIn('date', $h4)->get();
+
+// working in the morning
+$stcms3 = $staffHR->hasmanystafftcms()->whereNull('exception')->whereBetween('date', [$n->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->where([['in', '00:00:00'], ['break', '00:00:00'], ['resume', '<>', '00:00:00'], ['out', '<>', '00:00:00'], ['leave_taken', '<>', 'Outstation'], ['daytype', 'WORKDAY'] ])->whereNotIn('date', $h4)->get();
 $m = 0;
 $v2 = 0;
 foreach($stcms1 as $ke) {
@@ -420,12 +427,12 @@ if( !empty($sd->hasonestaffleavebackup) ) {
 							</thead>
 							<tbody>
 @foreach($stcms1 as $tc)
-<?php
-$sl5 = $staffHR->hasmanystaffleave()->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
-?>
-@if( $sl5->isEmpty() )
+	<?php
+	$sl5 = $staffHR->hasmanystaffleave()->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
+	?>
+	@if( $sl5->isEmpty() )
 									<tr>
-										<td>{!! Carbon::parse($tc->date)->format('D, j F Y') !!}</td>
+										<td>{!! Carbon::parse($tc->date)->format('D, j M Y') !!}</td>
 										<td>{{ $tc->daytype }}</td>
 										<td>{{ $tc->in }}</td>
 										<td>{{ $tc->break }}</td>
@@ -437,24 +444,24 @@ $sl5 = $staffHR->hasmanystaffleave()->whereRaw('"'.$tc->date.'" BETWEEN DATE(sta
 										<td>&nbsp;</td>
 										<td>{!! (is_null($tc->exception) || $tc->exception == 0)?'<i class="fas fa-times"></i>':'<i class="fas fa-check"></i>' !!}</td>
 									</tr>
-@else
-<?php
-$v = 0;
-$dt = NULL;
-foreach($sl5 as $nq1) {
-	$t = 0;
-	if($nq1->active == 3 || $nq1->active == 4) {
-		$t = 1;
-	} else {
-		$t = 0;
-		$dt = $tc->date;
-	}
-	// echo $dt.' date aprove<br />';
-}
-?>
-@if($tc->date != $dt)
+	@else
+		<?php
+		$v = 0;
+		$dt = NULL;
+		foreach($sl5 as $nq1) {
+			$t = 0;
+			if($nq1->active == 3 || $nq1->active == 4) {
+				$t = 1;
+			} else {
+				$t = 0;
+				$dt = $tc->date;
+			}
+			// echo $dt.' date aprove<br />';
+		}
+		?>
+		@if($tc->date != $dt)
 									<tr>
-										<td>{!! Carbon::parse($tc->date)->format('D, j F Y') !!}</td>
+										<td>{!! Carbon::parse($tc->date)->format('D, j M Y') !!}</td>
 										<td>{{ $tc->daytype }}</td>
 										<td>{{ $tc->in }}</td>
 										<td>{{ $tc->break }}</td>
@@ -464,7 +471,7 @@ foreach($sl5 as $nq1) {
 										<td>{!! ($tc->short_hour > 0)?'<span class="text-danger">'.$tc->short_hour.'</span>':$tc->short_hour !!}</td>
 										<td>{!! $tc->leave_taken !!}</td>
 										<td>
-@if($sl5->count() > 0)
+			@if($sl5->count() > 0)
 											<table class="table table-hover table-sm" style="font-size:12px">
 												<thead>
 													<tr>
@@ -473,26 +480,188 @@ foreach($sl5 as $nq1) {
 													</tr>
 												</thead>
 												<tbody>	
-@foreach($sl5 as $nq)
-<?php
-	$dts = Carbon::parse($nq->created_at)->format('Y');
-	$arr = str_split( $dts, 2 );
-	$leaid = 'HR9-'.str_pad( $nq->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
-?>
+				@foreach($sl5 as $nq)
+				<?php
+					$dts = Carbon::parse($nq->created_at)->format('Y');
+					$arr = str_split( $dts, 2 );
+					$leaid = 'HR9-'.str_pad( $nq->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
+				?>
 													<tr>
 														<td>{!! $leaid !!}</td>
 														<td>{!! ($nq->belongtoleavestatus->status) !!}</td>
 													</tr>
-@endforeach
+				@endforeach
 												</tbody>
 											</table>
-@endif
+			@endif
 										</td>
 										<td>{!! (is_null($tc->exception) || $tc->exception == 0)?'<i class="fas fa-times"></i>':'<i class="fas fa-check"></i>' !!}</td>
 									</tr>
-@endif
-@endif
+		@endif
+	@endif
 @endforeach
+
+
+
+
+<!-- absent in the evening -->
+<?php // echo $stcms2; ?>
+@foreach($stcms2 as $tc)
+	<?php
+	$sl5 = $staffHR->hasmanystaffleave()->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
+	?>
+	@if( $sl5->isEmpty() )
+									<tr>
+										<td>{!! Carbon::parse($tc->date)->format('D, j M Y') !!}</td>
+										<td>{{ $tc->daytype }}</td>
+										<td>{{ $tc->in }}</td>
+										<td>{{ $tc->break }}</td>
+										<td>{!! $tc->resume !!}</td>
+										<td>{{ $tc->out }}</td>
+										<td>{!! $tc->work_hour !!}</td>
+										<td>{!! ($tc->short_hour > 0)?'<span class="text-danger">'.$tc->short_hour.'</span>':$tc->short_hour !!}</td>
+										<td>{!! $tc->leave_taken !!}</td>
+										<td>&nbsp;</td>
+										<td>{!! (is_null($tc->exception) || $tc->exception == 0)?'<i class="fas fa-times"></i>':'<i class="fas fa-check"></i>' !!}</td>
+									</tr>
+	@else
+		<?php
+		$v = 0;
+		$dt = NULL;
+		foreach($sl5 as $nq1) {
+			$t = 0;
+			if($nq1->active == 3 || $nq1->active == 4) {
+				$t = 1;
+			} else {
+				$t = 0;
+				$dt = $tc->date;
+			}
+			// echo $dt.' date aprove<br />';
+		}
+		?>
+		@if($tc->date != $dt)
+									<tr>
+										<td>{!! Carbon::parse($tc->date)->format('D, j M Y') !!}</td>
+										<td>{{ $tc->daytype }}</td>
+										<td>{{ $tc->in }}</td>
+										<td>{{ $tc->break }}</td>
+										<td>{!! $tc->resume !!}</td>
+										<td>{{ $tc->out }}</td>
+										<td>{!! $tc->work_hour !!}</td>
+										<td>{!! ($tc->short_hour > 0)?'<span class="text-danger">'.$tc->short_hour.'</span>':$tc->short_hour !!}</td>
+										<td>{!! $tc->leave_taken !!}</td>
+										<td>
+			@if($sl5->count() > 0)
+											<table class="table table-hover table-sm" style="font-size:12px">
+												<thead>
+													<tr>
+														<th>HR-Ref</th>
+														<th>Status</th>
+													</tr>
+												</thead>
+												<tbody>	
+				@foreach($sl5 as $nq)
+				<?php
+					$dts = Carbon::parse($nq->created_at)->format('Y');
+					$arr = str_split( $dts, 2 );
+					$leaid = 'HR9-'.str_pad( $nq->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
+				?>
+													<tr>
+														<td>{!! $leaid !!}</td>
+														<td>{!! ($nq->belongtoleavestatus->status) !!}</td>
+													</tr>
+				@endforeach
+												</tbody>
+											</table>
+			@endif
+										</td>
+										<td>{!! (is_null($tc->exception) || $tc->exception == 0)?'<i class="fas fa-times"></i>':'<i class="fas fa-check"></i>' !!}</td>
+									</tr>
+		@endif
+	@endif
+@endforeach
+
+
+<!-- absent in the morning -->
+<?php // echo $stcms3; ?>
+@foreach($stcms3 as $tc)
+	<?php
+	$sl5 = $staffHR->hasmanystaffleave()->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
+	?>
+	@if( $sl5->isEmpty() )
+									<tr>
+										<td>{!! Carbon::parse($tc->date)->format('D, j M Y') !!}</td>
+										<td>{{ $tc->daytype }}</td>
+										<td>{{ $tc->in }}</td>
+										<td>{{ $tc->break }}</td>
+										<td>{!! $tc->resume !!}</td>
+										<td>{{ $tc->out }}</td>
+										<td>{!! $tc->work_hour !!}</td>
+										<td>{!! ($tc->short_hour > 0)?'<span class="text-danger">'.$tc->short_hour.'</span>':$tc->short_hour !!}</td>
+										<td>{!! $tc->leave_taken !!}</td>
+										<td>&nbsp;</td>
+										<td>{!! (is_null($tc->exception) || $tc->exception == 0)?'<i class="fas fa-times"></i>':'<i class="fas fa-check"></i>' !!}</td>
+									</tr>
+	@else
+		<?php
+		$v = 0;
+		$dt = NULL;
+		foreach($sl5 as $nq1) {
+			$t = 0;
+			if($nq1->active == 3 || $nq1->active == 4) {
+				$t = 1;
+			} else {
+				$t = 0;
+				$dt = $tc->date;
+			}
+			// echo $dt.' date aprove<br />';
+		}
+		?>
+		@if($tc->date != $dt)
+									<tr>
+										<td>{!! Carbon::parse($tc->date)->format('D, j M Y') !!}</td>
+										<td>{{ $tc->daytype }}</td>
+										<td>{{ $tc->in }}</td>
+										<td>{{ $tc->break }}</td>
+										<td>{!! $tc->resume !!}</td>
+										<td>{{ $tc->out }}</td>
+										<td>{!! $tc->work_hour !!}</td>
+										<td>{!! ($tc->short_hour > 0)?'<span class="text-danger">'.$tc->short_hour.'</span>':$tc->short_hour !!}</td>
+										<td>{!! $tc->leave_taken !!}</td>
+										<td>
+			@if($sl5->count() > 0)
+											<table class="table table-hover table-sm" style="font-size:12px">
+												<thead>
+													<tr>
+														<th>HR-Ref</th>
+														<th>Status</th>
+													</tr>
+												</thead>
+												<tbody>	
+				@foreach($sl5 as $nq)
+				<?php
+					$dts = Carbon::parse($nq->created_at)->format('Y');
+					$arr = str_split( $dts, 2 );
+					$leaid = 'HR9-'.str_pad( $nq->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
+				?>
+													<tr>
+														<td>{!! $leaid !!}</td>
+														<td>{!! ($nq->belongtoleavestatus->status) !!}</td>
+													</tr>
+				@endforeach
+												</tbody>
+											</table>
+			@endif
+										</td>
+										<td>{!! (is_null($tc->exception) || $tc->exception == 0)?'<i class="fas fa-times"></i>':'<i class="fas fa-check"></i>' !!}</td>
+									</tr>
+		@endif
+	@endif
+@endforeach
+
+
+
+
 							</tbody>
 						</table>
 
@@ -571,8 +740,19 @@ if( $tc->out != '00:00:00' ) {
 } else {
 	$out1 = NULL;
 }
+
+$sl6 = $staffHR->hasmanystaffleave()->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
+$notCount = '';
+foreach ($sl6 as $k) {
+	if($k->leave_id == 9 && ($k->active == 1 || $k->active ==2)) {
+		// echo $k->leave_no.' <br />';
+		// echo $tc->date.' <br />';
+		$notCount = $tc->date;
+	}
+}
 ?>
 @if( $in->gt( Carbon::createFromTimeString($time->first()->time_start_am) ) )
+@if( $tc->date != $notCount )
 								<tr>
 									<td>{!! Carbon::parse($tc->date)->format('D, j M Y') !!}</td>
 									<td>{{ $tc->daytype }}</td>
@@ -585,7 +765,6 @@ if( $tc->out != '00:00:00' ) {
 									<td>{!! $tc->leave_taken !!}</td>
 									<td>{!! $tc->remark !!}</td>
 									<td>
-<?php $sl6 = $staffHR->hasmanystaffleave()->whereRaw('"'.$tc->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get(); ?>
 @if($sl6->count() > 0)
 										<table class="table table-hover table-sm" style="font-size:12px">
 											<thead>
@@ -615,6 +794,7 @@ if( $tc->out != '00:00:00' ) {
 									<td>{!! (is_null($tc->exception) || $tc->exception == 0)?'<i class="fas fa-times"></i>':'<i class="fas fa-check"></i>' !!}</td>
 								</tr>
 @endif
+@endif
 @endforeach
 							</tbody>
 						</table>
@@ -635,7 +815,7 @@ $(document).on('keyup', '#hol', function () {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
-$.fn.dataTable.moment( 'ddd, D MMMM YYYY' );
+$.fn.dataTable.moment( 'ddd, D MMM YYYY' );
 
 $('#leaves').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
