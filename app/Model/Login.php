@@ -226,7 +226,13 @@ class Login extends Authenticatable
 
 	public function isoffice( $id )
 	{
-		$rt = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->get();
-		var_dump($rt);
+		$rt = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
+		// var_dump($rt);
+		// die();
+		if($rt->category_id == $id) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

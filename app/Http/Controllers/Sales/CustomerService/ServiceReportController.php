@@ -18,7 +18,7 @@ class ServiceReportController extends Controller
 {
 	function __construct()
 	{
-		$this->middleware('auth');
+		$this->middleware(['auth', 'officeaccess']);
 	}
 
 	public function index()

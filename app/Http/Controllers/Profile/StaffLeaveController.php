@@ -217,17 +217,18 @@ class StaffLeaveController extends Controller
 
 			echo '///////////////////////////////////////////////////////////////<br>';
 
-			$leave_no = \App\Model\StaffLeave::whereYear('created_at', $dt->year)->first();
+			$leave_no = \App\Model\StaffLeave::whereYear('date_time_start', $dt->year)->first();
+			echo $leave_no.' leave no<br />';
 			if(empty($leave_no)) {
 				$leave_no = 0;
 			} else {
-				$leave_no = $leave_no->max('leave_no');
+				$leave_no1 = \App\Model\StaffLeave::whereYear('date_time_start', $dt->year)->get();
+				$leave_no = $leave_no1->max('leave_no');
 			}
 			echo $leave_no.' leave_no<br />';
 			// before insert, check leave no.
 			$leave_no = $leave_no + 1;
 			echo $leave_no.' after add 1<br />';
-
 
 			/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			// find supervisor or HOD (group 2, 3 & 4)

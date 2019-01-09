@@ -227,7 +227,7 @@ $sl = $staffHR->hasmanystaffleave()->where('date_time_start', '>=', $dn->startof
 ?>
 @foreach($sl as $sd)
 <?php
-$dts = \Carbon\Carbon::parse($sd->created_at)->format('Y');
+$dts = \Carbon\Carbon::parse($sd->date_time_start)->format('Y');
 $arr = str_split( $dts, 2 );
 
 
@@ -332,7 +332,7 @@ $sl1 = $staffHR->hasmanystaffleave()->where('date_time_start', '>=', $dn->starto
 ?>
 @foreach($sl1 as $sd)
 <?php
-$dts = \Carbon\Carbon::parse($sd->created_at)->format('Y');
+$dts = \Carbon\Carbon::parse($sd->date_time_start)->format('Y');
 $arr = str_split( $dts, 2 );
 
 
@@ -482,7 +482,7 @@ if( !empty($sd->hasonestaffleavebackup) ) {
 												<tbody>	
 				@foreach($sl5 as $nq)
 				<?php
-					$dts = Carbon::parse($nq->created_at)->format('Y');
+					$dts = Carbon::parse($nq->date_time_start)->format('Y');
 					$arr = str_split( $dts, 2 );
 					$leaid = 'HR9-'.str_pad( $nq->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
 				?>
@@ -562,7 +562,7 @@ if( !empty($sd->hasonestaffleavebackup) ) {
 												<tbody>	
 				@foreach($sl5 as $nq)
 				<?php
-					$dts = Carbon::parse($nq->created_at)->format('Y');
+					$dts = Carbon::parse($nq->date_time_start)->format('Y');
 					$arr = str_split( $dts, 2 );
 					$leaid = 'HR9-'.str_pad( $nq->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
 				?>
@@ -640,7 +640,7 @@ if( !empty($sd->hasonestaffleavebackup) ) {
 												<tbody>	
 				@foreach($sl5 as $nq)
 				<?php
-					$dts = Carbon::parse($nq->created_at)->format('Y');
+					$dts = Carbon::parse($nq->date_time_start)->format('Y');
 					$arr = str_split( $dts, 2 );
 					$leaid = 'HR9-'.str_pad( $nq->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
 				?>
@@ -777,7 +777,7 @@ foreach ($sl6 as $k) {
 											<tbody>
 @foreach($sl6 as $ty)
 <?php
-	$dts1 = Carbon::parse($ty->created_at)->format('Y');
+	$dts1 = Carbon::parse($ty->date_time_start)->format('Y');
 	$arr = str_split( $dts1, 2 );
 	$leaid1 = 'HR9-'.str_pad( $ty->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
 ?>

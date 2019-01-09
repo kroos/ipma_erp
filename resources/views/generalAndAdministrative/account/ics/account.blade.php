@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header"><h1>Customer Service Department</h1></div>
+	<div class="card-header"><h1>Account Department</h1></div>
 	<div class="card-body">
 		@include('layouts.info')
 		@include('layouts.errorform')
@@ -17,7 +17,7 @@
 
 		<ul class="nav nav-tabs">
 			<li class="nav-item">
-				<a class="nav-link active" href="{{ route('ics.costing') }}">Intelligence Customer Service</a>
+				<a class="nav-link active" href="{{ route('ics.account') }}">Intelligence Customer Service</a>
 			</li>
 		</ul>
 		<div class="card">

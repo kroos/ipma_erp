@@ -296,7 +296,7 @@ $chi = \App\Model\StaffChildren::where('staff_id', $staff->id)->orderBy('dob')->
 					<div class="row justify-content-center">
 						<div class="col-lg-12">
 							<div class="card">
-								<div class="card-header"><h2 class="card-title">Personal Waktu Kecemasan (Emergency Contact Person)</h2></div>
+								<div class="card-header"><h2 class="card-title">Orang Yang Dihubungi Waktu Kecemasan (Emergency Contact Person)</h2></div>
 								<div class="card-body text-center table-responsive">
 
 									<div class="col">

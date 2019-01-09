@@ -229,7 +229,7 @@ $username = $tc->belongtostaff->hasmanylogin()->where('active', 1)->first()->use
 @foreach($lea as $key)
 <?php
 if ( !empty( $key ) ) {
-	$dts = Carbon::parse($key->created_at)->format('Y');
+	$dts = Carbon::parse($key->date_time_start)->format('Y');
 	$arr = str_split( $dts, 2 );
 	$leaid = 'HR9-'.str_pad( $key->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
 } else {

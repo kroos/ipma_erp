@@ -135,9 +135,11 @@ if ( $bmonth != 1 ) {
 			</tbody>
 		</table>
 	</div>
+</div>
+
 	<p>&nbsp;</p>
 	<div class="card">
-		<div class="card-header">Service Report With Invoice</div>
+		<div class="card-header"><h5>Service Report With Invoice</h5></div>
 		<div class="card-body">
 		<table class="table table-hover" style="font-size:12px" id="servicereport6">
 			<thead>
@@ -244,4 +246,3 @@ if ( $bmonth != 1 ) {
 		</table>
 		</div>
 	</div>
-</div>

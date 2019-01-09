@@ -89,11 +89,21 @@ foreach ($stcms as $tc) {
 	$userposition = $tc->pos_id;
 	$dt = Carbon::parse($tc->date);
 
-	if( $userposition != 72 && $dt->dayOfWeek != 5 ) {	// checking for friday
-		// normal
-		$time = \App\Model\WorkingHour::where('year', $dt->year)->whereRaw('"'.$dt.'" BETWEEN working_hours.effective_date_start AND working_hours.effective_date_end' )->limit(1);
-	} elseif( $userposition != 72 && $dt->dayOfWeek == 5 ) {	// checking for friday {
-		$time = \App\Model\WorkingHour::where('year', $dt->year)->where('category', 3)->whereRaw('"'.$dt.'" BETWEEN working_hours.effective_date_start AND working_hours.effective_date_end' )->limit(1);
+	if( $userposition == 72 && $dt->dayOfWeek != 5 ) {	// checking for friday
+		$time = \App\Model\WorkingHour::where('year', $dt->year)->where('category', 8);
+	} else {
+		if ( $userposition == 72 && $dt->dayOfWeek == 5 ) {	// checking for friday
+			$time = \App\Model\WorkingHour::where('year', $dt->year)->where('category', 8);
+		} else {
+			if( $userposition != 72 && $dt->dayOfWeek != 5 ) {	// checking for friday
+				// normal
+				$time = \App\Model\WorkingHour::where('year', $dt->year)->whereRaw('"'.$dt.'" BETWEEN working_hours.effective_date_start AND working_hours.effective_date_end' )->limit(1);
+			} else {
+				if( $userposition != 72 && $dt->dayOfWeek == 5 ) {	// checking for friday
+					$time = \App\Model\WorkingHour::where('year', $dt->year)->where('category', 3)->whereRaw('"'.$dt.'" BETWEEN working_hours.effective_date_start AND working_hours.effective_date_end' )->limit(1);
+				}
+			}
+		}
 	}
 
 	$in = Carbon::createFromTimeString($tc->in);
@@ -268,12 +278,10 @@ $lm5 = Discipline::where('id', 5)->first();
 @foreach($st2 as $sf)
 <?php
 ////////////////////////////////////////////////////////////////////////////
-echo $sf->id.' start moola<br />';
 // lateness
 $stcms = StaffTCMS::where([['staff_id', $sf->id]])->whereNull('exception')->whereBetween('date', [$n->copy()->startOfYear()->format('Y-m-d'), $n->copy()->format('Y-m-d')])->get();
 $i1late = 0;
 $i2late = 1;
-$i3late = 1;
 $count = 0;
 $count1 = 0;
 $count2 = 0;
@@ -286,10 +294,21 @@ foreach ($stcms as $tc) {
 
 	if( $userposition == 72 && $dt->dayOfWeek != 5 ) {	// checking for friday
 		$time = \App\Model\WorkingHour::where('year', $dt->year)->where('category', 8);
-	} elseif ( $userposition == 72 && $dt->dayOfWeek == 5 ) {	// checking for friday
-		$time = \App\Model\WorkingHour::where('year', $dt->year)->where('category', 8);
+	} else {
+		if ( $userposition == 72 && $dt->dayOfWeek == 5 ) {	// checking for friday
+			$time = \App\Model\WorkingHour::where('year', $dt->year)->where('category', 8);
+		} else {
+			if( $userposition != 72 && $dt->dayOfWeek != 5 ) {	// checking for friday
+				// normal
+				$time = \App\Model\WorkingHour::where('year', $dt->year)->whereRaw('"'.$dt.'" BETWEEN working_hours.effective_date_start AND working_hours.effective_date_end' )->limit(1);
+			} else {
+				if( $userposition != 72 && $dt->dayOfWeek == 5 ) {	// checking for friday
+					$time = \App\Model\WorkingHour::where('year', $dt->year)->where('category', 3)->whereRaw('"'.$dt.'" BETWEEN working_hours.effective_date_start AND working_hours.effective_date_end' )->limit(1);
+				}
+			}
+		}
 	}
-	
+
 	$in = Carbon::createFromTimeString($tc->in);
 	// echo $time->first()->time_start_am.' time start <br />';
 	
@@ -301,7 +320,7 @@ foreach ($stcms as $tc) {
 		if ( $sl == 0 ) {
 			$i1late++;
 		}
-		$notCount = '';
+		$notCount = NULL;
 		foreach ($sl6 as $k) {
 			if($k->leave_id == 9 && ($k->active == 1 || $k->active ==2)) {
 				// echo $k->leave_no.' <br />';
@@ -310,9 +329,8 @@ foreach ($stcms as $tc) {
 			}
 		}
 		if ($tc->date != $notCount) {
-			// echo $i2late++.' late<br />';
+			$i2late++.' late with filter (got TF)<br />';
 		}
-		echo $i3late++.' all late<br />';
 	}
 }
 $lm = Discipline::where('id', 1)->first();
