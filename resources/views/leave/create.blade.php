@@ -1473,9 +1473,17 @@ $('#leave_id').select2({
 	placeholder: 'Please choose',
 	ajax: {
 		url: '{{ route('workinghour.leaveType') }}',
-		data: { '_token': '{!! csrf_token() !!}' },
+		// data: { '_token': '{!! csrf_token() !!}' },
 		type: 'POST',
 		dataType: 'json',
+		data: function (params) {
+			var query = {
+				search: params.term,
+				_token: '{!! csrf_token() !!}'
+			}
+			// Query parameters will be ?search=[term]&_token=67y0VEKOi0SnS3HBcEHR0qOv10rO1l9fn82ovUWD
+			return query;
+		}
 	},
 	allowClear: true,
 	closeOnSelect: true,

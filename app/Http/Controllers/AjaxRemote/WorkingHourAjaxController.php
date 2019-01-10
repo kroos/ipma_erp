@@ -72,21 +72,37 @@ class WorkingHourAjaxController extends Controller
 					if ($leaveALMC->medical_leave_balance < 1) {
 			
 						// laki | no nrl | no al | no mc
-						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+						if( !$request->has('search') ) {
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+						} else {
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 2)->where('leave', '%'.'LIKE'.'%', $request->search)->get();
+						}
 					} else {
 		
 						// laki | no nrl | no al | with mc
-						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 11)->get();
+						if( !$request->has('search') ) {
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 11)->get();
+						} else {
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 11)->where('leave', '%'.'LIKE'.'%', $request->search)->get();
+						}
 					}
 				} else {
 					if ($leaveALMC->medical_leave_balance < 1) {
 		
 						// laki | no nrl | with al | no mc
-						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+						if( !$request->has('search') ) {
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+						} else {
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 2)->where('leave', 'LIKE', '%'.$request->search.'%')->get();
+						}
 					} else {
 		
 						// laki | no nrl | with al | with mc
-						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 11)->get();
+						if( !$request->has('search') ) {
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 11)->get();
+						} else {
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 11)->where('leave', 'LIKE', '%'.$request->search.'%')->get();
+						}
 					}
 				}
 			} else {
@@ -94,21 +110,37 @@ class WorkingHourAjaxController extends Controller
 					if ($leaveALMC->medical_leave_balance < 1) {
 		
 						// laki | with nrl | no al | no mc
-						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+						if( !$request->has('search') ) {
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+						} else {
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 1)->where('id', '<>', 2)->where('leave', 'LIKE', '%'.$request->search.'%')->get();
+						}
 					} else {
 		
 						// laki | with nrl | no al | with mc
-						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 1)->where('id', '<>', 11)->get();
+						if( !$request->has('search') ) {
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 1)->where('id', '<>', 11)->get();
+						} else {
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 1)->where('id', '<>', 11)->where('leave', 'LIKE', '%'.$request->search.'%')->get();
+						}
 					}
 				} else {
 					if ($leaveALMC->medical_leave_balance < 1) {
 		
 						// laki | with nrl | with al | no mc
-						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+						if( !$request->has('search') ) {
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+						} else {
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 2)->where('leave', 'LIKE', '%'.$request->search.'%')->get();
+						}
 					} else {
 		
 						// laki | with nrl | with al | with mc
-						$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 11)->get();
+						if( !$request->has('search') ) {
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 11)->get();
+						} else {
+							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 7)->where('id', '<>', 3)->where('id', '<>', 11)->where('leave', 'LIKE', '%'.$request->search.'%')->get();
+						}
 					}
 				}
 			}
@@ -122,21 +154,37 @@ class WorkingHourAjaxController extends Controller
 						if ($leaveALMC->medical_leave_balance < 1) {
 		
 							// pempuan | no nrl | no al | no mc
-							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+							if( !$request->has('search') ) {
+								$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+							} else {
+								$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 2)->where('leave', 'LIKE', '%'.$request->search.'%')->get();
+							}
 						} else {
 		
 							// pempuan | no nrl | no al | with mc
-							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 11)->get();
+							if( !$request->has('search') ) {
+								$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 11)->get();
+							} else {
+								$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 1)->where('id', '<>', 11)->where('leave', 'LIKE', '%'.$request->search.'%')->get();
+							}
 						}
 					} else {
 						if ($leaveALMC->medical_leave_balance < 1) {
 		
 							// pempuan | no nrl | with al | no mc
-							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+							if( !$request->has('search') ) {
+								$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+							} else {
+								$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 3)->where('id', '<>', 2)->where('leave', 'LIKE', '%'.$request->search.'%')->get();
+							}
 						} else {
 		
 							// pempuan | no nrl | with al | with mc
-							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 3)->where('id', '<>', 11)->get();
+							if( !$request->has('search') ) {
+								$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 3)->where('id', '<>', 11)->get();
+							} else {
+								$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 4)->where('id', '<>', 3)->where('id', '<>', 11)->where('leave', 'LIKE', '%'.$request->search.'%')->get();
+							}
 						}
 					}
 				} else {
@@ -145,21 +193,37 @@ class WorkingHourAjaxController extends Controller
 						if ($leaveALMC->medical_leave_balance < 1) {
 		
 							// pempuan | with nrl | no al | no mc
-							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+							if( !$request->has('search') ) {
+								$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 1)->where('id', '<>', 2)->get();
+							} else {
+								$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 1)->where('id', '<>', 2)->where('leave', 'LIKE', '%'.$request->search.'%')->get();
+							}
 						} else {
 		
 							// pempuan | with nrl | no al | with mc
-							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 1)->where('id', '<>', 11)->get();
+							if( !$request->has('search') ) {
+								$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 1)->where('id', '<>', 11)->get();
+							} else {
+								$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 1)->where('id', '<>', 11)->where('leave', 'LIKE', '%'.$request->search.'%')->get();
+							}
 						}
 					} else {
 						if ($leaveALMC->medical_leave_balance < 1) {
 		
 							// pempuan | with nrl | with al | no mc
-							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+							if( !$request->has('search') ) {
+								$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 3)->where('id', '<>', 2)->get();
+							} else {
+								$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 3)->where('id', '<>', 2)->where('leave', 'LIKE', '%'.$request->search.'%')->get();
+							}
 						} else {
 		
 							// pempuan | with nrl | with al | with mc
-							$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 3)->where('id', '<>', 11)->get();
+							if( !$request->has('search') ) {
+								$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 3)->where('id', '<>', 11)->get();
+							} else {
+								$er = \App\Model\Leave::where('id', '<>', 5)->where('id', '<>', 6)->where('id', '<>', 3)->where('id', '<>', 11)->where('leave', 'LIKE', '%'.$request->search.'%')->get();
+							}
 						}
 					}
 				}
@@ -171,7 +235,6 @@ class WorkingHourAjaxController extends Controller
 			$cuti['results'][] = [
 					'id' => $key->id,
 					'text' => $key->leave,
-					'created_at' => $key->created_at,
 			];
 			// $cuti['pagination'] = ['more' => true];
 		}
