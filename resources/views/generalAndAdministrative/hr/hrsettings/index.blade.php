@@ -152,7 +152,7 @@ $kj = HolidayCalendar::whereYear('date_start', $hi->yaer)->orderBy('date_start')
 							<td>{{ \Carbon\CarbonPeriod::create($ui->date_start, '1 day', $ui->date_end)->count().__(' Day/s') }}</td>
 							<td>
 								<a class="btn btn-primary" href="{{ route('holidayCalendar.edit', $ui->id) }}"><i class="far fa-edit"></i></a>
-								<button class="btn btn-primary delete_button" href="{{ route('holidayCalendar.destroy', $ui->id) }}" id="delete_product_{{ $ui->id }}" data-id="{{ $ui->id }}"><i class="far fa-trash-alt"></i></button>
+								<button class="btn btn-danger delete_button" href="{{ route('holidayCalendar.destroy', $ui->id) }}" id="delete_product_{{ $ui->id }}" data-id="{{ $ui->id }}"><i class="far fa-trash-alt"></i></button>
 							</td>
 						</tr>
 @endforeach
