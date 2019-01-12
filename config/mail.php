@@ -29,7 +29,8 @@ return [
     |
     */
 
-    'host' => env('MAIL_HOST', 'business29.web-hosting.com'),
+    // 'host' => env('MAIL_HOST', 'business29.web-hosting.com'),
+    'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
 
     /*
     |--------------------------------------------------------------------------
@@ -42,7 +43,8 @@ return [
     |
     */
 
-    'port' => env('MAIL_PORT', 465),
+    // 'port' => env('MAIL_PORT', 465),
+    'port' => env('MAIL_PORT', 587),
 
     /*
     |--------------------------------------------------------------------------
@@ -55,9 +57,13 @@ return [
     |
     */
 
+    // 'from' => [
+    //     'address' => env('MAIL_FROM_ADDRESS', 'admin@ipmaindustry.com'),
+    //     'name' => env('MAIL_FROM_NAME', 'ERP IPMA Industry'),
+    // ],
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'admin@ipmaindustry.com'),
-        'name' => env('MAIL_FROM_NAME', 'ERP IPMA Industry'),
+        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+        'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
     /*
@@ -71,7 +77,8 @@ return [
     |
     */
 
-    'encryption' => env('MAIL_ENCRYPTION', 'ssl'),
+    // 'encryption' => env('MAIL_ENCRYPTION', 'ssl'),
+    'encryption' => env('MAIL_ENCRYPTION', 'tls'),
 
     /*
     |--------------------------------------------------------------------------
@@ -84,9 +91,13 @@ return [
     |
     */
 
-    'username' => env('admin@ipmaindustry.com'),
+    // 'username' => env('admin@ipmaindustry.com'),
 
-    'password' => env('ipma8799.'),
+    // 'password' => env('ipma8799.'),
+
+    'username' => env('MAIL_USERNAME'),
+    'password' => env('MAIL_PASSWORD'),
+
 
     /*
     |--------------------------------------------------------------------------
