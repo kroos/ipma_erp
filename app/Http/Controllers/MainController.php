@@ -2,6 +2,15 @@
 
 namespace App\Http\Controllers;
 
+// load emailer
+use App\Mail\TestMail;
+
+
+use Session;
+
+// facades for mail
+use Illuminate\Support\Facades\Mail;
+
 use Illuminate\Http\Request;
 
 class MainController extends Controller
@@ -25,6 +34,13 @@ class MainController extends Controller
 // 		}
 // 		return response()->json($s);
 // 	}
+
+	public function mailer()
+	{
+		Mail::to('it@ipmaindustry.com', 'faiz')->send(new TestMail());
+		Session::flash('flash_message', 'Email Sent!');
+		return redirect( route('hrSettings.index') );
+	}
 
 	public function create()
 	{

@@ -21,6 +21,14 @@ Route::get('/', [
 // 		'uses' => 'MainController@test',
 // 	]);
 
+Route::get('/mailer', [
+		'as' => 'mailer',
+		'uses' => 'MainController@mailer'
+	]);
+
+
+############################################################################
+
 Auth::routes();
 
 Route::get('/home', [
