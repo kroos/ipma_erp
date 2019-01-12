@@ -39,7 +39,7 @@ class MainController extends Controller
 	{
 		Mail::to('it@ipmaindustry.com', 'faiz')->send(new TestMail());
 		Session::flash('flash_message', 'Email Sent!');
-		return redirect( route('hrSettings.index') );
+		return redirect( route('main.index') );
 	}
 
 	public function create()

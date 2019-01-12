@@ -45,6 +45,7 @@ class TestMail extends Mailable
 			->from('ipma@ipmaindustry.com', 'Miss Angeline')
 			->subject('Test Subject')
 			->markdown('mailer.test')
+			// ->view('mailer.test')
 			// ->text('mailer.test_plain')
 			// ->attach('/path/to/file', [
 			// 							'as' => 'name.pdf',
