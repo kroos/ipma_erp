@@ -21,9 +21,16 @@ Route::get('/', [
 // 		'uses' => 'MainController@test',
 // 	]);
 
+// EMAILER
 Route::get('/mailer', [
-		'as' => 'mailer',
+		'as' => 'main.mailer',
 		'uses' => 'MainController@mailer'
+	]);
+
+// EMAILER
+Route::get('/notify', [
+		'as' => 'main.notifi',
+		'uses' => 'MainController@notifi'
 	]);
 
 

@@ -34,17 +34,6 @@ class Login extends Authenticatable
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// all acl will be done here
 	// only main position is counted, else, deny access

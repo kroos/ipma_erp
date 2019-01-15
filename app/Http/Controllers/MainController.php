@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 // load emailer
 use App\Mail\TestMail;
 
+// load notifications
+use App\Notifications\TestNotification;
+
 
 use Session;
 
@@ -40,6 +43,13 @@ class MainController extends Controller
 		Mail::to('it@ipmaindustry.com', 'faiz')->send(new TestMail());
 		Session::flash('flash_message', 'Email Sent!');
 		return redirect( route('main.index') );
+	}
+
+	public function notifi()
+	{
+		$toUser = \App\Model\Staff::find(186);
+		$fromUser = \App\Model\Staff::find(48);
+		$toUser->notify(new TestNotification($fromUser));
 	}
 
 	public function create()
