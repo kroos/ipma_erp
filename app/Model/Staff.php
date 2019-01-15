@@ -27,6 +27,20 @@ class Staff extends Model
 	protected $table = 'staffs';
 	protected $dates = ['deleted_at'];
 
+
+	/**
+	 * Route notifications for the mail channel.
+	 *
+	 * @param  \Illuminate\Notifications\Notification  $notification
+	 * @return string
+	 */
+	public function routeNotificationForMail($notification)
+	{
+		return $this->email;
+	}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	public function hasmanylogin()
 	{
 		return $this->hasMany('App\Model\Login', 'staff_id');

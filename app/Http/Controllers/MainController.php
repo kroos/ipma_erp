@@ -50,6 +50,12 @@ class MainController extends Controller
 		$toUser = \App\Model\Staff::find(186);
 		$fromUser = \App\Model\Staff::find(48);
 		$toUser->notify(new TestNotification($fromUser));
+
+		$user = \App\Model\Staff::find(186);
+		// foreach (\Auth::user()->notifications as $notification) {
+		foreach ($user->notifications as $notification) {
+			echo $notification->type.'<br />';
+		}
 	}
 
 	public function create()
