@@ -1,4 +1,4 @@
-ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss@extends('layouts.app')
+@extends('layouts.app')
 
 @section('content')
 <div class="card">
@@ -39,8 +39,6 @@ ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
  -->				</div>
 			</div>
 		</div>
-
-
 	</div>
 </div>
 @endsection
@@ -103,7 +101,7 @@ $('#model_{!! $iiiiii !!}').select2({
 	width: '100%',
 });
 
-$("#test_run_machine_{{ $iiiiii }} , #serial_no_{{ $iiiiii }}, #test_capacity_{{ $iiiiii }}, #duration_{{ $iiiiii }}").keyup(function() {
+$("#1test_run_machine_{{ $iiiiii }} , #1serial_no_{{ $iiiiii }}, #1test_capacity_{{ $iiiiii }}, #1duration_{{ $iiiiii }}").keyup(function() {
 	tch(this);
 });
 @endfor
@@ -120,7 +118,7 @@ $('#vc_{!! $srlo !!}, #v_{{ $srlo }}').select2({
 
 $('#v_{{ $srlo }}').chainedTo('#vc_{{ $srlo }}');
 
-$("#description_{{ $srlo }}").keyup(function() {
+$("#1description_{{ $srlo }}").keyup(function() {
 	tch(this);
 });
 @endfor
@@ -130,7 +128,7 @@ $("#description_{{ $srlo }}").keyup(function() {
 $t = 1;
 ?>
 @foreach($serviceReport->hasmanypart()->get() as $srp)
-$("#part_accessory_{{ $t++ }}").keyup(function() {
+$("#1part_accessory_{{ $t++ }}").keyup(function() {
 	tch(this);
 });
 @endforeach
@@ -149,7 +147,7 @@ $('#aid_{!! $addc1++ !!}').select2({
 	width: '100%',
 });
 
-$("#description_amount_{{ $addc2++ }}").keyup(function() {
+$("#1description_amount_{{ $addc2++ }}").keyup(function() {
 	tch(this);
 });
 @endforeach
@@ -187,7 +185,7 @@ $("#wts_{{ $r3++ }}, #wte_{{ $r4++ }}, #ts_1_{{ $r5++ }}, #te_1_{{ $r6++ }}, #ts
 	useCurrent: false,
 });
 
-$("#job_perform_{{ $r9++ }}, #ds_1_{{ $r10++ }}, #de_1_{{ $r11++ }}, #ds_2_{{ $r12++ }}, #de_2_{{ $r13++ }}").keyup(function() {
+$("#1job_perform_{{ $r9++ }}, #1ds_1_{{ $r10++ }}, #1de_1_{{ $r11++ }}, #1ds_2_{{ $r12++ }}, #1de_2_{{ $r13++ }}").keyup(function() {
 	uch(this);
 });
 
@@ -202,7 +200,7 @@ $('#fr_{{ $r14++ }}, #wtv_{{ $r15++ }}, #accommodation_{{ $r16++ }}').select2({
 /////////////////////////////////////////////////////////////////////////////////////////
 // problem solution
 @for ($pf1 = ($serviceReport->hasmanyfeedproblem()->get()->count() > 0)?$serviceReport->hasmanyfeedproblem()->get()->count():1; $pf1 <= $serviceReport->hasmanyfeedproblem()->get()->count() + 1; $pf1++)
-$("#problem_{{ $pf1 }}1, #solution_{{ $pf1 }}1").keyup(function() {
+$("#1problem_{{ $pf1 }}1, #1solution_{{ $pf1 }}1").keyup(function() {
 	tch(this);
 });
 @endfor
@@ -210,7 +208,7 @@ $("#problem_{{ $pf1 }}1, #solution_{{ $pf1 }}1").keyup(function() {
 /////////////////////////////////////////////////////////////////////////////////////////
 // request action
 @for ($pfr2 = ($serviceReport->hasmanyfeedrequest()->get()->count() > 0)?$serviceReport->hasmanyfeedrequest()->get()->count():1; $pfr2 <= $serviceReport->hasmanyfeedrequest()->get()->count() + 1; $pfr2++)
-$("#request_{{ $pfr2 }}1, #action_{{ $pfr2 }}1").keyup(function() {
+$("#1request_{{ $pfr2 }}1, #1action_{{ $pfr2 }}1").keyup(function() {
 	tch(this);
 });
 @endfor
@@ -218,7 +216,7 @@ $("#request_{{ $pfr2 }}1, #action_{{ $pfr2 }}1").keyup(function() {
 /////////////////////////////////////////////////////////////////////////////////////////
 // item item_action
 @for ($pfr3 = ($serviceReport->hasmanyfeeditem()->get()->count() > 0)?$serviceReport->hasmanyfeeditem()->get()->count():1; $pfr3 <= $serviceReport->hasmanyfeeditem()->get()->count() + 1; $pfr3++)
-$("#item_{{ $pfr3 }}1, #item_action_{{ $pfr3 }}1w ").keyup(function() {
+$("#1item_{{ $pfr3 }}1, #1item_action_{{ $pfr3 }}1w ").keyup(function() {
 	tch(this);
 });
 @endfor
@@ -448,7 +446,7 @@ $(addbtnmod).click(function(){
 			width: '100%',
 		});
 
-		$('#test_run_machine_' + xmod).keyup(function() {
+		$('#test_run_machine_' + xmod + '').keyup(function() {
 			tch(this);
 		});
 
@@ -524,7 +522,7 @@ $(addbtnpart).click(function(){
 					'</div>'
 		); //add input box
 
-		$('#part_accessory_' + xpart).keyup(function() {
+		$('#1part_accessory_' + xpart).keyup(function() {
 			tch(this);
 		});
 
@@ -783,7 +781,7 @@ $(addbtnjobn).click(function(){
 			useCurrent: false,
 		});
 		
-		$('#job_perform_' + xj + ', #ds_1_' + xj + ', #de_1_' + xj + ', #ds_2_' + xj + ', #de_2_' + xj ).keyup(function() {
+		$('#1job_perform_' + xj + ', #1ds_1_' + xj + ', #1de_1_' + xj + ', #1ds_2_' + xj + ', #1de_2_' + xj ).keyup(function() {
 			uch(this);
 		});
 		
@@ -795,20 +793,20 @@ $(addbtnjobn).click(function(){
 		});
 
 		//bootstrap validate
-		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][date]"]'));
-		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][labour]"]'));
-		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][1][meter_start]"]'));
-		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][2][meter_start]"]'));
-		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][1][meter_end]"]'));
-		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][2][meter_end]"]'));
-		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][food_rate]"]'));
-		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][labour_leader]"]'));
-		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][labour_non_leader]"]'));
-		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][working_type_value]"]'));
-		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][overtime_hour]"]'));
-		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][accommodation_rate]"]'));
-		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][accommodation]"]'));
-		$('#form').bootstrapValidator('addField',	$('.rowjob')	.find('[name="srj[' + xj + '][travel_hour]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][date]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][labour]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][1][meter_start]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][2][meter_start]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][1][meter_end]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][2][meter_end]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][food_rate]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][labour_leader]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][labour_non_leader]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][working_type_value]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][overtime_hour]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][accommodation_rate]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][accommodation]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][travel_hour]"]'));
 	}
 });
 
@@ -2440,13 +2438,12 @@ $('#form').bootstrapValidator({
 		},
 		charge_id: {
 			validators : {
-				notEmpty: {
-					message: 'Please choose. '
-				},
+				// notEmpty: {
+				// 	message: 'Please choose. '
+				// },
 			}
 		},
 @for ($u=1; $u < 100; $u++)
-
 		'sr[{{ $u }}][attended_by]': {
 			validators: {
 				notEmpty: {
@@ -2454,13 +2451,22 @@ $('#form').bootstrapValidator({
 				},
 			}
 		},
-
-@endfor
-		remarks: {
-			validators : {
+		'srpn[{{ $u }}][phone_number]': {
+			validators: {
 				notEmpty: {
 					message: 'This field cannot be empty. '
 				},
+				numeric: {
+					message: 'Value invalid. '
+				}
+			}
+		},
+@endfor
+		remarks: {
+			validators : {
+				// notEmpty: {
+				// 	message: 'This field cannot be empty. '
+				// },
 			}
 		},
 		complaint: {
@@ -2472,9 +2478,9 @@ $('#form').bootstrapValidator({
 		},
 		complaint_by: {
 			validators : {
-				notEmpty: {
-					message: 'This field cannot be empty. '
-				},
+				// notEmpty: {
+				// 	message: 'This field cannot be empty. '
+				// },
 			}
 		},
 @for ($uu=1; $uu < 10; $uu++)
@@ -2517,19 +2523,19 @@ $('#form').bootstrapValidator({
 @for($uuu=1; $uuu < 10; $uuu++)
 		'srp[{!! $uuu !!}][part_accessory]': {
 			validators : {
-				notEmpty: {
-					message: 'This field cannot be empty. '
-				},
+				// notEmpty: {
+				// 	message: 'This field cannot be empty. '
+				// },
 			}
 		},
 		'srp[{!! $uuu !!}][qty]': {
 			validators : {
-				notEmpty: {
-					message: 'This field cannot be empty. '
-				},
-				integer: {
-					message: 'The value is not an integer. '
-				},
+				// notEmpty: {
+				// 	message: 'This field cannot be empty. '
+				// },
+				// integer: {
+				// 	message: 'The value is not an integer. '
+				// },
 			}
 		},
 @endfor

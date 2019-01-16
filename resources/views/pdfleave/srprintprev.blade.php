@@ -70,7 +70,7 @@ use Carbon\CarbonPeriod;
 	// $pdf->Cell(0, 5, $pdf->GetPageWidth(), 0, 0, 'C'); // 210
 
 	// $pdf->SetLeftMargin(180);
-	$pdf->SetFont('Arial', NULL, 8);
+	$pdf->SetFont('Arial', NULL, 10);
 
 	// date
 	$pdf->SetXY(155, 43);
@@ -97,7 +97,7 @@ use Carbon\CarbonPeriod;
 	$pdf->SetX(17);
 	$pdf->Cell(44, 5, $sr->belongtocustomer->phone, 0, 1, 'L');
 
-	$pdf->SetXY(110, 70);
+	$pdf->SetXY(110, 65);
 	$i = 1;
 	foreach ($sr->hasmanyattendees()->get() as $key) {
 		$pdf->Cell(44, 5,$i++.') '. $key->belongtostaff->name, 0, 1, 'L');
@@ -118,7 +118,7 @@ use Carbon\CarbonPeriod;
 	// $pdf->SetY(-26);
 	// $pdf->Cell(0, 5, 'Bottom', 0, 1, 'L');
 
-	$filename = 'Service Report Print Prelimenery.pdf';
+	$filename = 'Service Report Print Prelimenery '.$sr->id.'.pdf';
 
 	// use ob_get_clean() to make sure that the correct header is sent to the server so the correct pdf is being output
 	ob_get_clean();

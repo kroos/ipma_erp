@@ -290,9 +290,9 @@ $('#form').bootstrapValidator({
 		},
 		remarks: {
 			validators : {
-				notEmpty: {
-					message: 'Please choose. '
-				},
+				// notEmpty: {
+				// 	message: 'Please choose. '
+				// },
 			}
 		},
 	}
