@@ -48,7 +48,7 @@
 @section('js')
 /////////////////////////////////////////////////////////////////////////////////////////
 //ucwords
-$("#compby, #compl, #remarks").keyup(function() {
+$("#compby1, #compl1, #remarks1").keyup(function() {
 	tch(this);
 });
 
@@ -345,6 +345,53 @@ $(wrappers).on("click",".remove_position", function(e){
 	$('#form').bootstrapValidator('removeField', $option1);
 	console.log(xs);
 	xs--;
+})
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// add attendees phone number : add and remove row
+
+var mxfields	= 10; //maximum input boxes allowed
+var addBtn	= $(".add_phoneattendees");
+var wrapp	= $(".phoneattendees_wrap");
+
+var ix = 1;
+$(addBtn).click(function(){
+	// e.preventDefault();
+
+	//max input box allowed
+	if(ix < mxfields){
+		ix++;
+		wrapp.append(
+					'<div class="rowphoneattendees">' +
+						'<div class="form-row col-sm-12">' +
+							'<div class="col-sm-1 text-danger">' +
+									'<i class="fas fa-trash remove_phoneattendees" aria-hidden="true" id="button_delete_"></i>' +
+							'</div>' +
+							'<div class="col-sm-11">' +
+								'<div class="form-group {{ $errors->has('srp.*.phone_number') ? 'has-error' : '' }}">' +
+									'<input type="text" name="srp[' + ix + '][phone_number]" id="phone_attendees_' + ix + '" class="form-control" placeholder="Attendees Phone Number">' +
+								'</div>' +
+							'</div>' +
+						'</div>' +
+					'</div>'
+		); //add input box
+
+		//bootstrap validate
+		$('#form').bootstrapValidator('addField',	$('.rowphoneattendees')	.find('[name="srpn[' + ix + '][phone_number]"]'));
+	}
+});
+
+$(wrapp).on("click",".remove_phoneattendees", function(e){
+	//user click on remove text
+	e.preventDefault();
+	//var $row = $(this).parent('.rowphoneattendees');
+	var $row = $(this).parent().parent().parent();
+	var $option1 = $row.find('[name="srpn[][phone_number]"]');
+	$row.remove();
+
+	$('#form').bootstrapValidator('removeField', $option1);
+	console.log(ix);
+	ix--;
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////

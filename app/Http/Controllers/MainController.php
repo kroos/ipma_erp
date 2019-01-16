@@ -58,6 +58,11 @@ class MainController extends Controller
 		}
 	}
 
+	public function notifyread()
+	{
+		
+	}
+
 	public function create()
 	{
 		//

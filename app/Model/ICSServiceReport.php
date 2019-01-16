@@ -34,6 +34,11 @@ class ICSServiceReport extends Model
 		return $this->hasMany('App\Model\ICSServiceReportSerial', 'service_report_id');
 	}
 
+	public function hasmanyattendeesphone()
+	{
+		return $this->hasMany('App\Model\ICSServiceReportAttendeesPhone', 'service_report_id');
+	}
+
 	public function hasmanypart()
 	{
 		return $this->hasMany('App\Model\ICSServiceReportPart', 'service_report_id');

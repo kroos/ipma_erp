@@ -46,7 +46,7 @@ $staff = Staff::where('active', 1)->get();
 
 				<div class="col-6">
 					<div class="row form-group">
-						<label class="col-4" for="inlineRadio2">This SR was informed by : </label>
+						<label class="col-4" for="inlineRadio2">This Service Report was informed by : </label>
 						<div class="col-8">
 							<select name="inform_by" id="inlineRadio2" class="form-control" placeholder="Please choose">
 								<option value="">Please choose</option>
@@ -101,31 +101,59 @@ $staff = Staff::where('active', 1)->get();
 			<div class="card-body">
 
 				<div class="container-fluid position_wrap">
+<?php
+$ii = 1;
+$iii = 1;
+?>
+@foreach( $serviceReport->hasmanyattendees()->get() as $sra )
 					<div class="rowposition">
 						<div class="row col-sm-12">
+							<div class="col-sm-1 text-danger">
+									<i class="fas fa-trash delete_position" aria-hidden="true" id="button_delete_{!! $sra->id !!}" data-id="{!! $sra->id !!}"></i>
+							</div>
+							<div class="col-sm-11">
+								<div class="form-group {{ $errors->has('sr.*.attended_by') ? 'has-error' : '' }}">
+									<select name="sr[{!! $ii++ !!}][attended_by]" id="staff_id_{!! $iii++ !!}" class="form-control">
+										<option value="">Please choose</option>
+@foreach($staff as $st)
+										<option value="{!! $st->id !!}" {!! ($st->id == $sra->attended_by)?'selected':NULL !!} >{!! $st->hasmanylogin()->where('active', 1)->first()->username !!} {!! $st->name !!}</option>
+@endforeach
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+@endforeach
+				</div>
+				<div class="row col-lg-12 add_position">
+					<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Staff</p>
+				</div>
+
+
+				<div class="container-fluid phoneattendees_wrap">
+@foreach( $serviceReport->hasmanyattendeesphone()->get() as $sra )
+					<div class="rowphoneattendees">
+						<div class="form-row col-sm-12">
 
 							<div class="col-sm-1 text-danger">
-									<i class="fas fa-trash remove_position" aria-hidden="true" id="button_delete_"></i>
+									<i class="fas fa-trash remove_phoneattendees" aria-hidden="true" id="button_delete_"></i>
 							</div>
 
 							<div class="col-sm-11">
-								<div class="form-group {{ $errors->has('sr.*.attended_by') ? 'has-error' : '' }}">
-									<select name="sr[1][attended_by]" id="staff_id_1" class="form-control">
-										<option value="">Please choose</option>
-@foreach($staff as $st)
-										<option value="{!! $st->id !!}">{!! $st->hasmanylogin()->where('active', 1)->first()->username !!} {!! $st->name !!}</option>
-@endforeach
-									</select>
+								<div class="form-group {{ $errors->has('srp.*.phone_number') ? 'has-error' : '' }}">
+									<input type="text" name="srp[1][phone_number]" id="phoen" value="{{ $sra->phone_number }}" class="form-control" placeholder="Attendees Phone Number">
 								</div>
 							</div>
 
 						</div>
 					</div>
+@endforeach
+				</div>
+				<div class="row col-lg-12 add_phoneattendees">
+					<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add phone</p>
+				</div>
 
-				</div>
-				<div class="row col-lg-12 add_position">
-					<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Staff</p>
-				</div>
+
 
 			</div>
 		</div>

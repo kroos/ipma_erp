@@ -46,7 +46,7 @@ $staff = Staff::where('active', 1)->get();
 
 				<div class="col-6">
 					<div class="row form-group">
-						<label class="col-4" for="inlineRadio2">This SR was informed by : </label>
+						<label class="col-4" for="inlineRadio2">This Service Report was informed by : </label>
 						<div class="col-8">
 							<select name="inform_by" id="inlineRadio2" class="form-control" placeholder="Please choose">
 								<option value="">Please choose</option>
@@ -127,6 +127,31 @@ $staff = Staff::where('active', 1)->get();
 					<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Staff</p>
 				</div>
 
+
+				<div class="container-fluid phoneattendees_wrap">
+					<div class="rowphoneattendees">
+						<div class="form-row col-sm-12">
+
+							<div class="col-sm-1 text-danger">
+									<i class="fas fa-trash remove_phoneattendees" aria-hidden="true" id="button_delete_"></i>
+							</div>
+
+							<div class="col-sm-11">
+								<div class="form-group {{ $errors->has('srp.*.phone_number') ? 'has-error' : '' }}">
+									<input type="text" name="srp[1][phone_number]" id="" class="form-control" placeholder="Attendees Phone Number">
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+				<div class="row col-lg-12 add_phoneattendees">
+					<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add phone</p>
+				</div>
+
+
+
 			</div>
 		</div>
 	</div>
@@ -150,7 +175,7 @@ $staff = Staff::where('active', 1)->get();
 				<div class="form-group row {{ $errors->has('status_id')?'has-error':'' }}">
 					{{ Form::label( 'compby', 'Requested By :', ['class' => 'col-sm-3 col-form-label'] ) }}
 					<div class="col-sm-9">
-						{!! Form::text('complaint_by', @$value, ['class' => 'form-control', 'id' => 'compby', 'placeholder' => 'Complaint By', 'autocomplete' => 'off']) !!}
+						{!! Form::text('complaint_by', @$value, ['class' => 'form-control', 'id' => 'compby', 'placeholder' => 'Requested By', 'autocomplete' => 'off']) !!}
 					</div>
 				</div>
 

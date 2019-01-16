@@ -40,12 +40,9 @@ if ( $bmonth != 1 ) {
 					<th>SR No</th>
 					<th>Customer</th>
 					<th>Attendees</th>
+					<th>Phone Number</th>
 					<th>Complaints</th>
-					<th>Date Completed</th>
-					<th>Proceed</th>
 					<th>Approve By</th>
-					<th>Send By</th>
-					<th>Invoice</th>
 					<th>Remarks</th>
 					<th>&nbsp</th>
 				</tr>
@@ -70,39 +67,17 @@ if ( $bmonth != 1 ) {
 		@endforeach
 					</td>
 					<td>
+		<?php $p0 = 1 ?>
+		@foreach( $sr->hasmanyattendeesphone()->get() as $sra1 )
+						{{ $p0++ }}. {{ $sra1->phone_number }}<br />
+		@endforeach
+					</td>
+					<td>
 		@foreach($sr->hasmanycomplaint()->get() as $src)
 						{!! $src->complaint !!}
 		@endforeach
 					</td>
-					<td>
-		@if( !is_null( $sr->hasmanyjob()->first() ) )
-						{!! Carbon::parse($sr->hasmanyjob()->get()->max('date'))->format('D, j M Y') !!}
-		@endif
-					</td>
-					<td>
-		@if( !is_null($sr->belongtoproceed) )
-						{!! $sr->belongtoproceed->proceed !!}
-		@endif
-					</td>
-					<td>
-		<?php
-		$di = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
-		// echo $sr->whereNull('approved_by')->first();
-		?>
-		@if( is_null( $sr->approved_by ) )
-			@if( $di->group_id == 1 || $di->id == 29 )
-				@if(!is_null($sr->approved_by))
-								{{ $sr->belongtoapprovedby->name }}
-				@else
-								<div class="approval text-primary" data-id="{!! $sr->id !!}"><i class="far fa-check-square"></i></div>
-				@endif
-			@else
-							Only Director or HOD can approve
-			@endif
-		@else
-							{!! $sr->belongtoapprovedby->name !!}
-		@endif
-					</td>
+
 					<td>
 		@if(!is_null($sr->belongtosendby))
 						{{ $sr->belongtosendby->name }}
@@ -110,13 +85,6 @@ if ( $bmonth != 1 ) {
 					</td>
 					<td>
 						{!! $sr->remarks !!}
-					</td>
-					<td>
-		@if( !is_null( $sr->belongtoinvoice ))
-						{!! $sr->belongtoinvoice->DocNo !!}
-		@else
-						{!! __('No Invoice') !!}
-		@endif
 					</td>
 					<td>
 						<a href="{!! route('serviceReport.show', $sr->id) !!}" target="_blank" title="Show"><i class="far fa-eye"></i></a>
@@ -145,12 +113,9 @@ if ( $bmonth != 1 ) {
 					<th>SR No</th>
 					<th>Customer</th>
 					<th>Attendees</th>
+					<th>Phone Number</th>
 					<th>Complaints</th>
-					<th>Date Completed</th>
-					<th>Proceed</th>
 					<th>Approve By</th>
-					<th>Send By</th>
-					<th>Invoice</th>
 					<th>Remarks</th>
 					<th>&nbsp</th>
 				</tr>
@@ -176,19 +141,16 @@ if ( $bmonth != 1 ) {
 		@endforeach
 					</td>
 					<td>
+		<?php $p0 = 1 ?>
+		@foreach( $sr->hasmanyattendeesphone()->get() as $sra1 )
+						{{ $p0++ }}. {{ $sra1->phone_number }}<br />
+		@endforeach
+					</td>
+
+					<td>
 		@foreach($sr->hasmanycomplaint()->get() as $src)
 						{!! $src->complaint !!}
 		@endforeach
-					</td>
-					<td>
-		@if( !is_null( $sr->hasmanyjob()->first() ) )
-						{!! Carbon::parse($sr->hasmanyjob()->get()->max('date'))->format('D, j M Y') !!}
-		@endif
-					</td>
-					<td>
-		@if( !is_null($sr->belongtoproceed) )
-						{!! $sr->belongtoproceed->proceed !!}
-		@endif
 					</td>
 					<td>
 		<?php
@@ -202,18 +164,6 @@ if ( $bmonth != 1 ) {
 				@endif
 		@else
 						Only Director or HOD can approve
-		@endif
-					</td>
-					<td>
-		@if(!is_null($sr->belongtosendby))
-						{{ $sr->belongtosendby->name }}
-		@endif
-					</td>
-					<td>
-		@if( !is_null( $sr->belongtoinvoice ))
-						{!! $sr->belongtoinvoice->DocNo !!}
-		@else
-						{!! __('No Invoice') !!}
 		@endif
 					</td>
 					<td>
@@ -393,7 +343,6 @@ if ( $bmonth != 1 ) {
 					<th>Proceed</th>
 					<th>Approve By</th>
 					<th>Remarks</th>
-					<th>Invoice</th>
 					<th>&nbsp</th>
 				</tr>
 			</thead>
@@ -451,13 +400,6 @@ if ( $bmonth != 1 ) {
 					</td>
 					<td>
 						{!! $sr->remarks !!}
-					</td>
-					<td>
-		@if( !is_null( $sr->belongtoinvoice ))
-						{!! $sr->belongtoinvoice->DocNo !!}
-		@else
-						{!! __('No Invoice') !!}
-		@endif
 					</td>
 					<td>
 						<a href="{!! route('serviceReport.show', $sr->id) !!}" target="_blank" title="Show"><i class="far fa-eye"></i></a>

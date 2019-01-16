@@ -44,6 +44,7 @@ class ServiceReportController extends Controller
 	public function store(Request $request)
 	{
 		print_r($request->all());
+// die();
 		$sr = \Auth::user()->belongtostaff->hasmanyservicereport()->create(
 			array_add($request->only(['date', 'charge_id', 'customer_id', 'inform_by', 'remarks']), 'active', 1)
 		);
@@ -60,6 +61,15 @@ class ServiceReportController extends Controller
 			foreach( $request->sr as $key => $val ) {
 				$sr->hasmanyattendees()->create([
 					'attended_by' => $val['attended_by']
+				]);
+			}
+		}
+
+		// attendees phone
+		if ($request->has('srp')) {
+			foreach( $request->srp as $key => $val ) {
+				$sr->hasmanyattendeesphone()->create([
+					'phone_number' => $val['phone_number']
 				]);
 			}
 		}
@@ -103,6 +113,16 @@ class ServiceReportController extends Controller
 			foreach( $request->sr as $key => $val ) {
 				$serviceReport->hasmanyattendees()->create([
 					'attended_by' => $val['attended_by']
+				]);
+			}
+		}
+
+		// attendees phone
+		if ($request->has('srp')) {
+			$serviceReport->hasmanyattendeesphone()->delete();
+			foreach( $request->srp as $key => $val ) {
+				$serviceReport->hasmanyattendeesphone()->create([
+					'phone_number' => $val['phone_number']
 				]);
 			}
 		}
@@ -158,6 +178,16 @@ class ServiceReportController extends Controller
 			foreach( $request->sr as $key => $val ) {
 				$serviceReport->hasmanyattendees()->create([
 					'attended_by' => $val['attended_by']
+				]);
+			}
+		}
+
+		// attendees phone
+		if ($request->has('srpn')) {
+			$serviceReport->hasmanyattendeesphone()->delete();
+			foreach( $request->srpn as $key => $val ) {
+				$serviceReport->hasmanyattendeesphone()->create([
+					'phone_number' => $val['phone_number']
 				]);
 			}
 		}

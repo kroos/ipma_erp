@@ -47,10 +47,10 @@
 
 @section('js')
 /////////////////////////////////////////////////////////////////////////////////////////
-//ucwords
-$("#compby, #compl, #rem").keyup(function() {
-	tch(this);
-});
+// ucwords
+// $("#compby, #compl, #rem").keyup(function() {
+// 	tch(this);
+// });
 
 /////////////////////////////////////////////////////////////////////////////////////////
 $(document).on('change', '#cust', function () {
@@ -66,7 +66,7 @@ $(document).on('change', '#cust', function () {
 // table
 $('#date').datetimepicker({
 	format:'YYYY-MM-DD',
-	useCurrent: false,
+	useCurrent: true,
 })
 .on('dp.change dp.show dp.update', function() {
 	$('#form').bootstrapValidator('revalidateField', 'date');
@@ -155,7 +155,54 @@ $(wrappers).on("click",".remove_position", function(e){
 
 	$('#form').bootstrapValidator('removeField', $option1);
 	console.log(xs);
-    xs--;
+	xs--;
+})
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// add attendees phone number : add and remove row
+
+var mxfields	= 10; //maximum input boxes allowed
+var addBtn	= $(".add_phoneattendees");
+var wrapp	= $(".phoneattendees_wrap");
+
+var ix = 1;
+$(addBtn).click(function(){
+	// e.preventDefault();
+
+	//max input box allowed
+	if(ix < mxfields){
+		ix++;
+		wrapp.append(
+					'<div class="rowphoneattendees">' +
+						'<div class="form-row col-sm-12">' +
+							'<div class="col-sm-1 text-danger">' +
+									'<i class="fas fa-trash remove_phoneattendees" aria-hidden="true" id="button_delete_"></i>' +
+							'</div>' +
+							'<div class="col-sm-11">' +
+								'<div class="form-group {{ $errors->has('srpn.*.phone_number') ? 'has-error' : '' }}">' +
+									'<input type="text" name="srpn[' + ix + '][phone_number]" id="phone_attendees_' + ix + '" class="form-control" placeholder="Attendees Phone Number">' +
+								'</div>' +
+							'</div>' +
+						'</div>' +
+					'</div>'
+		); //add input box
+
+		//bootstrap validate
+		$('#form').bootstrapValidator('addField', $('.rowphoneattendees').find('[name="srpn[' + ix + '][phone_number]"]'));
+	}
+});
+
+$(wrapp).on("click",".remove_phoneattendees", function(e){
+	//user click on remove text
+	e.preventDefault();
+	//var $row = $(this).parent('.rowphoneattendees');
+	var $row = $(this).parent().parent().parent();
+	var $option1 = $row.find('[name="srpn[][phone_number]"]');
+	$row.remove();
+
+	$('#form').bootstrapValidator('removeField', $option1);
+	console.log(ix);
+	ix--;
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -200,13 +247,19 @@ $('#form').bootstrapValidator({
 		},
 		charge_id: {
 			validators : {
-				notEmpty: {
-					message: 'Please choose. '
-				},
+				// notEmpty: {
+				// 	message: 'Please choose. '
+				// },
 			}
 		},
 @for ($u=1; $u < 10; $u++)
-
+		'srpn[{{ $u }}][phone_number]': {
+			validators: {
+				// integer: {
+				// 	message: 'The value is not an integer. '
+				// }
+			}
+		},
 		'sr[{{ $u }}][attended_by]': {
 			validators: {
 				notEmpty: {

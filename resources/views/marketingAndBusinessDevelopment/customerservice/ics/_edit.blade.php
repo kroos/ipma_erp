@@ -174,6 +174,47 @@ $iii = 1;
 					<span class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Staff</span>
 				</div>
 
+				<div class="container-fluid phoneattendees_wrap">
+@if($serviceReport->hasmanyattendeesphone()->get()->count() > 0)
+@foreach( $serviceReport->hasmanyattendeesphone()->get() as $sra )
+					<div class="rowphoneattendees">
+						<div class="form-row col-sm-12">
+
+							<div class="col-sm-1 text-danger">
+									<i class="fas fa-trash remove_phoneattendees" aria-hidden="true" id="button_delete_"></i>
+							</div>
+
+							<div class="col-sm-11">
+								<div class="form-group {{ $errors->has('srpn.*.phone_number') ? 'has-error' : '' }}">
+									<input type="text" name="srpn[1][phone_number]" id="phoen" value="{{ $sra->phone_number }}" class="form-control" placeholder="Attendees Phone Number">
+								</div>
+							</div>
+
+						</div>
+					</div>
+@endforeach
+@else
+					<div class="rowphoneattendees">
+						<div class="form-row col-sm-12">
+
+							<div class="col-sm-1 text-danger">
+									<i class="fas fa-trash remove_phoneattendees" aria-hidden="true" id="button_delete_"></i>
+							</div>
+
+							<div class="col-sm-11">
+								<div class="form-group {{ $errors->has('srpn.*.phone_number') ? 'has-error' : '' }}">
+									<input type="text" name="srpn[1][phone_number]" id="phoen" value="{{ $sra->phone_number }}" class="form-control" placeholder="Attendees Phone Number">
+								</div>
+							</div>
+
+						</div>
+					</div>
+@endif
+				</div>
+				<div class="row col-lg-12 add_phoneattendees">
+					<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add phone</p>
+				</div>
+
 			</div>
 		</div>
 	</div>
@@ -957,7 +998,7 @@ $p4 = 1;
 						<div class="col-sm-12 form-row ">
 
 							<div class="col-sm-1 text-danger">
-									<i class="fas fa-trash" aria-hidden="true" id="delete_feedProb_1" data-id="1"></i>
+									<i class="fas fa-trash remove_feedProb" aria-hidden="true" id="delete_feedProb_1" data-id="1"></i>
 							</div>
 							<div class="form-group col {{ $errors->has('srfP.*.problem') ? 'has-error' : '' }}">
 								<textarea name="srfP[1][problem]" value="{!! @$value !!}" id="problem_1" class="form-control" autocomplete="off" placeholder="Problem" /></textarea>
@@ -1009,7 +1050,7 @@ $p4 = 1;
 					<div class="rowfeedReq">
 						<div class="col-sm-12 form-row ">
 							<div class="col-sm-1 text-danger">
-									<i class="fas fa-trash " aria-hidden="true" id="delete_feedReq" data-id="1"></i>
+									<i class="fas fa-trash remove_feedReq" aria-hidden="true" id="delete_feedReq" data-id="1"></i>
 							</div>
 							<div class="form-group col {{ $errors->has('srfR.*.request') ? 'has-error' : '' }}">
 								<input type="text" name="srfR[1][request]" value="{!! @$value !!}" id="request_1" class="form-control" autocomplete="off" placeholder="Additional Request" />
@@ -1070,7 +1111,7 @@ $item6 = 1;
 					<div class="rowfeedItem">
 						<div class="form-row col-sm-12">
 							<div class="col-sm-1 text-danger">
-									<i class="fas fa-trash " aria-hidden="true" id="delete_feedReq" data-id="1"></i>
+									<i class="fas fa-trash remove_feedItem" aria-hidden="true" id="delete_feedReq"></i>
 							</div>
 							<div class="form-group col-3 {{ $errors->has('srfI.*.item') ? 'has-error' : '' }}">
 								<input type="text" name="srfI[1][item]" value="{!! @$value !!}" id="item_1" class="form-control" autocomplete="off" placeholder="Item" />
