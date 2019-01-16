@@ -146,6 +146,26 @@ use \Carbon\CarbonPeriod;
 @endif
 									</tbody>									
 								</table>
+								<table width="100%" cellspacing="1" cellpadding="1" border="0">
+									<tbody>
+										<tr>
+											<th colspan="2">Phone Number</th>
+										</tr>
+<?php $u = 1 ?>
+@if($serviceReport->hasmanyattendeesphone()->get()->count() > 0)
+@foreach($serviceReport->hasmanyattendeesphone()->get() as $hj)
+										<tr>
+											<td>{{ $u++ }}.</td>
+											<td>{{ $hj->phone_number }}</td>
+										</tr>
+@endforeach
+@else
+										<tr>
+											<td>No Phone Number Yet</td>
+										</tr>
+@endif
+									</tbody>
+								</table>
 							</td>
 						</tr>
 						<tr>

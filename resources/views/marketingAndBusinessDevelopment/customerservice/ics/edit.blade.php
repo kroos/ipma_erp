@@ -1,4 +1,4 @@
-@extends('layouts.app')
+ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss@extends('layouts.app')
 
 @section('content')
 <div class="card">
@@ -202,7 +202,7 @@ $('#fr_{{ $r14++ }}, #wtv_{{ $r15++ }}, #accommodation_{{ $r16++ }}').select2({
 /////////////////////////////////////////////////////////////////////////////////////////
 // problem solution
 @for ($pf1 = ($serviceReport->hasmanyfeedproblem()->get()->count() > 0)?$serviceReport->hasmanyfeedproblem()->get()->count():1; $pf1 <= $serviceReport->hasmanyfeedproblem()->get()->count() + 1; $pf1++)
-$("#problem_{{ $pf1 }}, #solution_{{ $pf1 }}").keyup(function() {
+$("#problem_{{ $pf1 }}1, #solution_{{ $pf1 }}1").keyup(function() {
 	tch(this);
 });
 @endfor
@@ -210,7 +210,7 @@ $("#problem_{{ $pf1 }}, #solution_{{ $pf1 }}").keyup(function() {
 /////////////////////////////////////////////////////////////////////////////////////////
 // request action
 @for ($pfr2 = ($serviceReport->hasmanyfeedrequest()->get()->count() > 0)?$serviceReport->hasmanyfeedrequest()->get()->count():1; $pfr2 <= $serviceReport->hasmanyfeedrequest()->get()->count() + 1; $pfr2++)
-$("#request_{{ $pfr2 }}, #action_{{ $pfr2 }}").keyup(function() {
+$("#request_{{ $pfr2 }}1, #action_{{ $pfr2 }}1").keyup(function() {
 	tch(this);
 });
 @endfor
@@ -218,7 +218,7 @@ $("#request_{{ $pfr2 }}, #action_{{ $pfr2 }}").keyup(function() {
 /////////////////////////////////////////////////////////////////////////////////////////
 // item item_action
 @for ($pfr3 = ($serviceReport->hasmanyfeeditem()->get()->count() > 0)?$serviceReport->hasmanyfeeditem()->get()->count():1; $pfr3 <= $serviceReport->hasmanyfeeditem()->get()->count() + 1; $pfr3++)
-$("#item_{{ $pfr3 }}, #item_action_{{ $pfr3 }}").keyup(function() {
+$("#item_{{ $pfr3 }}1, #item_action_{{ $pfr3 }}1w ").keyup(function() {
 	tch(this);
 });
 @endfor
