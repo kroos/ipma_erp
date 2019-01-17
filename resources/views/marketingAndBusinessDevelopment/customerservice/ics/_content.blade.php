@@ -330,7 +330,10 @@ if ( $bmonth != 1 ) {
 		<table class="table table-hover table-sm" style="font-size:12px" id="servicereport3">
 			<thead>
 				<tr>
-					<th><input type="checkbox" id="selectAll"><label for="selectAll">Approved All</label></th>
+					<th>
+						<input type="checkbox" id="selectAll">
+						<label for="selectAll">Approved All</label>
+					</th>
 					<th>ID</th>
 					<th>Date</th>
 					<th>Informed By</th>
@@ -411,7 +414,7 @@ if ( $bmonth != 1 ) {
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="15">
+					<td colspan="14">
 						{!! Form::button('Approved All', ['class' => 'btn btn-primary', 'type' => 'submit']) !!}
 					</td>
 				</tr>
@@ -423,89 +426,4 @@ if ( $bmonth != 1 ) {
 
 <p>&nbsp;</p>
 
-<!-- <div class="card">
-	<div class="card-header"><h5>Approved Service Report</h5></div>
-	<div class="card-body">
-		<table class="table table-hover" style="font-size:12px" id="servicereport2">
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Date</th>
-					<th>Informed By</th>
-					<th>SR No</th>
-					<th>Customer</th>
-					<th>Attendees</th>
-					<th>Complaints</th>
-					<th>Date Completed</th>
-					<th>Vehicle</th>
-					<th>Proceed</th>
-					<th>Approve By</th>
-					<th>Remarks</th>
-					<th>Invoice</th>
-					<th>&nbsp</th>
-				</tr>
-			</thead>
-			<tbody>
-		@foreach($sre as $sr)
-				<tr>
-					<td>{!! $sr->id !!}</td>
-					<td>{!! Carbon::parse($sr->date)->format('D, j M Y') !!}</td>
-					<td>{!! $sr->belongtoinformby->name !!}</td>
-					<td>
-		@foreach( $sr->hasmanyserial()->get() as $srno )
-						{!! $srno->serial !!}<br />
-		@endforeach
-					</td>
-					<td>{!! $sr->belongtocustomer->customer !!}</td>
-					<td>
-		@foreach( $sr->hasmanyattendees()->get() as $sra )
-						{!! $sra->belongtostaff->name !!}<br />
-		@endforeach
-					</td>
-					<td>
-		@foreach($sr->hasmanycomplaint()->get() as $src)
-						{!! $src->complaint !!}
-		@endforeach
-					</td>
-					<td>
-		@if( !is_null( $sr->hasmanyjob()->first() ) )
-						{!! Carbon::parse($sr->hasmanyjob()->get()->max('date'))->format('D, j M Y') !!}
-		@endif
-					</td>
-					<td>
-		@if( !is_null($sr->belongtovehicle) )
-						{!! $sr->belongtovehicle->vehicle !!}
-		@endif
-					</td>
-					<td>
-		@if( !is_null($sr->belongtoproceed) )
-						{!! $sr->belongtoproceed->proceed !!}
-		@endif
-					</td>
-					<td>
-		@if(!is_null($sr->belongtoapprovedby))
-						{!! $sr->belongtoapprovedby->name !!}
-		@endif
-					</td>
-					<td>
-						{!! $sr->remarks !!}
-					</td>
-					<td>
-		@if( !is_null( $sr->belongtoinvoice ))
-						{!! $sr->belongtoinvoice->DocNo !!}
-		@else
-						{!! __('No Invoice') !!}
-		@endif
-					</td>
-					<td>
-						<a href="{!! route('serviceReport.show', $sr->id) !!}" target="_blank" title="Show"><i class="far fa-eye"></i></a>
-						<a href="{!! route('serviceReport.edit', $sr->id) !!}" title="Update"><i class="far fa-edit"></i></a>
-						<span class="text-danger inactivate" data-id="{!! $sr->id !!}"><i class="far fa-trash-alt"></i></span>
-					</td>
-				</tr>
-		@endforeach
-			</tbody>
-		</table>
-	</div>
-</div> -->
 <p>&nbsp;</p>
