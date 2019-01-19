@@ -14,8 +14,15 @@ use Carbon\CarbonPeriod;
 
 $n = Carbon::now();
 $dn = $n->today();
-// echo $dn.' today<br />';
+$dn1 = $n->copy()->subYear();
+// echo $dn1->format('Y-m-d').' today<br />';
+
+
 $leaveALMC = $staffHR->hasmanystaffannualmcleave()->where('year', date('Y'))->first();
+
+// tahun lepas
+$leaveALMC1 = $staffHR->hasmanystaffannualmcleave()->where('year', $dn1->format('Y'))->first();
+
 ?>
 @section('content')
 <div class="card">
@@ -57,71 +64,207 @@ $leaveALMC = $staffHR->hasmanystaffannualmcleave()->where('year', date('Y'))->fi
 					</div>
 					<div class="card-body">
 
-						<div class="container table-responsive">
+						<div class="container-fluid table-responsive">
 							<div class="row">
 								<div class="col-sm-3"><img class="card-img-top figure-img img-fluid rounded" src="{{ asset('storage/'.$staffHR->image) }}" alt="{{ $staffHR->name }} Image"></div>
 								<div class="col-sm-9">
-									<div class="container">
-										<div class="row">
+									<div class="container-fluid row">
+										<div class="col-6">
 
 											<dl class="row">
-												<dt class="col-sm-3">Staff ID</dt>
-												<dd class="col-sm-9">{{ $staffHR->hasmanylogin()->where('active', 1)->first()->username }}</dd>
+												<dt class="col-sm-6">Staff ID</dt>
+												<dd class="col-sm-6">{{ $staffHR->hasmanylogin()->where('active', 1)->first()->username }}</dd>
 
-												<dt class="col-sm-3">Tahun </dt>
-												<dd class="col-sm-9">{{ $dn->startofYear()->format('Y') }}</dd>
+												<dt class="col-sm-6">Tahun </dt>
+												<dd class="col-sm-6">{{ $dn1->startofYear()->format('Y') }}</dd>
 
-												<dt class="col-sm-3"><h5>Annual Leave :</h5></dt>
-												<dd class="col-sm-9">
+												<dt class="col-sm-6"><h5>Annual Leave :</h5></dt>
+												<dd class="col-sm-6">
 													<dl class="row">
-														<dt class="col-sm-3">Initialize : </dt>
-														<dd class="col-sm-9">{{ $leaveALMC->annual_leave + $leaveALMC->annual_leave_adjustment }} days</dd>
-														<dt class="col-sm-3">Balance :</dt>
-														<dd class="col-sm-9">
-															<span class=" {{ ($leaveALMC->annual_leave_balance < 4)?'text-danger font-weight-bold':'' }}">{{ $leaveALMC->annual_leave_balance }} days</span>
+														<dt class="col-sm-6">Initialize : </dt>
+														<dd class="col-sm-6">{{ $leaveALMC1->annual_leave + $leaveALMC1->annual_leave_adjustment }} days</dd>
+														<dt class="col-sm-6">Balance :</dt>
+														<dd class="col-sm-6">
+															<span class=" {{ ($leaveALMC1->annual_leave_balance < 4)?'text-danger font-weight-bold':'' }}">{{ $leaveALMC1->annual_leave_balance }} days</span>
 														</dd>
-														<dt class="col-sm-3">Utilize : </dt>
-														<dd class="col-sm-9">{{ ($leaveALMC->annual_leave + $leaveALMC->annual_leave_adjustment) - ($leaveALMC->annual_leave_balance) }} days</dd>
+														<dt class="col-sm-6">Utilize : </dt>
+														<dd class="col-sm-6">{{ ($leaveALMC1->annual_leave + $leaveALMC1->annual_leave_adjustment) - ($leaveALMC1->annual_leave_balance) }} days</dd>
 													</dl>
 												</dd>
 
-												<dt class="col-sm-3"><h5>MC Leave :</h5></dt>
-												<dd class="col-sm-9">
+												<dt class="col-sm-6"><h5>MC Leave :</h5></dt>
+												<dd class="col-sm-6">
 													<dl class="row">
-														<dt class="col-sm-3">Initialize :</dt>
-														<dd class="col-sm-9">{{ $leaveALMC->medical_leave + $leaveALMC->medical_leave_adjustment }} days</dd>
-														<dt class="col-sm-3">Balance :</dt>
-														<dd class="col-sm-9"><span class=" {{ ($leaveALMC->medical_leave_balance < 4)?'text-danger font-weight-bold':'' }}">{{ $leaveALMC->medical_leave_balance }} days</span></dd>
-														<dt class="col-sm-3">Utilize :</dt>
-														<dd class="col-sm-9">{{ ($leaveALMC->medical_leave + $leaveALMC->medical_leave_adjustment) - ($leaveALMC->medical_leave_balance) }} days</dd>
+														<dt class="col-sm-6">Initialize :</dt>
+														<dd class="col-sm-6">{{ $leaveALMC1->medical_leave + $leaveALMC1->medical_leave_adjustment }} days</dd>
+														<dt class="col-sm-6">Balance :</dt>
+														<dd class="col-sm-6"><span class=" {{ ($leaveALMC1->medical_leave_balance < 4)?'text-danger font-weight-bold':'' }}">{{ $leaveALMC1->medical_leave_balance }} days</span></dd>
+														<dt class="col-sm-6">Utilize :</dt>
+														<dd class="col-sm-6">{{ ($leaveALMC1->medical_leave + $leaveALMC1->medical_leave_adjustment) - ($leaveALMC1->medical_leave_balance) }} days</dd>
 													</dl>
 												</dd>
-												<dt class="col-sm-3"><h5>Unpaid MC Leave :</h5></dt>
-												<dd class="col-sm-9">{{ $staffHR->hasmanystaffleave()->whereYear( 'date_time_start', date('Y') )->where('leave_id', 11)->get()->sum('period') }} days</dd>
+												<dt class="col-sm-6"><h5>Unpaid MC Leave :</h5></dt>
+												<dd class="col-sm-6">{{ $staffHR->hasmanystaffleave()->whereYear( 'date_time_start', $dn1->format('Y') )->where('leave_id', 11)->get()->sum('period') }} days</dd>
 @if( $staffHR->gender_id == 2 )
-												<dt class="col-sm-3 text-truncate"><h5>Maternity Leave :</h5></dt>
-												<dd class="col-sm-9">
+												<dt class="col-sm-6 text-truncate"><h5>Maternity Leave :</h5></dt>
+												<dd class="col-sm-6">
 													<dl class="row">
-														<dt class="col-sm-3">Initialize :</dt>
-														<dd class="col-sm-9">{{ $leaveALMC->maternity_leave + $leaveALMC->maternity_leave_adjustment }} days</dd>
-														<dt class="col-sm-3">Balance :</dt>
-														<dd class="col-sm-9"><span class=" {{ ($leaveALMC->maternity_leave_balance < 4)?'text-danger font-weight-bold':'' }}">{{ $leaveALMC->maternity_leave_balance }} days</span></dd>
-														<dt class="col-sm-3">Utilize :</dt>
-														<dd class="col-sm-9">{{ ($leaveALMC->maternity_leave + $leaveALMC->maternity_leave_adjustment) - ($leaveALMC->maternity_leave_balance) }} days</dd>
+														<dt class="col-sm-6">Initialize :</dt>
+														<dd class="col-sm-6">{{ $leaveALMC1->maternity_leave + $leaveALMC1->maternity_leave_adjustment }} days</dd>
+														<dt class="col-sm-6">Balance :</dt>
+														<dd class="col-sm-6"><span class=" {{ ($leaveALMC1->maternity_leave_balance < 4)?'text-danger font-weight-bold':'' }}">{{ $leaveALMC1->maternity_leave_balance }} days</span></dd>
+														<dt class="col-sm-6">Utilize :</dt>
+														<dd class="col-sm-6">{{ ($leaveALMC1->maternity_leave + $leaveALMC1->maternity_leave_adjustment) - ($leaveALMC1->maternity_leave_balance) }} days</dd>
 													</dl>
 												</dd>
 @endif
-												<dt class="col-sm-3"><h5>Unpaid Leave Utilize :</h5></dt>
-												<dd class="col-sm-9">{{ $staffHR->hasmanystaffleave()->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [3, 6])->whereIn('active', [1, 2])->get()->sum('period') }} days</dd>
+												<dt class="col-sm-6"><h5>Unpaid Leave Utilize :</h5></dt>
+												<dd class="col-sm-6">{{ $staffHR->hasmanystaffleave()->whereYear( 'date_time_start', $dn1->format('Y') )->whereIn('leave_id', [3, 6])->whereIn('active', [1, 2])->get()->sum('period') }} days</dd>
 <?php
 $oi = $staffHR->hasmanystaffleavereplacement()->where('leave_balance', '<>', 0)->get();
 ?>
 @if($oi->sum('leave_balance') > 0)
-												<dt class="col-sm-3"><h5>Non Replacement Leave (Cuti Ganti) :</h5></dt>
-												<dd class="col-sm-9">{{ $oi->sum('leave_balance') }} days</dd>
+												<dt class="col-sm-6"><h5>Non Replacement Leave (Cuti Ganti) :</h5></dt>
+												<dd class="col-sm-6">{{ $oi->sum('leave_balance') }} days</dd>
 @endif
-												<dt class="col-sm-3"><h5>Tidak Hadir (ABSENT) :</h5></dt>
-												<dd class="col-sm-9">
+												<dt class="col-sm-6"><h5>Tidak Hadir (ABSENT) :</h5></dt>
+												<dd class="col-sm-6">
+<?php
+////////////////////////////////////////////////////////////////////////////
+// absent
+// find public holiday
+$h1 = HolidayCalendar::whereYear('date_start', $dn1->format('Y') )->get();
+$h4 = [];
+foreach($h1 as $h2) {
+	// echo $h2->date_start.' '.$h2->date_end.' hoilday calendar<br />';
+	$h3 = CarbonPeriod::create($h2->date_start, '1 days', $h2->date_end);
+	foreach ($h3 as $key => $value) {
+		$h5[] = $value->format('Y-m-d');
+		// echo $value->format('Y-m-d').' iterate<br />';
+	}
+}
+
+// checking if the array is correct
+// foreach($h4 as $h5){
+// 	echo $h5.' iterate h4<br />';
+// }
+
+// not working at all
+$stcms1 = $staffHR->hasmanystafftcms()->whereNull('exception')->whereBetween('date', [$dn1->copy()->startOfYear()->format('Y-m-d'), $dn1->copy()->endOfYear()->format('Y-m-d')])->where([['in', '00:00:00'], ['break', '00:00:00'], ['resume', '00:00:00'], ['out', '00:00:00'], ['leave_taken', '<>', 'Outstation'], ['daytype', 'WORKDAY'] ])->whereNotIn('date', $h5)->get();
+
+// working in the evening
+$stcms2 = $staffHR->hasmanystafftcms()->whereNull('exception')->whereBetween('date', [$dn1->copy()->startOfYear()->format('Y-m-d'), $dn1->copy()->endOfYear()->format('Y-m-d')])->where([['in', '<>', '00:00:00'], ['break', '<>', '00:00:00'], ['resume', '00:00:00'], ['out', '00:00:00'], ['leave_taken', '<>', 'Outstation'], ['daytype', 'WORKDAY'] ])->whereNotIn('date', $h5)->get();
+
+// working in the morning
+$stcms3 = $staffHR->hasmanystafftcms()->whereNull('exception')->whereBetween('date', [$dn1->copy()->startOfYear()->format('Y-m-d'), $dn1->copy()->endOfYear()->format('Y-m-d')])->where([['in', '00:00:00'], ['break', '00:00:00'], ['resume', '<>', '00:00:00'], ['out', '<>', '00:00:00'], ['leave_taken', '<>', 'Outstation'], ['daytype', 'WORKDAY'] ])->whereNotIn('date', $h5)->get();
+$m = 0;
+$v2 = 0;
+foreach($stcms1 as $ke) {
+	$sl5 = $staffHR->hasmanystaffleave()->whereRaw('"'.$ke->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->get();
+	if($sl5->isEmpty()){
+		$m = $m+1;
+		// echo $m.' count absent<br />';
+	} else {
+		// echo $sl5.' <br />';
+		$v = 0;
+		foreach ($sl5 as $nq) {
+			$b = 0;
+			$p = 0;
+			if($nq->active == 1 || $nq->active == 2) {
+				$b = 1;
+			} else {
+				$p = 1;
+			}
+		}
+			$v += $p - $b;
+			// echo $v.' absent count<br />';
+			if($v == -1) {
+				$v1 = 0;
+			} else {
+				$v1 = $v;
+			}
+			$v2 += $v1;
+			// echo $v2.' v2 absent count<br />';
+	}
+	// echo $m + $v2.' = m+v2 <br />';
+	// echo $ke->name.' '.$ke->date.' '.$ke->in.' '.$ke->break.' '.$ke->resume.' '.$ke->out.' '.$ke->leave_taken.' absent<br />';
+	// echo '---------------------------------<br />';
+}
+echo $m + $v2;
+////////////////////////////////////////////////////////////////////////////
+?>
+													 days
+												</dd>
+											</dl>
+
+
+										</div>
+										<div class="col-6">
+
+
+
+
+
+
+
+											<dl class="row">
+												<dt class="col-sm-6">Staff ID</dt>
+												<dd class="col-sm-6">{{ $staffHR->hasmanylogin()->where('active', 1)->first()->username }}</dd>
+
+												<dt class="col-sm-6">Tahun </dt>
+												<dd class="col-sm-6">{{ $dn->startofYear()->format('Y') }}</dd>
+
+												<dt class="col-sm-6"><h5>Annual Leave :</h5></dt>
+												<dd class="col-sm-6">
+													<dl class="row">
+														<dt class="col-sm-6">Initialize : </dt>
+														<dd class="col-sm-6">{{ $leaveALMC->annual_leave + $leaveALMC->annual_leave_adjustment }} days</dd>
+														<dt class="col-sm-6">Balance :</dt>
+														<dd class="col-sm-6">
+															<span class=" {{ ($leaveALMC->annual_leave_balance < 4)?'text-danger font-weight-bold':'' }}">{{ $leaveALMC->annual_leave_balance }} days</span>
+														</dd>
+														<dt class="col-sm-6">Utilize : </dt>
+														<dd class="col-sm-6">{{ ($leaveALMC->annual_leave + $leaveALMC->annual_leave_adjustment) - ($leaveALMC->annual_leave_balance) }} days</dd>
+													</dl>
+												</dd>
+
+												<dt class="col-sm-6"><h5>MC Leave :</h5></dt>
+												<dd class="col-sm-6">
+													<dl class="row">
+														<dt class="col-sm-6">Initialize :</dt>
+														<dd class="col-sm-6">{{ $leaveALMC->medical_leave + $leaveALMC->medical_leave_adjustment }} days</dd>
+														<dt class="col-sm-6">Balance :</dt>
+														<dd class="col-sm-6"><span class=" {{ ($leaveALMC->medical_leave_balance < 4)?'text-danger font-weight-bold':'' }}">{{ $leaveALMC->medical_leave_balance }} days</span></dd>
+														<dt class="col-sm-6">Utilize :</dt>
+														<dd class="col-sm-6">{{ ($leaveALMC->medical_leave + $leaveALMC->medical_leave_adjustment) - ($leaveALMC->medical_leave_balance) }} days</dd>
+													</dl>
+												</dd>
+												<dt class="col-sm-6"><h5>Unpaid MC Leave :</h5></dt>
+												<dd class="col-sm-6">{{ $staffHR->hasmanystaffleave()->whereYear( 'date_time_start', date('Y') )->where('leave_id', 11)->get()->sum('period') }} days</dd>
+@if( $staffHR->gender_id == 2 )
+												<dt class="col-sm-6 text-truncate"><h5>Maternity Leave :</h5></dt>
+												<dd class="col-sm-6">
+													<dl class="row">
+														<dt class="col-sm-6">Initialize :</dt>
+														<dd class="col-sm-6">{{ $leaveALMC->maternity_leave + $leaveALMC->maternity_leave_adjustment }} days</dd>
+														<dt class="col-sm-6">Balance :</dt>
+														<dd class="col-sm-6"><span class=" {{ ($leaveALMC->maternity_leave_balance < 4)?'text-danger font-weight-bold':'' }}">{{ $leaveALMC->maternity_leave_balance }} days</span></dd>
+														<dt class="col-sm-6">Utilize :</dt>
+														<dd class="col-sm-6">{{ ($leaveALMC->maternity_leave + $leaveALMC->maternity_leave_adjustment) - ($leaveALMC->maternity_leave_balance) }} days</dd>
+													</dl>
+												</dd>
+@endif
+												<dt class="col-sm-6"><h5>Unpaid Leave Utilize :</h5></dt>
+												<dd class="col-sm-6">{{ $staffHR->hasmanystaffleave()->whereYear( 'date_time_start', date('Y') )->whereIn('leave_id', [3, 6])->whereIn('active', [1, 2])->get()->sum('period') }} days</dd>
+<?php
+$oi = $staffHR->hasmanystaffleavereplacement()->where('leave_balance', '<>', 0)->get();
+?>
+@if($oi->sum('leave_balance') > 0)
+												<dt class="col-sm-6"><h5>Non Replacement Leave (Cuti Ganti) :</h5></dt>
+												<dd class="col-sm-6">{{ $oi->sum('leave_balance') }} days</dd>
+@endif
+												<dt class="col-sm-6"><h5>Tidak Hadir (ABSENT) :</h5></dt>
+												<dd class="col-sm-6">
 <?php
 ////////////////////////////////////////////////////////////////////////////
 // absent
@@ -191,8 +334,27 @@ echo $m + $v2;
 											</dl>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 										</div>
 									</div>
+
 								</div>
 							</div>
 						</div>

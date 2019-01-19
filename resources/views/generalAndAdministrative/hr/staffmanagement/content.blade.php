@@ -12,7 +12,7 @@ $m = Staff::where('active', '<>', 1)->get();
 <div class="card">
 	<div class="card-header">Active Staff List</div>
 	<div class="card-body">
-		<table class="table table-hover" style="font-size:12px" id="staff">
+		<table class="table table-hover table-sm" style="font-size:12px" id="staff">
 			<thead>
 				<tr>
 					<th>ID</th>
@@ -62,22 +62,26 @@ if (!is_null($b->belongtomanyposition()->wherePivot('main', 1)->first() )) {
 // echo $b->belongtomanyposition()->wherePivot('main', 1)->first()->belongtocategory->category;
 ?>
 				<tr>
-					<td>{{ $user }}</td>
-					<td><span class="name1" data-content="<img src='{{ asset('storage/'.$b->image) }}'' alt='{{ $b->name }}' class='img-thumbnail rounded img-fluid' >" data-placement="bottom" data-original-title="{{ $b->name }}" >{{ $b->name }}</span></td>
+					<td><a href="{!! route('staffHR.showReport', $b->id) !!}" title="Calendar" >{{ $user }}</a></td>
+					<td>
+						<a href="{{ route('staffHR.show', $b->id) }}" title="Show">
+							<span class="name1" data-content="<img src='{{ asset('storage/'.$b->image) }}'' alt='{{ $b->name }}' class='img-thumbnail rounded img-fluid' >" data-placement="bottom" data-original-title="{{ $b->name }}" >{{ $b->name }}</span>
+						</a>
+					</td>
 					<td>{{ $a }}</td>
 					<td>{{ $d }}</td>
 					<td>{{ $e }}</td>
 					<td>{{ $f }}</td>
 					<td>{{ $g }}</td>
 					<td>
-						<a href="{!! route('staffHR.showReport', $b->id) !!}" title="Calendar" class="btn btn-primary"><i class="far fa-calendar-alt"></i></a>
-						<a href="{{ route('staffHR.show', $b->id) }}" title="Show" class="btn btn-primary"><i class="far fa-eye"></i></a>
-						<a href="{{ route('staffHR.editHR', $b->id) }}" title="Edit" class="btn btn-primary"><i class="far fa-edit"></i></a>
+						<!-- <a href="{!! route('staffHR.showReport', $b->id) !!}" title="Calendar" class="btn btn-primary"><i class="far fa-calendar-alt"></i></a> -->
+						<!-- <a href="{{ route('staffHR.show', $b->id) }}" title="Show" class="btn btn-primary"><i class="far fa-eye"></i></a> -->
+						<a href="{{ route('staffHR.editHR', $b->id) }}" title="Edit"><i class="far fa-edit"></i></a>
 
 @if($b->status_id == 2)
-						<a href="{{ route('staffHR.promoteHR', $b->id) }}" title="Promote" class="btn btn-primary"><i class="far fa-arrow-alt-circle-up"></i></a>
+						<a href="{{ route('staffHR.promoteHR', $b->id) }}" title="Promote"><i class="far fa-arrow-alt-circle-up"></i></a>
 @endif
-						<button title="Disable" class="btn btn-danger disable_user" id="disable_user_{{ $b->id }}" data-id="{{ $b->id }}"><i class="far fa-times-circle"></i></button>
+						<span title="Disable" class="text-danger disable_user" id="disable_user_{{ $b->id }}" data-id="{{ $b->id }}"><i class="far fa-times-circle"></i></span>
 					</td>
 				</tr>
 @endforeach
@@ -93,7 +97,7 @@ if (!is_null($b->belongtomanyposition()->wherePivot('main', 1)->first() )) {
 <div class="card">
 	<div class="card-header">Inactive Staff List</div>
 	<div class="card-body">
-		<table class="table table-hover" style="font-size:12px" id="staffinactive">
+		<table class="table table-hover table-sm" style="font-size:12px" id="staffinactive">
 			<thead>
 				<tr>
 					<th>ID</th>
@@ -112,7 +116,7 @@ $y = $z->hasmanylogin()->where('active', 0)->get();
 ?>
 				<tr>
 					<td>
-						<table>
+						<table class="table table-hover table-sm" style="font-size:12px">
 							<tbody>
 @foreach($y as $x)
 <?php
