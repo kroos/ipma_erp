@@ -70,7 +70,7 @@ $leaveALMC1 = $staffHR->hasmanystaffannualmcleave()->where('year', $dn1->format(
 								<div class="col-sm-9">
 									<div class="container-fluid row">
 										<div class="col-6">
-
+@if( $staffHR->hasmanystaffannualmcleave()->where('year', $dn1->format('Y'))->get()->count() > 0 )
 											<dl class="row">
 												<dt class="col-sm-6">Staff ID</dt>
 												<dd class="col-sm-6">{{ $staffHR->hasmanylogin()->where('active', 1)->first()->username }}</dd>
@@ -196,16 +196,11 @@ echo $m + $v2;
 													 days
 												</dd>
 											</dl>
-
-
+@else
+										<p>No Record Last Year</p>
+@endif
 										</div>
 										<div class="col-6">
-
-
-
-
-
-
 
 											<dl class="row">
 												<dt class="col-sm-6">Staff ID</dt>
@@ -332,24 +327,6 @@ echo $m + $v2;
 													 days
 												</dd>
 											</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 										</div>

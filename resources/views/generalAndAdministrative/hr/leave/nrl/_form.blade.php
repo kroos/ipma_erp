@@ -11,7 +11,7 @@ $now = Carbon::now();
 		<a class="nav-link " href="{{ route('leaveSetting.index') }}">Settings</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link active" href="{{ route('leaveNRL.index') }}">Non Replacement Leave</a>
+		<a class="nav-link active" href="{{ route('leaveNRL.index') }}">Non Record Leave</a>
 	</li>
 <!-- 	<li class="nav-item">
 		<a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="{{ route('leaveList.index') }}">Leave List</a>

@@ -29,7 +29,7 @@ if( $jan != 1 ) {
 		<a class="nav-link " href="{{ route('leaveSetting.index') }}">Settings</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link active" href="{{ route('leaveNRL.index') }}">Non Replacement Leave</a>
+		<a class="nav-link active" href="{{ route('leaveNRL.index') }}">Non Record Leave</a>
 	</li>
 <!-- 	<li class="nav-item">
 		<a class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" href="{{ route('leaveList.index') }}">Leave List</a>
@@ -53,12 +53,12 @@ if( $jan != 1 ) {
 		@include('layouts.errorform')
 
 		<div class="card">
-			<div class="card-header">Unclaimed Replacement Leave</div>
+			<div class="card-header">Unclaimed Non Record Leave</div>
 			<div class="card-body">
 				<table class="table table-hover table-sm" id="nrl1" style="font-size:12px">
 					<thead>
 						<tr>
-							<th colspan="9"><h3>Unclaimed Replacement Leave</h3></th>
+							<th colspan="9"><h3>Unclaimed Non Record Leave</h3></th>
 						</tr>
 						<tr>
 							<th>Staff</th>
@@ -113,7 +113,7 @@ if( $jan != 1 ) {
 		<table class="table table-hover table-sm" id="nrl2" style="font-size:12px">
 			<thead>
 				<tr>
-					<th colspan="10"><h3>Claimed Replacement Leave</h3></th>
+					<th colspan="10"><h3>Claimed Non Record Leave</h3></th>
 				</tr>
 				<tr>
 					<th>Staff</th>
