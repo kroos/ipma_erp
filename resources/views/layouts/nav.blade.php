@@ -86,7 +86,7 @@ $allleaves = $tsb + $tshod + $tshr + $tdl;
 					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 						<a class="dropdown-item" href="{{ route('staff.show', Auth::user()->staff_id ) }}">{{ __('Profile') }}</a>
 						<a class="dropdown-item" href="{{ route('login.edit', Auth::user()->id ) }}">{{ __('Change Password') }}</a>
-
+						<a class="dropdown-item" href="{{ route('todoSchedule.index') }}">{{ __('Create Task') }}</a>
 						<a class="dropdown-item" href="{{ route('todoList.index') }}">
 							{{ __('Task List') }}
 @if($tdl > 0)

@@ -2,36 +2,16 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header"><h1>General & Administrative Division</h1></div>
+	<div class="card-header">Create Task</div>
 	<div class="card-body">
 		@include('layouts.info')
 		@include('layouts.errorform')
 
-		<ul class="nav nav-tabs">
-<?php
-// foreach( App\Model\Division::find(1)->hasmanydepartment()->whereNotIn('id', [22, 23, 24])->get() as $key)
-?>
-@foreach( App\Model\Division::find(1)->hasmanydepartment()->get() as $key)
-			<li class="nav-item">
-				<a class="nav-link" href="{{ route("$key->route.index") }}">{{ $key->department }}</a>
-			</li>
-@endforeach
-		</ul>
-		<ul class="nav nav-tabs">
-			<li class="nav-item">
-				<a class="nav-link active" href="{!! route('todoSchedule.index') !!}">To Do Task</a>
-			</li>
-		</ul>
-		<div class="card">
-			<div class="card-header">
-				Create Task
-			</div>
-			<div class="card-body">
+
 {!! Form::open(['route' => ['todoSchedule.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true, 'files' => true]) !!}
 @include('generalAndAdministrative.admin.todolist._create')
 {!! Form::close() !!}
-			</div>
-		</div>
+
 	</div>
 </div>
 @endsection

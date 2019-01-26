@@ -287,11 +287,7 @@ Route::resources([
 	'leaveNRL' => 'Administrative\HumanResource\LeaveEditing\NRL\LeaveNRLController',
 	'leaveList' => 'Administrative\HumanResource\LeaveEditing\LeaveList\LeaveListController',
 ]);
-// admin page
-Route::get('/admindivision/index', [
-	'as' => 'admindivision.index',
-	'uses' => 'Admin\AdminController@index'
-]);
+
 ############################################################################
 //remote
 Route::post('/staffSearch', [

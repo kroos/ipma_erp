@@ -22,7 +22,7 @@ class ToDoScheduleController extends Controller
 	function __construct()
 	{
 		$this->middleware('auth');
-		$this->middleware('deptaccess');
+		$this->middleware('officeaccess');
 	}
 
 	public function index()

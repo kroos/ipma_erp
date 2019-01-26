@@ -523,52 +523,59 @@ class StaffLeaveController extends Controller
 					]);
 				}
 			}
-
+// \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 			if ( $request->leave_id == 7 ) { // ML leave (maternity) check ml for that particular year
 				$mlbal = $period->count() - $almc->maternity_leave_balance;
-				// insert into staff_leaves table
-				$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
-					'leave_no' => $leave_no,
-					'leave_id' => $request->leave_id,
-					'half_day' => $request->leave_type,
-					'reason' => $request->reason,
-					'date_time_start' => $date_time_start,
-					'date_time_end' => $date_time_end,
-					'period' => $period->count(),
-					'document' => $image,
-					'active' => 1,
-				]);
 
-				// update at StaffAnnualMCLeave for al balance
-				$updal = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->updateOrCreate(
-						// where part
-						['year' => $dt->year],
-						// insert or update parameter
-						['maternity_leave_balance' => $mlbal]
-				);
+				if ($mlbal == 0) {
+					// insert into staff_leaves table
+					$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
+						'leave_no' => $leave_no,
+						'leave_id' => $request->leave_id,
+						'half_day' => $request->leave_type,
+						'reason' => $request->reason,
+						'date_time_start' => $date_time_start,
+						'date_time_end' => $date_time_end,
+						'period' => $period->count(),
+						'document' => $image,
+						'active' => 1,
+					]);
 
-				// insert backup if there is any
-				if($request->staff_id) {
-					$takeLeave->hasonestaffleavebackup()->create(
-						['staff_id' => $request->staff_id]
+					// update at StaffAnnualMCLeave for al balance
+					$updal = \Auth::user()->belongtostaff->hasmanystaffannualmcleave()->updateOrCreate(
+							// where part
+							['year' => $dt->year],
+							// insert or update parameter
+							['maternity_leave_balance' => $mlbal]
 					);
-				}
 
-				// insert data for HOD if there is any..
-				if(!empty($HOD)) {
-					$takeLeave->hasmanystaffapproval()->create([
-						'staff_id' => $HOD,
-					]);
-				}
-				// insert hr approve
-				if( !empty($hret) ) {
-					$takeLeave->hasmanystaffapproval()->create([
-						'staff_id' => $hret,
-						'hr' => 1,
-					]);
+					// insert backup if there is any
+					if($request->staff_id) {
+						$takeLeave->hasonestaffleavebackup()->create(
+							['staff_id' => $request->staff_id]
+						);
+					}
+
+					// insert data for HOD if there is any..
+					if(!empty($HOD)) {
+						$takeLeave->hasmanystaffapproval()->create([
+							'staff_id' => $HOD,
+						]);
+					}
+					// insert hr approve
+					if( !empty($hret) ) {
+						$takeLeave->hasmanystaffapproval()->create([
+							'staff_id' => $hret,
+							'hr' => 1,
+						]);
+					}
+				} else {
+					Session::flash('flash_message', 'Sorry, we cant process your leave. You have taken your Maternity Leave this year.' );
+					return redirect()->route('staffLeave.index');
 				}
 			}
 
+// \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 			if ( $request->leave_id == 8 ) { // EL leave = cari al dulu kalau lebih 3 hari, reject
 
 				// check al for that particular year

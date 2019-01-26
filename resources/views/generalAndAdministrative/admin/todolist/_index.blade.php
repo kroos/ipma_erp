@@ -23,7 +23,7 @@ use Carbon\Carbon;
 		</tr>
 	</thead>
 	<tbody>
-@foreach(ToDoSchedule::orderBy('category_id', 'ASC')->get() as $tds)
+@foreach( \Auth::user()->belongtostaff->hasmanytaskcreator()->orderBy('category_id', 'ASC')->get() as $tds )
 <?php
 // Carbon::parse($tds->dateline)->format('jS F')
 switch ($tds->category_id) {
@@ -109,7 +109,8 @@ switch ($tds->category_id) {
 		</tr>
 	</thead>
 	<tbody>
-@foreach( ToDoList::whereNotNull('remarks')->whereNull('completed')->get() as $y )
+@foreach(\Auth::user()->belongtostaff->hasmanytaskcreator()->get() as $tds)
+@foreach( $tds->hasmanytask()->whereNotNull('description')->whereNull('completed')->get() as $y )
 		<tr class="{!! ($y->belongtoschedule->priority_id == 1)?'table-danger':(($y->belongtoschedule->priority_id == 2)?'table-warning':'table-info') !!}">
 			<td>{!! $y->belongtoschedule->id !!}</td>
 			<td>{!! $y->belongtoschedule->belongtocategory->category !!}</td>
@@ -119,10 +120,11 @@ switch ($tds->category_id) {
 			<td>{!! Carbon::parse($y->reminder)->format('D, j F Y') !!}</td>
 			<td>{!! $y->belongtoschedule->belongtopriority->priority !!}</td>
 			<td>{!! (!is_null($y->completed))?'Accomplished':'Incomplete' !!}</td>
-			<td>{!! $y->remarks !!}</td>
+			<td>{!! $y->description !!}</td>
 			<td>{{ $y->belongtodoers->name }}</td>
 			<td>{!! Carbon::parse($y->updated_at)->format('D, j M Y') !!}</td>
 		</tr>
+@endforeach
 @endforeach
 	</tbody>
 </table>
@@ -150,7 +152,8 @@ switch ($tds->category_id) {
 		</tr>
 	</thead>
 	<tbody>
-@foreach( ToDoList::whereNotNull('completed')->get() as $y )
+@foreach(\Auth::user()->belongtostaff->hasmanytaskcreator()->get() as $tds)
+@foreach( $tds->hasmanytask()->whereNotNull('completed')->get() as $y )
 		<tr class="{!! ($y->belongtoschedule->priority_id == 1)?'table-danger':(($y->belongtoschedule->priority_id == 2)?'table-warning':'table-info') !!}">
 			<td>{!! $y->belongtoschedule->id !!}</td>
 			<td>{!! $y->belongtoschedule->belongtocategory->category !!}</td>
@@ -160,10 +163,11 @@ switch ($tds->category_id) {
 			<td>{!! Carbon::parse($y->reminder)->format('D, j F Y') !!}</td>
 			<td>{!! $y->belongtoschedule->belongtopriority->priority !!}</td>
 			<td>{!! (!is_null($y->completed))?'Accomplished':'Incomplete' !!}</td>
-			<td>{!! $y->remarks !!}</td>
+			<td>{!! $y->description !!}</td>
 			<td>{{ $y->belongtodoers->name }}</td>
 			<td>{!! Carbon::parse($y->updated_at)->format('D, j M Y') !!}</td>
 		</tr>
+@endforeach
 @endforeach
 	</tbody>
 </table>

@@ -57,7 +57,7 @@ class ToDoListController extends Controller
 	public function updatetask(ToDoListUpdateByUserRequest $request, ToDoList $todoList)
 	{
 		var_dump($request->all());
-		$todoList->update($request->only(['description', 'completed']));
+		$todoList->update( array_add($request->only(['description', 'completed']), 'updated_by', \Auth::user()->belongtostaff->id) );
 		Session::flash('flash_message', 'Data successfully stored!');
 		return redirect( route('todoList.index') );
 	}

@@ -2,29 +2,14 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header"><h1>General & Administrative Division</h1></div>
+	<div class="card-header"><h1>Task Scheduler</h1></div>
 	<div class="card-body">
 		@include('layouts.info')
 		@include('layouts.errorform')
 
-		<ul class="nav nav-tabs">
-<?php
-// foreach( App\Model\Division::find(1)->hasmanydepartment()->whereNotIn('id', [22, 23, 24])->get() as $key)
-?>
-@foreach( App\Model\Division::find(1)->hasmanydepartment()->get() as $key)
-			<li class="nav-item">
-				<a class="nav-link" href="{{ route("$key->route.index") }}">{{ $key->department }}</a>
-			</li>
-@endforeach
-		</ul>
-		<ul class="nav nav-tabs">
-			<li class="nav-item">
-				<a class="nav-link active" href="{!! route('todoSchedule.index') !!}">To Do Task</a>
-			</li>
-		</ul>
 		<div class="card">
 			<div class="card-header">
-				To Do Schedule
+				Task Scheduler
 				<a class="btn btn-primary float-right" href="{!! route('todoSchedule.create') !!}">Create Task</a>
 			</div>
 			<div class="card-body">
