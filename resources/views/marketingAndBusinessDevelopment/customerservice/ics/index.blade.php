@@ -268,7 +268,7 @@ function SwalInactiveSR(sRinact){
 		preConfirm: function() {
 			return new Promise(function(resolve) {
 				$.ajax({
-					url: '{{ url('serviceReport') }}' + '/' + sRinact + '/updateApproveSR',
+					url: '{{ url('serviceReport') }}' + '/' + sRinact + '/updateDeactivate',
 					type: 'PATCH',
 					data: {
 							_token : $('meta[name=csrf-token]').attr('content'),

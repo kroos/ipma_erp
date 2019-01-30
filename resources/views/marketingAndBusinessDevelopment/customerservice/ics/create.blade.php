@@ -48,9 +48,9 @@
 @section('js')
 /////////////////////////////////////////////////////////////////////////////////////////
 // ucwords
-// $("#compby, #compl, #rem").keyup(function() {
-// 	tch(this);
-// });
+$("#compby, #compl, #rem").keyup(function() {
+	uch(this);
+});
 
 /////////////////////////////////////////////////////////////////////////////////////////
 $(document).on('change', '#cust', function () {
@@ -255,9 +255,9 @@ $('#form').bootstrapValidator({
 @for ($u=1; $u < 10; $u++)
 		'srpn[{{ $u }}][phone_number]': {
 			validators: {
-				// integer: {
-				// 	message: 'The value is not an integer. '
-				// }
+				digit: {
+					message: 'The value is not a digits. '
+				}
 			}
 		},
 		'sr[{{ $u }}][attended_by]': {

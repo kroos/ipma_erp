@@ -138,7 +138,7 @@ $staff = Staff::where('active', 1)->get();
 
 							<div class="col-sm-11">
 								<div class="form-group {{ $errors->has('srp.*.phone_number') ? 'has-error' : '' }}">
-									<input type="text" name="srp[1][phone_number]" id="" class="form-control" placeholder="Attendees Phone Number">
+									<input type="text" name="srpn[1][phone_number]" id="" class="form-control" placeholder="Attendees Phone Number">
 								</div>
 							</div>
 

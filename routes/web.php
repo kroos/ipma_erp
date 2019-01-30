@@ -220,6 +220,12 @@ Route::patch('/serviceReport/{serviceReport}/checkSR', [
 	'uses' => 'Sales\CustomerService\ServiceReportController@updatecheckbySR'
 ]);
 
+// update deactivate SR service report
+Route::patch('/serviceReport/{serviceReport}/updateDeactivate', [
+	'as' => 'serviceReport.updateDeactivate',
+	'uses' => 'Sales\CustomerService\ServiceReportController@updateDeactivate'
+]);
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 ## To do list
 // toggle task schedule

@@ -66,8 +66,8 @@ class ServiceReportController extends Controller
 		}
 
 		// attendees phone
-		if ($request->has('srp')) {
-			foreach( $request->srp as $key => $val ) {
+		if ($request->has('srpn')) {
+			foreach( $request->srpn as $key => $val ) {
 				$sr->hasmanyattendeesphone()->create([
 					'phone_number' => $val['phone_number']
 				]);
@@ -403,6 +403,15 @@ class ServiceReportController extends Controller
 		$serviceReport->update(['checked_by' => \Auth::user()->belongtostaff->id, 'checked_date' => today()]);
 		return response()->json([
 			'message' => 'Service Report Checked',
+			'status' => 'success'
+		]);
+	}
+
+	public function updateDeactivate(Request $request, ICSServiceReport $serviceReport)
+	{
+		$serviceReport->update(['active' => 0]);
+		return response()->json([
+			'message' => 'Service Report Deactivate',
 			'status' => 'success'
 		]);
 	}
