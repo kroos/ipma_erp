@@ -116,8 +116,7 @@ $y = $z->hasmanylogin()->where('active', 0)->get();
 ?>
 				<tr>
 					<td>
-						<table class="table table-hover table-sm" style="font-size:12px">
-							<tbody>
+
 @foreach($y as $x)
 <?php
 if (!is_null($x)) {
@@ -126,14 +125,8 @@ if (!is_null($x)) {
 	$user1 = NULL;
 }
 ?>
-								<tr>
-									<td>
-										{{ $user1 }}
-									</td>
-								</tr>
+						{{ $user1 }}<br />
 @endforeach
-							</tbody>
-						</table>
 					</td>
 <?php
 if (!is_null($z->belongtolocation)) {

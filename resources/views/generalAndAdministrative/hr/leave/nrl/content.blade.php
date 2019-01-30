@@ -84,8 +84,8 @@ if( $jan != 1 ) {
 							<td>{!! $rnl->leave_utilize !!}</td>
 							<td>{!! $rnl->leave_balance !!}</td>
 							<td>
-								<a href="{{ route('staffLeaveReplacement.edit', $rnl->id) }}" title="Edit" class="btn btn-primary"><i class="far fa-edit"></i></a>
-								<button title="Delete" class="btn btn-danger delete_nrl" id="delete_nrl_{!! $rnl->id !!}" data-id="{!! $rnl->id !!}"><i class="fas fa-trash" aria-hidden="true"></i></button>
+								<a href="{{ route('staffLeaveReplacement.edit', $rnl->id) }}" title="Edit" class=""><i class="far fa-edit"></i></a>
+								<span title="Delete" class="text-danger delete_nrl" id="delete_nrl_{!! $rnl->id !!}" data-id="{!! $rnl->id !!}"><i class="fas fa-trash" aria-hidden="true"></i></span>
 							</td>
 						</tr>
 				@endforeach

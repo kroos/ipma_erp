@@ -49,7 +49,7 @@ $yhc = HolidayCalendar::groupBy('yaer')->selectRaw('YEAR(date_start) as yaer')->
 	<div class="card">
 		<div class="card-header">Working Hours</div>
 		<div class="card-body table-responsive">
-			<table class="table table-hover" style="font-size:12px">
+			<table class="table table-hover table-sm" style="font-size:12px">
 @foreach($yp as $tp)
 				<thead>
 					<tr>
@@ -78,7 +78,7 @@ $yhc = HolidayCalendar::groupBy('yaer')->selectRaw('YEAR(date_start) as yaer')->
 						<td>{{ Carbon::parse($t->effective_date_start)->format('D, j M Y') }}</td>
 						<td>{{ Carbon::parse($t->effective_date_end)->format('D, j M Y') }}</td>
 						<td>{{ $t->remarks }}</td>
-						<td> <a class="btn btn-primary" href="{{ route('workingHour.edit', $t->id) }}"><i class="far fa-edit"></i></a> </td>
+						<td> <a class="" href="{{ route('workingHour.edit', $t->id) }}"><i class="far fa-edit"></i></a> </td>
 					</tr>
 @endforeach
 				</tbody>
@@ -109,7 +109,7 @@ $yhc = HolidayCalendar::groupBy('yaer')->selectRaw('YEAR(date_start) as yaer')->
 						<td>{{ Carbon::parse($t->effective_date_start)->format('D, j M Y') }}</td>
 						<td>{{ Carbon::parse($t->effective_date_end)->format('D, j M Y') }}</td>
 						<td>{{ $t->remarks }}</td>
-						<td> <a class="btn btn-primary" href="{{ route('workingHour.edit', $t->id) }}"><i class="far fa-edit"></i></a> </td>
+						<td> <a class="" href="{{ route('workingHour.edit', $t->id) }}"><i class="far fa-edit"></i></a> </td>
 					</tr>
 @endforeach
 				</tbody>
@@ -124,7 +124,7 @@ $yhc = HolidayCalendar::groupBy('yaer')->selectRaw('YEAR(date_start) as yaer')->
 		<div class="card">
 			<div class="card-header">Public Holiday For {{ config('app.name') }}</div>
 			<div class="card-body table-responsive">
-				<table class="table table-hover" style="font-size:12px">
+				<table class="table table-hover table-sm" style="font-size:12px">
 @foreach($yhc as $hi)
 @if($hi->yaer >= date('Y'))
 					<thead>
@@ -151,8 +151,8 @@ $kj = HolidayCalendar::whereYear('date_start', $hi->yaer)->orderBy('date_start')
 							<td>{{ ucwords(strtolower($ui->holiday)) }}</td>
 							<td>{{ \Carbon\CarbonPeriod::create($ui->date_start, '1 day', $ui->date_end)->count().__(' Day/s') }}</td>
 							<td>
-								<a class="btn btn-primary" href="{{ route('holidayCalendar.edit', $ui->id) }}"><i class="far fa-edit"></i></a>
-								<button class="btn btn-danger delete_button" href="{{ route('holidayCalendar.destroy', $ui->id) }}" id="delete_product_{{ $ui->id }}" data-id="{{ $ui->id }}"><i class="far fa-trash-alt"></i></button>
+								<a class="" href="{{ route('holidayCalendar.edit', $ui->id) }}"><i class="far fa-edit"></i></a>
+								<span class="text-danger delete_button" href="{{ route('holidayCalendar.destroy', $ui->id) }}" id="delete_product_{{ $ui->id }}" data-id="{{ $ui->id }}"><i class="far fa-trash-alt"></i></span>
 							</td>
 						</tr>
 @endforeach

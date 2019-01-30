@@ -160,7 +160,7 @@ class ServiceReportController extends Controller
 		// print_r($request->all());
 		// echo '<br />';
 
-		$serviceReport->update( array_add($request->only(['date', 'charge_id', 'customer_id', 'proceed_id', 'remarks', 'inform_by']), 'updated_by', \Auth::user()->belongtostaff->id) );
+		$serviceReport->update( array_add($request->only(['date', 'charge_id', 'customer_id', 'proceed_id', 'remarks', 'inform_by', 'category_id', 'status_id']), 'updated_by', \Auth::user()->belongtostaff->id) );
 
 		// serial
 		if ($request->has('srs')) {

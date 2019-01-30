@@ -16,10 +16,9 @@ Route::get('/', [
 		'uses' => 'MainController@index',
 	]);
 
-// Route::get('/test', [
-// 		'as' => 'main.test',
-// 		'uses' => 'MainController@test',
-// 	]);
+Route::get('/phpinfo', function() {
+	echo phpinfo();
+});
 
 // EMAILER
 Route::get('/mailer', [

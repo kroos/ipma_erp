@@ -69,8 +69,8 @@ $s2 = StaffAnnualMCLeave::where('year', $n->copy()->addYear()->year)->get();
 					<td>{{ ($k->belomgtostaff->gender_id == 1 )?NULL:$k->maternity_leave_balance }}</td>
 					<td>{{ $k->remarks }}</td>
 					<td>
-						<a href="{{ route('staffAnnualMCLeave.edit', $k->id) }}" title="Edit" class="btn btn-primary"><i class="far fa-edit"></i></a>
-						<button title="Delete" class="btn btn-danger delete_almcml" id="delete_almcml_{!! $k->id !!}" data-id="{!! $k->id !!}"><i class="fas fa-trash" aria-hidden="true"></i></button>
+						<a href="{{ route('staffAnnualMCLeave.edit', $k->id) }}" title="Edit" class=""><i class="far fa-edit"></i></a>
+						<span title="Delete" class="text-danger delete_almcml" id="delete_almcml_{!! $k->id !!}" data-id="{!! $k->id !!}"><i class="fas fa-trash" aria-hidden="true"></i></span>
 					</td>
 				</tr>
 @endif
