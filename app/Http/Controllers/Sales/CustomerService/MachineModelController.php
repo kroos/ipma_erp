@@ -35,21 +35,26 @@ class MachineModelController extends Controller
 		return redirect( route('serviceReport.edit', $request->id) );
 	}
 
-	public function show(ICSServiceReport $serviceReport)
+	public function show(ICSMachineModel $machine_model)
 	{
 	}
 
-	public function edit(ICSServiceReport $serviceReport)
+	public function edit(ICSMachineModel $machine_model)
 	{
+		return view('marketingAndBusinessDevelopment.customerservice.machine_model.edit', compact(['machine_model']));
 	}
 
-	public function update(Request $request, ICSServiceReport $serviceReport)
+	public function update(Request $request, ICSMachineModel $machine_model)
 	{
 
 	}
 
-	public function destroy(ICSServiceReport $serviceReport)
+	public function destroy(ICSMachineModel $machine_model)
 	{
-
+		$machine_model->destroy($machine_model->id);
+		return response()->json([
+			'message' => 'Data deleted',
+			'status' => 'success'
+		]);
 	}
 }

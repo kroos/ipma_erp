@@ -78,38 +78,38 @@ use Carbon\CarbonPeriod;
 
 	// customer
 	$pdf->SetXY(23, 53);
-	$pdf->Cell(100, 5, $sr->belongtocustomer->customer, 0, 1, 'L');
-	$pdf->SetX(2);
-	$pdf->Cell(100, 5, $sr->belongtocustomer->address1, 0, 1, 'L');
-	$pdf->SetX(2);
-	$pdf->Cell(100, 5, $sr->belongtocustomer->address2, 0, 1, 'L');
-	$pdf->SetX(2);
-	$pdf->Cell(100, 5, $sr->belongtocustomer->address3, 0, 1, 'L');
-	$pdf->SetX(2);
-	$pdf->Cell(100, 5, $sr->belongtocustomer->address4, 0, 1, 'L');
+	$pdf->Cell(100, 5, strtoupper(strtolower($sr->belongtocustomer->customer)), 0, 1, 'L');
+	$pdf->SetX(23);
+	$pdf->Cell(100, 5, strtoupper(strtolower($sr->belongtocustomer->address1)), 0, 1, 'L');
+	$pdf->SetX(23);
+	$pdf->Cell(100, 5, strtoupper(strtolower($sr->belongtocustomer->address2)), 0, 1, 'L');
+	$pdf->SetX(23);
+	$pdf->Cell(100, 5, strtoupper(strtolower($sr->belongtocustomer->address3)), 0, 1, 'L');
+	$pdf->SetX(23);
+	$pdf->Cell(100, 5, strtoupper(strtolower($sr->belongtocustomer->address4)), 0, 1, 'L');
 
 	// attn to:
 	$pdf->SetXY(15, 80);
-	$pdf->Cell(44, 5, $sr->belongtocustomer->pc, 0, 1, 'L');
+	$pdf->Cell(44, 5, strtoupper(strtolower($sr->belongtocustomer->pc)), 0, 1, 'L');
 	// $pdf->Cell(44, 5, 'Test PC', 0, 1, 'L');
 
 	// phone
 	$pdf->SetX(17);
 	$pdf->Cell(44, 5, $sr->belongtocustomer->phone, 0, 1, 'L');
 
-	$pdf->SetXY(110, 65);
+	$pdf->SetXY(110, 55);
 	$i = 1;
 	foreach ($sr->hasmanyattendees()->get() as $key) {
-		$pdf->Cell(44, 5,$i++.') '. $key->belongtostaff->name, 0, 1, 'L');
+		$pdf->Cell(44, 5,$i++.') '. strtoupper(strtolower($key->belongtostaff->name)), 0, 1, 'L');
 		$pdf->SetX(110);
 	}
 
 	$pdf->SetXY(2, 96);
-	$pdf->MultiCell(80, 5, $sr->hasmanycomplaint()->first()->complaint, 0, 'L');
+	$pdf->MultiCell(80, 5, strtoupper(strtolower($sr->hasmanycomplaint()->first()->complaint)), 0, 'L');
 
 	// $pdf->SetXY(20, 103);
 	$pdf->SetX(2);
-	$pdf->MultiCell(80, 5, $sr->hasmanycomplaint()->first()->complaint_by, 0, 'L');
+	$pdf->MultiCell(80, 5, 'REPORT BY : '.strtoupper(strtolower($sr->hasmanycomplaint()->first()->complaint_by)), 0, 'L');
 
 
 	// for($i=1;$i<=300;$i++)

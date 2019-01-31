@@ -7,8 +7,8 @@
 		@include('layouts.info')
 		@include('layouts.errorform')
 
-{!! Form::open(['route' => ['machine_model.store', 'id='.$_GET['id']], 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) !!}
-	@include('marketingAndBusinessDevelopment.customerservice.machine_model._create')
+{{ Form::model( $customer, ['route' => ['customer.update', $customer->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
+	@include('customer._create')
 {{ Form::close() }}
 		
 	</div>
@@ -25,15 +25,14 @@ $(document).on('keyup', 'input', function () {
 /////////////////////////////////////////////////////////////////////////////////////////
 // table
 // $.fn.dataTable.moment( 'ddd, D MMM YYYY' );
-$("#mmodel").DataTable({
+$("#cust11").DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	"order": [[1, "asc" ]],	// sorting the 2nd column ascending
+	"order": [[0, "asc" ]],	// sorting the 2nd column ascending
 	// responsive: true
 });
 
-/////////////////////////////////////////////////////////////////////////////////////////
 // user disable
-$(document).on('click', '.delete_model', function(e){
+$(document).on('click', '.delete_customer', function(e){
 	
 	var productId = $(this).data('id');
 	SwalDelete(productId);
@@ -55,7 +54,7 @@ function SwalDelete(productId){
 			return new Promise(function(resolve) {
 				$.ajax({
 					type: 'DELETE',
-					url: '{{ url('machine_model') }}' + '/' + productId,
+					url: '{{ url('customer') }}' + '/' + productId,
 					data: {
 							_token : $('meta[name=csrf-token]').attr('content'),
 							id: productId,
@@ -93,10 +92,48 @@ $('#form').bootstrapValidator({
 		validating: ''
 	},
 	fields: {
-		model: {
+		customer: {
 			validators: {
 				notEmpty: {
-					message: 'Machne model name is required. '
+					message: 'Customer name is required. '
+				},
+			}
+		},
+		pc: {
+			validators: {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+			}
+		},
+		address1: {
+			validators: {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+			}
+		},
+		address2: {
+			validators: {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+			}
+		},
+		phone: {
+			validators: {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
+				digits: {
+					message: 'Only numbers. '
+				},
+			}
+		},
+		fax: {
+			validators: {
+				digits: {
+					message: 'Only numbers. '
 				},
 			}
 		},

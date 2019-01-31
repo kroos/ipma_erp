@@ -7,7 +7,7 @@
 		@include('layouts.info')
 		@include('layouts.errorform')
 
-{!! Form::open(['route' => ['machine_model.store', 'id='.$_GET['id']], 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) !!}
+{{ Form::model( $machine_model, ['route' => ['machine_model.update', $machine_model->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
 	@include('marketingAndBusinessDevelopment.customerservice.machine_model._create')
 {{ Form::close() }}
 		

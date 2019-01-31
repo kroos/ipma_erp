@@ -252,14 +252,10 @@ if ( $bmonth != 1 ) {
 		<?php
 		$di = \Auth::user()->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first();
 		?>
-		@if( $di->group_id == 1 || $di->id == 29 )
 		@if(!is_null($sr->approved_by))
 						{{ $sr->belongtoapprovedby->name }}
 		@else
 						<div class="approval text-primary" data-id="{!! $sr->id !!}"><i class="far fa-check-square"></i></div>
-		@endif
-		@else
-						Only Director or HOD can approve
 		@endif
 					</td>
 					<td>

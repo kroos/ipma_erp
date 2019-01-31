@@ -40,25 +40,36 @@ class CustomerController extends Controller
 		}
 	}
 
-	public function show(Department $department)
+	public function show(Customer $customer)
 	{
-	//
+
 	}
 
-	public function edit(Department $department)
+	public function edit(Customer $customer)
 	{
-	//
+		return view('customer.edit', compact(['customer']));
 	}
 
-	public function update(Request $request, Department $department)
+	public function update(Request $request, Customer $customer)
 	{
-	//
+		Customer::where('id', $customer->id)->update($request->only(['customer', 'pc', 'address1', 'address2', 'address3', 'address4', 'phone', 'fax']));
+		Session::flash('flash_message', 'Data successfully save!');
+
+		if($request->id == 0) {
+			return redirect( route('serviceReport.create') );
+		} elseif ($request->kiv == 00) {
+			return redirect( route('serviceReport.editkiv', $request->id) );
+		} else {
+			return redirect( route('serviceReport.edit', $request->id) );
+		}
 	}
 
-	public function destroy(Department $department)
+	public function destroy(Customer $customer)
 	{
-	//
+		$customer->destroy($customer->id);
+		return response()->json([
+			'message' => 'Data deleted',
+			'status' => 'success'
+		]);
 	}
 }
-		// Session::flash('flash_message', 'Data successfully update!');
-		// return redirect( route('tcms.index') );
