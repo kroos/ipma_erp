@@ -204,7 +204,7 @@ $iii = 1;
 
 							<div class="col-sm-11">
 								<div class="form-group {{ $errors->has('srpn.*.phone_number') ? 'has-error' : '' }}">
-									<input type="text" name="srpn[1][phone_number]" id="phoen" value="{{ $sra->phone_number }}" class="form-control" placeholder="Attendees Phone Number">
+									<input type="text" name="srpn[1][phone_number]" id="phoen_1" value="{{ $sra->phone_number }}" class="form-control" placeholder="Attendees Phone Number">
 								</div>
 							</div>
 
@@ -230,9 +230,9 @@ $iii = 1;
 			<div class="card-body">
 
 				<div class="form-group row {{ $errors->has('model')?'has-error':'' }}">
-					{{ Form::label( 'model', 'Model :', ['class' => 'col-sm-3 col-form-label'] ) }}
+					{{ Form::label( 'model_mavhine', 'Model :', ['class' => 'col-sm-3 col-form-label'] ) }}
 					<div class="col-sm-9">
-						{!! Form::text('model', @$value, ['class' => 'form-control', 'id' => 'model', 'placeholder' => 'Model', 'autocomplete' => 'off']) !!}
+						{!! Form::text('model_mavhine', @$value, ['class' => 'form-control', 'id' => 'model_mavhine', 'placeholder' => 'Model', 'autocomplete' => 'off']) !!}
 					</div>
 				</div>
 

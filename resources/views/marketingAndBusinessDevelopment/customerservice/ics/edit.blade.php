@@ -59,6 +59,20 @@ $( function() {
 		} ?>
 	];
 
+	$("#model_mavhine").autocomplete({
+		source: availableTags
+	});
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// autocomplete
+$( function() {
+	var availableTags = [
+		<?php foreach (\App\Model\ICSMachineModel::all() as $key) {
+			echo '"'.$key->model.'" '.',';
+		} ?>
+	];
+
 	$("#model").autocomplete({
 		source: availableTags
 	});
@@ -795,7 +809,7 @@ $(addbtnjobn).click(function(){
 			useCurrent: false,
 		});
 		
-		$('#1job_perform_' + xj + ', #1ds_1_' + xj + ', #1de_1_' + xj + ', #1ds_2_' + xj + ', #1de_2_' + xj ).keyup(function() {
+		$('#1job_perform_' + xj + ', #ds_1_' + xj + ', #de_1_' + xj + ', #ds_2_' + xj + ', #de_2_' + xj ).keyup(function() {
 			uch(this);
 		});
 		
