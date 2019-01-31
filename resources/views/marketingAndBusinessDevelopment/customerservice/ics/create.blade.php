@@ -53,6 +53,20 @@ $("#compby, #compl, #rem").keyup(function() {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+// autocomplete
+$( function() {
+	var availableTags = [
+		<?php foreach (\App\Model\ICSMachineModel::all() as $key) {
+			echo '"'.$key->model.'" '.',';
+		} ?>
+	];
+
+	$("#model").autocomplete({
+		source: availableTags
+	});
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
 $(document).on('change', '#cust', function () {
 	selectedOption = $('option:selected', this);
 	var client = $('#attn');
@@ -255,9 +269,9 @@ $('#form').bootstrapValidator({
 @for ($u=1; $u < 10; $u++)
 		'srpn[{{ $u }}][phone_number]': {
 			validators: {
-				digit: {
+				digits: {
 					message: 'The value is not a digits. '
-				}
+				},
 			}
 		},
 		'sr[{{ $u }}][attended_by]': {

@@ -131,17 +131,18 @@ $iii = 1;
 
 
 				<div class="container-fluid phoneattendees_wrap">
+<?php $b = 1; ?>
 @foreach( $serviceReport->hasmanyattendeesphone()->get() as $sra )
 					<div class="rowphoneattendees">
 						<div class="form-row col-sm-12">
 
 							<div class="col-sm-1 text-danger">
-									<i class="fas fa-trash remove_phoneattendees" aria-hidden="true" id="button_delete_"></i>
+									<i class="fas fa-trash remove_phoneattendees" aria-hidden="true" id="button_delete_1"></i>
 							</div>
 
 							<div class="col-sm-11">
 								<div class="form-group {{ $errors->has('srp.*.phone_number') ? 'has-error' : '' }}">
-									<input type="text" name="srp[1][phone_number]" id="phoen" value="{{ $sra->phone_number }}" class="form-control" placeholder="Attendees Phone Number">
+									<input type="text" name="srp[{{ $b++ }}][phone_number]" id="phoen_1" value="{{ $sra->phone_number }}" class="form-control" placeholder="Attendees Phone Number">
 								</div>
 							</div>
 
@@ -167,6 +168,13 @@ $iii = 1;
 		<div class="card">
 			<div class="div card-header">Nature Of Complaints</div>
 			<div class="card-body">
+
+				<div class="form-group row {{ $errors->has('model')?'has-error':'' }}">
+					{{ Form::label( 'model', 'Model :', ['class' => 'col-sm-3 col-form-label'] ) }}
+					<div class="col-sm-9">
+						{!! Form::text('model', @$value, ['class' => 'form-control', 'id' => 'model', 'placeholder' => 'Model', 'autocomplete' => 'off']) !!}
+					</div>
+				</div>
 
 				<div class="form-group row {{ $errors->has('complaints')?'has-error':'' }}">
 					{{ Form::label( 'compl', 'Complaints :', ['class' => 'col-sm-3 col-form-label'] ) }}

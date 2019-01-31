@@ -49,7 +49,21 @@
 /////////////////////////////////////////////////////////////////////////////////////////
 //ucwords
 $("#compby1, #compl1, #rem1").keyup(function() {
-	tch(this);
+	uch(this);
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// autocomplete
+$( function() {
+	var availableTags = [
+		<?php foreach (\App\Model\ICSMachineModel::all() as $key) {
+			echo '"'.$key->model.'" '.',';
+		} ?>
+	];
+
+	$("#model").autocomplete({
+		source: availableTags
+	});
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -192,7 +206,7 @@ $(addBtn).click(function(){
 		); //add input box
 
 		//bootstrap validate
-		$('#form').bootstrapValidator('addField',	$('.rowphoneattendees')	.find('[name="srp[' + ix + '][phone_number]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowphoneattendees') .find('[name="srp[' + ix + '][phone_number]"]'));
 	}
 });
 
@@ -230,8 +244,8 @@ $('#form').bootstrapValidator({
 		},
 		serial: {
 			validators : {
-				integer: {
-					message: 'The value is not an integer. '
+				digits: {
+					message: 'The value is not a digits. '
 				},
 			}
 		},
@@ -260,9 +274,9 @@ $('#form').bootstrapValidator({
 
 		'srp[{{ $u }}][phone_number]': {
 			validators: {
-				// notEmpty: {
-				// 	message: 'Please choose. '
-				// },
+				digits: {
+					message: 'The value is not a digits. '
+				},
 			}
 		},
 		'sr[{{ $u }}][attended_by]': {

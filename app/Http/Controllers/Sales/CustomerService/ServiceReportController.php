@@ -43,8 +43,8 @@ class ServiceReportController extends Controller
 
 	public function store(Request $request)
 	{
-		print_r($request->all());
-// die();
+		// print_r($request->all());
+
 		$sr = \Auth::user()->belongtostaff->hasmanyservicereport()->create(
 			array_add($request->only(['date', 'charge_id', 'customer_id', 'inform_by', 'remarks']), 'active', 1)
 		);

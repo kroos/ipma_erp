@@ -38,6 +38,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.3.1",
+        "jquery-ui": "^1.12.1",
         "pretty-checkbox": "^3.0.3",
         "tether": "^1.4.4"
     }

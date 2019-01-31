@@ -137,8 +137,8 @@ $staff = Staff::where('active', 1)->get();
 							</div>
 
 							<div class="col-sm-11">
-								<div class="form-group {{ $errors->has('srp.*.phone_number') ? 'has-error' : '' }}">
-									<input type="text" name="srpn[1][phone_number]" id="" class="form-control" placeholder="Attendees Phone Number">
+								<div class="form-group {{ $errors->has('srpn.*.phone_number') ? 'has-error' : '' }}">
+									<input type="text" name="srpn[1][phone_number]" id="phone_attendees_1" class="form-control" placeholder="Attendees Phone Number">
 								</div>
 							</div>
 
@@ -164,6 +164,13 @@ $staff = Staff::where('active', 1)->get();
 		<div class="card">
 			<div class="div card-header">Nature Of Complaints</div>
 			<div class="card-body">
+
+				<div class="form-group row {{ $errors->has('model')?'has-error':'' }}">
+					{{ Form::label( 'model', 'Model :', ['class' => 'col-sm-3 col-form-label'] ) }}
+					<div class="col-sm-9">
+						{!! Form::text('model', @$value, ['class' => 'form-control', 'id' => 'model', 'placeholder' => 'Model', 'autocomplete' => 'off']) !!}
+					</div>
+				</div>
 
 				<div class="form-group row {{ $errors->has('complaints')?'has-error':'' }}">
 					{{ Form::label( 'compl', 'Complaints :', ['class' => 'col-sm-3 col-form-label'] ) }}

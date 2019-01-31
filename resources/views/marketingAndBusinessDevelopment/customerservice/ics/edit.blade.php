@@ -51,6 +51,20 @@ $("#compby1, #compl1, #remarks1").keyup(function() {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+// autocomplete
+$( function() {
+	var availableTags = [
+		<?php foreach (\App\Model\ICSMachineModel::all() as $key) {
+			echo '"'.$key->model.'" '.',';
+		} ?>
+	];
+
+	$("#model").autocomplete({
+		source: availableTags
+	});
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
 $(document).on('change', '#cust', function () {
 	selectedOption = $('option:selected', this);
 	var client = $('#attn');
@@ -366,8 +380,8 @@ $(addBtn).click(function(){
 									'<i class="fas fa-trash remove_phoneattendees" aria-hidden="true" id="button_delete_"></i>' +
 							'</div>' +
 							'<div class="col-sm-11">' +
-								'<div class="form-group {{ $errors->has('srp.*.phone_number') ? 'has-error' : '' }}">' +
-									'<input type="text" name="srp[' + ix + '][phone_number]" id="phone_attendees_' + ix + '" class="form-control" placeholder="Attendees Phone Number">' +
+								'<div class="form-group {{ $errors->has('srpn.*.phone_number') ? 'has-error' : '' }}">' +
+									'<input type="text" name="srpn[' + ix + '][phone_number]" id="phone_attendees_' + ix + '" class="form-control" placeholder="Attendees Phone Number">' +
 								'</div>' +
 							'</div>' +
 						'</div>' +
@@ -2456,7 +2470,7 @@ $('#form').bootstrapValidator({
 				notEmpty: {
 					message: 'This field cannot be empty. '
 				},
-				numeric: {
+				digits: {
 					message: 'Value invalid. '
 				}
 			}
