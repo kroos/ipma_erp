@@ -65,6 +65,12 @@ Route::resources([
 	'staffAvailability' => 'Administrative\HumanResource\StaffManagement\StaffAvailabilityController',
 	'staffDis' => 'Administrative\HumanResource\StaffManagement\StaffDisciplineController',
 
+// setting double date in HR
+	'settingDoubleDate' => 'Administrative\HumanResource\HRSettings\SettingDoubleDateController',
+
+// setting 3 days checking in HR
+	'setting3DaysChecking' => 'Administrative\HumanResource\HRSettings\Setting3DaysCheckingController',
+
 // sales
 	'serviceReport' => 'Sales\CustomerService\ServiceReportController',
 	'srSerial' => 'Sales\CustomerService\ServiceReportSerialController',

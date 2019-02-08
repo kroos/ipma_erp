@@ -46,6 +46,122 @@ $yhc = HolidayCalendar::groupBy('yaer')->selectRaw('YEAR(date_start) as yaer')->
 	<div class="card-header">Human Resource Settings</div>
 	<div class="card-body">
 
+		<div class="card">
+			<div class="card-header">Settings</div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-6">
+						<h5>Double Date Checking</h5>
+@foreach(\App\Model\HRSettingsDoubleDate::all() as $r)
+						<dl class="row">
+							<dt class="col-10">Yes - User will be block from taking a leave within same date<br />No - User can apply a leave within the same date</dt>
+							<dd class="col-2">
+
+								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+									{!! $r->belongtoyesno->label !!}
+								</button>
+								<!-- Modal -->
+{{ Form::model($r, ['route' => ['settingDoubleDate.update', $r->id], 'method' => 'PATCH', 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+								<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+									<div class="modal-dialog modal-dialog-centered" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="exampleModalCenterTitle">Change Double Date Setting</h5>
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												<div class="form-group row {!! $errors->has('double_date_setting') ? ' has-error' : '' !!}">
+													<label for="ddc" class="col-sm-8 col-form-label">Enable Double Date Checking ?</label>
+													<div class="col-sm-4">
+@foreach(\App\Model\YesNoLabel::all() as $t)
+														<div class="pretty p-icon p-curve">
+															<input type="radio" name="double_date_setting" value="{!! $t->value !!}" {!! ($r->double_date_setting == $t->value)?'checked':NULL !!}>
+															<div class="state p-success">
+																<i class="icon mdi mdi-check"></i>
+																<label> {!! $t->label !!}</label>
+															</div>
+														</div>
+@endforeach
+													</div>
+												</div>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+												<button type="submit" class="btn btn-primary">Save Changes</button>
+											</div>
+										</div>
+									</div>
+								</div>
+{!! Form::close() !!}
+
+							</dd>
+						</dl>
+@endforeach
+					</div>
+					<div class="col-6">
+						<h5>3 Days Submit Checking</h5>
+
+@foreach(\App\Model\HRSettings3Days::all() as $r1)
+						<dl class="row">
+							<dt class="col-10">
+								Yes - System will block users upon taking a leave if leave is submitted less than 3 days.
+									<br />
+								No - System will pass users upon taking a leave regardless of days.
+							</dt>
+							<dd class="col-2">
+
+								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter1">
+									{!! $r1->belongtoyesno->label !!}
+								</button>
+								<!-- Modal -->
+{{ Form::model($r1, ['route' => ['setting3DaysChecking.update', $r1->id], 'method' => 'PATCH', 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) }}
+								<div class="modal fade" id="exampleModalCenter1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+									<div class="modal-dialog modal-dialog-centered" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="exampleModalCenterTitle">Change 3 Days Checking Setting</h5>
+												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												<div class="form-group row {!! $errors->has('3_days_checking') ? ' has-error' : '' !!}">
+													<label for="ddc" class="col-sm-8 col-form-label">Enable 3 Days Checking ?</label>
+													<div class="col-sm-4">
+@foreach(\App\Model\YesNoLabel::all() as $t1)
+														<div class="pretty p-icon p-curve">
+															<input type="radio" name="t3_days_checking" value="{!! $t1->value !!}" {!! ($r1->{'t3_days_checking'} == $t1->value)?'checked':NULL !!}>
+															<div class="state p-success">
+																<i class="icon mdi mdi-check"></i>
+																<label> {!! $t1->label !!}</label>
+															</div>
+														</div>
+@endforeach
+													</div>
+												</div>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+												<button type="submit" class="btn btn-primary">Save Changes</button>
+											</div>
+										</div>
+									</div>
+								</div>
+{!! Form::close() !!}
+
+							</dd>
+						</dl>
+@endforeach
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	<br />
+
 	<div class="card">
 		<div class="card-header">Working Hours</div>
 		<div class="card-body table-responsive">

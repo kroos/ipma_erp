@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 
 // load model
 use App\Model\StaffLeave;
+use App\Model\HRSettingsDoubleDate;
+use App\Model\HRSettings3Days;
 
 use Illuminate\Http\Request;
 
@@ -57,6 +59,11 @@ class StaffLeaveController extends Controller
 	*/
 	public function store(StaffLeaveRequest $request)
 	{
+		// echo HRSettingsDoubleDate::first()->double_date_setting.' setting double date<br />';
+		// echo HRSettings3Days::first()->{'t3_days_checking'}.' setting double date<br />';
+		$ddchecking = HRSettingsDoubleDate::first()->double_date_setting;
+		$t3dchecking = HRSettings3Days::first()->{'t3_days_checking'};
+		die();
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		// initialization phase
 
@@ -89,8 +96,10 @@ class StaffLeaveController extends Controller
 			$kik = \Auth::user()->belongtostaff->hasmanystaffleave()->where('active', 1)->whereRaw('? BETWEEN DATE(date_time_start) AND DATE(staff_leaves.date_time_end)', [$key->format('Y-m-d')])->get();
 			if( $kik->count() > 0 ) {
 				// block kalau ada bertindih cuti yg dah sedia ada
-				Session::flash('flash_message', 'Tarikh permohonan cuti ('.\Carbon\Carbon::parse($request->date_time_start)->format('D, j F Y').' hingga '.\Carbon\Carbon::parse($request->date_time_end)->format('D, j F Y').') sudah diisi. Sila ambil tarikh yang lain.');
-				return redirect()->back()->withInput();
+				if($ddchecking == 1 ){			// bypass untuk cuti bertindih
+					Session::flash('flash_message', 'Tarikh permohonan cuti ('.\Carbon\Carbon::parse($request->date_time_start)->format('D, j F Y').' hingga '.\Carbon\Carbon::parse($request->date_time_end)->format('D, j F Y').') sudah diisi. Sila ambil tarikh yang lain.');
+					return redirect()->back()->withInput();
+				}
 			}
 		}
 
