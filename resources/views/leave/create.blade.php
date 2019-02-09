@@ -67,7 +67,7 @@ if (empty($sel)) {	// apa sebab empty? dalam department DAN di location, dia sor
 // block holiday tgk dlm disable date in datetimepicker
 $nodate = \App\Model\HolidayCalendar::orderBy('date_start')->get();
 // block cuti sendiri
-$nodate1 = \Auth::user()->belongtostaff->hasmanystaffleave()->where('active', 1)->orWhere('active', 2)->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
+$nodate1 = \Auth::user()->belongtostaff->hasmanystaffleave()->whereIn('active', [1, 2])->whereRaw( '"'.date('Y').'" BETWEEN YEAR(date_time_start) AND YEAR(date_time_end)' )->get();
 ?>
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $('#leave_id').on('change', function() {
@@ -174,7 +174,9 @@ $('#leave_id').on('change', function() {
 			format:'YYYY-MM-DD',
 			useCurrent: false,
 			daysOfWeekDisabled: [0],
+			@if(\App\Model\HRSettings3Days::first()->t3_days_checking == 1)
 			minDate: moment().add(3, 'days').format('YYYY-MM-DD'),
+			@endif
 			disabledDates: 
 					[
 						<?php
@@ -186,14 +188,17 @@ $('#leave_id').on('change', function() {
 									// $holiday[] = $key->format('Y-m-d');
 								}
 							}
+							if(\App\Model\HRSettingsDoubleDate::first()->double_date_setting == 1) {		// setting for double date
 							// block cuti sendiri
-							foreach ($nodate1 as $key) {
-								$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
-								foreach ($period1 as $key1) {
-									echo 'moment("'.$key1->format('Y-m-d').'"),';
-									// $holiday[] = $key1->format('Y-m-d');
+								foreach ($nodate1 as $key) {
+									$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
+									foreach ($period1 as $key1) {
+										echo 'moment("'.$key1->format('Y-m-d').'"),';
+										// $holiday[] = $key1->format('Y-m-d');
+									}
 								}
 							}
+
 						?>
 					],
 		})
@@ -234,7 +239,9 @@ $('#leave_id').on('change', function() {
 			useCurrent: false,
 			format:'YYYY-MM-DD',
 			daysOfWeekDisabled: [0],
+			@if(\App\Model\HRSettings3Days::first()->t3_days_checking == 1)
 			minDate: moment().add(3, 'days').format('YYYY-MM-DD'),
+			@endif
 			disabledDates:[
 <?php
 // block holiday tgk dlm disable date in datetimepicker
@@ -244,8 +251,9 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
+if(\App\Model\HRSettingsDoubleDate::first()->double_date_setting == 1) {		// setting for double date
 // block cuti sendiri
-foreach ($nodate1 as $key) {
+	foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
 		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
@@ -253,6 +261,7 @@ foreach ($nodate1 as $key) {
 			echo 'moment("'.$key1->format('Y-m-d').'"),';
 		}
 	}
+}
 ?>
 							],
 		})
@@ -413,8 +422,9 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
-// block cuti sendiri
-foreach ($nodate1 as $key) {
+if(\App\Model\HRSettingsDoubleDate::first()->double_date_setting == 1) {		// setting for double date
+	// block cuti sendiri
+	foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
 		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
@@ -422,6 +432,7 @@ foreach ($nodate1 as $key) {
 			echo 'moment("'.$key1->format('Y-m-d').'"),';
 		}
 	}
+}
 ?>
 							],
 		})
@@ -445,8 +456,9 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
-// block cuti sendiri
-foreach ($nodate1 as $key) {
+if(\App\Model\HRSettingsDoubleDate::first()->double_date_setting == 1) {		// setting for double date
+	// block cuti sendiri
+	foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
 		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
@@ -454,6 +466,7 @@ foreach ($nodate1 as $key) {
 			echo 'moment("'.$key1->format('Y-m-d').'"),';
 		}
 	}
+}
 ?>
 							],
 		})
@@ -567,8 +580,9 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
-// block cuti sendiri
-foreach ($nodate1 as $key) {
+if(\App\Model\HRSettingsDoubleDate::first()->double_date_setting == 1) {		// setting for double date
+	// block cuti sendiri
+	foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
 		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
@@ -576,6 +590,7 @@ foreach ($nodate1 as $key) {
 			echo 'moment("'.$key1->format('Y-m-d').'"),';
 		}
 	}
+}
 ?>
 							],
 		})
@@ -625,8 +640,9 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
-// block cuti sendiri
-foreach ($nodate1 as $key) {
+if(\App\Model\HRSettingsDoubleDate::first()->double_date_setting == 1) {		// setting for double date
+	// block cuti sendiri
+	foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
 		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
@@ -634,6 +650,7 @@ foreach ($nodate1 as $key) {
 			echo 'moment("'.$key1->format('Y-m-d').'"),';
 		}
 	}
+}
 ?>
 							],
 		})
@@ -865,8 +882,9 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
-// block cuti sendiri
-foreach ($nodate1 as $key) {
+if(\App\Model\HRSettingsDoubleDate::first()->double_date_setting == 1) {		// setting for double date
+	// block cuti sendiri
+	foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
 		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
@@ -874,6 +892,7 @@ foreach ($nodate1 as $key) {
 			echo 'moment("'.$key1->format('Y-m-d').'"),';
 		}
 	}
+}
 ?>
 							],
 		})
@@ -898,8 +917,9 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
-// block cuti sendiri
-foreach ($nodate1 as $key) {
+if(\App\Model\HRSettingsDoubleDate::first()->double_date_setting == 1) {		// setting for double date
+	// block cuti sendiri
+	foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
 		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
@@ -907,6 +927,7 @@ foreach ($nodate1 as $key) {
 			echo 'moment("'.$key1->format('Y-m-d').'"),';
 		}
 	}
+}
 ?>
 							],
 		})
@@ -1022,8 +1043,9 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
-// block cuti sendiri
-foreach ($nodate1 as $key) {
+if(\App\Model\HRSettingsDoubleDate::first()->double_date_setting == 1) {		// setting for double date
+	// block cuti sendiri
+	foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
 		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
@@ -1031,6 +1053,7 @@ foreach ($nodate1 as $key) {
 			echo 'moment("'.$key1->format('Y-m-d').'"),';
 		}
 	}
+}
 ?>
 							],
 		})
@@ -1108,8 +1131,9 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
-// block cuti sendiri
-foreach ($nodate1 as $key) {
+if(\App\Model\HRSettingsDoubleDate::first()->double_date_setting == 1) {		// setting for double date
+	// block cuti sendiri
+	foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
 		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
@@ -1117,6 +1141,7 @@ foreach ($nodate1 as $key) {
 			echo 'moment("'.$key1->format('Y-m-d').'"),';
 		}
 	}
+}
 ?>
 							],
 		})
@@ -1234,12 +1259,14 @@ foreach ($nodate1 as $key) {
 				'<div class="form-group row {{ $errors->has('date_time_end') ? 'has-error' : '' }}">' +
 					'{{ Form::label('to', 'Time : ', ['class' => 'col-sm-2 col-form-label']) }}' +
 					'<div class="col-sm-10">' +
-						'<div class="container">' +
-							'<div class="row time">' +
-									'{{ Form::text('time_start', @$value, ['class' => 'form-control col-6', 'id' => 'start', 'placeholder' => 'From : ', 'autocomplete' => 'off']) }}' +
-									'{{ Form::text('time_end', @$value, ['class' => 'form-control col-6', 'id' => 'end', 'placeholder' => 'To : ', 'autocomplete' => 'off']) }}' +
+							'<div class="form-row time">' +
+								'<div class="col">' +
+									'{{ Form::text('time_start', @$value, ['class' => 'form-control', 'id' => 'start', 'placeholder' => 'From : ', 'autocomplete' => 'off']) }}' +
+								'</div>' +
+								'<div class="col">' +
+									'{{ Form::text('time_end', @$value, ['class' => 'form-control', 'id' => 'end', 'placeholder' => 'To : ', 'autocomplete' => 'off']) }}' +
+								'</div>' +
 							'</div>' +
-						'</div>' +
 					'</div>' +
 				'</div>' +
 @if( $userneedbackup == 1 )
@@ -1296,8 +1323,9 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
-// block cuti sendiri
-foreach ($nodate1 as $key) {
+if(\App\Model\HRSettingsDoubleDate::first()->double_date_setting == 1) {		// setting for double date
+	// block cuti sendiri
+	foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
 		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
@@ -1305,6 +1333,7 @@ foreach ($nodate1 as $key) {
 			echo 'moment("'.$key1->format('Y-m-d').'"),';
 		}
 	}
+}
 ?>
 							],
 		})
@@ -1404,8 +1433,9 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
-// block cuti sendiri
-foreach ($nodate1 as $key) {
+if(\App\Model\HRSettingsDoubleDate::first()->double_date_setting == 1) {		// setting for double date
+	// block cuti sendiri
+	foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
 		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
@@ -1413,6 +1443,7 @@ foreach ($nodate1 as $key) {
 			echo 'moment("'.$key1->format('Y-m-d').'"),';
 		}
 	}
+}
 ?>
 							],
 		})
@@ -1436,8 +1467,9 @@ foreach ($nodate as $nda) {
 		echo 'moment("'.$key->format('Y-m-d').'"),';
 	}
 }
-// block cuti sendiri
-foreach ($nodate1 as $key) {
+if(\App\Model\HRSettingsDoubleDate::first()->double_date_setting == 1) {		// setting for double date
+	// block cuti sendiri
+	foreach ($nodate1 as $key) {
 		// echo $key->date_time_start.' datetime start';
 		// echo $key->date_time_end.' datetime end';
 		$period1 = \Carbon\CarbonPeriod::create($key->date_time_start, '1 days', $key->date_time_end);
@@ -1445,6 +1477,7 @@ foreach ($nodate1 as $key) {
 			echo 'moment("'.$key1->format('Y-m-d').'"),';
 		}
 	}
+}
 ?>
 							],
 		})
