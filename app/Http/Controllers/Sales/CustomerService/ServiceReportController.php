@@ -416,6 +416,11 @@ class ServiceReportController extends Controller
 		]);
 	}
 
+	public function floatth(ICSServiceReport $serviceReport)
+	{
+		return view('marketingAndBusinessDevelopment.customerservice.ics.showfloatth', compact(['serviceReport']));
+	}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 	public function destroy(ICSServiceReport $serviceReport)
 	{

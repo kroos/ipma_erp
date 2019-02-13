@@ -302,6 +302,7 @@ if ( $bmonth != 1 ) {
 					</td>
 					<td>
 						<a href="{!! route('serviceReport.show', $sr->id) !!}" target="_blank" title="Show"><i class="far fa-eye"></i></a>
+						<a href="{!! route('serviceReport.floatth', $sr->id) !!}" target="_blank" title="FLOAT-TH"><i class="far fa-money-bill-alt"></i></i></a>
 						<a href="{!! route('serviceReport.edit', $sr->id) !!}" title="Update"><i class="far fa-edit"></i></a>
 		@if($sr->status_id == 1)
 						<span class="text-primary courtesycall" title="Courtesy Calls" data-id="{!! $sr->id !!}"><i class="fas fa-phone-volume"></i></span>

@@ -204,6 +204,11 @@ Route::get('/serviceReport/{serviceReport}/editkiv', [
 	'as' => 'serviceReport.editkiv',
 	'uses' => 'Sales\CustomerService\ServiceReportController@editkiv'
 ]);
+// show float-th
+Route::get('/serviceReport/{serviceReport}/float-th', [
+	'as' => 'serviceReport.floatth',
+	'uses' => 'Sales\CustomerService\ServiceReportController@floatth'
+]);
 // update kiv service report
 Route::patch('/serviceReport/{serviceReport}/updatekiv', [
 	'as' => 'serviceReport.updatekiv',
