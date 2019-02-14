@@ -311,6 +311,85 @@ if ( $bmonth != 1 ) {
 					</td>
 				</tr>
 		@endif
+				<thead>
+					<tr>
+						<th colspan="6">Problem Detect On Site</th>
+						<th colspan="6">Additional Request (Order Part, Request For Next Service)</th>
+						<th colspan="6">Item Bring Back To IPMA</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td colspan="6">
+@if($sr->hasmanyfeedproblem()->get()->count() > 0)
+							<table class="table table-hover table-sm" style="font-size:12px">
+								<thead>
+									<tr>
+										<th>Problem</th>
+										<th>Solution</th>
+									</tr>
+								</thead>
+								<tbody>
+@foreach($sr->hasmanyfeedproblem()->get() as $srpp)
+									<tr>
+										<td>{{ $srpp->problem }}</td>
+										<td>{{ $srpp->solution }}</td>
+									</tr>
+@endforeach
+								</tbody>
+							</table>
+@else
+							No Data
+@endif
+						</td>
+						<td colspan="6">
+@if($sr->hasmanyfeedrequest()->get()->count() > 0)
+							<table class="table table-hover table-sm" style="font-size:12px">
+								<thead>
+									<tr>
+										<th>Request</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+@foreach($sr->hasmanyfeedrequest()->get() as $srfr)
+									<tr>
+										<td>{{ $srfr->request }}</td>
+										<td>{{ $srfr->action }}</td>
+									</tr>
+@endforeach
+								</tbody>
+							</table>
+@else
+							No Data
+@endif
+						</td>
+						<td colspan="6">
+@if($sr->hasmanyfeeditem()->get()->count() > 0)
+							<table class="table table-hover table-sm" style="font-size:12px">
+								<thead>
+									<tr>
+										<th>Item</th>
+										<th>Quantity</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+@foreach($sr->hasmanyfeeditem()->get() as $srfi)
+									<tr>
+										<td>{{ $srfi->item }}</td>
+										<td>{{ $srfi->quantity }}</td>
+										<td>{{ $srfi->item_action }}</td>
+									</tr>
+@endforeach
+								</tbody>
+							</table>
+@else
+							No Data
+@endif
+						</td>
+					</tr>
+				</tbody>
 		@endforeach
 			</tbody>
 		</table>

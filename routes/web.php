@@ -80,6 +80,7 @@ Route::resources([
 	'srJob' => 'Sales\CustomerService\ServiceReportJobController',
 	'srFeedProb' => 'Sales\CustomerService\ServiceReportFeedbackProblemController',
 	'srFeedReq' => 'Sales\CustomerService\ServiceReportFeedbackRequestController',
+	'srFeedItem' => 'Sales\CustomerService\ServiceReportFeedbackItemController',
 	'srLogistic' => 'Sales\CustomerService\ServiceReportLogisticController',
 	'srAddCharge' => 'Sales\CustomerService\ServiceReportAdditionalChargesController',
 	'srDiscount' => 'Sales\CustomerService\ServiceReportDiscountController',

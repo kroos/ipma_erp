@@ -1807,6 +1807,57 @@ function SwalDeleteSRDiscount(srDisc){
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row sr feedback item
+$(document).on('click', '.delete_feedItem', function(e){
+	var srfeedItem = $(this).data('id');
+	SwalDeleteSRFeedItem(srfeedItem);
+	e.preventDefault();
+});
+
+function SwalDeleteSRFeedItem(srfeedItem){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('srFeedItem') }}' + '/' + srfeedItem,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: srfeedItem,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_logistic_' + srfeedItem).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // counting on service report job
 // get all the variable -> start with labour
 
