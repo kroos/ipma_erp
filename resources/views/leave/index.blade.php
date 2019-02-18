@@ -214,6 +214,8 @@ $("#username").keyup(function() {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+$.fn.dataTable.moment( 'ddd, D MMMM YYYY' );
+$.fn.dataTable.moment( 'ddd, D MMMM YYYY h:mm a' );
 $('#leaves').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
 	"order": [[0, "desc" ]],	// sorting the 6th column descending
