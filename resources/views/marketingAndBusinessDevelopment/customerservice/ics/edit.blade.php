@@ -24,19 +24,11 @@
 			</li> -->
 		</ul>
 		<div class="card">
-			<div class="card-header">Intelligence Customer Service</div>
+			<div class="card-header">Update Service Report</div>
 			<div class="card-body">
-				<div class="card">
-					<div class="card-header">Update Service Report</div>
-					<div class="card-body">
 {!! Form::model( $serviceReport, ['route' => ['serviceReport.update', $serviceReport->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
 @include('marketingAndBusinessDevelopment.customerservice.ics._edit')
 {{ Form::close() }}
-					</div>
-<!-- 					<div class="card-footer">
-						<a href="{{ route('serviceReport.create') }}" class="btn btn-primary float-right">Add Service Report</a>
-					</div>
- -->				</div>
 			</div>
 		</div>
 	</div>
