@@ -40,7 +40,7 @@ use \Carbon\CarbonPeriod;
 		}
 		table {
 			font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-			font-size: 12px;
+			font-size: 10px;
 			border-collapse: collapse;
 		}
 
@@ -66,26 +66,17 @@ use \Carbon\CarbonPeriod;
 
 </head>
 	<body>
-	<h1>FLOAT TH</h1>
 	<center>
-		<table width="100%" cellspacing="1" cellpadding="1" border="0">
-			<tbody>
-				<tr>
-					<th colspan="14" align="center">
-						Service Report NO :
+		<h4>FLOAT TH</h4>
+			<p>Service Report NO :
 @foreach($serviceReport->hasmanyserial()->get() as $srs1 )
 						 					{{ $srs1->serial }}, 
 @endforeach
-					</th>
+					</p>
+					<p>Customer : {!! (!is_null($serviceReport->belongtocustomer()))?$serviceReport->belongtocustomer->customer:NULL !!}</p>
 				</tr>
-				<tr>
-					<th colspan="14" align="center">
-						Customer : {!! (!is_null($serviceReport->belongtocustomer()))?$serviceReport->belongtocustomer->customer:NULL !!}
-					</th>
-				</tr>
-				<tr>
-					<td colspan="14">&nbsp;</td>
-				</tr>
+		<table width="75%" cellspacing="1" cellpadding="1" border="0">
+			<tbody>
 <?php $count = 0 ?>
 @if($serviceReport->hasmanyjob()->get()->count() > 0)
 @foreach($serviceReport->hasmanyjob()->get() as $srj5)
@@ -119,7 +110,7 @@ $f6 = ( $f2 * $srj5->working_type_value ) * $srj5->travel_hour_constant * $srj5-
 $total = $f1 + $f2 + $f3 + $f4 + $f5 + $f6;
 $count += $total;
 ?>
-					<th align="left">Food :</th>
+					<th align="left">F :</th>
 					<td align="center">RM</td>
 					<td align="center">{{ $srj5->food_rate }}</td>
 					<td align="center">X</td>
@@ -130,7 +121,7 @@ $count += $total;
 					<td align="right">{{ number_format($f1, 2) }}</td>
 				</tr>
 				<tr>
-					<th align="left">Labour :</th>
+					<th align="left">L :</th>
 					<td align="center">( RM</td>
 					<td align="center">{{ $srj5->labour_leader }}</td>
 					<td align="center">+</td>
@@ -146,7 +137,7 @@ $count += $total;
 					<td align="right">{{ number_format($f2, 2) }}</td>
 				</tr>
 				<tr>
-					<th align="left">Overtime :</th>
+					<th align="left">O :</th>
 					<td align="center">RM</td>
 					<td align="center">{{ $f2 * $srj5->working_type_value }}</td>
 					<td align="center">X</td>
@@ -161,7 +152,7 @@ $count += $total;
 					<td align="right">{{ number_format($f3, 2) }}</td>
 				</tr>
 				<tr>
-					<th align="left">Accommodation :</th>
+					<th align="left">A :</th>
 					<td align="center">RM</td>
 					<td align="center">{{ $srj5->accommodation_rate }}</td>
 					<td align="center">X</td>
@@ -172,7 +163,7 @@ $count += $total;
 					<td align="right">{{ number_format($f4, 2) }}</td>
 				</tr>
 				<tr>
-					<th align="left">Travel :</th>
+					<th align="left">T :</th>
 					<td align="center">{{ ($m1 + $m2) }}</td>
 					<td align="center">KM</td>
 					<td align="center">X</td>
@@ -184,7 +175,7 @@ $count += $total;
 					<td align="right">{{ number_format($f5, 2) }}</td>
 				</tr>
 				<tr>
-					<th align="left">Travel Hour : </th>
+					<th align="left">TH : </th>
 					<td align="center">RM</td>
 					<td align="center">{{ $f2 * $srj5->working_type_value }}</td>
 					<td align="center">X</td>
@@ -200,51 +191,38 @@ $count += $total;
 				<tr>
 					<th align="left">Total :</th>
 					<td align="center" colspan="11"></td>
-					<th align="center">RM</th>
-					<th align="right">{{ number_format($total, 2) }}</th>
-				</tr>
-				<tr>
-					<td colspan="14">&nbsp;</td>
+					<td align="center">RM</td>
+					<td align="right">{{ number_format($total, 2) }}</td>
 				</tr>
 @endforeach
 				<tr>
 					<th align="left">Total FLOAT TH :</th>
 					<td align="center" colspan="11"></td>
-					<th align="center">RM</th>
-					<th align="right">{{ number_format($count, 2) }}</th>
+					<td align="center">RM</td>
+					<td align="right">{{ number_format($count, 2) }}</td>
 				</tr>
 @endif
-				<tr>
-					<td colspan="14">&nbsp;</td>
-				</tr>
+
 <?php $countl = 0 ?>
 @if( $serviceReport->hasmanylogistic()->get()->count() > 0 )
-				<tr>
-					<th align="center" colspan="14">Logistic</th>
-				</tr>
+
 @foreach( $serviceReport->hasmanylogistic()->get() as $srl )
 <?php $countl += $srl->charge ?>
 				<tr>
-					<th>{{ $srl->belongtovehicle->vehicle }}</th>
+					<td>{{ $srl->belongtovehicle->vehicle }}</td>
 					<td align="center">{{ $srl->description }}</td>
 					<td align="center" colspan="10"></td>
 					<td align="center">RM</td>
 					<td align="right">{{ $srl->charge }}</td>
 				</tr>
 @endforeach
-				<tr>
-					<td colspan="14">&nbsp;</td>
-				</tr>
+
 				<tr>
 					<th align="left">Total Logistic :</th>
 					<td align="center" colspan="11"></td>
-					<th align="center">RM</th>
-					<th align="right">{{ number_format($countl, 2) }}</th>
+					<td align="center">RM</td>
+					<td align="right">{{ number_format($countl, 2) }}</td>
 				</tr>
-				<tr>
-					<td colspan="14">&nbsp;</td>
-				</tr>
-
 @endif
 <?php $countac = 0; ?>
 @if( $serviceReport->hasmanyadditionalcharge()->get()->count() > 0 )
@@ -265,13 +243,10 @@ $count += $total;
 					<td colspan="14">&nbsp;</td>
 				</tr>
 				<tr>
-					<th align="left">Total Additional Charges :</th>
+					<td align="left">Total Additional Charges :</td>
 					<td align="center" colspan="11"></td>
-					<th align="center">RM</th>
-					<th align="right">{{ number_format($countac, 2) }}</th>
-				</tr>
-				<tr>
-					<td colspan="14">&nbsp;</td>
+					<td align="center">RM</td>
+					<td align="right">{{ number_format($countac, 2) }}</td>
 				</tr>
 @endif
 <?php $countdis = 0 ?>
@@ -300,16 +275,16 @@ if($serviceReport->hasonediscount->discount_id == 1) {		// 1 = percentage
 						{!! ($serviceReport->hasonediscount->discount_id == 1)?'%':NULL !!}
 					</td>
 					<td colspan="10">&nbsp;</td>
-					<th >RM</th>
-					<th align="right">{!! number_format($countdis, 2) !!}</th>
+					<td >RM</td>
+					<td align="right">{!! number_format($countdis, 2) !!}</td>
 				</tr>
 
 @endif
 				<tr>
 					<th align="left">Grand Total</th>
 					<td colspan="11">&nbsp;</td>
-					<th>RM</th>
-					<th align="right">{{ number_format((($count + $countl + $countac) - $countdis), 2) }}</th>
+					<td align="center">RM</td>
+					<td align="right"><b>{{ number_format((($count + $countl + $countac) - $countdis), 2) }}</b></td>
 				</tr>
 			</tbody>
 		</table>

@@ -310,7 +310,6 @@ if ( $bmonth != 1 ) {
 						<span class="text-danger inactivate" data-id="{!! $sr->id !!}"><i class="far fa-trash-alt"></i></span>
 					</td>
 				</tr>
-		@endif
 				<thead>
 					<tr>
 						<th colspan="6">Problem Detect On Site</th>
@@ -390,6 +389,7 @@ if ( $bmonth != 1 ) {
 						</td>
 					</tr>
 				</tbody>
+		@endif
 		@endforeach
 			</tbody>
 		</table>

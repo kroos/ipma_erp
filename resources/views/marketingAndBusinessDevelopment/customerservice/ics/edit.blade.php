@@ -809,7 +809,7 @@ $(addbtnjobn).click(function(){
 			useCurrent: false,
 		});
 		
-		$('#1job_perform_' + xj + ', #ds_1_' + xj + ', #de_1_' + xj + ', #ds_2_' + xj + ', #de_2_' + xj ).keyup(function() {
+		$('#job_perform_' + xj + ', #ds_1_' + xj + ', #de_1_' + xj + ', #ds_2_' + xj + ', #de_2_' + xj ).keyup(function() {
 			uch(this);
 		});
 		
@@ -823,10 +823,10 @@ $(addbtnjobn).click(function(){
 		//bootstrap validate
 		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][date]"]'));
 		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][labour]"]'));
-		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][1][meter_start]"]'));
-		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][2][meter_start]"]'));
-		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][1][meter_end]"]'));
-		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][2][meter_end]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][srjde][1][meter_start]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][srjde][2][meter_start]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][srjde][1][meter_end]"]'));
+		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][srjde][2][meter_end]"]'));
 		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][food_rate]"]'));
 		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][labour_leader]"]'));
 		$('#form').bootstrapValidator('addField', $('.rowjob').find('[name="srj[' + xj + '][labour_non_leader]"]'));
@@ -847,10 +847,10 @@ $(wrapjobnd).on("click",".remove_job", function(e){
 	var $row = $(this).parent().parent().parent();
 	var $option1 = $row.find('[name="srj[' + jobndId + '][date]"]');
 	var $option2 = $row.find('[name="srj[' + jobndId + '][labour]"]');
-	var $option3 = $row.find('[name="srj[' + jobndId + '][1][meter_start]"]');
-	var $option4 = $row.find('[name="srj[' + jobndId + '][2][meter_start]"]');
-	var $option5 = $row.find('[name="srj[' + jobndId + '][1][meter_end]"]');
-	var $option6 = $row.find('[name="srj[' + jobndId + '][2][meter_end]"]');
+	var $option3 = $row.find('[name="srj[' + jobndId + '][srjde][1][meter_start]"]');
+	var $option4 = $row.find('[name="srj[' + jobndId + '][srjde][2][meter_start]"]');
+	var $option5 = $row.find('[name="srj[' + jobndId + '][srjde][1][meter_end]"]');
+	var $option6 = $row.find('[name="srj[' + jobndId + '][srjde][2][meter_end]"]');
 	var $option7 = $row.find('[name="srj[' + jobndId + '][food_rate]"]');
 	var $option8 = $row.find('[name="srj[' + jobndId + '][labour_leader]"]');
 	var $option9 = $row.find('[name="srj[' + jobndId + '][labour_non_leader]"]');
@@ -1061,7 +1061,7 @@ var maxsrlogistic	= 10; //maximum input boxes allowed
 var addbtnsrlogistic	= $(".add_logistic");
 var wrapsrLogistic	= $(".logistic_wrap");
 
-var xL = <?=($serviceReport->hasmanylogistic()->get()->count() == 0)?1:$serviceReport->hasmanylogistic()->get()->count() ?>;
+var xL = <?=($serviceReport->hasmanylogistic()->get()->count() == 0)?0:$serviceReport->hasmanylogistic()->get()->count() ?>;
 $(addbtnsrlogistic).click(function(){
 	// e.preventDefault();
 
@@ -1110,29 +1110,32 @@ $(addbtnsrlogistic).click(function(){
 		$('#v_' + xL).chainedTo('#vc_' + xL);
 		
 		$('#description_' + xL).keyup(function() {
-			tch(this);
+			uch(this);
 		});
 		//bootstrap validate
 		$('#form').bootstrapValidator('addField', $('.rowsrlogistic').find('[name="srL[' + xL + '][vehicle_id]"]'));
-		$('#form').bootstrapValidator('addField', $('.rowsrlogistic').find('[name="srL[' + xL + '][description]"]'));
+		// $('#form').bootstrapValidator('addField', $('.rowsrlogistic').find('[name="srL[' + xL + '][description]"]'));
 		$('#form').bootstrapValidator('addField', $('.rowsrlogistic').find('[name="srL[' + xL + '][charge]"]'));
 	}
+	console.log(xL);
 });
 
 $(wrapsrLogistic).on("click",".remove_logistic", function(e){
 	//user click on remove text
 	var srlogist = $(this).data('id');
 	e.preventDefault();
-	var $row = $(this).parent().parent();
+	var $row = $(this).parent().parent().parent();
+
+	$row.css({"color": "red", "border": "2px solid red"});
 
 	var $optsrlogist1 = $row.find('[name="srL[' + srlogist + '][vehicle_id]"]');
-	var $optsrlogist2 = $row.find('[name="srL[' + srlogist + '][description]"]');
+	// var $optsrlogist2 = $row.find('[name="srL[' + srlogist + '][description]"]');
 	var $optsrlogist3 = $row.find('[name="srL[' + srlogist + '][charge]"]');
 
 	// $($optsfItem1).css({"color": "red", "border": "2px solid red"});
 
 	$('#form').bootstrapValidator('removeField', $optsrlogist1 );
-	$('#form').bootstrapValidator('removeField', $optsrlogist2 );
+	// $('#form').bootstrapValidator('removeField', $optsrlogist2 );
 	$('#form').bootstrapValidator('removeField', $optsrlogist3 );
 	$row.remove();
 	xL--;
@@ -1740,6 +1743,57 @@ function SwalDeleteSRAddCharges(sraddC){
 						window.location.reload(true);
 					});
 					//$('#delete_logistic_' + sraddC).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row sr phone attendees
+$(document).on('click', '.delete_phoneattendees', function(e){
+	var srdpatt = $(this).data('id');
+	SwalDeleteSRPhoneAttendees(srdpatt);
+	e.preventDefault();
+});
+
+function SwalDeleteSRPhoneAttendees(srdpatt){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('srAttendPhone') }}' + '/' + srdpatt,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: srdpatt,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_logistic_' + srdpatt).parent().parent().remove();
 				})
 				.fail(function(){
 					swal('Oops...', 'Something went wrong with ajax !', 'error');
@@ -2638,6 +2692,7 @@ $('#form').bootstrapValidator({
 			}
 		},
 		'srj[{{ $xc }}][srjde][1][meter_start]': {
+			group: '.form-group',
 			validators : {
 				notEmpty: {
 					message: 'Please insert this field. '
@@ -2654,6 +2709,7 @@ $('#form').bootstrapValidator({
 			}
 		},
 		'srj[{{ $xc }}][srjde][1][meter_end]': {
+			group: '.form-group',
 			validators : {
 				notEmpty: {
 					message: 'Please insert this field. '
@@ -2669,6 +2725,7 @@ $('#form').bootstrapValidator({
 			}
 		},
 		'srj[{{ $xc }}][srjde][2][meter_start]': {
+			group: '.form-group',
 			validators : {
 				integer: {
 					message: 'The value is not an integer. '
@@ -2681,6 +2738,7 @@ $('#form').bootstrapValidator({
 			}
 		},
 		'srj[{{ $xc }}][srjde][2][meter_end]': {
+			group: '.form-group',
 			validators : {
 				integer: {
 					message: 'The value is not an integer. '

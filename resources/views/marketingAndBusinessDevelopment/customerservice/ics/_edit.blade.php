@@ -182,7 +182,7 @@ $iii = 1;
 						<div class="form-row col-sm-12">
 
 							<div class="col-sm-1 text-danger">
-									<i class="fas fa-trash remove_phoneattendees" aria-hidden="true" id="button_delete_"></i>
+									<i class="fas fa-trash delete_phoneattendees" aria-hidden="true" id="button_delete_" data-id="{!! $sra->id !!}"></i>
 							</div>
 
 							<div class="col-sm-11">
@@ -195,7 +195,7 @@ $iii = 1;
 					</div>
 @endforeach
 @else
-					<div class="rowphoneattendees">
+<!--					<div class="rowphoneattendees">
 						<div class="form-row col-sm-12">
 
 							<div class="col-sm-1 text-danger">
@@ -210,6 +210,7 @@ $iii = 1;
 
 						</div>
 					</div>
+-->
 @endif
 				</div>
 				<div class="row col-lg-12 add_phoneattendees">
@@ -497,7 +498,7 @@ $gt = 0;
 						</div>
 						<br />
 @foreach( $srj->hasmanysrjobdetail()->where('return', '<>', 1)->get() as $srjd )
-						<div class="col-sm-12 form-row ">
+						<div class="col-sm-12 form-group form-row ">
 							<div class="col-sm-1 text-primary"><small>To <i class="fas fa-arrow-right"></i> <i class="fas fa-map-marker-alt"></i></small></div>
 
 							<div class="form-group {{ $errors->has('srj.*.srjde.*.date') ? 'has-error' : '' }}">
@@ -813,13 +814,13 @@ $tl = 0;
 <?php $tl += $srL->charge; ?>
 @endforeach
 @else
-					<div class="rowsrlogistic">
+{{-- 					<div class="rowsrlogistic">
 						<div class="form-row col-sm-12">
 							<div class="col-sm-1 text-danger">
-									<i class="fas fa-trash" aria-hidden="true" id="delete_feedProb_1" data-id="1"></i>
+									<i class="fas fa-trash remove_logistic" aria-hidden="true" id="delete_feedProb_' + xL + '" data-id="' + xL + '"></i>
 							</div>
 							<div class="form-group col-3 {{ $errors->has('srL.*.vehicle_category') ? 'has-error' : '' }}">
-								<select name="srL[1]vehicle_category" id="vc_1" class="form-control form-control-sm" placeholder="Please choose">
+								<select name="srL[' + xL + ']vehicle_category" id="vc_' + xL + '" class="form-control form-control-sm" placeholder="Please choose">
 									<option value="">Please choose</option>
 @foreach( \App\Model\VehicleCategory::all() as $vc )
 									<option value="{{ $vc->id }}" >{{ $vc->category }}</option>
@@ -827,7 +828,7 @@ $tl = 0;
 								</select>
 							</div>
 							<div class="form-group col-3 {{ $errors->has('srL.*.solution') ? 'has-error' : '' }}">
-								<select name="srL[1][vehicle_id]" id="v_1" class="form-control form-control-sm" placeholder="Please choose">
+								<select name="srL[' + xL + '][vehicle_id]" id="v_' + xL + '" class="form-control form-control-sm" placeholder="Please choose">
 									<option value="" data-chained="">Please choose</option>
 @foreach( \App\Model\Vehicle::all() as $v )
 									<option value="{{ $v->id }}"  data-chained="{{ $v->vehicle_category_id }}" >{{ $v->vehicle }}</option>
@@ -835,13 +836,13 @@ $tl = 0;
 								</select>
 							</div>
 							<div class="form-group col-3 {{ $errors->has('srL.*.description') ? 'has-error' : '' }}">
-								<input type="text" name="srL[1][description]" value="{{ @$value }}" id="description_1" class="form-control form-control-sm" placeholder="Description">
+								<input type="text" name="srL[' + xL + '][description]" value="{{ @$value }}" id="description_' + xL + '" class="form-control form-control-sm" placeholder="Description">
 							</div>
 							<div class="form-group col-2 {{ $errors->has('srL.*.charge') ? 'has-error' : '' }}">
-								<input type="text" name="srL[1][charge]" value="{{ @$value }}" id="charge_1" class="form-control form-control-sm logistic_charge" placeholder="Charge (MYR)">
+								<input type="text" name="srL[' + xL + '][charge]" value="{{ @$value }}" id="charge_' + xL + '" class="form-control form-control-sm logistic_charge" placeholder="Charge (MYR)">
 							</div>
 						</div>
-					</div>
+					</div> --}}
 @endif
 				</div>
 				<div class="col-sm-12">Grand Total Logistic<span class="float-right font-weight-bold text-primary">RM <span id="grandtotallogistic">{{ $tl }}</span></span></div>
@@ -1002,7 +1003,7 @@ $p4 = 1;
 					</div>
 @endforeach
 @else
-					<div class="rowfeedProb">
+{{-- 					<div class="rowfeedProb">
 						<div class="col-sm-12 form-row ">
 
 							<div class="col-sm-1 text-danger">
@@ -1015,7 +1016,7 @@ $p4 = 1;
 								<textarea name="srfP[1][solution]" value="{!! @$value !!}" id="solution_1" class="form-control" autocomplete="off" placeholder="Solution" /></textarea>
 							</div>
 						</div>
-					</div>
+					</div> --}}
 @endif
 				</div>
 				<div class="row col-lg-12 add_feedProb">
@@ -1055,7 +1056,7 @@ $p4 = 1;
 					</div>
 @endforeach
 @else
-					<div class="rowfeedReq">
+{{-- 					<div class="rowfeedReq">
 						<div class="col-sm-12 form-row ">
 							<div class="col-sm-1 text-danger">
 									<i class="fas fa-trash remove_feedReq" aria-hidden="true" id="delete_feedReq" data-id="1"></i>
@@ -1067,7 +1068,7 @@ $p4 = 1;
 								<input type="text" name="srfR[1][action]" value="{!! @$value !!}" id="action_1" class="form-control" autocomplete="off" placeholder="Action (Fill By Management)" />
 							</div>
 						</div>
-					</div>
+					</div> --}}
 @endif
 				</div>
 				<div class="row col-lg-12 add_feedReq">
@@ -1116,7 +1117,7 @@ $item6 = 1;
 					</div>
 @endforeach
 @else
-					<div class="rowfeedItem">
+{{-- 					<div class="rowfeedItem">
 						<div class="form-row col-sm-12">
 							<div class="col-sm-1 text-danger">
 									<i class="fas fa-trash remove_feedItem" aria-hidden="true" id="delete_feedReq"></i>
@@ -1131,7 +1132,7 @@ $item6 = 1;
 								<input type="text" name="srfI[1][item_action]" value="{!! @$value !!}" id="item_action_1" class="form-control" autocomplete="off" placeholder="Action (Fill By Management)" />
 							</div>
 						</div>
-					</div>
+					</div> --}}
 @endif
 				</div>
 				<div class="row col-lg-12 add_feedItem">

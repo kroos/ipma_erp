@@ -75,6 +75,7 @@ Route::resources([
 	'serviceReport' => 'Sales\CustomerService\ServiceReportController',
 	'srSerial' => 'Sales\CustomerService\ServiceReportSerialController',
 	'srAttend' => 'Sales\CustomerService\ServiceReportAttendeesController',
+	'srAttendPhone' => 'Sales\CustomerService\ServiceReportPhoneAttendeesController',
 	'srModel' => 'Sales\CustomerService\ServiceReportModelController',
 	'srPart' => 'Sales\CustomerService\ServiceReportPartAccessoryController',
 	'srJob' => 'Sales\CustomerService\ServiceReportJobController',
