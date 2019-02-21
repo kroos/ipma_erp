@@ -1,5 +1,5 @@
 <?php
-ini_set('max_execution_time', 180);
+ini_set('max_execution_time', 1800);
 use \App\Model\ICSServiceReport;
 
 use Carbon\Carbon;

@@ -60,6 +60,7 @@ use \Carbon\CarbonPeriod;
 			text-align: left;
 			/*background-color: #4CAF50;*/
 			background-color: #A9A9A9;
+			background-color: #3B5998;
 			color: white;
 		}
 	</style>
@@ -75,7 +76,7 @@ use \Carbon\CarbonPeriod;
 					</p>
 					<p>Customer : {!! (!is_null($serviceReport->belongtocustomer()))?$serviceReport->belongtocustomer->customer:NULL !!}</p>
 				</tr>
-		<table width="75%" cellspacing="1" cellpadding="1" border="0">
+		<table width="30%" cellspacing="1" cellpadding="1" border="0">
 			<tbody>
 <?php $count = 0 ?>
 @if($serviceReport->hasmanyjob()->get()->count() > 0)
@@ -207,7 +208,8 @@ $count += $total;
 @if( $serviceReport->hasmanylogistic()->get()->count() > 0 )
 
 @foreach( $serviceReport->hasmanylogistic()->get() as $srl )
-<?php $countl += $srl->charge ?>
+<?php $countl += $srl->charge; ?>
+@if($srl->belongtovehicle->belongtovehiclecategory->id == 5 || $srl->belongtovehicle->belongtovehiclecategory->id == 6)
 				<tr>
 					<td>{{ $srl->belongtovehicle->vehicle }}</td>
 					<td align="center">{{ $srl->description }}</td>
@@ -215,8 +217,8 @@ $count += $total;
 					<td align="center">RM</td>
 					<td align="right">{{ $srl->charge }}</td>
 				</tr>
+@endif
 @endforeach
-
 				<tr>
 					<th align="left">Total Logistic :</th>
 					<td align="center" colspan="11"></td>

@@ -35,7 +35,7 @@ use \Carbon\CarbonPeriod;
 					page-break-after: always;
 		}
 		.responsive {
-			max-width: 100%;
+			max-width: 30%;
 			height: auto;
 		}
 		table {
@@ -59,7 +59,8 @@ use \Carbon\CarbonPeriod;
 			padding-bottom: 3px;
 			text-align: left;
 			/*background-color: #4CAF50;*/
-			background-color: #A9A9A9;
+			/*background-color: #A9A9A9;*/
+			background-color: #3B5998;
 			color: white;
 		}
 	</style>
@@ -71,7 +72,7 @@ use \Carbon\CarbonPeriod;
 		</center>
 
 			<center>
-				<table width="100%" border="1" cellspacing="1" cellpadding="1">
+				<table width="30%" border="1" cellspacing="1" cellpadding="1">
 					<tbody>
 						<tr>
 							<th colspan="10" width="60%">
@@ -359,7 +360,7 @@ $thours = floor($th / 60).' hours '.($th -   floor($th / 60) * 60).' minutes';
 <p style="page-break-before: always">
 	<h1>ON-SITE SERVICE FEEDBACK</h1>
 		<center>
-			<table width="100%" border="1" cellspacing="1" cellpadding="1">
+			<table width="30%" border="1" cellspacing="1" cellpadding="1">
 				<tbody>
 					<tr>
 						<th colspan="3" width="10%">Date</th>
@@ -408,7 +409,7 @@ $thours = floor($th / 60).' hours '.($th -   floor($th / 60) * 60).' minutes';
 				</tbody>
 			</table>
 <!-- <p>&nbsp;</p> -->
-			<table width="50%" border="1" cellspacing="1" cellpadding="1">
+			<table width="30%" border="1" cellspacing="1" cellpadding="1">
 				<tbody>
 @if( !is_null( $serviceReport->proceed_id ) )
 					<tr>
@@ -418,7 +419,7 @@ $thours = floor($th / 60).' hours '.($th -   floor($th / 60) * 60).' minutes';
 @endif
 				</tbody>
 			</table>
-			<table width="50%" border="1" cellspacing="1" cellpadding="1">
+			<table width="30%" border="1" cellspacing="1" cellpadding="1">
 				<tbody>
 @if( !is_null($serviceReport->status_id) )
 					<tr>
@@ -432,7 +433,7 @@ $thours = floor($th / 60).' hours '.($th -   floor($th / 60) * 60).' minutes';
 <p style="page-break-before: always">
 	<h1>FLOAT TH</h1>
 	<center>
-		<table width="100%" cellspacing="1" cellpadding="1" border="0">
+		<table width="30%" cellspacing="1" cellpadding="1" border="0">
 			<tbody>
 				<tr>
 					<th colspan="14" align="center">
@@ -483,7 +484,7 @@ $f6 = ( $f2 * $srj5->working_type_value ) * $srj5->travel_hour_constant * $srj5-
 $total = $f1 + $f2 + $f3 + $f4 + $f5 + $f6;
 $count += $total;
 ?>
-					<th align="left">Food :</th>
+					<th align="left">F :</th>
 					<td align="center">RM</td>
 					<td align="center">{{ $srj5->food_rate }}</td>
 					<td align="center">X</td>
@@ -494,7 +495,7 @@ $count += $total;
 					<td align="right">{{ number_format($f1, 2) }}</td>
 				</tr>
 				<tr>
-					<th align="left">Labour :</th>
+					<th align="left">L :</th>
 					<td align="center">( RM</td>
 					<td align="center">{{ $srj5->labour_leader }}</td>
 					<td align="center">+</td>
@@ -510,7 +511,7 @@ $count += $total;
 					<td align="right">{{ number_format($f2, 2) }}</td>
 				</tr>
 				<tr>
-					<th align="left">Overtime :</th>
+					<th align="left">O :</th>
 					<td align="center">RM</td>
 					<td align="center">{{ $f2 * $srj5->working_type_value }}</td>
 					<td align="center">X</td>
@@ -525,7 +526,7 @@ $count += $total;
 					<td align="right">{{ number_format($f3, 2) }}</td>
 				</tr>
 				<tr>
-					<th align="left">Accommodation :</th>
+					<th align="left">A :</th>
 					<td align="center">RM</td>
 					<td align="center">{{ $srj5->accommodation_rate }}</td>
 					<td align="center">X</td>
@@ -536,7 +537,7 @@ $count += $total;
 					<td align="right">{{ number_format($f4, 2) }}</td>
 				</tr>
 				<tr>
-					<th align="left">Travel :</th>
+					<th align="left">T :</th>
 					<td align="center">{{ ($m1 + $m2) }}</td>
 					<td align="center">KM</td>
 					<td align="center">X</td>
@@ -548,7 +549,7 @@ $count += $total;
 					<td align="right">{{ number_format($f5, 2) }}</td>
 				</tr>
 				<tr>
-					<th align="left">Travel Hour : </th>
+					<th align="left">TH : </th>
 					<td align="center">RM</td>
 					<td align="center">{{ $f2 * $srj5->working_type_value }}</td>
 					<td align="center">X</td>
@@ -567,9 +568,6 @@ $count += $total;
 					<th align="center">RM</th>
 					<th align="right">{{ number_format($total, 2) }}</th>
 				</tr>
-				<tr>
-					<td colspan="14">&nbsp;</td>
-				</tr>
 @endforeach
 				<tr>
 					<th align="left">Total FLOAT TH :</th>
@@ -578,9 +576,6 @@ $count += $total;
 					<th align="right">{{ number_format($count, 2) }}</th>
 				</tr>
 @endif
-				<tr>
-					<td colspan="14">&nbsp;</td>
-				</tr>
 <?php $countl = 0 ?>
 @if( $serviceReport->hasmanylogistic()->get()->count() > 0 )
 				<tr>
@@ -588,6 +583,7 @@ $count += $total;
 				</tr>
 @foreach( $serviceReport->hasmanylogistic()->get() as $srl )
 <?php $countl += $srl->charge ?>
+@if($srl->belongtovehicle->belongtovehiclecategory->id == 5 || $srl->belongtovehicle->belongtovehiclecategory->id == 6)
 				<tr>
 					<th>{{ $srl->belongtovehicle->vehicle }}</th>
 					<td align="center">{{ $srl->description }}</td>
@@ -595,20 +591,14 @@ $count += $total;
 					<td align="center">RM</td>
 					<td align="right">{{ $srl->charge }}</td>
 				</tr>
+@endif
 @endforeach
-				<tr>
-					<td colspan="14">&nbsp;</td>
-				</tr>
 				<tr>
 					<th align="left">Total Logistic :</th>
 					<td align="center" colspan="11"></td>
 					<th align="center">RM</th>
 					<th align="right">{{ number_format($countl, 2) }}</th>
 				</tr>
-				<tr>
-					<td colspan="14">&nbsp;</td>
-				</tr>
-
 @endif
 <?php $countac = 0; ?>
 @if( $serviceReport->hasmanyadditionalcharge()->get()->count() > 0 )
@@ -626,17 +616,14 @@ $count += $total;
 				</tr>
 @endforeach
 				<tr>
-					<td colspan="14">&nbsp;</td>
-				</tr>
-				<tr>
 					<th align="left">Total Additional Charges :</th>
 					<td align="center" colspan="11"></td>
 					<th align="center">RM</th>
 					<th align="right">{{ number_format($countac, 2) }}</th>
 				</tr>
-				<tr>
+{{-- 				<tr>
 					<td colspan="14">&nbsp;</td>
-				</tr>
+				</tr> --}}
 @endif
 <?php $countdis = 0 ?>
 @if( !is_null($serviceReport->hasonediscount) )
@@ -681,7 +668,7 @@ if($serviceReport->hasonediscount->discount_id == 1) {		// 1 = percentage
 <p style="page-break-before: always">
 	<h1>POST SERVICE FEEDBACK FORM</h1>
 	<center>
-		<table width="100%" cellspacing="1" cellpadding="1" border="1">
+		<table width="30%" cellspacing="1" cellpadding="1" border="1">
 			<tbody>
 @if($serviceReport->hasmanyfeedcall()->get()->count() > 0)
 				<tr>
