@@ -1,6 +1,7 @@
 
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Josefin+Sans:400,400i,700,700i|Noto+Sans:400,400i,700,700i');
+@import url('https://fonts.googleapis.com/css?family=Poiret+One');
 // Bootstrap
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap/scss/bootstrap-grid";
@@ -33,7 +34,8 @@
 @import '~pretty-checkbox/src/pretty-checkbox.scss';
 
 body {
-	background-color: #0B8165;
+	background-color: #17a2b8;
+	// background-color: #0B8165;
 	// background: url(images/background.jpg);
 	// background-attachment: fixed;
 	// background-size: cover;
@@ -41,6 +43,9 @@ body {
 	// background-position: center center;
 	width: 100%;
 	font-family: 'Noto Sans', sans-serif;
+}
+body:hover {
+	background-color: #138496;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -62,6 +67,8 @@ h1, h2, h3, h4, h5, h6 {
 	border: $card-border-width solid $gray-500;
 }
 .card-header {
-	// background-color: $gray-500;
-	background-color: $gray-400;
+	// background-color: $gray-400;
+	background-color: $gray-500;
+	// background-color: #9eff98;
+	// background-color: #f56686;
 }

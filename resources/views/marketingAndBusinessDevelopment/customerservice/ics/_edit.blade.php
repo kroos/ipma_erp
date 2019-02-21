@@ -20,8 +20,8 @@ $staff = Staff::where('active', 1)->get();
 <div class="row">
 	<div class="col-sm-6">
 		<div class="card">
-			<div class="card-header">Service Report</div>
-			<div class="card-body">
+			<div class="card-header" style="background-color: #dfe98d">Service Report</div>
+			<div class="card-body" style="background-color: #faffd2">
 	
 					<div class="form-group row {{ $errors->has('date')?'has-error':'' }}">
 						{{ Form::label( 'cust', 'Date : ', ['class' => 'col-sm-4 col-form-label'] ) }}
@@ -70,10 +70,8 @@ $staff = Staff::where('active', 1)->get();
 	</div>
 	<div class="col-sm-6">
 		<div class="card">
-			<div class="card-header">Service Report Serial</div>
-			<div class="card-body">
-
-
+			<div class="card-header" style="background-color: #a2e1fa">Service Report Serial</div>
+			<div class="card-body" style="background-color: #ddf5ff">
 				<div class="container-fluid serial_wrap">
 <?php $i = 1; $r = 1; ?>
 @foreach($serviceReport->hasmanyserial()->get() as $srs)
@@ -108,8 +106,8 @@ $staff = Staff::where('active', 1)->get();
 <div class="row">
 	<div class="col-sm-6">
 		<div class="card">
-			<div class="card-header">Customer</div>
-			<div class="card-body">
+			<div class="card-header" style="background-color: #e2baea">Customer</div>
+			<div class="card-body" style="background-color: #fadfff">
 
 				<div class="form-group row {{ $errors->has('customer_id')?'has-error':'' }}">
 					{{ Form::label( 'cust', 'Customer : ', ['class' => 'col-sm-3 col-form-label'] ) }}
@@ -139,8 +137,8 @@ $staff = Staff::where('active', 1)->get();
 
 	<div class="col-sm-6">
 		<div class="card">
-			<div class="card-header">Attended By</div>
-			<div class="card-body">
+			<div class="card-header" style="background-color: #fcc27e">Attended By</div>
+			<div class="card-body" style="background-color: #ffe6c8">
 
 				<div class="container-fluid position_wrap">
 <?php
@@ -227,8 +225,8 @@ $iii = 1;
 <div class="row">
 	<div class="col-sm-6">
 		<div class="card">
-			<div class="div card-header">Nature Of Complaints</div>
-			<div class="card-body">
+			<div class="div card-header" style="background-color: #ffe042">Nature Of Complaints</div>
+			<div class="card-body" style="background-color: #fff5c3">
 
 				<div class="form-group row {{ $errors->has('model')?'has-error':'' }}">
 					{{ Form::label( 'model_mavhine', 'Model :', ['class' => 'col-sm-3 col-form-label'] ) }}
@@ -256,18 +254,18 @@ $iii = 1;
 	</div>
 	<div class="col-sm-6">
 		<div class="card">
-			<div class="card-header">Model</div>
-			<div class="card-body">
+			<div class="card-header" style="background-color: #fb9fc0">Model</div>
+			<div class="card-body" style="background-color: #ffd5e4">
 
-				<div class="container-fluid model_wrap">
-	<div class="col-sm-12 form-row">
-		<div class="col-1 text-danger">&nbsp;</div>
-		<div class="col-3"><input type="text" name="" placeholder="Select Model" class="form-control" disabled></div>
-		<div class="col-2"><input type="text" name="" placeholder="Test Run Machine" class="form-control" disabled></div>
-		<div class="col-2"><input type="text" name="" placeholder="Serial No." class="form-control" disabled></div>
-		<div class="col-2"><input type="text" name="" placeholder="Test Capacity" class="form-control" disabled></div>
-		<div class="col-2"><input type="text" name="" placeholder="Duration" class="form-control" disabled></div>
-	</div>
+				<div class="col model_wrap">
+					<div class="col-sm-12 form-row">
+						<div class="col-1 text-danger">&nbsp;</div>
+						<div class="col-3"><input type="text" name="" placeholder="Select Model" class="form-control" disabled></div>
+						<div class="col-2"><input type="text" name="" placeholder="Test Run Machine" class="form-control" disabled></div>
+						<div class="col-2"><input type="text" name="" placeholder="Serial No." class="form-control" disabled></div>
+						<div class="col-2"><input type="text" name="" placeholder="Test Capacity" class="form-control" disabled></div>
+						<div class="col-2"><input type="text" name="" placeholder="Duration" class="form-control" disabled></div>
+					</div>
 <?php
 $model = \App\Model\ICSMachineModel::all();
 $e1 = 1;
@@ -330,8 +328,8 @@ $e10 = 1;
 <div class="row">
 	<div class="col-sm-6">
 		<div class="card">
-			<div class="card-header">Parts & Accessories</div>
-			<div class="card-body">
+			<div class="card-header" style="background-color: #dfe98d">Parts & Accessories</div>
+			<div class="card-body" style="background-color: #faffd2">
 
 				<div class="container-fluid part_wrap">
 <?php
@@ -365,8 +363,8 @@ $rrrr = 1;
 	</div>
 	<div class="col-sm-6">
 		<div class="card">
-			<div class="card-header">Remarks</div>
-			<div class="card-body">
+			<div class="card-header" style="background-color: #a2e1fa">Remarks</div>
+			<div class="card-body" style="background-color: #ddf5ff">
 				<div class="form-group row {{ $errors->has('remarks') ? 'has-error' : '' }}">
 					{!! Form::label('remarks', 'Remarks : ', ['class' => 'col-form-label col-3']) !!}
 					<div class="col-9">
@@ -384,8 +382,8 @@ $rrrr = 1;
 <div class="row">
 	<div class="col-sm-12">
 		<div class="card">
-			<div class="card-header">Job Performed</div>
-			<div class="card-body">
+			<div class="card-header" style="background-color: #e2baea">Job Performed</div>
+			<div class="card-body" style="background-color: #fadfff">
 
 				<div class="container-fluid job_wrap">
 <?php
@@ -765,8 +763,8 @@ $gt += ($srj->labour * $srj->food_rate)
 <div class="row">
 	<div class="col-sm-12">
 		<div class="card">
-			<div class="card-header">Logistic</div>
-			<div class="card-body">
+			<div class="card-header" style="background-color: #fcc27e">Logistic</div>
+			<div class="card-body" style="background-color: #ffe6c8">
 				<div class="container-fluid logistic_wrap">
 <?php
 $l1 = 1;
@@ -859,8 +857,8 @@ $tl = 0;
 <div class="row">
 	<div class="col-sm-12">
 		<div class="card">
-			<div class="card-header">Additional Charges</div>
-			<div class="card-body">
+			<div class="card-header" style="background-color: #ffe042">Additional Charges</div>
+			<div class="card-body" style="background-color: #fff5c3">
 
 				<div class="container-fluid addcharges_wrap">
 <?php
@@ -915,8 +913,8 @@ $tac = 0;
 <div class="row">
 	<div class="col-sm-12">
 		<div class="card">
-			<div class="card-header">Discount</div>
-			<div class="card-body">
+			<div class="card-header" style="background-color: #fb9fc0">Discount</div>
+			<div class="card-body" style="background-color: #ffd5e4">
 
 				<div class="container-fluid discount_wrap">
 <?php
@@ -975,8 +973,8 @@ $tdisx = 0;
 <div class="row">
 	<div class="col-sm-6">
 		<div class="card">
-			<div class="card-header">Problem Detect On Site</div>
-			<div class="card-body">
+			<div class="card-header" style="background-color: #dfe98d">Problem Detect On Site</div>
+			<div class="card-body" style="background-color: #faffd2">
 
 				<div class="container-fluid feedProb_wrap">
 <?php
@@ -1029,8 +1027,8 @@ $p4 = 1;
 	</div>
 	<div class="col-sm-6">
 		<div class="card">
-			<div class="card-header">Additional Request (Order Part, Request For Next Service)</div>
-			<div class="card-body">
+			<div class="card-header" style="background-color: #a2e1fa">Additional Request (Order Part, Request For Next Service)</div>
+			<div class="card-body" style="background-color: #ddf5ff">
 
 				<div class="container-fluid feedReq_wrap">
 <?php
@@ -1085,8 +1083,8 @@ $p4 = 1;
 <div class="row">
 	<div class="col-sm-6">
 		<div class="card">
-			<div class="card-header">Item Brought Back To IPMA</div>
-			<div class="card-body">
+			<div class="card-header" style="background-color: #e2baea">Item Brought Back To IPMA</div>
+			<div class="card-body" style="background-color: #fadfff">
 
 				<div class="container-fluid feedItem_wrap">
 <?php
@@ -1144,8 +1142,8 @@ $item6 = 1;
 	</div>
 	<div class="col-sm-6">
 		<div class="card">
-			<div class="card-header">Customer Site Survey</div>
-			<div class="card-body">
+			<div class="card-header" style="background-color: #fcc27e">Customer Site Survey</div>
+			<div class="card-body" style="background-color: #ffe6c8">
 <?php
 if (!is_null($serviceReport->hasmanyfeedback()->first())) {
 	$nm = $serviceReport->hasmanyfeedback()->first()->new_machine;
@@ -1212,8 +1210,8 @@ if (!is_null($serviceReport->hasmanyfeedback()->first())) {
 <div class="row">
 	<div class="col-sm-6">
 		<div class="card">
-			<div class="card-header">Service Report Proceed With :</div>
-			<div class="card-body">
+			<div class="card-header" style="background-color: #ffe042">Service Report Proceed With :</div>
+			<div class="card-body" style="background-color: #fff5c3">
 <?php
 if(!is_null($serviceReport->hasmanyfeedback()->first())) {
 	$pid = $serviceReport->hasmanyfeedback()->first()->proceed_id;
@@ -1241,8 +1239,8 @@ if(!is_null($serviceReport->hasmanyfeedback()->first())) {
 	</div>
 	<div class="col-sm-6">
 		<div class="card">
-			<div class="card-header">Status</div>
-			<div class="card-body">
+			<div class="card-header" style="background-color: #fb9fc0">Status</div>
+			<div class="card-body" style="background-color: #ffd5e4">
 				<div class="form-group row {{ $errors->has('status_id') ? 'has-error' : '' }}">
 					{{ Form::label( 'status', 'Status : ', ['class' => 'col-sm-4 col-form-label'] ) }}
 @foreach(ICSStatus::all() as $st1)

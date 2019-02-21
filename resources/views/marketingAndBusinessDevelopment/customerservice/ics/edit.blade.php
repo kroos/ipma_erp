@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header"><h1>Customer Service Department</h1></div>
+	<div class="card-header" style="background-color: #dadada;"><h1 style="font-family: 'Poiret One'; font-weight: bold;">Customer Service Department</h1></div>
 	<div class="card-body">
 		@include('layouts.info')
 		@include('layouts.errorform')
@@ -23,14 +23,14 @@
 				<a class="nav-link" href="">Cost Planning System</a>
 			</li> -->
 		</ul>
-		<div class="card">
+{{-- 		<div class="card">
 			<div class="card-header">Update Service Report</div>
-			<div class="card-body">
+			<div class="card-body"> --}}
 {!! Form::model( $serviceReport, ['route' => ['serviceReport.update', $serviceReport->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
 @include('marketingAndBusinessDevelopment.customerservice.ics._edit')
 {{ Form::close() }}
-			</div>
-		</div>
+{{-- 			</div>
+		</div> --}}
 	</div>
 </div>
 @endsection
@@ -52,20 +52,6 @@ $( function() {
 	];
 
 	$("#model_mavhine").autocomplete({
-		source: availableTags
-	});
-});
-
-/////////////////////////////////////////////////////////////////////////////////////////
-// autocomplete
-$( function() {
-	var availableTags = [
-		<?php foreach (\App\Model\ICSMachineModel::all() as $key) {
-			echo '"'.$key->model.'" '.',';
-		} ?>
-	];
-
-	$("#model").autocomplete({
 		source: availableTags
 	});
 });
