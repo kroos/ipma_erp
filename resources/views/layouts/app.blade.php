@@ -25,7 +25,7 @@
 		<main class="py-4">
 			<div class="container-fluid">
 				<div class="row justify-content-center">
-					<!-- <div class="col-md-12 animated flipInY delay-5s"> -->
+					{{-- <div class="col-md-12 animated flipInY delay-5s"> --}}
 					<div class="col-md-12">
 
 						@yield('content')

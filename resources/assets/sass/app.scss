@@ -29,9 +29,11 @@
 @import '~tether/src/css/tether-theme-arrows-dark';
 @import '~tether/src/css/tether-theme-basic';
 
-
-// pretty checkbox	
+// pretty checkbox
 @import '~pretty-checkbox/src/pretty-checkbox.scss';
+
+// mdi font
+@import '~@mdi/font/scss/materialdesignicons.scss';
 
 body {
 	background-color: #17a2b8;
@@ -44,9 +46,9 @@ body {
 	width: 100%;
 	font-family: 'Noto Sans', sans-serif;
 }
-body:hover {
-	background-color: #138496;
-}
+// body:hover {
+// 	background-color: #138496;
+// }
 
 h1, h2, h3, h4, h5, h6 {
 	font-family: 'Josefin Sans', sans-serif;

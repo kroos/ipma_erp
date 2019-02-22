@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header" style="background-color: #dadada;"><h1 style="font-family: 'Poiret One'; font-weight: bold;">Customer Service Department</h1></div>
+	<div class="card-header" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #dadada;"':NULL !!}><h1 class="animated infinite bounce delay-2s" {!! (\Auth::user()->belongtostaff->id == 82)?'style="font-family: \'Poiret One\'; font-weight: bold;"':NULL !!}>Customer Service Department</h1></div>
 	<div class="card-body">
 		@include('layouts.info')
 		@include('layouts.errorform')
@@ -2708,11 +2708,11 @@ $('#form').bootstrapValidator({
 				integer: {
 					message: 'The value is not an integer. '
 				},
-				greaterThan: {
-					value: 'srj[{{ $xc }}][srjde][1][meter_end]',
-					inclusive: true,
-					message: 'The meter has to be less or equal than than Meter End. '
-				},
+//				greaterThan: {
+//					value: 'srj[{{ $xc }}][srjde][1][meter_end]',
+//					inclusive: true,
+//					message: 'The meter has to be less or equal than than Meter End. '
+//				},
 			}
 		},
 		'srj[{{ $xc }}][srjde][2][meter_end]': {
