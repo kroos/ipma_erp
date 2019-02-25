@@ -11,8 +11,8 @@
     },
     "devDependencies": {
         "@claviska/jquery-minicolors": "^2.3.4",
-        "@mdi/font": "^3.4.93",
-        "ajv": "^6.9.1",
+        "@mdi/font": "^3.5.94",
+        "ajv": "^6.9.2",
         "animate.css": "^3.7.0",
         "axios": "^0.18",
         "bootstrap": "^4.3.1",

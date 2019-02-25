@@ -324,61 +324,6 @@ $e10 = 1;
 
 <br />
 
-
-<div class="row">
-	<div class="col-sm-6">
-		<div class="card">
-			<div class="card-header" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #dfe98d"':NULL !!}>Parts & Accessories</div>
-			<div class="card-body" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #faffd2"':NULL !!}>
-
-				<div class="container-fluid part_wrap">
-<?php
-$r = 1;
-$rr = 1;
-$rrr = 1;
-$rrrr = 1;
-?>
-@foreach($serviceReport->hasmanypart()->get() as $srp)
-					<div class="rowpart">
-						<div class="col-sm-12 form-row ">
-
-							<div class="col-sm-1 text-danger">
-									<i class="fas fa-trash delete_part" aria-hidden="true" id="delete_part_{!! $srp->id !!}" data-id="{!! $srp->id !!}"></i>
-							</div>
-							<div class="form-group col {{ $errors->has('srp.*.part_accessory') ? 'has-error' : '' }}">
-								<input type="text" name="srp[{{ $r++ }}][part_accessory]" value="{!! (!empty($srp->part_accessory))?$srp->part_accessory:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Parts & Accessories" />
-							</div>
-							<div class="form-group col {{ $errors->has('srp.*.qty') ? 'has-error' : '' }}">
-								<input type="text" name="srp[{{ $rrr++ }}][qty]" value="{!! (!empty($srp->qty))?$srp->qty:@$value !!}" id="qty_{{ $rrrr++ }}" class="form-control" autocomplete="off" placeholder="Quantity" />
-							</div>
-						</div>
-					</div>
-@endforeach
-				</div>
-				<div class="row col-lg-12 add_part">
-					<span class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Parts & Accessories</span>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-6">
-		<div class="card">
-			<div class="card-header" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #a2e1fa"':NULL !!}>Remarks</div>
-			<div class="card-body" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #ddf5ff"':NULL !!}>
-				<div class="form-group row {{ $errors->has('remarks') ? 'has-error' : '' }}">
-					{!! Form::label('remarks', 'Remarks : ', ['class' => 'col-form-label col-3']) !!}
-					<div class="col-9">
-						{!! Form::textarea('remarks', @$value, ['id' => 'remarks', 'class' => 'form-control form-control-sm', 'placeholder' => 'Remarks']) !!}
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
-
-<br />
-
 <div class="row">
 	<div class="col-sm-12">
 		<div class="card">
@@ -757,6 +702,62 @@ $gt += ($srj->labour * $srj->food_rate)
 		</div>
 	</div>
 </div>
+
+<br />
+
+
+
+<div class="row">
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-header" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #dfe98d"':NULL !!}>Parts & Accessories</div>
+			<div class="card-body" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #faffd2"':NULL !!}>
+
+				<div class="container-fluid part_wrap">
+<?php
+$r = 1;
+$rr = 1;
+$rrr = 1;
+$rrrr = 1;
+?>
+@foreach($serviceReport->hasmanypart()->get() as $srp)
+					<div class="rowpart">
+						<div class="col-sm-12 form-row ">
+
+							<div class="col-sm-1 text-danger">
+									<i class="fas fa-trash delete_part" aria-hidden="true" id="delete_part_{!! $srp->id !!}" data-id="{!! $srp->id !!}"></i>
+							</div>
+							<div class="form-group col {{ $errors->has('srp.*.part_accessory') ? 'has-error' : '' }}">
+								<input type="text" name="srp[{{ $r++ }}][part_accessory]" value="{!! (!empty($srp->part_accessory))?$srp->part_accessory:@$value !!}" id="part_accessory_{{ $rr++ }}" class="form-control" autocomplete="off" placeholder="Parts & Accessories" />
+							</div>
+							<div class="form-group col {{ $errors->has('srp.*.qty') ? 'has-error' : '' }}">
+								<input type="text" name="srp[{{ $rrr++ }}][qty]" value="{!! (!empty($srp->qty))?$srp->qty:@$value !!}" id="qty_{{ $rrrr++ }}" class="form-control" autocomplete="off" placeholder="Quantity" />
+							</div>
+						</div>
+					</div>
+@endforeach
+				</div>
+				<div class="row col-lg-12 add_part">
+					<span class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Parts & Accessories</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-6">
+		<div class="card">
+			<div class="card-header" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #a2e1fa"':NULL !!}>Remarks</div>
+			<div class="card-body" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #ddf5ff"':NULL !!}>
+				<div class="form-group row {{ $errors->has('remarks') ? 'has-error' : '' }}">
+					{!! Form::label('remarks', 'Remarks : ', ['class' => 'col-form-label col-3']) !!}
+					<div class="col-9">
+						{!! Form::textarea('remarks', @$value, ['id' => 'remarks', 'class' => 'form-control form-control-sm', 'placeholder' => 'Remarks']) !!}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 
 <br />
 

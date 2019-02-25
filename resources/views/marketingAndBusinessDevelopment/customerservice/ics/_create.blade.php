@@ -11,8 +11,8 @@ $staff = Staff::where('active', 1)->get();
 ?>
 <div class="col-sm-12">
 	<div class="card">
-		<div class="card-header">Service Report</div>
-		<div class="card-body">
+		<div class="card-header" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #dfe98d"':NULL !!}>Service Report</div>
+		<div class="card-body" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #faffd2"':NULL !!}>
 
 			<div class="row">
 				<div class="col form-group {{ $errors->has('date')?'has-error':'' }}">
@@ -66,8 +66,8 @@ $staff = Staff::where('active', 1)->get();
 <div class="row">
 	<div class="col-sm-6">
 		<div class="card">
-			<div class="card-header">Customer</div>
-			<div class="card-body">
+			<div class="card-header" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #e2baea"':NULL !!}>Customer</div>
+			<div class="card-body" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #fadfff"':NULL !!}>
 
 				<div class="form-group row {{ $errors->has('customer_id')?'has-error':'' }}">
 					{{ Form::label( 'cust', 'Customer : ', ['class' => 'col-sm-3 col-form-label'] ) }}
@@ -97,8 +97,8 @@ $staff = Staff::where('active', 1)->get();
 
 	<div class="col-sm-6">
 		<div class="card">
-			<div class="card-header">Attended By</div>
-			<div class="card-body">
+			<div class="card-header" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #fcc27e"':NULL !!}>Attended By</div>
+			<div class="card-body" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #ffe6c8"':NULL !!}>
 
 				<div class="container-fluid position_wrap">
 					<div class="rowposition">
@@ -160,10 +160,10 @@ $staff = Staff::where('active', 1)->get();
 <br />
 
 <div class="row">
-	<div class="col-sm-12">
+	<div class="col-sm-6">
 		<div class="card">
-			<div class="div card-header">Nature Of Complaints</div>
-			<div class="card-body">
+			<div class="div card-header" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #ffe042"':NULL !!}>Nature Of Complaints</div>
+			<div class="card-body" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #fff5c3"':NULL !!}>
 
 				<div class="form-group row {{ $errors->has('model')?'has-error':'' }}">
 					{{ Form::label( 'model', 'Model :', ['class' => 'col-sm-3 col-form-label'] ) }}
@@ -189,15 +189,11 @@ $staff = Staff::where('active', 1)->get();
 			</div>
 		</div>
 	</div>
-</div>
 
-<br />
-
-<div class="row">
-	<div class="col-sm-12">
+	<div class="col-sm-6">
 		<div class="card">
-			<div class="div card-header">Remarks</div>
-			<div class="card-body">
+			<div class="div card-header" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #a2e1fa"':NULL !!}>Remarks</div>
+			<div class="card-body" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #ddf5ff"':NULL !!}>
 
 				<div class="form-group row {{ $errors->has('remarks')?'has-error':'' }}">
 					{{ Form::label( 'rem', 'Remarks :', ['class' => 'col-sm-3 col-form-label'] ) }}

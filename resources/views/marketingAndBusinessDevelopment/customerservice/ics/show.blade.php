@@ -358,8 +358,8 @@ $thours = floor($th / 60).' hours '.($th -   floor($th / 60) * 60).' minutes';
 			</center>
 
 <p style="page-break-before: always">
-	<h1>ON-SITE SERVICE FEEDBACK</h1>
 		<center>
+			<h1>ON-SITE SERVICE FEEDBACK</h1>
 			<table width="30%" border="1" cellspacing="1" cellpadding="1">
 				<tbody>
 					<tr>
@@ -431,8 +431,8 @@ $thours = floor($th / 60).' hours '.($th -   floor($th / 60) * 60).' minutes';
 			</table>
 		</center>
 <p style="page-break-before: always">
-	<h1>FLOAT TH</h1>
 	<center>
+		<h1>FLOAT TH</h1>
 		<table width="30%" cellspacing="1" cellpadding="1" border="0">
 			<tbody>
 				<tr>
@@ -666,8 +666,8 @@ if($serviceReport->hasonediscount->discount_id == 1) {		// 1 = percentage
 		</table>
 	</center>
 <p style="page-break-before: always">
-	<h1>POST SERVICE FEEDBACK FORM</h1>
 	<center>
+		<h1>POST SERVICE FEEDBACK FORM</h1>
 		<table width="30%" cellspacing="1" cellpadding="1" border="1">
 			<tbody>
 @if($serviceReport->hasmanyfeedcall()->get()->count() > 0)

@@ -29,8 +29,8 @@ if ( $bmonth != 1 ) {
 
 ?>
 <div class="card">
-	<div class="card-header"><h5>Appointment For Service</h5></div>
-	<div class="card-body">
+	<div class="card-header" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #e2baea;"':NULL !!}><h5>Appointment For Service</h5></div>
+	<div class="card-body" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #fadfff;"':NULL !!}>
 		<table class="table table-hover table-sm" style="font-size:12px" id="servicereport1">
 			<thead>
 				<tr>
@@ -102,8 +102,8 @@ if ( $bmonth != 1 ) {
 <p>&nbsp;</p>
 
 <div class="card">
-	<div class="card-header"><h5>Service Report In Progress</h5></div>
-	<div class="card-body">
+	<div class="card-header" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #e2baea;"':NULL !!}><h5>Service Report In Progress</h5></div>
+	<div class="card-body" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #fadfff;"':NULL !!}>
 		<table class="table table-hover table-sm" style="font-size:12px" id="servicereport4">
 			<thead>
 				<tr>
@@ -186,8 +186,8 @@ if ( $bmonth != 1 ) {
 <p>&nbsp;</p>
 
 <div class="card">
-	<div class="card-header"><h5>Completed Service Report for Customer Service Department</h5></div>
-	<div class="card-body">
+	<div class="card-header" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #e2baea;"':NULL !!}><h5>Completed Service Report for Customer Service Department</h5></div>
+	<div class="card-body" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #fadfff;"':NULL !!}>
 		<table class="table table-hover table-sm" style="font-size:12px" id="servicereport5">
 			<thead>
 				<tr>
@@ -399,8 +399,8 @@ if ( $bmonth != 1 ) {
 <p>&nbsp;</p>
 
 <div class="card">
-	<div class="card-header"><h5>Unapproved Service Report</h5></div>
-	<div class="card-body">
+	<div class="card-header" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #e2baea;"':NULL !!}><h5>Unapproved Service Report</h5></div>
+	<div class="card-body"  {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #fadfff;"':NULL !!}>
 
 {!! Form::open(['route' => ['serviceReport.updateunapprove'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true,  'data-toggle' => 'validator']) !!}
 		<table class="table table-hover table-sm" style="font-size:12px" id="servicereport3">

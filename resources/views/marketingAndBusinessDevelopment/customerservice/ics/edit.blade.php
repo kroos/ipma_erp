@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #dadada;"':NULL !!}><h1 class="animated infinite bounce delay-2s" {!! (\Auth::user()->belongtostaff->id == 82)?'style="font-family: \'Poiret One\'; font-weight: bold;"':NULL !!}>Customer Service Department</h1></div>
+	<div class="card-header" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #dadada;"':NULL !!}><h1 class="animated bounce delay-2s" {!! (\Auth::user()->belongtostaff->id == 82)?'style="font-family: \'Poiret One\'; font-weight: bold;"':NULL !!}>Customer Service Department</h1></div>
 	<div class="card-body">
 		@include('layouts.info')
 		@include('layouts.errorform')
@@ -26,7 +26,7 @@
 {{-- 		<div class="card">
 			<div class="card-header">Update Service Report</div>
 			<div class="card-body"> --}}
-{!! Form::model( $serviceReport, ['route' => ['serviceReport.update', $serviceReport->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
+{!! Form::model( $serviceReport, ['route' => ['serviceReport.update', $serviceReport->id], 'method' => 'PATCH', 'id' => 'form', 'files' => true]) !!}
 @include('marketingAndBusinessDevelopment.customerservice.ics._edit')
 {{ Form::close() }}
 {{-- 			</div>
@@ -694,7 +694,7 @@ $(addbtnjobn).click(function(){
 											'<td><span class="overtimeconstant1">{{ \App\Model\ICSFloatthConstant::where('active', 1)->first()->overtime_constant_1 }}</span> X <span class="overtimeconstant2">{{ \App\Model\ICSFloatthConstant::where('active', 1)->first()->overtime_constant_2 }}</span></td>' +
 											'<td>X</td>' +
 											'<td class="form-group {{ $errors->has('srj.*.overtime_hour') ? ' has-error' : '' }}">' +
-												'<input type="text" name="srj[' + xj + '][overtime_hour]" value="{{ @$value }}" class="form-control form-control-sm overtimehour" id="overtime_hour_' + xj + '" placeholder="Hour">' +
+												'<input type="text" name="srj[' + xj + '][overtime_hour]" value="0" class="form-control form-control-sm overtimehour" id="overtime_hour_' + xj + '" placeholder="Hour">' +
 											'</td>' +
 											'<td>hour</td>' +
 											'<td colspan="3">&nbsp;</td>' +
@@ -2963,9 +2963,9 @@ $('#form').bootstrapValidator({
 		},
 		status_id: {
 			validators : {
-				notEmpty: {
-					message: 'Please choose. '
-				},
+//				notEmpty: {
+//					message: 'Please choose. '
+//				},
 			}
 		},
 	}
