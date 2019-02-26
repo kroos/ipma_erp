@@ -64,6 +64,8 @@ Route::resources([
 	'staffOvertime' => 'Administrative\HumanResource\StaffManagement\StaffOvertimeController',
 	'staffAvailability' => 'Administrative\HumanResource\StaffManagement\StaffAvailabilityController',
 	'staffDis' => 'Administrative\HumanResource\StaffManagement\StaffDisciplineController',
+// staff warning & verbal warning
+	'staffMemo' => 'Administrative\HumanResource\StaffManagement\StaffMemoController',
 
 // setting double date in HR
 	'settingDoubleDate' => 'Administrative\HumanResource\HRSettings\SettingDoubleDateController',
@@ -92,6 +94,9 @@ Route::resources([
 
 // ics machine model
 	'machine_model' => 'Sales\CustomerService\MachineModelController',
+
+// memo category
+	'MemoCategoryController' => 'MemoCategoryController',
 
 // todo schedule
 	'todoSchedule' => 'Admin\ToDoScheduleController',

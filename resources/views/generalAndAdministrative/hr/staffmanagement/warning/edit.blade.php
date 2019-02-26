@@ -46,7 +46,9 @@
 					</li>
 				</ul>
 
-				@include('generalAndAdministrative.hr.staffmanagement.attendance._index')
+{{ Form::model($staffMemo, ['route' => ['staffMemo.update', $staffMemo->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
+				@include('generalAndAdministrative.hr.staffmanagement.warning._edit')
+{!! Form::close() !!}
 
 			</div>
 		</div>
@@ -68,55 +70,72 @@ $("#staffdiscoff, #staffdiscprod").DataTable({
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
-// ajax delete
-$(document).on('click', '.remove_staffMemo', function(e){
-	var tdsid = $(this).data('id');
-	SwalToggle(tdsid);
-	e.preventDefault();
+$('#m_cat').select2({
+	placeholder: 'Please Choose',
+	width: '100%',
 });
 
-function SwalToggle(tdsid){
-	swal({
-		title: 'Delete Warning',
-		text: 'Delete this warning?',
-		type: 'question',
-		showCancelButton: true,
-		confirmButtonColor: '#3085d6',
-		cancelButtonColor: '#d33',
-		confirmButtonText: 'Delete',
-		showLoaderOnConfirm: true,
+/////////////////////////////////////////////////////////////////////////////////////////
+$('#date').datetimepicker({
+	format:'YYYY-MM-DD',
+	// useCurrent: false,
+})
+.on('dp.change dp.show dp.update', function(e) {
+	$('#form').bootstrapValidator('revalidateField', 'date');
+});
 
-		preConfirm: function() {
-			return new Promise(function(resolve) {
-				$.ajax({
-					url: '{{ url('staffMemo') }}' + '/' + tdsid,
-					type: 'DELETE',
-					data: {
-							_token : $('meta[name=csrf-token]').attr('content'),
-							id: tdsid,
-					},
-					dataType: 'json'
-				})
-				.done(function(response){
-					swal('Delete Success!', response.message, response.status)
-					.then(function(){
-						window.location.reload(true);
-					});
-					//$('#delete_logistic_' + tdsid).parent().parent().remove();
-				})
-				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
-				})
-			});
+/////////////////////////////////////////////////////////////////////////////////////////
+$(document).on('keyup', '#reason', function () {
+	// tch(this);
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// validator
+$(document).ready(function() {
+	$('#form').bootstrapValidator({
+		feedbackIcons: {
+			valid: '',
+			invalid: '',
+			validating: ''
 		},
-		allowOutsideClick: false			  
-	})
-	.then((result) => {
-		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is saved', 'info')
+		fields: {
+			memo_category: {
+				validators: {
+					notEmpty: {
+						message: 'Please choose. ',
+					},
+				}
+			},
+			reason: {
+				validators: {
+					notEmpty: {
+						message: 'Please insert Reason. ',
+					},
+				}
+			},
+			date: {
+				validators: {
+					notEmpty : {
+						message: 'Please insert date. '
+					},
+					date: {
+						format: 'YYYY-MM-DD',
+						message: 'The value is not a valid date. '
+					},
+				}
+			},
 		}
-	});
-}
+	})
+	// .find('[name="reason"]')
+	// .ckeditor()
+	// .editor
+	// 	.on('change', function() {
+	// 		// Revalidate the bio field
+	// 	$('#form').bootstrapValidator('revalidateField', 'reason');
+	// 	// console.log($('#reason').val());
+	// })
+	;
+});
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @endsection

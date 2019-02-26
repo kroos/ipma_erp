@@ -204,7 +204,7 @@ class StaffHRController extends Controller
 		]);
 
 		// 4. change status at staff model
-		$staffHR->update(['status_id' => 1]);
+		$staffHR->update(['status_id' => 1, 'confirmed_at' => today()]);
 // die();
 		// 5. update the staff_annual_MC_maternity_leave
 		$staffHR->hasmanystaffannualmcleave()->where('year', date('Y'))->updateOrCreate(

@@ -162,6 +162,13 @@ class Staff extends Model
 	{
 		return $this->hasMany('\App\Model\ToDoList', 'updated_by');
 	}
+
+// warning & verbal warning
+	public function hasmanystaffmemo()
+	{
+		return $this->hasMany('\App\Model\StaffMemo', 'staff_id');
+	}
+
 // https://laravel.com/docs/5.6/eloquent-relationships#many-to-many
 	public function belongtomanyposition()
 	{

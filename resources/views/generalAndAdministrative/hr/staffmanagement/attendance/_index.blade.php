@@ -5,6 +5,7 @@ ini_set('max_execution_time', 300); //5 minutes
 use \App\Model\Staff;
 use \App\Model\StaffTCMS;
 use \App\Model\StaffLeave;
+use \App\Model\StaffMemo;
 use \App\Model\StaffAnnualMCLeave;
 use \App\Model\HolidayCalendar;
 use \App\Model\WorkingHour;
@@ -44,14 +45,14 @@ foreach($h1 as $h2) {
 				<tr>
 					<th rowspan="2">ID Staff</th>
 					<th rowspan="2">Name</th>
-					<th rowspan="2">Location</th>
-					<th rowspan="2">Department</th>
-					<th colspan="2" >Late</th>
-					<th colspan="2" >Freq. UPL</th>
-					<th colspan="2" >Freq MC</th>
-					<th colspan="2" >EL w/o Supporting Doc</th>
-					<th colspan="3" >Absent / Absent w/ Reject Or Cancelled</th>
-					<th colspan="2" >EL (Below Than 3 Days)</th>
+					<th rowspan="2">Verbal Warning</th>
+					<th rowspan="2">Warning</th>
+					<th colspan="2">Late</th>
+					<th colspan="2">Freq. UPL</th>
+					<th colspan="2">Freq MC</th>
+					<th colspan="2">EL w/o Supporting Doc</th>
+					<th colspan="3">Absent / Absent w/ Reject Or Cancelled</th>
+					<th colspan="2">EL (Below Than 3 Days)</th>
 					<th rowspan="2">Total Merit</th>
 				</tr>
 				<tr>
@@ -214,10 +215,71 @@ $lm5 = Discipline::where('id', 5)->first();
 ////////////////////////////////////////////////////////////////////////////
 ?>
 				<tr>
-					<td>{!! $sf->username !!}</td>
+					<td>
+						<a href="{{ route('staffMemo.create', 'staff_id='.$sf->id) }}" title="Verbal Warning & Warning"><i class="fas fa-chalkboard-teacher"></i>&nbsp;{!! $sf->username !!}</a>
+					</td>
 					<td>{!! $sf->name !!}</td>
-					<td>{!! $sf->location !!}</td>
-					<td>{!! $sf->department !!}</td>
+					<td>
+<?php
+$sm1 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 2)->get();
+$sm2 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 1)->get();
+// echo $sm;
+?>
+@if($sm1->count() > 0)
+						<table class="table table-hover table-sm" style="font-size:12px" id="staffdiscoff1">
+							<thead>
+								<tr>
+									<th>Date</th>
+									<th>Reason</th>
+									<th>&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody>
+@foreach($sm1 as $sme1)
+								<tr>
+									<td>{!! Carbon::parse($sme1->date)->format('D, j M Y') !!}</td>
+									<td>
+										<a href="{!! route('staffMemo.edit', $sme1->id) !!}" title="Edit">{!! $sme1->reason !!}</a>
+									</td>
+									<td>
+										<span title="Delete" class="text-danger remove_staffMemo" data-id="{!! $sme1->id !!}">
+											<i class="far fa-trash-alt"></i>
+										</span>
+									</td>
+								</tr>
+@endforeach
+							</tbody>
+						</table>
+@endif
+					</td>
+					<td>
+@if($sm2->count() > 0)
+						<table class="table table-hover table-sm" style="font-size:12px" id="staffdiscoff1">
+							<thead>
+								<tr>
+									<th>Date</th>
+									<th>Reason</th>
+									<th>&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody>
+@foreach($sm2 as $sme2)
+								<tr>
+									<td>{!! Carbon::parse($sme2->date)->format('D, j M Y') !!}</td>
+									<td>
+										<a href="{!! route('staffMemo.edit', $sme2->id) !!}" title="Edit">{!! $sme2->reason !!}</a>
+									</td>
+									<td>
+										<span title="Delete" class="text-danger remove_staffMemo" data-id="{!! $sme2->id !!}">
+											<i class="far fa-trash-alt"></i>
+										</span>
+									</td>
+								</tr>
+@endforeach
+							</tbody>
+						</table>
+@endif
+					</td>
 					<td>{!! $i1late !!}</td>
 					<td>{!! $i1late * $lm->merit_point !!}<?php $count += $i1late * $lm->merit_point ?> m</td>
 					<td>{!! $sl1 !!}</td>
@@ -246,14 +308,14 @@ $lm5 = Discipline::where('id', 5)->first();
 				<tr>
 					<th rowspan="2">ID Staff</th>
 					<th rowspan="2">Name</th>
-					<th rowspan="2">Location</th>
-					<th rowspan="2">Department</th>
-					<th colspan="2" >Late</th>
-					<th colspan="2" >Freq. UPL</th>
-					<th colspan="2" >Freq MC</th>
-					<th colspan="2" >EL w/o Supporting Doc</th>
-					<th colspan="3" >Absent / Absent w/ Reject Or Cancelled</th>
-					<th colspan="2" >EL (Below Than 3 Days)</th>
+					<th rowspan="2">Verbal Warning</th>
+					<th rowspan="2">Warning</th>
+					<th colspan="2">Late</th>
+					<th colspan="2">Freq. UPL</th>
+					<th colspan="2">Freq MC</th>
+					<th colspan="2">EL w/o Supporting Doc</th>
+					<th colspan="3">Absent / Absent w/ Reject Or Cancelled</th>
+					<th colspan="2">EL (Below Than 3 Days)</th>
 					<th rowspan="2">Total Merit</th>
 				</tr>
 				<tr>
@@ -422,10 +484,71 @@ foreach($stcms1 as $ke) {
 $lm5 = Discipline::where('id', 5)->first();
 ?>
 				<tr>
-					<td>{!! $sf->username !!}</td>
+					<td>
+						<a href="{{ route('staffMemo.create', 'staff_id='.$sf->id) }}" title="Verbal Warning & Warning"><i class="fas fa-chalkboard-teacher"></i>&nbsp;{!! $sf->username !!}</a>
+					</td>
 					<td>{!! $sf->name !!}</td>
-					<td>{!! $sf->location !!}</td>
-					<td>{!! $sf->department !!}</td>
+					<td>
+<?php
+$sm3 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 2)->get();
+$sm4 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 1)->get();
+// echo $sm;
+?>
+@if($sm3->count() > 0)
+						<table class="table table-hover table-sm" style="font-size:12px" id="staffdiscoff1">
+							<thead>
+								<tr>
+									<th>Date</th>
+									<th>Reason</th>
+									<th>&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody>
+@foreach($sm3 as $sme3)
+								<tr>
+									<td>{!! Carbon::parse($sme3->date)->format('D, j M Y') !!}</td>
+									<td>
+										<a href="{!! route('staffMemo.edit', $sme3->id) !!}" title="Edit">{!! $sme3->reason !!}</a>
+									</td>
+									<td>
+										<span title="Delete" class="text-danger remove_staffMemo" data-id="{!! $sme3->id !!}">
+											<i class="far fa-trash-alt"></i>
+										</span>
+									</td>
+								</tr>
+@endforeach
+							</tbody>
+						</table>
+@endif
+					</td>
+					<td>
+@if($sm4->count() > 0)
+						<table class="table table-hover table-sm" style="font-size:12px" id="staffdiscoff1">
+							<thead>
+								<tr>
+									<th>Date</th>
+									<th>Reason</th>
+									<th>&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody>
+@foreach($sm4 as $sme4)
+								<tr>
+									<td>{!! Carbon::parse($sme4->date)->format('D, j M Y') !!}</td>
+									<td>
+										<a href="{!! route('staffMemo.edit', $sme4->id) !!}" title="Edit">{!! $sme4->reason !!}</a>
+									</td>
+									<td>
+										<span title="Delete" class="text-danger remove_staffMemo" data-id="{!! $sme4->id !!}">
+											<i class="far fa-trash-alt"></i>
+										</span>
+									</td>
+								</tr>
+@endforeach
+							</tbody>
+						</table>
+@endif
+					</td>
 					<td>{!! $i1late !!}</td>
 					<td>{!! $i1late * $lm->merit_point !!}<?php $count += $i1late * $lm->merit_point ?> m</td>
 					<td>{!! $sl1 !!}</td>
