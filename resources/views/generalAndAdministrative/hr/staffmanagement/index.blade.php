@@ -47,6 +47,9 @@ ini_set('max_execution_time', 300); //5 minutes
 					<li class="nav-item">
 						<a class="nav-link" href="{!! route('staffDis.index') !!}">Staff Attendance & Discipline</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{!! route('staffDisciplinaryAct.index') !!}">Staff Disciplinary Action</a>
+					</li>
 				</ul>
 
 				@include('generalAndAdministrative.hr.staffmanagement.content')

@@ -19,6 +19,13 @@
 			</div>
 		</div>
 
+		<div class="form-group row {{ $errors->has('merit_point') ? 'has-error' : '' }}">
+			{{ Form::label( 'm_pnt', 'Point : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+			<div class="col-sm-10">
+				{{ Form::text('merit_point', @$value, ['class' => 'form-control form-control-sm', 'id' => 'm_pnt', 'placeholder' => 'Merit Point']) }}
+			</div>
+		</div>
+
 		<div class="form-group row {{ $errors->has('reason') ? 'has-error' : '' }}">
 			{{ Form::label( 'reason', 'Reason : ', ['class' => 'col-sm-2 col-form-label'] ) }}
 			<div class="col-sm-10">

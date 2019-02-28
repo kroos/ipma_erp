@@ -44,6 +44,9 @@
 					<li class="nav-item">
 						<a class="nav-link active" href="{!! route('staffDis.index') !!}">Staff Attendance & Discipline</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{!! route('staffDisciplinaryAct.index') !!}">Staff Disciplinary Action</a>
+					</li>
 				</ul>
 
 				@include('generalAndAdministrative.hr.staffmanagement.attendance._index')

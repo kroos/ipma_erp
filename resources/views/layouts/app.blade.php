@@ -49,6 +49,7 @@
 	<script type="text/javascript" src="{{ asset('js/datetime-moment.js') }}" ></script>
 	<script type="text/javascript" src="{{ asset('js/dataTable-any-number.js') }}" ></script>
 	<script type="text/javascript" src="{{ asset('js/select2-dropdownPosition.js') }}" ></script>
+	<script type="text/javascript" src="{{ asset('js/colResizable-1.5.min.js') }}" ></script>
 
 	@include('layouts.jscript')
 </body>

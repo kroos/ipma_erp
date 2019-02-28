@@ -44,6 +44,9 @@
 					<li class="nav-item">
 						<a class="nav-link active" href="{!! route('staffDis.index') !!}">Staff Attendance & Discipline</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{!! route('staffDisciplinaryAct.index') !!}">Staff Disciplinary Action</a>
+					</li>
 				</ul>
 
 {!! Form::open(['route' => ['staffMemo.store', 'staff_id='.request()->staff_id], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
@@ -90,6 +93,17 @@ $(document).on('keyup', '#reason', function () {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+$('#m_cat').on('change', function() {
+	$selection = $(this).find(':selected');
+
+@foreach(\App\Model\MemoCategory::all() as $mc)
+	if ($selection.val() == '{!! $mc->id !!}') {
+		$('#m_pnt').val('{!! $mc->merit_point !!}');
+	};
+@endforeach
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
 // validator
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
@@ -103,6 +117,16 @@ $(document).ready(function() {
 				validators: {
 					notEmpty: {
 						message: 'Please choose. ',
+					},
+				}
+			},
+			merit_point: {
+				validators: {
+					notEmpty: {
+						message: 'Please choose. ',
+					},
+					integer: {
+						message: 'Please insert integer. '
 					},
 				}
 			},

@@ -25,6 +25,18 @@ use \Carbon\CarbonPeriod;
 	<style type="text/css">
 		body {
 			background-color: #FFF;
+			font-size: 12px;
+			line-height: 12px;   /* within paragraph */
+			margin-bottom: 5px; /* between paragraphs */
+			margin-left: 5mm;
+		}
+		p {
+			line-height: 8px;   /* within paragraph */
+			margin-bottom: 3px; /* between paragraphs */
+		}
+		h4 {
+			line-height: 8px;   /* within paragraph */
+			margin-bottom: 3px; /* between paragraphs */
 		}
 		@page {
 					size 21cm 29.7cm;

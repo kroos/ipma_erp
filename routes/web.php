@@ -66,6 +66,7 @@ Route::resources([
 	'staffDis' => 'Administrative\HumanResource\StaffManagement\StaffDisciplineController',
 // staff warning & verbal warning
 	'staffMemo' => 'Administrative\HumanResource\StaffManagement\StaffMemoController',
+	'staffDisciplinaryAct' => 'Administrative\HumanResource\StaffManagement\StaffDisciplinaryActionController',
 
 // setting double date in HR
 	'settingDoubleDate' => 'Administrative\HumanResource\HRSettings\SettingDoubleDateController',

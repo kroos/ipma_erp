@@ -37,7 +37,7 @@ foreach($h1 as $h2) {
 	<div class="card-header">Staff Attendance & Discipline</div>
 	<div class="card-body">
 
-		<table class="table table-hover table-sm" style="font-size:12px" id="staffdiscoff">
+		<table class="table table-hover table-sm" style="font-size:10px" id="staffdiscoff">
 			<thead>
 				<tr>
 					<th colspan="18" class="text-center text-primary">Office</th>
@@ -45,6 +45,7 @@ foreach($h1 as $h2) {
 				<tr>
 					<th rowspan="2">ID Staff</th>
 					<th rowspan="2">Name</th>
+					<th rowspan="2">Non Record Councelling</th>
 					<th rowspan="2">Verbal Warning</th>
 					<th rowspan="2">Warning</th>
 					<th colspan="2">Late</th>
@@ -213,36 +214,43 @@ foreach($stcms1 as $ke) {
 }
 $lm5 = Discipline::where('id', 5)->first();
 ////////////////////////////////////////////////////////////////////////////
+$sm1 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 2)->get();
+$sm2 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 1)->get();
+$sm3 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 3)->get();
+
+
+$mp1 = 0;
+$mp2 = 0;
 ?>
 				<tr>
 					<td>
-						<a href="{{ route('staffMemo.create', 'staff_id='.$sf->id) }}" title="Verbal Warning & Warning"><i class="fas fa-chalkboard-teacher"></i>&nbsp;{!! $sf->username !!}</a>
+						<a href="{{ route('staffMemo.create', 'staff_id='.$sf->id) }}" title="Verbal Warning & Warning"><i class="fas fa-chalkboard-teacher"></i> {!! $sf->username !!}</a>
 					</td>
 					<td>{!! $sf->name !!}</td>
 					<td>
-<?php
-$sm1 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 2)->get();
-$sm2 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 1)->get();
-// echo $sm;
-?>
-@if($sm1->count() > 0)
-						<table class="table table-hover table-sm" style="font-size:12px" id="staffdiscoff1">
+@if($sm3->count() > 0)
+						<table class="table table-hover table-sm" style="font-size:10px" id="staffdiscoff1">
 							<thead>
 								<tr>
+									<th>#</th>
 									<th>Date</th>
 									<th>Reason</th>
 									<th>&nbsp;</th>
 								</tr>
 							</thead>
 							<tbody>
-@foreach($sm1 as $sme1)
+<?php
+$i1 = 1;
+?>
+@foreach($sm3 as $sme3)
 								<tr>
-									<td>{!! Carbon::parse($sme1->date)->format('D, j M Y') !!}</td>
 									<td>
-										<a href="{!! route('staffMemo.edit', $sme1->id) !!}" title="Edit">{!! $sme1->reason !!}</a>
+										<a href="{!! route('staffMemo.edit', $sme3->id) !!}" title="Edit">{!! $i1++ !!}</a>
 									</td>
+									<td>{!! Carbon::parse($sme3->date)->format('j M Y') !!}</td>
+									<td>{!! $sme3->reason !!}</td>
 									<td>
-										<span title="Delete" class="text-danger remove_staffMemo" data-id="{!! $sme1->id !!}">
+										<span title="Delete" class="text-danger remove_staffMemo" data-id="{!! $sme3->id !!}">
 											<i class="far fa-trash-alt"></i>
 										</span>
 									</td>
@@ -251,24 +259,72 @@ $sm2 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 1)->get();
 							</tbody>
 						</table>
 @endif
+
 					</td>
 					<td>
-@if($sm2->count() > 0)
-						<table class="table table-hover table-sm" style="font-size:12px" id="staffdiscoff1">
+@if($sm1->count() > 0)
+						<table class="table table-hover table-sm" style="font-size:10px" id="staffdiscoff1">
 							<thead>
 								<tr>
+									<th>#</th>
 									<th>Date</th>
 									<th>Reason</th>
+									<th>Point</th>
+									<th>&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody>
+<?php $i3 = 1 ?>
+@foreach($sm1 as $sme1)
+								<tr>
+									<td>
+										<a href="{!! route('staffMemo.edit', $sme1->id) !!}" title="Edit">{!! $i3++ !!}</a>
+									</td>
+									<td>{!! Carbon::parse($sme1->date)->format('j M Y') !!}</td>
+									<td>{!! $sme1->reason !!}</td>
+									<td>{!! $sme1->merit_point !!}<?php $mp2 += $sme1->merit_point ?></td>
+									<td>
+										<span title="Delete" class="text-danger remove_staffMemo" data-id="{!! $sme1->id !!}">
+											<i class="far fa-trash-alt"></i>
+										</span>
+									</td>
+								</tr>
+@endforeach
+							</tbody>
+							<tfoot>
+								<tr>
+									<th>Total</th>
+									<th colspan="2">&nbsp;</th>
+									<th colspan="2">{!! $mp2 !!}</th>
+								</tr>
+							</tfoot>
+						</table>
+@endif
+					</td>
+					<td>
+<?php
+$i2 = 1;
+?>
+@if($sm2->count() > 0)
+						<table class="table table-hover table-sm" style="font-size:10px" id="staffdiscoff1">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Date</th>
+									<th>Reason</th>
+									<th>Point</th>
 									<th>&nbsp;</th>
 								</tr>
 							</thead>
 							<tbody>
 @foreach($sm2 as $sme2)
 								<tr>
-									<td>{!! Carbon::parse($sme2->date)->format('D, j M Y') !!}</td>
 									<td>
-										<a href="{!! route('staffMemo.edit', $sme2->id) !!}" title="Edit">{!! $sme2->reason !!}</a>
+										<a href="{!! route('staffMemo.edit', $sme2->id) !!}" title="Edit">{!! $i2++ !!}</a>
 									</td>
+									<td>{!! Carbon::parse($sme2->date)->format('j M Y') !!}</td>
+									<td>{!! $sme2->reason !!}</td>
+									<td>{!! $sme2->merit_point !!}<?php $mp1 += $sme2->merit_point ?></td>
 									<td>
 										<span title="Delete" class="text-danger remove_staffMemo" data-id="{!! $sme2->id !!}">
 											<i class="far fa-trash-alt"></i>
@@ -277,6 +333,13 @@ $sm2 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 1)->get();
 								</tr>
 @endforeach
 							</tbody>
+							<tfoot>
+								<tr>
+									<th>Total</th>
+									<th colspan="2">&nbsp;</th>
+									<th colspan="2">{!! $mp1 !!}</th>
+								</tr>
+							</tfoot>
 						</table>
 @endif
 					</td>
@@ -293,14 +356,14 @@ $sm2 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 1)->get();
 					<td>{!! ($m + $v2) * $lm5->merit_point !!}<?php $count5 = ($m + $v2) * $lm5->merit_point ?> m</td>
 					<td>{!! $sl4 !!}</td>
 					<td>{!! $sl4 * $lm4->merit_point !!}<?php $count4 = $sl4 * $lm4->merit_point ?> m</td>
-					<td>{!! number_format($count + $count1 + $count2 + $count3 + $count4 , 2) !!}</td>
+					<td>{!! number_format($count + $count1 + $count2 + $count3 + $count4 + $mp1 + $mp2, 2) !!}</td>
 				</tr>
 @endforeach
 			</tbody>
 		</table>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-		<table class="table table-hover table-sm" style="font-size:12px" id="staffdiscprod">
+		<table class="table table-hover table-sm" style="font-size:10px" id="staffdiscprod">
 			<thead>
 				<tr>
 					<th colspan="18" class="text-center text-primary">Production</th>
@@ -308,6 +371,7 @@ $sm2 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 1)->get();
 				<tr>
 					<th rowspan="2">ID Staff</th>
 					<th rowspan="2">Name</th>
+					<th rowspan="2">Non Record Councelling</th>
 					<th rowspan="2">Verbal Warning</th>
 					<th rowspan="2">Warning</th>
 					<th colspan="2">Late</th>
@@ -482,36 +546,41 @@ foreach($stcms1 as $ke) {
 	// echo '---------------------------------<br />';
 }
 $lm5 = Discipline::where('id', 5)->first();
+$sm3 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 2)->get();
+$sm4 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 1)->get();
+$sm6 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 3)->get();
+
+$mp3 = 0;
+$mp4 = 0;
 ?>
 				<tr>
 					<td>
-						<a href="{{ route('staffMemo.create', 'staff_id='.$sf->id) }}" title="Verbal Warning & Warning"><i class="fas fa-chalkboard-teacher"></i>&nbsp;{!! $sf->username !!}</a>
+						<a href="{{ route('staffMemo.create', 'staff_id='.$sf->id) }}" title="Verbal Warning & Warning"><i class="fas fa-chalkboard-teacher"></i> {!! $sf->username !!}</a>
 					</td>
 					<td>{!! $sf->name !!}</td>
 					<td>
-<?php
-$sm3 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 2)->get();
-$sm4 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 1)->get();
-// echo $sm;
-?>
-@if($sm3->count() > 0)
-						<table class="table table-hover table-sm" style="font-size:12px" id="staffdiscoff1">
+@if($sm6->count() > 0)
+						<table class="table table-hover table-sm" style="font-size:10px" id="staffdiscoff1">
 							<thead>
 								<tr>
+									<th>#</th>
 									<th>Date</th>
 									<th>Reason</th>
 									<th>&nbsp;</th>
 								</tr>
 							</thead>
 							<tbody>
-@foreach($sm3 as $sme3)
+<?php $i4 = 1 ?>
+@foreach($sm6 as $sme6)
 								<tr>
-									<td>{!! Carbon::parse($sme3->date)->format('D, j M Y') !!}</td>
 									<td>
-										<a href="{!! route('staffMemo.edit', $sme3->id) !!}" title="Edit">{!! $sme3->reason !!}</a>
+										<a href="{!! route('staffMemo.edit', $sme6->id) !!}" title="Edit">{!! $i4++ !!}</a>
+									</td>
+									<td>{!! Carbon::parse($sme3->date)->format('j M Y') !!}
+									<td>{!! $sme6->reason !!}</td>
 									</td>
 									<td>
-										<span title="Delete" class="text-danger remove_staffMemo" data-id="{!! $sme3->id !!}">
+										<span title="Delete" class="text-danger remove_staffMemo" data-id="{!! $sme6->id !!}">
 											<i class="far fa-trash-alt"></i>
 										</span>
 									</td>
@@ -522,22 +591,67 @@ $sm4 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 1)->get();
 @endif
 					</td>
 					<td>
-@if($sm4->count() > 0)
-						<table class="table table-hover table-sm" style="font-size:12px" id="staffdiscoff1">
+@if($sm3->count() > 0)
+						<table class="table table-hover table-sm" style="font-size:10px" id="staffdiscoff1">
 							<thead>
 								<tr>
+									<th>#</th>
 									<th>Date</th>
 									<th>Reason</th>
+									<th>Point</th>
+									<th>&nbsp;</th>
+								</tr>
+							</thead>
+							<tbody>
+<?php $i5=1 ?>
+@foreach($sm3 as $sme3)
+								<tr>
+									<td>
+										<a href="{!! route('staffMemo.edit', $sme3->id) !!}" title="Edit">{!! $i5++ !!}</a>
+									</td>
+									<td>{!! Carbon::parse($sme3->date)->format('j M Y') !!}</td>
+									<td>{!! $sme3->reason !!}</td>
+									<td>{!! $sme3->merit_point !!}<?php $mp3 += $sme3->merit_point ?></td>
+									<td>
+										<span title="Delete" class="text-danger remove_staffMemo" data-id="{!! $sme3->id !!}">
+											<i class="far fa-trash-alt"></i>
+										</span>
+									</td>
+								</tr>
+@endforeach
+							</tbody>
+							<tfoot>
+								<tr>
+									<th>Total</th>
+									<th colspan="2">&nbsp;</th>
+									<th colspan="2">{!! $mp3 !!}</th>
+								</tr>
+							</tfoot>
+						</table>
+@endif
+					</td>
+					<td>
+<?php $i6 = 1 ?>
+@if($sm4->count() > 0)
+						<table class="table table-hover table-sm" style="font-size:10px" id="staffdiscoff1">
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>Date</th>
+									<th>Reason</th>
+									<th>Point</th>
 									<th>&nbsp;</th>
 								</tr>
 							</thead>
 							<tbody>
 @foreach($sm4 as $sme4)
 								<tr>
-									<td>{!! Carbon::parse($sme4->date)->format('D, j M Y') !!}</td>
 									<td>
-										<a href="{!! route('staffMemo.edit', $sme4->id) !!}" title="Edit">{!! $sme4->reason !!}</a>
+										<a href="{!! route('staffMemo.edit', $sme4->id) !!}" title="Edit">{!! $i6++ !!}</a>
 									</td>
+									<td>{!! Carbon::parse($sme4->date)->format('j M Y') !!}</td>
+									<td>{!! $sme4->reason !!}</td>
+									<td>{!! $sme4->merit_point !!}<?php $mp4 += $sme4->merit_point ?></td>
 									<td>
 										<span title="Delete" class="text-danger remove_staffMemo" data-id="{!! $sme4->id !!}">
 											<i class="far fa-trash-alt"></i>
@@ -546,6 +660,13 @@ $sm4 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 1)->get();
 								</tr>
 @endforeach
 							</tbody>
+							<tfoot>
+								<tr>
+									<th>Total</th>
+									<th colspan="2">&nbsp;</th>
+									<th colspan="2">{!! $mp4 !!}<th>
+								</tr>
+							</tfoot>
 						</table>
 @endif
 					</td>
@@ -562,7 +683,7 @@ $sm4 = StaffMemo::where('staff_id', $sf->id)->where('memo_category', 1)->get();
 					<td>{!! ($m + $v2) * $lm5->merit_point !!}<?php $count5 = ($m + $v2) * $lm5->merit_point ?> m</td>
 					<td>{!! $sl4 !!}</td>
 					<td>{!! $sl4 * $lm4->merit_point !!}<?php $count4 = $sl4 * $lm4->merit_point ?> m</td>
-					<td>{!! number_format($count + $count1 + $count2 + $count3 + $count4 + $count5, 2) !!}</td>
+					<td>{!! number_format($count + $count1 + $count2 + $count3 + $count4 + $count5 + $mp3 + $mp4, 2) !!}</td>
 				</tr>
 @endforeach
 			</tbody>
