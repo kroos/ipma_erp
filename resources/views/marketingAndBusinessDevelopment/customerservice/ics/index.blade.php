@@ -179,10 +179,10 @@ $('#servicereport6').DataTable({
 	// responsive: true
 });
 
-$('#servicereport6').colResizable({liveDrag:true});
-$('#servicereport5').colResizable({liveDrag:true});
+// $('#servicereport6').colResizable({liveDrag:true});
+// $('#servicereport5').colResizable({liveDrag:true});
 $('#servicereport4').colResizable({liveDrag:true});
-$('#servicereport3').colResizable({liveDrag:true});
+// $('#servicereport3').colResizable({liveDrag:true});
 $('#servicereport2').colResizable({liveDrag:true});
 $('#servicereport1').colResizable({liveDrag:true});
 

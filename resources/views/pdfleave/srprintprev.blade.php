@@ -69,11 +69,15 @@ use Carbon\CarbonPeriod;
 	// $pdf->Cell(0, 5, $pdf->GetPageHeight(), 0, 1, 'C'); // 148
 	// $pdf->Cell(0, 5, $pdf->GetPageWidth(), 0, 0, 'C'); // 210
 
+	// https://www.google.com/search?client=firefox-b-d&q=how+to+create+font+file+in+fpdf#kpvalbx=1
+	// $pdf->AddFont('Haettenschweiler', '', 'C:/Users/IT-B-03/Desktop/ipma_erp/trunk/vendor/crabbly/fpdf-laravel/src/font/HATTEN.php');
+	// $pdf->AddFont('Verdana', 'B', 'verdana.php');
+
 	// $pdf->SetLeftMargin(180);
-	$pdf->SetFont('Arial', NULL, 10);
+	$pdf->SetFont('Arial', 'B', 10);
 
 	// date
-	$pdf->SetXY(155, 43);
+	$pdf->SetXY(155, 41);
 	$pdf->Cell(35, 5, Carbon::parse($sr->date)->format('D, j M Y'), 0, 1, 'L');
 
 	// customer
@@ -89,15 +93,15 @@ use Carbon\CarbonPeriod;
 	$pdf->Cell(100, 5, strtoupper(strtolower($sr->belongtocustomer->address4)), 0, 1, 'L');
 
 	// attn to:
-	$pdf->SetXY(15, 80);
+	$pdf->SetXY(15, 77);
 	$pdf->Cell(44, 5, strtoupper(strtolower($sr->belongtocustomer->pc)), 0, 1, 'L');
 	// $pdf->Cell(44, 5, 'Test PC', 0, 1, 'L');
 
 	// phone
-	$pdf->SetX(17);
+	$pdf->SetX(15);
 	$pdf->Cell(44, 5, $sr->belongtocustomer->phone, 0, 1, 'L');
 
-	$pdf->SetXY(110, 55);
+	$pdf->SetXY(110, 65);
 	$i = 1;
 	foreach ($sr->hasmanyattendees()->get() as $key) {
 		$pdf->Cell(44, 5,$i++.') '. strtoupper(strtolower($key->belongtostaff->name)), 0, 1, 'L');
