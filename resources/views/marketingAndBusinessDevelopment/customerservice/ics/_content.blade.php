@@ -332,7 +332,6 @@ if ( $bmonth != 1 ) {
 					<th>SR No</th>
 					<th>Customer</th>
 					<th>Attendees</th>
-					<th>Parts & Accessories</th>
 					<th>Problem Detect On Site</th>
 					<th>Additional Request (Order Part, Request For Next Service)</th>
 					<th>Item Bring Back To IPMA</th>
@@ -341,7 +340,7 @@ if ( $bmonth != 1 ) {
 			</thead>
 			<tbody>
 		@foreach($sr0 as $sr)
-		@if( $sr->hasmanypart()->get()->count() > 0 || $sr->hasmanyfeedproblem()->get()->count() > 0 || $sr->hasmanyfeedrequest()->get()->count() > 0 || $sr->hasmanyfeeditem()->get()->count() > 0 )
+		@if( $sr->hasmanyfeedproblem()->get()->count() > 0 || $sr->hasmanyfeedrequest()->get()->count() > 0 || $sr->hasmanyfeeditem()->get()->count() > 0 )
 				<tr>
 					<td>{!! $sr->id !!}</td>
 					<td>{!! Carbon::parse($sr->date)->format('D, j M Y') !!}</td>
@@ -359,29 +358,7 @@ if ( $bmonth != 1 ) {
 						{!! $i3++ !!}. {!! $sra->belongtostaff->name !!}<br />
 		@endforeach
 					</td>
-					<td>
-@if($sr->hasmanypart()->get()->count() > 0)
-						<table class="table table-hover table-sm" style="font-size:12px">
-							<thead>
-								<tr>
-									<th>Part & Accs</th>
-									<th>Quantity</th>
-								</tr>
-							</thead>
-							<tbody>
-@foreach($sr->hasmanypart()->get() as $srpart)
-								<tr>
-									<td>{{ $srpart->part_accessory }}</td>
-									<td>{{ $srpart->qty }}</td>
-								</tr>
-@endforeach
-							</tbody>
-						</table>
-@else
-							No Data
-@endif
-					</td>
-					<td>
+ 					<td>
 @if($sr->hasmanyfeedproblem()->get()->count() > 0)
 						<table class="table table-hover table-sm" style="font-size:12px">
 							<thead>

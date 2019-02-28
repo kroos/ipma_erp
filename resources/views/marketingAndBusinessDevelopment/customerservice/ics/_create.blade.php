@@ -46,7 +46,7 @@ $staff = Staff::where('active', 1)->get();
 
 				<div class="col-6">
 					<div class="row form-group">
-						<label class="col-4" for="inlineRadio2">This Service Report was informed by : </label>
+						<label class="col-4" for="inlineRadio2">Informed by : </label>
 						<div class="col-8">
 							<select name="inform_by" id="inlineRadio2" class="form-control" placeholder="Please choose">
 								<option value="">Please choose</option>
