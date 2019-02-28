@@ -145,37 +145,37 @@ $("#username").keyup(function() {
 $.fn.dataTable.moment( 'ddd, D MMM YYYY' );
 $('#servicereport1').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	"order": [[1, "asc" ]],	// sorting the 2nd column ascending
+	"order": [[1, "desc" ]],	// sorting the 2nd column ascending
 	// responsive: true
 });
 
 $('#servicereport2').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	"order": [[1, "asc" ]],	// sorting the 2nd column ascending
+	"order": [[1, "desc" ]],	// sorting the 2nd column ascending
 	// responsive: true
 });
 
 $('#servicereport3').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	"order": [[2, "asc" ]],	// sorting the 2nd column ascending
+	"order": [[4, "desc" ]],	// sorting the 2nd column ascending
 	// responsive: true
 });
 
 $('#servicereport4').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	"order": [[1, "asc" ]],	// sorting the 2nd column ascending
+	"order": [[3, "desc" ]],	// sorting the 2nd column ascending
 	// responsive: true
 });
 
 $('#servicereport5').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	"order": [[1, "asc" ]],	// sorting the 2nd column ascending
+	"order": [[4, "desc" ]],	// sorting the 2nd column ascending
 	// responsive: true
 });
 
 $('#servicereport6').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	"order": [[1, "asc" ]],	// sorting the 2nd column ascending
+	"order": [[3, "desc" ]],	// sorting the 2nd column ascending
 	// responsive: true
 });
 

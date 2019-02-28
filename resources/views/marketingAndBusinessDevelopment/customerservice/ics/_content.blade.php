@@ -52,11 +52,12 @@ if ( $bmonth != 1 ) {
 		@if( $sr->hasmanyserial()->whereNull('serial')->first() )
 				<tr>
 					<td>{!! $sr->id !!}</td>
-					<td>{!! Carbon::parse($sr->date)->format('D, j M Y') !!}</td>
-					<td>{!! $sr->belongtoinformby->name !!}</td>
+					<td><strong>{!! Carbon::parse($sr->date)->format('D, j M Y') !!}</strong></td>
+					<td><strong>{!! $sr->belongtoinformby->name !!}</strong></td>
 					<td>
+		<?php $u1 = 1 ?>
 		@foreach( $sr->hasmanyserial()->get() as $srno )
-						{!! $srno->serial !!}<br />
+						{{ $u1++ }}-<strong>{!! $srno->serial !!}</strong><br />
 		@endforeach
 					</td>
 					<td>{!! $sr->belongtocustomer->customer !!}</td>
@@ -130,10 +131,10 @@ if ( $bmonth != 1 ) {
 					<td>
 		<?php $i4 = 1?>
 		@foreach( $sr->hasmanyserial()->get() as $srno )
-						{!! $i4++ !!}) {!! $srno->serial !!}<br />
+						{!! $i4++ !!}-<strong>{!! $srno->serial !!}</strong><br />
 		@endforeach
 					</td>
-					<td>{!! $sr->belongtocustomer->customer !!}</td>
+					<td><strong>{!! $sr->belongtocustomer->customer !!}</strong></td>
 					<td>
 		<?php $i2 = 1 ?>
 		@foreach( $sr->hasmanyattendees()->get() as $sra )
@@ -485,7 +486,7 @@ if ( $bmonth != 1 ) {
 					<td>
 		<?php $i6 = 1 ?>
 		@foreach( $sr->hasmanyserial()->get() as $srno )
-						{!! $i6++ !!}) {!! $srno->serial !!}<br />
+						{!! $i6++ !!}-<strong>{!! $srno->serial !!}</strong><br />
 		@endforeach
 					</td>
 					<td>{!! $sr->belongtocustomer->customer !!}</td>
