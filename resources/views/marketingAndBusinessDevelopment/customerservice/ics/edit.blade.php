@@ -648,7 +648,7 @@ $(addbtnjobn).click(function(){
 												'<select name="srj[' + xj + '][food_rate]" id="fr_' + xj + '" class="form-control form-control-sm fr_" placeholder="Please choose">' +
 													'<option value="">Please choose</option>' +
 @foreach( \App\Model\ICSFoodRate::all() as $fr )
-													'<option value="{!! $fr->value !!}" data-value="{{ $fr->value }}">{!! $fr->food_rate !!}</option>' +
+													'<option value="{!! $fr->value !!}" data-value="{{ $fr->value }}" {{ ($fr->value == 15)?'selected':NULL }}>{!! $fr->food_rate !!}</option>' +
 @endforeach
 												'</select>' +
 											'</td>' +
@@ -676,7 +676,7 @@ $(addbtnjobn).click(function(){
 												'<select name="srj[' + xj + '][working_type_value]" id="wtv_' + xj + '" class="form-control form-control-sm workingtypevalue">' +
 													'<option value="">Please choose</option>' +
 @foreach( \App\Model\ICSWorkingType::all() as $wt )
-													'<option value="{!! $wt->value !!}" data-value="{!! $wt->value !!}">{!! $wt->working_type !!}</option>' +
+													'<option value="{!! $wt->value !!}" data-value="{!! $wt->value !!}" {!! ($wt->value == 1)?'selected':NULL !!}>{!! $wt->working_type !!}</option>' +
 @endforeach
 												'</select>' +
 											'</td>' +
@@ -713,7 +713,7 @@ $(addbtnjobn).click(function(){
 												'<select name="srj[' + xj + '][accommodation]" id="accommodation_' + xj + '" class="form-control form-control-sm accommodation" placeholder="Please choose">' +
 													'<option value="">Please choose</option>' +
 @foreach( \App\Model\ICSAccommodationRate::all() as $acr )
-													'<option value="{!! $acr->value !!}" data-value="{!! $acr->value !!}">{!! $acr->accommodation_rate !!}</option>' +
+													'<option value="{!! $acr->value !!}" data-value="{!! $acr->value !!}" {{ ($acr->value == 0)?'selected':NULL }}>{!! $acr->accommodation_rate !!}</option>' +
 @endforeach
 												'</select>' +
 											'</td>' +
@@ -748,7 +748,7 @@ $(addbtnjobn).click(function(){
 											'</td>' +
 											'<td>X</td>' +
 											'<td class="form-group {{ $errors->has('srj.*.travel_hour') ? ' has-error' : '' }}">' +
-												'<input type="text" name="srj[' + xj + '][travel_hour]" value="{!! @$value !!}" id="travel_hour_' + xj + '" class="form-control form-control-sm travelhour" placeholder="Travel Hour">' +
+												'<input type="text" name="srj[' + xj + '][travel_hour]" value="0" id="travel_hour_' + xj + '" class="form-control form-control-sm travelhour" placeholder="Travel Hour">' +
 											'</td>' +
 											'<td>hour</td>' +
 											'<td colspan="3">&nbsp;</td>' +

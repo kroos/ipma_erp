@@ -173,6 +173,12 @@ $('#servicereport5').DataTable({
 	// responsive: true
 });
 
+$('#servicereport6').DataTable({
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	"order": [[1, "asc" ]],	// sorting the 2nd column ascending
+	// responsive: true
+});
+
 /////////////////////////////////////////////////////////////////////////////////////////
 // update unapproved
 $('#selectAll').on('click',function(){

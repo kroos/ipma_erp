@@ -222,10 +222,10 @@ if ( $bmonth != 1 ) {
 					<td>
 		<?php $i5 = 1 ?>
 		@foreach( $sr->hasmanyserial()->get() as $srno )
-						{!! $i5++ !!}) {!! $srno->serial !!}<br />
+						{!! $i5++ !!}-<strong>{!! $srno->serial !!}</strong><br />
 		@endforeach
 					</td>
-					<td>{!! $sr->belongtocustomer->customer !!}</td>
+					<td><strong>{!! $sr->belongtocustomer->customer !!}</strong></td>
 					<td>
 		<?php $i3 = 1 ?>
 		@foreach( $sr->hasmanyattendees()->get() as $sra )
@@ -310,60 +310,122 @@ if ( $bmonth != 1 ) {
 						<span class="text-danger inactivate" data-id="{!! $sr->id !!}"><i class="far fa-trash-alt"></i></span>
 					</td>
 				</tr>
-				<thead>
-					<tr>
-						<th colspan="6">Problem Detect On Site</th>
-						<th colspan="6">Additional Request (Order Part, Request For Next Service)</th>
-						<th colspan="6">Item Bring Back To IPMA</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td colspan="6">
+		@endif
+		@endforeach
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<p>&nbsp;</p>
+
+<div class="card">
+	<div class="card-header" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #e2baea;"':NULL !!}><h5>Service Report Feedback</h5></div>
+	<div class="card-body"  {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #fadfff;"':NULL !!}>
+
+		<table class="table table-hover table-sm" style="font-size:12px" id="servicereport6">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Date</th>
+					<th>Category</th>
+					<th>SR No</th>
+					<th>Customer</th>
+					<th>Attendees</th>
+					<th>Parts & Accessories</th>
+					<th>Problem Detect On Site</th>
+					<th>Additional Request (Order Part, Request For Next Service)</th>
+					<th>Item Bring Back To IPMA</th>
+					<th>&nbsp</th>
+				</tr>
+			</thead>
+			<tbody>
+		@foreach($sr0 as $sr)
+		@if( $sr->hasmanypart()->get()->count() > 0 || $sr->hasmanyfeedproblem()->get()->count() > 0 || $sr->hasmanyfeedrequest()->get()->count() > 0 || $sr->hasmanyfeeditem()->get()->count() > 0 )
+				<tr>
+					<td>{!! $sr->id !!}</td>
+					<td>{!! Carbon::parse($sr->date)->format('D, j M Y') !!}</td>
+					<td>{!! $sr->belongtocategory->sr_category !!}</td>
+					<td>
+		<?php $i5 = 1 ?>
+		@foreach( $sr->hasmanyserial()->get() as $srno )
+						{!! $i5++ !!}-<strong>{!! $srno->serial !!}</strong><br />
+		@endforeach
+					</td>
+					<td><strong>{!! $sr->belongtocustomer->customer !!}</strong></td>
+					<td>
+		<?php $i3 = 1 ?>
+		@foreach( $sr->hasmanyattendees()->get() as $sra )
+						{!! $i3++ !!}. {!! $sra->belongtostaff->name !!}<br />
+		@endforeach
+					</td>
+					<td>
+@if($sr->hasmanypart()->get()->count() > 0)
+						<table class="table table-hover table-sm" style="font-size:12px">
+							<thead>
+								<tr>
+									<th>Part & Accs</th>
+									<th>Quantity</th>
+								</tr>
+							</thead>
+							<tbody>
+@foreach($sr->hasmanypart()->get() as $srpart)
+								<tr>
+									<td>{{ $srpart->part_accessory }}</td>
+									<td>{{ $srpart->qty }}</td>
+								</tr>
+@endforeach
+							</tbody>
+						</table>
+@else
+							No Data
+@endif
+					</td>
+					<td>
 @if($sr->hasmanyfeedproblem()->get()->count() > 0)
-							<table class="table table-hover table-sm" style="font-size:12px">
-								<thead>
-									<tr>
-										<th>Problem</th>
-										<th>Solution</th>
-									</tr>
-								</thead>
-								<tbody>
+						<table class="table table-hover table-sm" style="font-size:12px">
+							<thead>
+								<tr>
+									<th>Problem</th>
+									<th>Solution</th>
+								</tr>
+							</thead>
+							<tbody>
 @foreach($sr->hasmanyfeedproblem()->get() as $srpp)
-									<tr>
-										<td>{{ $srpp->problem }}</td>
-										<td>{{ $srpp->solution }}</td>
-									</tr>
+								<tr>
+									<td>{{ $srpp->problem }}</td>
+									<td>{{ $srpp->solution }}</td>
+								</tr>
 @endforeach
-								</tbody>
-							</table>
+							</tbody>
+						</table>
 @else
 							No Data
 @endif
-						</td>
-						<td colspan="6">
+					</td>
+					<td>
 @if($sr->hasmanyfeedrequest()->get()->count() > 0)
-							<table class="table table-hover table-sm" style="font-size:12px">
-								<thead>
-									<tr>
-										<th>Request</th>
-										<th>Action</th>
-									</tr>
-								</thead>
-								<tbody>
+						<table class="table table-hover table-sm" style="font-size:12px">
+							<thead>
+								<tr>
+									<th>Request</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
 @foreach($sr->hasmanyfeedrequest()->get() as $srfr)
-									<tr>
-										<td>{{ $srfr->request }}</td>
-										<td>{{ $srfr->action }}</td>
-									</tr>
+								<tr>
+									<td>{{ $srfr->request }}</td>
+									<td>{{ $srfr->action }}</td>
+								</tr>
 @endforeach
-								</tbody>
-							</table>
+							</tbody>
+						</table>
 @else
 							No Data
-@endif
-						</td>
-						<td colspan="6">
+@endif					
+					</td>
+					<td>
 @if($sr->hasmanyfeeditem()->get()->count() > 0)
 							<table class="table table-hover table-sm" style="font-size:12px">
 								<thead>
@@ -386,13 +448,22 @@ if ( $bmonth != 1 ) {
 @else
 							No Data
 @endif
-						</td>
-					</tr>
-				</tbody>
+					</td>
+					<td>
+						<a href="{!! route('serviceReport.show', $sr->id) !!}" target="_blank" title="Show"><i class="far fa-eye"></i></a>
+						<a href="{!! route('serviceReport.floatth', $sr->id) !!}" target="_blank" title="FLOAT-TH"><i class="far fa-money-bill-alt"></i></i></a>
+						<a href="{!! route('serviceReport.edit', $sr->id) !!}" title="Update"><i class="far fa-edit"></i></a>
+		@if($sr->status_id == 1)
+						<span class="text-primary courtesycall" title="Courtesy Calls" data-id="{!! $sr->id !!}"><i class="fas fa-phone-volume"></i></span>
+		@endif
+						<span class="text-danger inactivate" data-id="{!! $sr->id !!}"><i class="far fa-trash-alt"></i></span>
+					</td>
+				</tr>
 		@endif
 		@endforeach
 			</tbody>
 		</table>
+
 	</div>
 </div>
 

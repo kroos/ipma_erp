@@ -1161,7 +1161,7 @@ if (!is_null($serviceReport->hasmanyfeedback()->first())) {
 @foreach( YesNoLabel::all() as $ynl )
 					<div class="form-check form-check-inline">
 						<div class="pretty p-icon p-round p-smooth">
-							{{ Form::radio('new_machine', $ynl->value, ($ynl->value == $nm)?true:@$value, ['class' => 'form-control']) }}
+							{{ Form::radio('new_machine', $ynl->value, ($ynl->value == $nm)?true:NULL, ['class' => 'form-control']) }}
 							<div class="state p-success">
 								<i class="icon mdi mdi-check"></i>
 								<label>{{ $ynl->label }}</label>
