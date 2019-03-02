@@ -72,7 +72,61 @@ use \Carbon\CarbonPeriod;
 		<div class="card">
 			<div class="card-header">Inactive Staff List</div>
 			<div class="card-body">
-				
+				<table class="table table-hover table-sm" style="font-size:12px" id="staff1">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+							<th>Loc</th>
+							<th>Department</th>
+							<th>Disciplinary Action</th>
+						</tr>
+					</thead>
+					<tbody>
+@foreach(Staff::where('active', 0)->whereNotIn('id', ['191', '192'])->get() AS $st)
+						<tr>
+							<td>
+@foreach($st->hasmanylogin()->get() as $sty)
+	{!! $sty->username !!} <br />
+@endforeach
+							</td>
+							<td>{!! $st->name !!}</td>
+							<td>
+								{!! $st->belongtolocation->location !!}
+							</td>
+							<td>
+@if($st->belongtomanyposition()->get()->count() > 0)
+								{!! $st->belongtomanyposition()->wherePivot('main', 1)->first()->belongtodepartment->department !!}
+@endif
+							</td>
+							<td>
+@if(StaffDisciplinaryAction::where('staff_id', $st->id)->get()->count() > 0)
+								<table class="table table-hover table-sm" style="font-size:12px" id="staff">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Date</th>
+											<th>Disciplinary Action</th>
+											<th>Description</th>
+										</tr>
+									</thead>
+									<tbody>
+@foreach(StaffDisciplinaryAction::where('staff_id', $st->id)->get() as $da)
+										<tr>
+											<td align="center">{!! $da->id !!}</td>
+											<td>{!! Carbon::parse($da->date)->format('j M Y') !!}</td>
+											<td>{!! $da->belongtodisciplinaryaction->disciplinary_action !!}</td>
+											<td>{!! $da->description !!}</td>
+										</tr>
+@endforeach
+									</tbody>
+								</table>
+@endif
+							</td>
+						</tr>
+@endforeach
+					</tbody>
+				</table>
 			</div>
 		</div>
 

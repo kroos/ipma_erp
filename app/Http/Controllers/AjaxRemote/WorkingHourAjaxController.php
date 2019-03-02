@@ -681,6 +681,25 @@ class WorkingHourAjaxController extends Controller
 		]);
 	}
 
+	// preventing service report serial number overlapped
+	public function srserialoverlapped(Request $request)
+	{
+		$valid = true;
+		// $log = \App\Model\ICSServiceReportSerial::all();
+		// foreach($log as $k) {
+		// 	if($k->serial == $request->serial) {
+		// 		$valid = false;
+		// 	}
+		// }
+		$va = \App\Model\ICSServiceReportSerial::where('serial', $request->except('_token'))->get()->count();
+		if($va > 0) {
+			$valid = FALSE;
+		}
+		return response()->json([
+			'valid' => $valid,
+		]);
+	}
+
 
 
 

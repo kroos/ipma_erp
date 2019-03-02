@@ -50,6 +50,9 @@ ini_set('max_execution_time', 180); //3 minutes
 					<li class="nav-item">
 						<a class="nav-link" href="{!! route('staffDisciplinaryAct.index') !!}">Staff Disciplinary Action</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{!! route('staffResign.index') !!}">Staff Resignation</a>
+					</li>
 				</ul>
 
 				@include('generalAndAdministrative.hr.staffmanagement.overtime.content')

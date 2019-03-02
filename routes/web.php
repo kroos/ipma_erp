@@ -26,7 +26,7 @@ Route::get('/mailer', [
 		'uses' => 'MainController@mailer'
 	]);
 
-// EMAILER
+// notify
 Route::get('/notify', [
 		'as' => 'main.notifi',
 		'uses' => 'MainController@notifi'
@@ -64,6 +64,7 @@ Route::resources([
 	'staffOvertime' => 'Administrative\HumanResource\StaffManagement\StaffOvertimeController',
 	'staffAvailability' => 'Administrative\HumanResource\StaffManagement\StaffAvailabilityController',
 	'staffDis' => 'Administrative\HumanResource\StaffManagement\StaffDisciplineController',
+	'staffResign' => 'Administrative\HumanResource\StaffManagement\StaffResignController',
 // staff warning & verbal warning
 	'staffMemo' => 'Administrative\HumanResource\StaffManagement\StaffMemoController',
 	'staffDisciplinaryAct' => 'Administrative\HumanResource\StaffManagement\StaffDisciplinaryActionController',
@@ -331,6 +332,13 @@ Route::post('/staffEmergencyPersonPhonesearch', [
 Route::post('/workinghour', [
 		'as' => 'workinghour.workingtime',
 		'uses' => 'AjaxRemote\WorkingHourAjaxController@workingtime'
+	]);
+
+############################################################################
+// WorkingHour Ajax Controller
+Route::post('/serialnumberoverlapped', [
+		'as' => 'workinghour.serialnooverlapped',
+		'uses' => 'AjaxRemote\WorkingHourAjaxController@srserialoverlapped'
 	]);
 
 ############################################################################

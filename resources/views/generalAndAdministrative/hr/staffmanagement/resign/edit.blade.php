@@ -42,18 +42,18 @@
 						<a class="nav-link" href="{{ route('staffAvailability.index') }}">Staff Availability Report</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link active" href="{!! route('staffDis.index') !!}">Staff Attendance & Discipline</a>
+						<a class="nav-link" href="{!! route('staffDis.index') !!}">Staff Attendance & Discipline</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="{!! route('staffDisciplinaryAct.index') !!}">Staff Disciplinary Action</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{!! route('staffResign.index') !!}">Staff Resignation</a>
+						<a class="nav-link active" href="{!! route('staffResign.index') !!}">Staff Resignation</a>
 					</li>
 				</ul>
 
-{{ Form::model($staffMemo, ['route' => ['staffMemo.update', $staffMemo->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
-				@include('generalAndAdministrative.hr.staffmanagement.warning._edit')
+{{ Form::model($staffResign, ['route' => ['staffResign.update', $staffResign->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
+				@include('generalAndAdministrative.hr.staffmanagement.resign._edit')
 {!! Form::close() !!}
 
 			</div>
@@ -66,34 +66,40 @@
 /////////////////////////////////////////////////////////////////////////////////////////
 // table
 // $.fn.dataTable.moment( 'ddd, D MMM YYYY' );
-$("#staffdiscoff, #staffdiscprod").DataTable({
+$("#staff1, #staff2").DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	// "order": [[3, "asc" ]],	// sorting the 4th column descending
+	"order": [[3, "asc" ]],	// sorting the 4th column descending
 	// responsive: true,
-	columnDefs: [
-		{ type: 'any-number', targets : 0 }
-	],
 });
 
-/////////////////////////////////////////////////////////////////////////////////////////
-$('#m_cat').select2({
-	placeholder: 'Please Choose',
-	width: '100%',
-});
+$('#staff1').colResizable({liveDrag:true});
 
 /////////////////////////////////////////////////////////////////////////////////////////
-$('#date').datetimepicker({
-	format:'YYYY-MM-DD',
-	// useCurrent: false,
-})
-.on('dp.change dp.show dp.update', function(e) {
-	$('#form').bootstrapValidator('revalidateField', 'date');
-});
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
-$(document).on('keyup', '#reason', function () {
-	// tch(this);
-});
+// date
+	$('#datl').datetimepicker({
+		format:'YYYY-MM-DD',
+		// useCurrent: false,
+	})
+	.on('dp.change dp.show dp.update', function(e) {
+		$('#form').bootstrapValidator('revalidateField', 'resignation_letter_at');
+	})
+
+	$('#datr').datetimepicker({
+		format:'YYYY-MM-DD',
+		// useCurrent: false,
+	})
+	.on('dp.change dp.show dp.update', function(e) {
+		$('#form').bootstrapValidator('revalidateField', 'resign_at');
+	});
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // validator
@@ -105,21 +111,18 @@ $(document).ready(function() {
 			validating: ''
 		},
 		fields: {
-			memo_category: {
+			resignation_letter_at: {
 				validators: {
-					notEmpty: {
-						message: 'Please choose. ',
+					notEmpty : {
+						message: 'Please insert date. '
+					},
+					date: {
+						format: 'YYYY-MM-DD',
+						message: 'The value is not a valid date. '
 					},
 				}
 			},
-			reason: {
-				validators: {
-					notEmpty: {
-						message: 'Please insert Reason. ',
-					},
-				}
-			},
-			date: {
+			resign_at: {
 				validators: {
 					notEmpty : {
 						message: 'Please insert date. '

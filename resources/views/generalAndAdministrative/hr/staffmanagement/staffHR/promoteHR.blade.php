@@ -61,6 +61,15 @@ $(document).on('keyup', '#username ', function () {
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+// confirmed date
+$('#cat').datetimepicker({
+	format:'YYYY-MM-DD',
+	// useCurrent: false,
+})
+.on('dp.change dp.show dp.update', function() {
+	$('#form').bootstrapValidator('revalidateField', 'confirmed_at');
+});
+/////////////////////////////////////////////////////////////////////////////////////////
 // validator
 $(document).ready(function() {
 	$('#form').bootstrapValidator({
@@ -112,6 +121,13 @@ $(document).ready(function() {
 					numeric: {
 						message: 'Only number. '
 					}
+				}
+			},
+			confirmed_at: {
+				validators: {
+					notEmpty: {
+						message: 'Please insert Confirmed Date. '
+					},
 				}
 			},
 		}

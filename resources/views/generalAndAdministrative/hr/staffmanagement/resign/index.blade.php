@@ -42,17 +42,17 @@
 						<a class="nav-link" href="{{ route('staffAvailability.index') }}">Staff Availability Report</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link active" href="{!! route('staffDis.index') !!}">Staff Attendance & Discipline</a>
+						<a class="nav-link" href="{!! route('staffDis.index') !!}">Staff Attendance & Discipline</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="{!! route('staffDisciplinaryAct.index') !!}">Staff Disciplinary Action</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{!! route('staffResign.index') !!}">Staff Resignation</a>
+						<a class="nav-link active" href="{!! route('staffResign.index') !!}">Staff Resignation</a>
 					</li>
 				</ul>
 
-				@include('generalAndAdministrative.hr.staffmanagement.attendance._index')
+				@include('generalAndAdministrative.hr.staffmanagement.resign._index')
 
 			</div>
 		</div>
@@ -64,18 +64,45 @@
 /////////////////////////////////////////////////////////////////////////////////////////
 // table
 // $.fn.dataTable.moment( 'ddd, D MMM YYYY' );
-$("#staffdiscoff, #staffdiscprod").DataTable({
+$("#staff1, #staff2").DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	// "order": [[3, "asc" ]],	// sorting the 4th column descending
+	"order": [[3, "asc" ]],	// sorting the 4th column descending
 	// responsive: true,
-	columnDefs: [
-		{ type: 'any-number', targets : 0 }
-	],
 });
+
+$('#staff1').colResizable({liveDrag:true});
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// date
+@foreach(\App\Model\Staff::where('active', 1)->whereNotIn('id', ['191', '192'])->get() AS $st)
+	$('#rla_{!! $st->id !!}').datetimepicker({
+		format:'YYYY-MM-DD',
+		// useCurrent: false,
+	})
+	// .on('dp.change dp.show dp.update', function(e) {
+	// 	$('#form').bootstrapValidator('revalidateField', 'resignation_letter_at');
+	// })
+	;
+	$('#ra_{!! $st->id !!}').datetimepicker({
+		format:'YYYY-MM-DD',
+		// useCurrent: false,
+	})
+	// .on('dp.change dp.show dp.update', function(e) {
+	// 	$('#form').bootstrapValidator('revalidateField', 'resign_at');
+	// })
+	;
+@endforeach
+/////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // ajax delete
-$(document).on('click', '.remove_staffMemo', function(e){
+$(document).on('click', '.remove_staffDiscAct', function(e){
 	var tdsid = $(this).data('id');
 	SwalToggle(tdsid);
 	e.preventDefault();
@@ -84,7 +111,7 @@ $(document).on('click', '.remove_staffMemo', function(e){
 function SwalToggle(tdsid){
 	swal({
 		title: 'Delete Warning',
-		text: 'Delete this warning?',
+		text: 'Delete this action?',
 		type: 'question',
 		showCancelButton: true,
 		confirmButtonColor: '#3085d6',
@@ -95,7 +122,7 @@ function SwalToggle(tdsid){
 		preConfirm: function() {
 			return new Promise(function(resolve) {
 				$.ajax({
-					url: '{{ url('staffMemo') }}' + '/' + tdsid,
+					url: '{{ url('staffDisciplinaryAct') }}' + '/' + tdsid,
 					type: 'DELETE',
 					data: {
 							_token : $('meta[name=csrf-token]').attr('content'),
@@ -124,5 +151,6 @@ function SwalToggle(tdsid){
 	});
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 @endsection

@@ -47,6 +47,9 @@
 					<li class="nav-item">
 						<a class="nav-link active" href="{!! route('staffDisciplinaryAct.index') !!}">Staff Disciplinary Action</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{!! route('staffResign.index') !!}">Staff Resignation</a>
+					</li>
 				</ul>
 
 {!! Form::open(['route' => ['staffDisciplinaryAct.store', 'staff_id='.request()->staff_id], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}

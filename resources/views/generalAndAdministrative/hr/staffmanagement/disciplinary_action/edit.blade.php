@@ -47,6 +47,9 @@
 					<li class="nav-item">
 						<a class="nav-link active" href="{!! route('staffDisciplinaryAct.index') !!}">Staff Disciplinary Action</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{!! route('staffResign.index') !!}">Staff Resignation</a>
+					</li>
 				</ul>
 
 {{ Form::model($staffDisciplinaryAct, ['route' => ['staffDisciplinaryAct.update', $staffDisciplinaryAct->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}

@@ -47,6 +47,9 @@
 					<li class="nav-item">
 						<a class="nav-link active" href="{!! route('staffDisciplinaryAct.index') !!}">Staff Disciplinary Action</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{!! route('staffResign.index') !!}">Staff Resignation</a>
+					</li>
 				</ul>
 
 				@include('generalAndAdministrative.hr.staffmanagement.disciplinary_action._index')
