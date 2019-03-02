@@ -41,15 +41,11 @@
 	<script src="{{ asset('js/ckeditor/ckeditor.js') }}"></script>
 	<script src="{{ asset('js/ckeditor/adapters/jquery.js') }}"></script>
 
-	<!-- if there is chart involved, uncommented this -->
-	<script type="text/javascript" src="{{ asset('js/Chart.bundle.js') }}"></script>
-
 	<script type="text/javascript" src="{{ asset('js/ucwords.js') }}" ></script>
 
 	<script type="text/javascript" src="{{ asset('js/datetime-moment.js') }}" ></script>
 	<script type="text/javascript" src="{{ asset('js/dataTable-any-number.js') }}" ></script>
 	<script type="text/javascript" src="{{ asset('js/select2-dropdownPosition.js') }}" ></script>
-	<script type="text/javascript" src="{{ asset('js/colResizable-1.5.min.js') }}" ></script>
 
 	@include('layouts.jscript')
 </body>

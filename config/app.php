@@ -171,7 +171,8 @@ return [
 
         Collective\Html\HtmlServiceProvider::class,
 
-
+        // https://github.com/maddhatter/laravel-fullcalendar
+        MaddHatter\LaravelFullcalendar\ServiceProvider::class,
     ],
 
     /*

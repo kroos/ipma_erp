@@ -25,8 +25,13 @@ try {
 	require('jquery.cookie');
 	require('pc-bootstrap4-datetimepicker');
 	require('select2');
+	require('colresizable/colResizable-1.6.min');
 	window.moment = require('moment');
 	window.swal = require ('sweetalert2');
+	require('fullcalendar');
+	require('chart.js/dist/Chart');
+	require('chartjs-color/index');
+	require('chartjs-color-string/color-string');
 
 
 	require ('./bootstrapValidator4/js/bootstrapValidator');
