@@ -9,10 +9,10 @@
 	<meta name=author content="Author">
 	<title>{{ config('app.name') }}</title>
 	<link href="{{ asset('images/logo.png') }}" type="image/x-icon" rel="icon" />
-	<meta name="keywords" content="" />
+	<meta name="keywords" content="erp system, erp" />
+
 	<!-- CSRF Token -->
 	<meta name="csrf-token" content="{{ csrf_token() }}">
-
 
 	<!-- Styles -->
 	<link href="{{ asset('css/app.css') }}" rel="stylesheet">

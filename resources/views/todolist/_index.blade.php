@@ -16,6 +16,16 @@ foreach( $st as $key ) {
 }
 ?>
 
+<div class="card">
+	<div class="card-header">Calendar</div>
+	<div class="card-body">
+		{!! $calendar->calendar() !!}
+	</div>
+</div>
+
+<p>&nbsp;</p>
+
+<!-- if there is a task from tasker -->
 @if($st->count() > 0)
 <table class="table table-hover table-sm" id="todolist1" style="font-size:12px">
 	<thead>
@@ -43,6 +53,9 @@ foreach( $st as $key ) {
 			<td>{{ $key->belongtoschedule->belongtopriority->priority }}</td>
 			<td><span class="text-primary update" title="Update" data-id="{!! $ke->id !!}" data-toggle="modal" data-target="#form-{!! $ke->id !!}"><i class="fas fa-pen-alt"></i></span></td>
 		</tr>
+
+
+
 		<!-- Modal -->
 		<div class="modal fade" id="form-{!! $ke->id !!}" tabindex="-1" role="dialog" aria-labelledby="Form-{!! $ke->id !!}" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document">
@@ -82,6 +95,9 @@ foreach( $st as $key ) {
 			</div>
 		</div>
 <!-- modal end -->
+
+
+
 	@endforeach
 @endforeach
 	</tbody>

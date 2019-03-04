@@ -1,5 +1,1 @@
-<script>
-    $(document).ready(function(){
-        $('#calendar-{{ $id }}').fullCalendar({!! $options !!});
-    });
-</script>
+$('#calendar-{{ $id }}').fullCalendar({!! $options !!});

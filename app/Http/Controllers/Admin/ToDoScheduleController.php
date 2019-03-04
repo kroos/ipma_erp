@@ -15,6 +15,9 @@ use \App\Http\Requests\ToDoScheduleRequest;
 use \Carbon\Carbon;
 use \Carbon\CarbonPeriod;
 
+// load calendar
+use Calendar;
+
 use Session;
 
 class ToDoScheduleController extends Controller
@@ -27,7 +30,46 @@ class ToDoScheduleController extends Controller
 
 	public function index()
 	{
-		return view('generalAndAdministrative.admin.todolist.index');
+		$events = [];
+		$data = \Auth::user()->belongtostaff->hasmanytaskcreator()->where('active', 1)->get();
+		if ($data->count()) {
+
+			foreach ($data as $key) {
+
+				switch ($key->belongtopriority->id) {
+					case '3':
+						$prio = '#c8c8c8';
+						break;
+
+					case '2':
+						$prio = '#ffeeba';
+						break;
+
+					case '1':
+						$prio = '#f5c6cb';
+						break;
+
+					default:
+						$prio = '#ffffff';
+						break;
+				}
+
+				$events[] = Calendar::event(
+					$key->task,		// event title
+					true,			// full day event?
+					$key->dateline,	// start time
+					$key->dateline,	// end time
+					$key->id,		// id of the event (optional)
+					// optional
+					[
+						'color' => $prio,
+						// 'url' => 'pass here url and any route',
+					]
+				);
+			}
+		}
+		$calendar = Calendar::addEvents($events);
+		return view('generalAndAdministrative.admin.todolist.index', compact('calendar'));
 	}
 
 	public function create()
