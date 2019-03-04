@@ -64,11 +64,23 @@ class ToDoScheduleController extends Controller
 					[
 						'color' => $prio,
 						// 'url' => 'pass here url and any route',
+						'description' => $key->description,
 					]
 				);
 			}
 		}
-		$calendar = Calendar::addEvents($events);
+		$calendar = Calendar::addEvents($events)
+				->setCallbacks([ //set fullcalendar callback options (will not be JSON encoded)
+					'eventRender' => 'function(event, element) {
+						element.popover({
+								title: event.title,
+								content: event.description,
+								trigger: \'hover\',
+								placement: \'top\',
+								container: \'body\',
+							});
+					}'
+				]);
 		return view('generalAndAdministrative.admin.todolist.index', compact('calendar'));
 	}
 

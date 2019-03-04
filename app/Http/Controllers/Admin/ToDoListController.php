@@ -59,21 +59,35 @@ class ToDoListController extends Controller
 					$events[] = Calendar::event(
 						$key->belongtoschedule->task,		// event title
 						true,								// full day event?
-						// Carbon::now()->format('Y-m-d'),		// start time
-						$ke->dateline,		// start time
+						$ke->dateline,						// start time
 						$ke->dateline,						// end time
 						$key->id,							// id of the event (optional)
 						// optional
 						[
 							'color' => $prio,
-							// 'url' => 'pass here url and any route',
+							'url' => route('todoList.edit', $key->id),
+							'textColor' => 'blue',
+							// 'backgroundColor' => 'grey',
+							'description' => $key->belongtoschedule->description,
 						]
 					);
 				}
 			}
 
 		}
-		$calendar = Calendar::addEvents($events);
+		$calendar = Calendar::addEvents($events)
+				->setCallbacks([ //set fullcalendar callback options (will not be JSON encoded)
+					'eventRender' => 'function(event, element) {
+						element.popover({
+								title: event.title,
+								content: event.description,
+								trigger: \'hover\',
+								placement: \'top\',
+								container: \'body\',
+							});
+					}'
+				]);
+
 		return view('todolist.index', compact('calendar'));
 	}
 
@@ -94,29 +108,32 @@ class ToDoListController extends Controller
 
 	public function edit(ToDoList $todoList)
 	{
-		//
+		return view('todolist.edit', compact('todoList'));
 	}
 
-	public function update(Request $request, ToDoList $todoList)
+	public function update(ToDoListUpdateByUserRequest $request, ToDoList $todoList)
 	{
-		//
+		$todoList->update( array_add($request->only(['description', 'completed']), 'update_by', \Auth::user()->belongtostaff->id) );
+		Session::flash('flash_message', 'Data successfully updated!');
+		return redirect( route('todoList.index') );
 	}
 
 ////////////////////////////////////////////////////////
 // additional function
 	public function updatetask(ToDoListUpdateByUserRequest $request, ToDoList $todoList)
 	{
-		var_dump($request->all());
-		$todoList->update( array_add($request->only(['description', 'completed']), 'updated_by', \Auth::user()->belongtostaff->id) );
+		// var_dump($request->all());
+		$todoList->update( array_add($request->only(['description', 'completed']), 'update_by', \Auth::user()->belongtostaff->id) );
 		Session::flash('flash_message', 'Data successfully stored!');
 		return redirect( route('todoList.index') );
 	}
 
-////////////////////////////////////////////////////////
 	public function updatetoggle(Request $request, ToDoList $todoList)
 	{
 		//
 	}
+
+////////////////////////////////////////////////////////
 
 	public function destroy(ToDoList $todoList)
 	{
