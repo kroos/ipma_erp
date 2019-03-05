@@ -81,15 +81,15 @@ use Carbon\CarbonPeriod;
 	$pdf->Cell(35, 5, Carbon::parse($sr->date)->format('D, j M Y'), 0, 1, 'L');
 
 	// customer
-	$pdf->SetXY(23, 53);
+	$pdf->SetXY(15, 53);
 	$pdf->Cell(100, 5, strtoupper(strtolower($sr->belongtocustomer->customer)), 0, 1, 'L');
-	$pdf->SetX(23);
+	$pdf->SetX(15);
 	$pdf->Cell(100, 5, strtoupper(strtolower($sr->belongtocustomer->address1)), 0, 1, 'L');
-	$pdf->SetX(23);
+	$pdf->SetX(15);
 	$pdf->Cell(100, 5, strtoupper(strtolower($sr->belongtocustomer->address2)), 0, 1, 'L');
-	$pdf->SetX(23);
+	$pdf->SetX(15);
 	$pdf->Cell(100, 5, strtoupper(strtolower($sr->belongtocustomer->address3)), 0, 1, 'L');
-	$pdf->SetX(23);
+	$pdf->SetX(15);
 	$pdf->Cell(100, 5, strtoupper(strtolower($sr->belongtocustomer->address4)), 0, 1, 'L');
 
 	// attn to:
