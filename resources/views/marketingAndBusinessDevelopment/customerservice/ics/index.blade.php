@@ -26,6 +26,11 @@
 		<div class="card">
 			<div class="card-header">Intelligence Customer Service<a href="{{ route('serviceReport.create') }}" class="btn btn-primary float-right">Add Service Report</a></div>
 			<div class="card-body table-responsive"">
+				<ul class="nav nav-tabs">
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('srConstant.index') }}">Settings</a>
+					</li>
+				</ul>
 @include('marketingAndBusinessDevelopment.customerservice.ics._content')
 			</div>
 		</div>

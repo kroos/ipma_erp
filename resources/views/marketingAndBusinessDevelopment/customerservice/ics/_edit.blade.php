@@ -29,7 +29,7 @@ $staff = Staff::where('active', 1)->get();
 							{!! Form::text('date', @$value, ['class' => 'form-control col', 'id' => 'date', 'placeholder' => 'Date', 'autocomplete' => 'off']) !!}
 						</div>
 					</div>
-	
+
 				<div class="form-group {{ $errors->has('charge_id')?'has-error':'' }}">
 					<div class="form-check form-check-inline">
 						<label class="form-check-label" for="inlineRadio1">Charge : </label>

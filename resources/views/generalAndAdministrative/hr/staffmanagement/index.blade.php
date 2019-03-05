@@ -108,13 +108,13 @@ $(document).on('click', '.disable_user', function(e){
 
 function SwalDelete(productId){
 	swal({
-		title: 'Are you sure?',
-		text: "It will be deleted permanently!",
+		title: 'User Deactivate',
+		text: "This user will be deactivate, are you sure?",
 		type: 'warning',
 		showCancelButton: true,
 		confirmButtonColor: '#3085d6',
 		cancelButtonColor: '#d33',
-		confirmButtonText: 'Yes, delete it!',
+		confirmButtonText: 'Yes, deactivate it!',
 		showLoaderOnConfirm: true,
 
 		preConfirm: function() {
@@ -144,7 +144,7 @@ function SwalDelete(productId){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal('Cancelled', 'User is safe from deactivate', 'info')
 		}
 	});
 }

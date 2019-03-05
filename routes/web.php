@@ -91,6 +91,8 @@ Route::resources([
 	'srDiscount' => 'Sales\CustomerService\ServiceReportDiscountController',
 	'srCCall' => 'Sales\CustomerService\ServiceReportFeedbackCallController',
 
+	'srConstant' => 'Sales\CustomerService\ServiceReportFLOATTHConstantController',
+
 // customer
 	'customer' => 'CustomerController',
 
