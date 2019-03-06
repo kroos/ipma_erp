@@ -128,9 +128,10 @@ class ServiceReportController extends Controller
 			}
 		}
 
-		//complaints
-		if ($request->has('complaint')) {
-			$serviceReport->hasmanycomplaint()->update($request->only(['complaint', 'complaint_by']));
+		// complaints
+		if ($request->has(['complaint', 'complaint_by'])) {
+			$serviceReport->hasmanycomplaint()->delete();
+				$serviceReport->hasmanycomplaint()->create($request->only(['complaint', 'complaint_by']));
 		}
 
 		Session::flash('flash_message', 'Data successfully stored!');

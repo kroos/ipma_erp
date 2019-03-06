@@ -18,10 +18,12 @@ $jan = $stmjan->month;
 
 if( $jan != 1 ) {
 	$tynrl = StaffLeaveReplacement::where('created_at', '>=', $soy)->where('leave_balance', '>', 0)->orderBy('working_date', 'desc')->get();	// not utilized yet
-	$tynr2 = StaffLeaveReplacement::where('created_at', '>=', $soy)->where('leave_balance', 0)->orderBy('working_date', 'desc')->get();		// utilized replacement leave
+	// $tynr2 = StaffLeaveReplacement::where('created_at', '>=', $soy)->where('leave_balance', '<', 1)->orderBy('working_date', 'desc')->get();		// utilized replacement leave
+	$tynr2 = StaffLeave::where('created_at', '>=', $soy)->where('leave_id', 4)->orderBy('date_time_start', 'desc')->get();		// utilized replacement leave
 } else {
 	$tynrl = StaffLeaveReplacement::where('created_at', '>=', $stmjan)->where('leave_balance', '>', 0)->orderBy('working_date', 'desc')->get();
-	$tynr2 = StaffLeaveReplacement::where('created_at', '>=', $stmjan)->where('leave_balance', 0)->orderBy('working_date', 'desc')->get();
+	// $tynr2 = StaffLeaveReplacement::where('created_at', '>=', $stmjan)->where('leave_balance', '<', 1)->orderBy('working_date', 'desc')->get();
+	$tynr2 = StaffLeave::where('created_at', '>=', $stmjan)->where('leave_id', 4)->orderBy('date_time_start', 'desc')->get();
 }
 ?>
 <ul class="nav nav-pills">
@@ -113,7 +115,7 @@ if( $jan != 1 ) {
 		<table class="table table-hover table-sm" id="nrl2" style="font-size:12px">
 			<thead>
 				<tr>
-					<th colspan="10"><h3>Claimed Non Record Leave</h3></th>
+					<th colspan="10"><h3>Claimed Replacement Leave</h3></th>
 				</tr>
 				<tr>
 					<th>Staff</th>
@@ -131,25 +133,26 @@ if( $jan != 1 ) {
 			<tbody>
 		@foreach($tynr2 as $crl)
 		<?php
-		if( is_null($crl->belongtostaffleave) ) {
+
+		if( is_null( $crl->leave_replacement_id ) ) {
 			$href = NULL;
 		} else {
-			$arr = str_split( Carbon::parse($crl->belongtostaffleave->created_at)->format('Y'), 2 );
-			$href = 'HR9-'.str_pad( $crl->belongtostaffleave->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
+			$arr = str_split( Carbon::parse($crl->created_at)->format('Y'), 2 );
+			$href = 'HR9-'.str_pad( $crl->leave_no, 5, "0", STR_PAD_LEFT ).'/'.$arr[1];
 		}
 		?>
 				<tr>
-					<td>ID {{ $crl->id }} => {!! $crl->belongtostaff->name !!}</td>
+					<td>ID {{ $crl->id }} => {!! $crl->belongtostaff->name !!} => {!! $crl->belongtostaff->hasmanylogin()->where('active', 1)->first()->username !!} => {!! $crl->created_at !!}</td>
 					<td>
 		<?php
 		$i = 0;
 		if(is_null($href)) {
-		$p = StaffLeave::where('staff_id', $crl->staff_id)->where('leave_id', 4)->where('period', $crl->leave_utilize)->get();
+		$p = StaffLeaveReplacement::where('staff_id', $crl->staff_id)->where('leave_balance', 0)->get();
 		// echo $p.' query<br />';
 		?>
 		<select name="xtau" id="sel{!! $i !!}">
 			@foreach($p as $t)
-			<option value="{{ $t->id }}">{{ $t->id }} {{ $t->belongtostaff->name }} {{ $t->belongtoleave->leave }} {{ $t->created_at }}</option>
+			<option value="{{ $t->id }}">{{ $t->id }}  => {{ $t->created_at }} => {!! $t->leave_balance !!}</option>
 			@endforeach
 		</select>
 		
@@ -159,14 +162,14 @@ if( $jan != 1 ) {
 		}
 		?>
 					</td>
-					<td>{!! Carbon::parse($crl->updated_at)->format('D, j M Y') !!}</td>
-					<td>{!! Carbon::parse($crl->working_date)->format('D, j M Y') !!}</td>
-					<td>{!! $crl->working_location !!}</td>
-					<td>{!! $crl->working_reason !!}</td>
-					<td>{!! $crl->remarks !!}</td>
-					<td>{!! $crl->leave_total !!} day/s</td>
-					<td>{!! $crl->leave_utilize !!} day/s</td>
-					<td>{!! $crl->leave_balance !!} day/s</td>
+					<td>{!! (!is_null($crl->belongtostaffleavereplacement))?Carbon::parse($crl->belongtostaffleavereplacement->updated_at)->format('D, j M Y'):NULL !!}</td>
+					<td>{!! (!is_null($crl->belongtostaffleavereplacement))?Carbon::parse($crl->belongtostaffleavereplacement->working_date)->format('D, j M Y'):NULL !!}</td>
+					<td>{!! (!is_null($crl->belongtostaffleavereplacement))?$crl->belongtostaffleavereplacement->working_location:NULL !!}</td>
+					<td>{!! (!is_null($crl->belongtostaffleavereplacement))?$crl->belongtostaffleavereplacement->working_reason:NULL !!}</td>
+					<td>{!! (!is_null($crl->belongtostaffleavereplacement))?$crl->belongtostaffleavereplacement->remarks:NULL !!}</td>
+					<td>{!! (!is_null($crl->belongtostaffleavereplacement))?$crl->belongtostaffleavereplacement->leave_total:NULL !!} day/s</td>
+					<td>{!! (!is_null($crl->belongtostaffleavereplacement))?$crl->belongtostaffleavereplacement->leave_utilize:NULL !!} day/s</td>
+					<td>{!! (!is_null($crl->belongtostaffleavereplacement))?$crl->belongtostaffleavereplacement->leave_balance:NULL !!} day/s</td>
 				</tr>
 		@endforeach
 			</tbody>

@@ -166,8 +166,8 @@ class StaffLeaveHRController extends Controller
 		}
 
 		if( $staffLeaveHR->leave_id == 4 ) {
-			$nl = $staffLeaveHR->hasmanystaffleavereplacement()->first()->leave_balance;
-			$nlb = $staffLeaveHR->hasmanystaffleavereplacement()->first()->leave_total;
+			$nl = $staffLeaveHR->belongtostaffleavereplacement->leave_balance;
+			$nlb = $staffLeaveHR->belongtostaffleavereplacement->leave_total;
 			$alle = $nl + $per - $request->period;
 			if( $alle < 0 ) {
 				Session::flash('flash_message', 'Masa bagi permohonon ini tidak dapat diproses kerana tempoh baki Cuti Ganti sudah habis digunakan ('.$alle.') hari. Sila ambil masa yang lain.');
@@ -182,7 +182,7 @@ class StaffLeaveHRController extends Controller
 				]);
 				// update staff balance annual.
 
-				$staffLeaveHR->hasmanystaffleavereplacement()->update([
+				$staffLeaveHR->belongtostaffleavereplacement->update([
 					'leave_utilize' => $nlb - $request->balance,
 					'leave_balance' => $request->balance,
 				]);
