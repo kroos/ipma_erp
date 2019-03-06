@@ -82,14 +82,14 @@ $mcupl = $staffLeaveHR->belongtostaff->hasmanystaffleave()->where('leave_id', 11
 			<dd class="col-sm-9">
 				<dl class="row">
 					<dt class="col-sm-3"><h5>Initialize :</h5></dt>
-					<dd class="col-sm-9"><span id="">{{ $staffLeaveHR->hasmanystaffleavereplacement()->first()->leave_total }}</span> day/s</dd>
+					<dd class="col-sm-9"><span id="">{{ $staffLeaveHR->belongtostaffleavereplacement->leave_total }}</span> day/s</dd>
 					<dt class="col-sm-3"><h5>Initial Utilized :</h5></dt>
-					<dd class="col-sm-9" id="matlb"><span id="albi">{{ $staffLeaveHR->hasmanystaffleavereplacement()->first()->leave_balance }}</span> day/s</dd>
+					<dd class="col-sm-9" id="matlb"><span id="albi">{{ $staffLeaveHR->belongtostaffleavereplacement->leave_balance }}</span> day/s</dd>
 					<dt class="col-sm-3"><h5>Change Utilized :</h5></dt>
-					<dd class="col-sm-9" id="matlb"><span id="albc">{{ $staffLeaveHR->hasmanystaffleavereplacement()->first()->leave_balance }}</span> day/s</dd>
+					<dd class="col-sm-9" id="matlb"><span id="albc">{{ $staffLeaveHR->belongtostaffleavereplacement->leave_balance }}</span> day/s</dd>
 				</dl>
 			</dd>
-			{{ Form::hidden('balance', (is_null(@$value))?$staffLeaveHR->hasmanystaffleavereplacement()->first()->leave_balance:@$value, ['id' => 'balance']) }}
+			{{ Form::hidden('balance', (is_null(@$value))?$staffLeaveHR->belongtostaffleavereplacement->leave_balance:@$value, ['id' => 'balance']) }}
 @endif
 		</dl>
 
