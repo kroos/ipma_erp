@@ -2537,13 +2537,15 @@ $('#form').bootstrapValidator({
 				integer: {
 					message: 'The value is not an integer. '
 				},
-				remote: {
-					message: 'This serial number is already exist. ',
-					url: '{!! route('workinghour.serialnooverlapped') !!}',
-					type: 'POST',
-					data: {
-						_token : $('meta[name=csrf-token]').attr('content'),
-					},
+
+//				remote: {
+//					message: 'This serial number is already exist. ',
+//					url: '{!! route('workinghour.serialnooverlapped') !!}',
+//					type: 'POST',
+//					data: {
+//						_token : $('meta[name=csrf-token]').attr('content'),
+//					},
+
 				}
 			}
 		},
