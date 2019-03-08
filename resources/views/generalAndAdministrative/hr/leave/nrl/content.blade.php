@@ -2,6 +2,7 @@
 use \Carbon\Carbon;
 use \App\Model\StaffLeaveReplacement;
 use \App\Model\StaffLeave;
+use \App\Model\Staff;
 
 $now = Carbon::now();
 
@@ -16,13 +17,13 @@ $jan = $stmjan->month;
 // echo StaffLeaveReplacement::where('created_at', '>=', $soy)->where('leave_balance', '>', 0)->orderBy('working_date', 'desc')->get();
 // echo StaffLeaveReplacement::where('created_at', '>=', $soy)->where('leave_balance', 0)->orderBy('working_date', 'desc')->get();
 
+// echo Staff::where('active', 1)->get();
+
 if( $jan != 1 ) {
 	$tynrl = StaffLeaveReplacement::where('created_at', '>=', $soy)->where('leave_balance', '>', 0)->orderBy('working_date', 'desc')->get();	// not utilized yet
-	// $tynr2 = StaffLeaveReplacement::where('created_at', '>=', $soy)->where('leave_balance', '<', 1)->orderBy('working_date', 'desc')->get();		// utilized replacement leave
 	$tynr2 = StaffLeave::where('created_at', '>=', $soy)->where('leave_id', 4)->orderBy('date_time_start', 'desc')->get();		// utilized replacement leave
 } else {
 	$tynrl = StaffLeaveReplacement::where('created_at', '>=', $stmjan)->where('leave_balance', '>', 0)->orderBy('working_date', 'desc')->get();
-	// $tynr2 = StaffLeaveReplacement::where('created_at', '>=', $stmjan)->where('leave_balance', '<', 1)->orderBy('working_date', 'desc')->get();
 	$tynr2 = StaffLeave::where('created_at', '>=', $stmjan)->where('leave_id', 4)->orderBy('date_time_start', 'desc')->get();
 }
 ?>
@@ -76,8 +77,9 @@ if( $jan != 1 ) {
 					</thead>
 					<tbody>
 				@foreach( $tynrl as $rnl )
+				@if($rnl->belongtostaff->active == 1)
 						<tr>
-							<td>{!! $rnl->belongtostaff->name !!}</td>
+							<td>{!! $rnl->belongtostaff->hasmanylogin()->where('active', 1)->first()->username !!} {!! $rnl->belongtostaff->name !!}</td>
 							<td>{!! Carbon::parse($rnl->working_date)->format('D, j M Y') !!}</td>
 							<td>{!! $rnl->working_location !!}</td>
 							<td>{!! $rnl->working_reason !!}</td>
@@ -90,6 +92,7 @@ if( $jan != 1 ) {
 								<span title="Delete" class="text-danger delete_nrl" id="delete_nrl_{!! $rnl->id !!}" data-id="{!! $rnl->id !!}"><i class="fas fa-trash" aria-hidden="true"></i></span>
 							</td>
 						</tr>
+				@endif
 				@endforeach
 					</tbody>
 					<tfoot>
@@ -132,8 +135,10 @@ if( $jan != 1 ) {
 			</thead>
 			<tbody>
 		@foreach($tynr2 as $crl)
-		<?php
 
+		@if($crl->belongtostaff->active == 1)
+
+		<?php
 		if( is_null( $crl->leave_replacement_id ) ) {
 			$href = NULL;
 		} else {
@@ -142,7 +147,7 @@ if( $jan != 1 ) {
 		}
 		?>
 				<tr>
-					<td>ID {{ $crl->id }} => {!! $crl->belongtostaff->name !!} => {!! $crl->belongtostaff->hasmanylogin()->where('active', 1)->first()->username !!} => {!! $crl->created_at !!}</td>
+					<td>ID {{ $crl->id }} => {!! $crl->belongtostaff->hasmanylogin()->where('active', 1)->first()->username !!} {!! $crl->belongtostaff->name !!} => {!! $crl->created_at !!}</td>
 					<td>
 		<?php
 		$i = 0;
@@ -152,7 +157,7 @@ if( $jan != 1 ) {
 		?>
 		<select name="xtau" id="sel{!! $i !!}">
 			@foreach($p as $t)
-			<option value="{{ $t->id }}">{{ $t->id }}  => {{ $t->created_at }} => {!! $t->leave_balance !!}</option>
+			<option value="{{ $t->id }}">ID {{ $t->id }}  => Staff ID {{ $t->staff_id }}  => {{ $t->created_at }} => Remarks {!! $t->remarks !!}</option>
 			@endforeach
 		</select>
 		
@@ -171,6 +176,7 @@ if( $jan != 1 ) {
 					<td>{!! (!is_null($crl->belongtostaffleavereplacement))?$crl->belongtostaffleavereplacement->leave_utilize:NULL !!} day/s</td>
 					<td>{!! (!is_null($crl->belongtostaffleavereplacement))?$crl->belongtostaffleavereplacement->leave_balance:NULL !!} day/s</td>
 				</tr>
+		@endif
 		@endforeach
 			</tbody>
 			<tfoot>

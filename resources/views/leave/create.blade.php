@@ -506,11 +506,11 @@ if(\App\Model\HRSettingsDoubleDate::first()->double_date_setting == 1) {		// set
 <?php
 $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave_balance', '<>', 0)->get();
 ?>
-				'<div class="form-group row {{ $errors->has('staff_leave_replacement_id') ? 'has-error' : '' }}">' +
+				'<div class="form-group row {{ $errors->has('leave_replacement_id') ? 'has-error' : '' }}">' +
 					'{{ Form::label('nrla', 'Please Choose Your Replacement Leave : ', ['class' => 'col-sm-2 col-form-label']) }}' +
 					'<div class="col-sm-10 nrl">' +
 						'<p>Total Non Replacement Leave = {{ $oi->sum('leave_balance') }} days</p>' +
-						'<select name="staff_leave_replacement_id" id="nrla" class="form-control">' +
+						'<select name="leave_replacement_id" id="nrla" class="form-control">' +
 							'<option value="">Please select</option>' +
 @foreach( $oi as $po )
 							'<option value="{{ $po->id }}" data-nrlbalance="{{ $po->leave_balance }}">On ' + moment( '{{ $po->working_date }}', 'YYYY-MM-DD' ).format('ddd Do MMM YYYY') + ', your leave balance = {{ $po->leave_balance }} day</option>' +
@@ -558,7 +558,7 @@ $oi = \Auth::user()->belongtostaff->hasmanystaffleavereplacement()->where('leave
 		// more option
 		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_start"]'));
 		$('#form').bootstrapValidator('addField', $('.datetime').find('[name="date_time_end"]'));
-		$('#form').bootstrapValidator('addField', $('.nrl').find('[name="staff_leave_replacement_id"]'));
+		$('#form').bootstrapValidator('addField', $('.nrl').find('[name="leave_replacement_id"]'));
 
 		/////////////////////////////////////////////////////////////////////////////////////////
 		// enable select2
@@ -754,7 +754,7 @@ if(\App\Model\HRSettingsDoubleDate::first()->double_date_setting == 1) {		// set
 
 			selectedOption = $('option:selected', this);
 
-			$('#form').bootstrapValidator('revalidateField', 'staff_leave_replacement_id');
+			$('#form').bootstrapValidator('revalidateField', 'leave_replacement_id');
 
 			var nrlbal = selectedOption.data('nrlbalance');
 
@@ -1591,8 +1591,7 @@ $(document).ready(function() {
 					},
 				}
 			},
-			staff_leave_replacement_id: {
-			 	// group: '.nrl',
+			leave_replacement_id: {
 				validators: {
 					notEmpty: {
 						message: 'Please select 1 option',

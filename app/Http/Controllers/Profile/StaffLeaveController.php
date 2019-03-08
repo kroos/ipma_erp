@@ -478,7 +478,8 @@ class StaffLeaveController extends Controller
 			if ( $request->leave_id == 4 ) { // NRL leave
 
 				// upacara tolak cuti ganti.
-				$gant = \App\Model\StaffLeaveReplacement::find($request->staff_leave_replacement_id)->leave_balance;
+				// $gant = \App\Model\StaffLeaveReplacement::find($request->leave_replacement_id)->leave_balance;
+				$gant = \App\Model\StaffLeaveReplacement::find($request->leave_replacement_id)->leave_balance;
 				echo $gant.' balance replacement<br />';
 
 				$balancegant = $gant - $haricuti;
@@ -488,6 +489,7 @@ class StaffLeaveController extends Controller
 				$takeLeave = \Auth::user()->belongtostaff->hasmanystaffleave()->create([
 					'leave_no' => $leave_no,
 					'leave_id' => $request->leave_id,
+					'leave_replacement_id' => $request->leave_replacement_id,
 					'half_day' => $request->leave_type,
 					'reason' => $request->reason,
 					'date_time_start' => $date_time_start,
@@ -497,16 +499,16 @@ class StaffLeaveController extends Controller
 					'active' => 1,
 				]);
 
-				echo $request->staff_leave_replacement_id.' id staff_leave_replacement<br />';
+				echo $request->leave_replacement_id.' id staff_leave_replacement<br />';
 				echo $takeLeave->id.' insert id from $takeleave<br />';
 				// update staff leave replacement => somehow this method doesnt work
-				// $upl = $takeLeave->hasmanystaffleavereplacement()->where('id', $request->staff_leave_replacement_id)->update( [
+				// $upl = $takeLeave->hasmanystaffleavereplacement()->where('id', $request->leave_replacement_id)->update( [
 				// 	'leave_utilize' => $haricuti,
 				// 	'leave_balance' => $balancegant
 				// 	] );
 
-				$upl = \App\Model\StaffLeaveReplacement::where('id', $request->staff_leave_replacement_id)->update([
-					'staff_leave_id' => $takeLeave->id,
+				$upl = \App\Model\StaffLeaveReplacement::where('id', $request->leave_replacement_id)->update([
+					// 'staff_leave_id' => $takeLeave->id,
 					'leave_utilize' => $haricuti,
 					'leave_balance' => $balancegant,
 				]);
