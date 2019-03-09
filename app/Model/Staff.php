@@ -169,6 +169,19 @@ class Staff extends Model
 		return $this->hasMany('\App\Model\StaffMemo', 'staff_id');
 	}
 
+// customer service order
+	public function hasmanyinformerorder()
+	{
+		return $this->hasMany('\App\Model\CSOrder', 'informed_by');
+	}
+
+	public function hasmanypicorder()
+	{
+		return $this->hasMany('\App\Model\CSOrder', 'pic');
+	}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // https://laravel.com/docs/5.6/eloquent-relationships#many-to-many
 	public function belongtomanyposition()
 	{

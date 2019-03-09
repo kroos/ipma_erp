@@ -93,6 +93,10 @@ Route::resources([
 
 	'srConstant' => 'Sales\CustomerService\ServiceReportFLOATTHConstantController',
 
+// cs order
+	'csOrder' => 'Sales\CustomerService\CSOrderController',
+	'csOrderItem' => 'Sales\CustomerService\CSOrderItemController',
+
 // customer
 	'customer' => 'CustomerController',
 
