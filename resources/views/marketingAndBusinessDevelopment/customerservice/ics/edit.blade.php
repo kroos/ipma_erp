@@ -19,9 +19,9 @@
 			<li class="nav-item">
 				<a class="nav-link active" href="{{ route('serviceReport.index') }}">Intelligence Customer Service</a>
 			</li>
-<!-- 			<li class="nav-item">
-				<a class="nav-link" href="">Cost Planning System</a>
-			</li> -->
+			<li class="nav-item">
+				<a class="nav-link" href="{{ route('csOrder.index') }}">Customer Order Item</a>
+			</li>
 		</ul>
 {{-- 		<div class="card">
 			<div class="card-header">Update Service Report</div>
@@ -2800,8 +2800,10 @@ $('#form').bootstrapValidator({
 				notEmpty: {
 					message: 'This field cant be empty. '
 				},
-				integer: {
-					message: 'Invalid input. '
+				greaterThan: {
+					value: 0,
+					inclusive: true,
+					message: 'The hour has to be greater or equal to 0. ',
 				},
 			}
 		},
