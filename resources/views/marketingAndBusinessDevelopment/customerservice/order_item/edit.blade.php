@@ -72,6 +72,19 @@ $('#cust, #iby, #pi, #ois_1').select2({
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
+<?php
+$p1 = 1;
+?>
+@foreach($csOrder->hasmanyorderitem()->get() as $oi)
+$('#ois_{!! $p1++ !!}').select2({
+	placeholder: 'Please choose',
+	allowClear: true,
+	closeOnSelect: true,
+	width: '100%',
+});
+@endforeach
+
+/////////////////////////////////////////////////////////////////////////////////////////
 // add position : add and remove row
 <?php
 $csois = \App\Model\CSOrderItemStatus::all();
@@ -81,7 +94,7 @@ var max_fields	= 100; //maximum input boxes allowed
 var add_buttons	= $(".add_orderitem");
 var wrappers	= $(".orderitem_wrap");
 
-var xs = 1;
+var xs = {{ $csOrder->hasmanyorderitem()->get()->count() }};
 $(add_buttons).click(function(){
 	// e.preventDefault();
 

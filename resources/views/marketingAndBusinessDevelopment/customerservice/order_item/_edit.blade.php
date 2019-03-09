@@ -46,18 +46,26 @@
 
 	<div class="col-6">
 		<div class="col orderitem_wrap">
-
+<?php
+$i1 = 1;
+$i2 = 1;
+$i3 = 1;
+$i4 = 1;
+$i5 = 1;
+$i6 = 1;
+$i7 = 1;
+?>
 @foreach($csOrder->hasmanyorderitem()->get() as $oi)
 			<div class="roworderitem">
 				<div class="col-sm-12 form-row ">
 					<div class="col-sm-1 text-danger">
-							<i class="fas fa-trash delete_item" aria-hidden="true" id="delete_item_1"></i>
+							<i class="fas fa-trash delete_item" aria-hidden="true" id="delete_item_{{ $i1++ }}"></i>
 					</div>
 					<div class="form-group col {{ $errors->has('csoi.*.order_item') ? 'has-error' : '' }}">
-						{!! Form::text('csoi[1][order_item]', $oi->order_item, ['class' => 'form-control form-control-sm', 'id' => 'oi_1', 'autocomplete' => 'off', 'placeholder' => 'Item/Parts']) !!}
+						{!! Form::text('csoi['.$i2++.'][order_item]', $oi->order_item, ['class' => 'form-control form-control-sm', 'id' => 'oi_'.$i3++, 'autocomplete' => 'off', 'placeholder' => 'Item/Parts']) !!}
 					</div>
 					<div class="form-group col {{ $errors->has('csoi.*.order_item_status_id') ? 'has-error' : '' }}">
-						<select name="csoi[1][order_item_status_id]" id="ois_1" class="form-control form-control-sm" autocomplete="off" placeholder="Please choose">
+						<select name="csoi[{{ $i4++ }}][order_item_status_id]" id="ois_{{ $i5++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Please choose">
 							<option value="">Please choose</option>
 @foreach( \App\Model\CSOrderItemStatus::all() as $mod )
 							<option value="{!! $mod->id !!}" {!! ($mod->id == $oi->order_item_status_id)?'selected':NULL !!}>{!! $mod->order_item_status !!}</option>
@@ -65,7 +73,7 @@
 						</select>
 					</div>
 					<div class="form-group col {{ $errors->has('csoi.*.description') ? 'has-error' : '' }}">
-						<textarea name="csoi[1][description]" id="oid_1" class="form-control form-control-sm" placeholder="Remarks for Item">{!! $oi->description !!}</textarea>
+						<textarea name="csoi[{{ $i6++ }}][description]" id="oid_{{ $i7++ }}" class="form-control form-control-sm" placeholder="Remarks for Item">{!! $oi->description !!}</textarea>
 					</div>
 				</div>
 			</div>
