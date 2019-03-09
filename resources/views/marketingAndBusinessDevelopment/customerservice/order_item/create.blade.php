@@ -226,9 +226,9 @@ $('#form').bootstrapValidator({
 		},
 		requester: {
 			validators: {
-				notEmpty: {
-					message: 'Please insert Requester. '
-				}
+				// notEmpty: {
+				// 	message: 'Please insert Requester. '
+				// }
 			}
 		},
 		informed_by: {
