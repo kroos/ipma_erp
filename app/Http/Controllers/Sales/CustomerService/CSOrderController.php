@@ -76,6 +76,7 @@ class CSOrderController extends Controller
 
 	public function destroy(CSOrder $csOrder)
 	{
+		$csOrder->hasmanyorderitem()->delete();
 		CSOrder::destroy($csOrder->id);
 		return response()->json([
 			'message' => 'Data deleted',
