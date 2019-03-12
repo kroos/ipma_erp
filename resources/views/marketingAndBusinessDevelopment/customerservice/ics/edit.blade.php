@@ -39,7 +39,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////
 //ucwords
 $("#compby1, #compl1, #remarks1").keyup(function() {
-	uch(this);
+	// uch(this);
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -108,7 +108,7 @@ $('#model_{!! $iiiiii !!}').select2({
 });
 
 $("#1test_run_machine_{{ $iiiiii }} , #1serial_no_{{ $iiiiii }}, #1test_capacity_{{ $iiiiii }}, #1duration_{{ $iiiiii }}").keyup(function() {
-	tch(this);
+	// tch(this);
 });
 @endfor
 
@@ -125,7 +125,7 @@ $('#vc_{!! $srlo !!}, #v_{{ $srlo }}').select2({
 $('#v_{{ $srlo }}').chainedTo('#vc_{{ $srlo }}');
 
 $("#1description_{{ $srlo }}").keyup(function() {
-	tch(this);
+	// tch(this);
 });
 @endfor
 
@@ -135,7 +135,7 @@ $t = 1;
 ?>
 @foreach($serviceReport->hasmanypart()->get() as $srp)
 $("#1part_accessory_{{ $t++ }}").keyup(function() {
-	tch(this);
+	// tch(this);
 });
 @endforeach
 
@@ -154,7 +154,7 @@ $('#aid_{!! $addc1++ !!}').select2({
 });
 
 $("#1description_amount_{{ $addc2++ }}").keyup(function() {
-	tch(this);
+	// tch(this);
 });
 @endforeach
 
@@ -192,7 +192,7 @@ $("#wts_{{ $r3++ }}, #wte_{{ $r4++ }}, #ts_1_{{ $r5++ }}, #te_1_{{ $r6++ }}, #ts
 });
 
 $("#1job_perform_{{ $r9++ }}, #1ds_1_{{ $r10++ }}, #1de_1_{{ $r11++ }}, #1ds_2_{{ $r12++ }}, #1de_2_{{ $r13++ }}").keyup(function() {
-	uch(this);
+	// uch(this);
 });
 
 $('#fr_{{ $r14++ }}, #wtv_{{ $r15++ }}, #accommodation_{{ $r16++ }}').select2({
@@ -207,7 +207,7 @@ $('#fr_{{ $r14++ }}, #wtv_{{ $r15++ }}, #accommodation_{{ $r16++ }}').select2({
 // problem solution
 @for ($pf1 = ($serviceReport->hasmanyfeedproblem()->get()->count() > 0)?$serviceReport->hasmanyfeedproblem()->get()->count():1; $pf1 <= $serviceReport->hasmanyfeedproblem()->get()->count() + 1; $pf1++)
 $("#1problem_{{ $pf1 }}1, #1solution_{{ $pf1 }}1").keyup(function() {
-	tch(this);
+	// tch(this);
 });
 @endfor
 
@@ -215,7 +215,7 @@ $("#1problem_{{ $pf1 }}1, #1solution_{{ $pf1 }}1").keyup(function() {
 // request action
 @for ($pfr2 = ($serviceReport->hasmanyfeedrequest()->get()->count() > 0)?$serviceReport->hasmanyfeedrequest()->get()->count():1; $pfr2 <= $serviceReport->hasmanyfeedrequest()->get()->count() + 1; $pfr2++)
 $("#1request_{{ $pfr2 }}1, #1action_{{ $pfr2 }}1").keyup(function() {
-	tch(this);
+	// tch(this);
 });
 @endfor
 
@@ -223,7 +223,7 @@ $("#1request_{{ $pfr2 }}1, #1action_{{ $pfr2 }}1").keyup(function() {
 // item item_action
 @for ($pfr3 = ($serviceReport->hasmanyfeeditem()->get()->count() > 0)?$serviceReport->hasmanyfeeditem()->get()->count():1; $pfr3 <= $serviceReport->hasmanyfeeditem()->get()->count() + 1; $pfr3++)
 $("#1item_{{ $pfr3 }}1, #1item_action_{{ $pfr3 }}1w ").keyup(function() {
-	tch(this);
+	// tch(this);
 });
 @endfor
 
@@ -453,19 +453,19 @@ $(addbtnmod).click(function(){
 		});
 
 		$('#test_run_machine_' + xmod + '').keyup(function() {
-			tch(this);
+			// tch(this);
 		});
 
 		$('#serial_no_' + xmod).keyup(function() {
-			tch(this);
+			// tch(this);
 		});
 
 		$('#test_capacity_' + xmod).keyup(function() {
-			tch(this);
+			// tch(this);
 		});
 
 		$('#duration_' + xmod).keyup(function() {
-			tch(this);
+			// tch(this);
 		});
 
 		//bootstrap validate
@@ -529,7 +529,7 @@ $(addbtnpart).click(function(){
 		); //add input box
 
 		$('#1part_accessory_' + xpart).keyup(function() {
-			tch(this);
+			// tch(this);
 		});
 
 		//bootstrap validate
@@ -788,7 +788,7 @@ $(addbtnjobn).click(function(){
 		});
 		
 		$('#job_perform_' + xj + ', #ds_1_' + xj + ', #de_1_' + xj + ', #ds_2_' + xj + ', #de_2_' + xj ).keyup(function() {
-			uch(this);
+			// uch(this);
 		});
 		
 		$('#fr_' + xj + ', #wtv_' + xj + ', #accommodation_' + xj ).select2({
@@ -888,7 +888,7 @@ $(addbtnfeedProb).click(function(){
 					'</div>'
 		); //add input box
 		$('#problem_' + xfp + ', #solution_' + xfp).keyup(function() {
-			tch(this);
+			// tch(this);
 		});
 
 		//bootstrap validate
@@ -944,7 +944,7 @@ $(addbtnfeedReq).click(function(){
 					'</div>'
 		); //add input box
 		$('#request_' + xfr + ', #action_' + xfr).keyup(function() {
-			tch(this);
+			// tch(this);
 		});
 
 		//bootstrap validate
@@ -1003,7 +1003,7 @@ $(addbtnfeedItem).click(function(){
 					'</div>'
 		); //add input box
 		$('#item_' + xfi + ', #item_action_' + xfi).keyup(function() {
-			tch(this);
+			// tch(this);
 		});
 
 		//bootstrap validate
@@ -1088,7 +1088,7 @@ $(addbtnsrlogistic).click(function(){
 		$('#v_' + xL).chainedTo('#vc_' + xL);
 		
 		$('#description_' + xL).keyup(function() {
-			uch(this);
+			// uch(this);
 		});
 		//bootstrap validate
 		$('#form').bootstrapValidator('addField', $('.rowsrlogistic').find('[name="srL[' + xL + '][vehicle_id]"]'));
@@ -1168,7 +1168,7 @@ $(addbtnsraddch).click(function(){
 		});
 		
 		$('#description_amount_' + xsrAddCh).keyup(function() {
-			tch(this);
+			// tch(this);
 		});
 
 		//bootstrap validate
