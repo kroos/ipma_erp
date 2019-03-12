@@ -204,9 +204,9 @@ function SwalDelete(productId){
 
 $('#form').bootstrapValidator({
 	feedbackIcons: {
-		valid: '',
-		invalid: '',
-		validating: ''
+		valid: 'fas fa-check',
+		invalid: 'fas fa-times',
+		validating: 'fas fa-spinner'
 	},
 	fields: {
 		date: {

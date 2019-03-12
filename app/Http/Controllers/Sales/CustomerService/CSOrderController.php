@@ -31,7 +31,7 @@ class CSOrderController extends Controller
 
 	public function store(Request $request)
 	{
-		$csoi = CSOrder::create($request->only(['date', 'customer_id', 'requester', 'informed_id', 'pic', 'description']));
+		$csoi = CSOrder::create($request->only(['date', 'customer_id', 'requester', 'informed_by', 'pic', 'description']));
 		if ($request->has('csoi')) {
 			foreach ($request->csoi as $key => $value) {
 				$csoi->hasmanyorderitem()->create([
@@ -57,7 +57,7 @@ class CSOrderController extends Controller
 
 	public function update(Request $request, CSOrder $csOrder)
 	{
-		$csOrder->update($request->only(['date', 'customer_id', 'requester', 'informed_id', 'pic', 'description']));
+		$csOrder->update($request->only(['date', 'customer_id', 'requester', 'informed_by', 'pic', 'description']));
 
 		// item
 		if ($request->has('csoi')) {
