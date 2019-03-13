@@ -101,50 +101,12 @@ $staff = Staff::where('active', 1)->get();
 			<div class="card-body" {!! (\Auth::user()->belongtostaff->id == 82)?'style="background-color: #ffe6c8"':NULL !!}>
 
 				<div class="container-fluid position_wrap">
-					<div class="rowposition">
-						<div class="row col-sm-12">
-
-							<div class="col-sm-1 text-danger">
-									<i class="fas fa-trash remove_position" aria-hidden="true" id="button_delete_"></i>
-							</div>
-
-							<div class="col-sm-11">
-								<div class="form-group {{ $errors->has('sr.*.attended_by') ? 'has-error' : '' }}">
-									<select name="sr[1][attended_by]" id="staff_id_1" class="form-control">
-										<option value="">Please choose</option>
-@foreach($staff as $st)
-										<option value="{!! $st->id !!}">{!! $st->hasmanylogin()->where('active', 1)->first()->username !!} {!! $st->name !!}</option>
-@endforeach
-									</select>
-								</div>
-							</div>
-
-						</div>
-					</div>
-
 				</div>
 				<div class="row col-lg-12 add_position">
 					<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Staff</p>
 				</div>
 
-
 				<div class="container-fluid phoneattendees_wrap">
-					<div class="rowphoneattendees">
-						<div class="form-row col-sm-12">
-
-							<div class="col-sm-1 text-danger">
-									<i class="fas fa-trash remove_phoneattendees" aria-hidden="true" id="button_delete_"></i>
-							</div>
-
-							<div class="col-sm-11">
-								<div class="form-group {{ $errors->has('srpn.*.phone_number') ? 'has-error' : '' }}">
-									<input type="text" name="srpn[1][phone_number]" id="phone_attendees_1" class="form-control" placeholder="Attendees Phone Number">
-								</div>
-							</div>
-
-						</div>
-					</div>
-
 				</div>
 				<div class="row col-lg-12 add_phoneattendees">
 					<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add phone</p>

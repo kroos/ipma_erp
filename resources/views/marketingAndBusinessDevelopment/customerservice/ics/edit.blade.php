@@ -2634,16 +2634,16 @@ $('#form').bootstrapValidator({
 @for($uuu=1; $uuu < 10; $uuu++)
 		'srp[{!! $uuu !!}][part_accessory]': {
 			validators : {
-				// notEmpty: {
-				// 	message: 'This field cannot be empty. '
-				// },
+				notEmpty: {
+					message: 'This field cannot be empty. '
+				},
 			}
 		},
 		'srp[{!! $uuu !!}][qty]': {
 			validators : {
-				// notEmpty: {
-				// 	message: 'This field cannot be empty. '
-				// },
+				notEmpty: {
+					message: 'This field cannot be empty. '
+				},
 				// integer: {
 				// 	message: 'The value is not an integer. '
 				// },
@@ -2705,6 +2705,9 @@ $('#form').bootstrapValidator({
 		'srj[{{ $xc }}][srjde][2][meter_start]': {
 			group: '.form-group',
 			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
 				integer: {
 					message: 'The value is not an integer. '
 				},
@@ -2718,6 +2721,9 @@ $('#form').bootstrapValidator({
 		'srj[{{ $xc }}][srjde][2][meter_end]': {
 			group: '.form-group',
 			validators : {
+				notEmpty: {
+					message: 'Please insert this field. '
+				},
 				integer: {
 					message: 'The value is not an integer. '
 				},
@@ -2965,9 +2971,9 @@ $('#form').bootstrapValidator({
 		},
 		status_id: {
 			validators : {
-//				notEmpty: {
-//					message: 'Please choose. '
-//				},
+				notEmpty: {
+					message: 'Please choose. '
+				},
 			}
 		},
 	}
