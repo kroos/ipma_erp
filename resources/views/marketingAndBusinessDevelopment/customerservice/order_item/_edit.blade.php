@@ -21,6 +21,13 @@
 			</div>
 		</div>
 
+		<div class="form-group row {{ $errors->has('customer_PO_no')?'has-error':'' }}">
+			{{ Form::label( 'custpono', 'Customer PO No : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+			<div class="col-sm-10">
+				{!! Form::text('customer_PO_no', @$value, ['class' => 'form-control form-control-sm', 'id' => 'custpono', 'placeholder' => 'Customer PO No', 'autocomplete' => 'off']) !!}
+			</div>
+		</div>
+
 		<div class="form-group row {{ $errors->has('informed_by')?'has-error':'' }}">
 			{{ Form::label( 'iby', 'Informed By : ', ['class' => 'col-sm-2 col-form-label'] ) }}
 			<div class="col-sm-10">
@@ -54,6 +61,8 @@ $i4 = 1;
 $i5 = 1;
 $i6 = 1;
 $i7 = 1;
+$i8 = 1;
+$i9 = 1;
 ?>
 @foreach($csOrder->hasmanyorderitem()->get() as $oi)
 			<div class="roworderitem">
@@ -62,7 +71,10 @@ $i7 = 1;
 							<i class="fas fa-trash delete_item" aria-hidden="true" id="delete_item_{{ $i1++ }}"></i>
 					</div>
 					<div class="form-group col {{ $errors->has('csoi.*.order_item') ? 'has-error' : '' }}">
-						{!! Form::text('csoi['.$i2++.'][order_item]', $oi->order_item, ['class' => 'form-control form-control-sm', 'id' => 'oi_'.$i3++, 'autocomplete' => 'off', 'placeholder' => 'Item/Parts']) !!}
+						{!! Form::text('csoi['.$i2++.'][order_item]', $oi->order_item, ['class' => "form-control form-control-sm", 'id' => 'oi_'.$i3++.'', 'autocomplete' => 'off', 'placeholder' => 'Item/Parts']) !!}
+					</div>
+					<div class="form-group col {{ $errors->has('csoi.*.item_additional_info') ? 'has-error' : NULL }}">
+						<input type="text" name="csoi[{!! $i8++ !!}][item_additional_info]" class="form-control form-control-sm" value="{!! $oi->item_additional_info !!}" id="oiai_{!! $i9++ !!}" autocomplete="off" placeholder="Item Additional Info" />
 					</div>
 					<div class="form-group col {{ $errors->has('csoi.*.order_item_status_id') ? 'has-error' : '' }}">
 						<select name="csoi[{{ $i4++ }}][order_item_status_id]" id="ois_{{ $i5++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Please choose">

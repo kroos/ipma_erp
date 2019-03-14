@@ -26,5 +26,8 @@ class CSOrderItem extends Model
 		return $this->belongsTo('\App\Model\CSOrderItemStatus', 'order_item_status_id');
 	}
 
-
+	public function belongtoorderdelivery()
+	{
+		return $this->belongsTo('\App\Model\CSOrderDelivery', 'delivery_id');
+	}
 }

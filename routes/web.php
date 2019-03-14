@@ -265,6 +265,23 @@ Route::patch('/todoList/{todoList}/updatetask', [
 		'uses' => 'Admin\ToDoListController@updatetask'
 	]);
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// CS Order item/Part
+Route::post('csOrder/delivery', [
+		'as' => 'csOrder.delivery',
+		'uses' => 'Sales\CustomerService\CSOrderController@delivery'
+	]);
+
+Route::get('csOrder/deliverymethod', [
+		'as' => 'csOrder.deliverymethod',
+		'uses' => 'Sales\CustomerService\CSOrderController@deliverymethod'
+	]);
+
+Route::post('csOrder/deliverymethodstore', [
+		'as' => 'csOrder.deliverymethodstore',
+		'uses' => 'Sales\CustomerService\CSOrderController@deliverymethodstore'
+	]);
+
 ############################################################################
 // Division Page Controller
 Route::resources([

@@ -21,6 +21,13 @@
 			</div>
 		</div>
 
+		<div class="form-group row {{ $errors->has('customer_PO_no')?'has-error':'' }}">
+			{{ Form::label( 'custpono', 'Customer PO No : ', ['class' => 'col-sm-2 col-form-label'] ) }}
+			<div class="col-sm-10">
+				{!! Form::text('customer_PO_no', @$value, ['class' => 'form-control form-control-sm', 'id' => 'custpono', 'placeholder' => 'Customer PO No', 'autocomplete' => 'off']) !!}
+			</div>
+		</div>
+
 		<div class="form-group row {{ $errors->has('informed_by')?'has-error':'' }}">
 			{{ Form::label( 'iby', 'Informed By : ', ['class' => 'col-sm-2 col-form-label'] ) }}
 			<div class="col-sm-10">
@@ -53,7 +60,10 @@
 							<i class="fas fa-trash remove_item" aria-hidden="true" id="delete_item_1"></i>
 					</div>
 					<div class="form-group col {{ $errors->has('csoi.*.order_item') ? 'has-error' : '' }}">
-						{!! Form::text('csoi[1][order_item]', @$value, ['class' => 'form-control form-control-sm', 'id' => 'oi_1', 'autocomplete' => 'off', 'placeholder' => 'Item/Parts']) !!}
+						<input name="csoi[1][order_item]" type="text" value="{!! @$value !!}" class="form-control form-control-sm" id="oi_1" autocomplete="off" placeholder="Item/Parts" />
+					</div>
+					<div class="form-group col {{ $errors->has('csoi.*.item_additional_info') ? 'has-error' : NULL }}">
+						<input type="text" name="csoi[1][item_additional_info]" class="form-control form-control-sm" id="oiai_1" autocomplete="off" placeholder="Item Additional Info" />
 					</div>
 					<div class="form-group col {{ $errors->has('csoi.*.order_item_status_id') ? 'has-error' : '' }}">
 						<select name="csoi[1][order_item_status_id]" id="ois_1" class="form-control form-control-sm" autocomplete="off" placeholder="Please choose">

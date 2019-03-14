@@ -31,11 +31,12 @@ class CSOrderController extends Controller
 
 	public function store(Request $request)
 	{
-		$csoi = CSOrder::create($request->only(['date', 'customer_id', 'requester', 'informed_by', 'pic', 'description']));
+		$csoi = CSOrder::create($request->only(['date', 'customer_id', 'requester', 'customer_PO_no', 'informed_by', 'pic', 'description']));
 		if ($request->has('csoi')) {
 			foreach ($request->csoi as $key => $value) {
 				$csoi->hasmanyorderitem()->create([
 					'order_item' => $value['order_item'],
+					'item_additional_info' => $value['item_additional_info'],
 					'order_item_status_id' => $value['order_item_status_id'],
 					'description' => $value['description'],
 				]);
@@ -57,7 +58,7 @@ class CSOrderController extends Controller
 
 	public function update(Request $request, CSOrder $csOrder)
 	{
-		$csOrder->update($request->only(['date', 'customer_id', 'requester', 'informed_by', 'pic', 'description']));
+		$csOrder->update($request->only(['date', 'customer_id', 'requester', 'customer_PO_no', 'informed_by', 'pic', 'description']));
 
 		// item
 		if ($request->has('csoi')) {
@@ -65,6 +66,7 @@ class CSOrderController extends Controller
 			foreach( $request->csoi as $key => $val ) {
 				$csOrder->hasmanyorderitem()->create([
 					'order_item' => $val['order_item'],
+					'item_additional_info' => $val['item_additional_info'],
 					'order_item_status_id' => $val['order_item_status_id'],
 					'description' => $val['description'],
 				]);
@@ -82,5 +84,30 @@ class CSOrderController extends Controller
 			'message' => 'Data deleted',
 			'status' => 'success'
 		]);
+	}
+
+	public function delivery(Request $request)
+	{
+		// print_r(request()->all());
+		// $pr = [];
+		// $pr1 = '';
+		// if ($request->has('print')){
+			// foreach($request->print as $k => $v) {
+				// $pr[] = $v;
+				// $pr1 .= 'orderitem='.$v.'&';
+			// }
+		// }
+		// print_r($pr);
+		// echo '<br />';
+		// echo $pr1.'<br />';
+		// echo CSOrderItem::whereIn('id', $pr)->get();
+		$item = CSOrderItem::whereIn('id', $request->print)->get();
+		return view('marketingAndBusinessDevelopment.customerservice.order_item.deliverymethodupdate', compact('item'));
+	}
+
+	public function deliverymethodstore(Request $request)
+	{
+		$did = CSOrderItem::whereIn('id', $request->orderitem)->update($request->only(['delivery_date', 'delivery_id', 'delivery_remarks']));
+		echo view('pdfleave.orderitemdeliverymethod', compact('request'));
 	}
 }
