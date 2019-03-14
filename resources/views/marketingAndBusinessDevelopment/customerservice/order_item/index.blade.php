@@ -44,9 +44,9 @@
 /////////////////////////////////////////////////////////////////////////////////////////
 // table
 $.fn.dataTable.moment( 'ddd, D MMM YYYY' );
-$("#orderitem1").DataTable({
+$("#orderitem1, #orderitem3").DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	"order": [[1, "asc" ]],	// sorting the 2nd column ascending
+	"order": [[1, "desc" ]],	// sorting the 2nd column ascending
 	// responsive: true
 });
 

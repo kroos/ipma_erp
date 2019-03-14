@@ -37,6 +37,7 @@ class CSOrderController extends Controller
 				$csoi->hasmanyorderitem()->create([
 					'order_item' => $value['order_item'],
 					'item_additional_info' => $value['item_additional_info'],
+					'quantity' => $value['quantity'],
 					'order_item_status_id' => $value['order_item_status_id'],
 					'description' => $value['description'],
 				]);
@@ -62,14 +63,22 @@ class CSOrderController extends Controller
 
 		// item
 		if ($request->has('csoi')) {
-			$csOrder->hasmanyorderitem()->delete();
+			// $csOrder->hasmanyorderitem()->delete();
 			foreach( $request->csoi as $key => $val ) {
-				$csOrder->hasmanyorderitem()->create([
-					'order_item' => $val['order_item'],
-					'item_additional_info' => $val['item_additional_info'],
-					'order_item_status_id' => $val['order_item_status_id'],
-					'description' => $val['description'],
-				]);
+				// $csOrder->hasmanyorderitem()->updateOrCreate([
+				CSOrderItem::updateOrCreate(
+					[
+						'id' => $val['id']
+					],
+					[
+						'order_id' => $val['order_id'],
+						'order_item' => $val['order_item'],
+						'item_additional_info' => $val['item_additional_info'],
+						'quantity' => $val['quantity'],
+						'order_item_status_id' => $val['order_item_status_id'],
+						'description' => $val['description']
+					]
+				);
 			}
 		}
 		Session::flash('flash_message', 'Data successfully updated!');

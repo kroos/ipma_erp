@@ -137,9 +137,11 @@ if ( $bmonth != 1 ) {
 					<td><strong>{!! $sr->belongtocustomer->customer !!}</strong></td>
 					<td>
 		<?php $i2 = 1 ?>
+		@if($sr->hasmanyattendees()->get()->count())
 		@foreach( $sr->hasmanyattendees()->get() as $sra )
 						{!! $i2++ !!}. {!! $sra->belongtostaff->name !!}<br />
 		@endforeach
+		@endif
 					</td>
 					<td>
 		<?php $p0 = 1 ?>
@@ -229,9 +231,11 @@ if ( $bmonth != 1 ) {
 					<td><strong>{!! $sr->belongtocustomer->customer !!}</strong></td>
 					<td>
 		<?php $i3 = 1 ?>
+		@if($sr->hasmanyattendees()->get()->count())
 		@foreach( $sr->hasmanyattendees()->get() as $sra )
 						{!! $i3++ !!}. {!! $sra->belongtostaff->name !!}<br />
 		@endforeach
+		@endif
 					</td>
 					<td>
 		@foreach($sr->hasmanycomplaint()->get() as $src)
@@ -355,9 +359,11 @@ if ( $bmonth != 1 ) {
 					<td><strong>{!! $sr->belongtocustomer->customer !!}</strong></td>
 					<td>
 		<?php $i3 = 1 ?>
+		@if($sr->hasmanyattendees()->get()->count())
 		@foreach( $sr->hasmanyattendees()->get() as $sra )
 						{!! $i3++ !!}. {!! $sra->belongtostaff->name !!}<br />
 		@endforeach
+		@endif
 					</td>
  					<td>
 @if($sr->hasmanyfeedproblem()->get()->count() > 0)
@@ -492,9 +498,11 @@ if ( $bmonth != 1 ) {
 					<td>{!! $sr->belongtocustomer->customer !!}</td>
 					<td>
 		<?php $i4 = 1 ?>
+		@if($sr->hasmanyattendees()->get()->count())
 		@foreach( $sr->hasmanyattendees()->get() as $sra )
 						{!! $i4++ !!}. {!! $sra->belongtostaff->name !!}<br />
 		@endforeach
+		@endif
 					</td>
 					<td>
 		@foreach($sr->hasmanycomplaint()->get() as $src)
@@ -548,7 +556,5 @@ if ( $bmonth != 1 ) {
 {{ Form::close() }}
 	</div>
 </div>
-
-<p>&nbsp;</p>
 
 <p>&nbsp;</p>

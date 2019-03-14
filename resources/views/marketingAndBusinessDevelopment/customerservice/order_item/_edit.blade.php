@@ -10,7 +10,7 @@
 		<div class="form-group row {{ $errors->has('customer_id')?'has-error':'' }}">
 			{{ Form::label( 'cust', 'Customer : ', ['class' => 'col-sm-2 col-form-label'] ) }}
 			<div class="col-sm-10">
-				{!! Form::select('customer_id', \App\Model\Customer::pluck('customer', 'id')->toArray(), @$value, ['class' => 'form-control form-control-sm', 'id' => 'cust', 'placeholder' => 'Please choose', 		'autocomplete' => 'off']) !!}
+				{!! Form::select('customer_id', \App\Model\Customer::pluck('customer', 'id')->toArray(), @$value, ['class' => 'form-control form-control-sm', 'id' => 'cust', 'placeholder' => 'Please choose', 'autocomplete' => 'off']) !!}
 			</div>
 		</div>
 
@@ -63,18 +63,29 @@ $i6 = 1;
 $i7 = 1;
 $i8 = 1;
 $i9 = 1;
+$i10 = 1;
+$i11 = 1;
+$i12 = 1;
+$i13 = 1;
 ?>
 @foreach($csOrder->hasmanyorderitem()->get() as $oi)
 			<div class="roworderitem">
 				<div class="col-sm-12 form-row ">
 					<div class="col-sm-1 text-danger">
 							<i class="fas fa-trash delete_item" aria-hidden="true" id="delete_item_{{ $i1++ }}"></i>
+@if(!is_null($oi->id))
+							{!! Form::hidden('csoi['.$i12++.'][id]', $oi->id) !!}
+@endif
+							{!! Form::hidden('csoi['.$i13++.'][order_id]', $csOrder->id) !!}
 					</div>
 					<div class="form-group col {{ $errors->has('csoi.*.order_item') ? 'has-error' : '' }}">
 						{!! Form::text('csoi['.$i2++.'][order_item]', $oi->order_item, ['class' => "form-control form-control-sm", 'id' => 'oi_'.$i3++.'', 'autocomplete' => 'off', 'placeholder' => 'Item/Parts']) !!}
 					</div>
 					<div class="form-group col {{ $errors->has('csoi.*.item_additional_info') ? 'has-error' : NULL }}">
 						<input type="text" name="csoi[{!! $i8++ !!}][item_additional_info]" class="form-control form-control-sm" value="{!! $oi->item_additional_info !!}" id="oiai_{!! $i9++ !!}" autocomplete="off" placeholder="Item Additional Info" />
+					</div>
+					<div class="form-group col {{ $errors->has('csoi.*.quantity') ? 'has-error' : NULL }}">
+						<input type="text" name="csoi[{!! $i10++ !!}][quantity]" class="form-control form-control-sm" value="{!! $oi->quantity !!}" id="oiai_{!! $i11++ !!}" autocomplete="off" placeholder="Quantity" />
 					</div>
 					<div class="form-group col {{ $errors->has('csoi.*.order_item_status_id') ? 'has-error' : '' }}">
 						<select name="csoi[{{ $i4++ }}][order_item_status_id]" id="ois_{{ $i5++ }}" class="form-control form-control-sm" autocomplete="off" placeholder="Please choose">

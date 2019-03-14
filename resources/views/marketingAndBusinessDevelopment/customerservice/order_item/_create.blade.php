@@ -65,6 +65,9 @@
 					<div class="form-group col {{ $errors->has('csoi.*.item_additional_info') ? 'has-error' : NULL }}">
 						<input type="text" name="csoi[1][item_additional_info]" class="form-control form-control-sm" id="oiai_1" autocomplete="off" placeholder="Item Additional Info" />
 					</div>
+					<div class="form-group col {{ $errors->has('csoi.*.quantity') ? 'has-error' : NULL }}">
+						<input type="text" name="csoi[1][quantity]" value="" class="form-control form-control-sm" id="oiq_1" autocomplete="off" placeholder="Quantity" />
+					</div>
 					<div class="form-group col {{ $errors->has('csoi.*.order_item_status_id') ? 'has-error' : '' }}">
 						<select name="csoi[1][order_item_status_id]" id="ois_1" class="form-control form-control-sm" autocomplete="off" placeholder="Please choose">
 							<option value="">Please choose</option>

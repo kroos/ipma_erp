@@ -116,12 +116,17 @@ $(add_buttons).click(function(){
 				'<div class="col-sm-12 form-row ">' +
 					'<div class="col-sm-1 text-danger">' +
 							'<i class="fas fa-trash remove_item" aria-hidden="true" id="delete_item_' + xs + '"></i>' +
+							'<input type="hidden" name="csoi[' + xs + '][id]" value="">' +
+							'<input type="hidden" name="csoi[' + xs + '][order_id]" value="{!! $csOrder->id !!}">' +
 					'</div>' +
 					'<div class="form-group col {{ $errors->has('csoi.*.order_item') ? 'has-error' : '' }}">' +
 						'<input type="text" name="csoi[' + xs + '][order_item]" value="{{ @$value }}" id="oi_' + xs + '" class="form-control form-control-sm" autocomplete="off" placeholder="Item/Parts" />' +
 					'</div>' +
 					'<div class="form-group col {{ $errors->has('csoi.*.item_additional_info') ? 'has-error' : '' }}">' +
 						'<input type="text" name="csoi[' + xs + '][item_additional_info]" value="{{ @$value }}" id="oiai_' + xs + '" class="form-control form-control-sm" autocomplete="off" placeholder="Item Additional Info" />' +
+					'</div>' +
+					'<div class="form-group col {{ $errors->has('csoi.*.quantity') ? 'has-error' : '' }}">' +
+						'<input type="text" name="csoi[' + xs + '][quantity]" value="{{ @$value }}" id="oiq_' + xs + '" class="form-control form-control-sm" autocomplete="off" placeholder="Quantity" />' +
 					'</div>' +
 					'<div class="form-group col {{ $errors->has('csoi.*.order_item_status_id') ? 'has-error' : '' }}">' +
 						'<select name="csoi[' + xs + '][order_item_status_id]" id="ois_' + xs + '" class="form-control form-control-sm" autocomplete="off" placeholder="Please choose">' +
@@ -299,6 +304,13 @@ $('#form').bootstrapValidator({
 				notEmpty: {
 					message: 'Please insert Item/Part. '
 				}
+			}
+		},
+		'csoi[{!! $i !!}][quantity]': {
+			validators: {
+				// notEmpty: {
+				// 	message: 'Please insert Item/Part Quantity. '
+				// }
 			}
 		},
 		'csoi[{!! $i !!}][order_item_status_id]': {

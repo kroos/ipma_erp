@@ -99,6 +99,9 @@ $(add_buttons).click(function(){
 					'<div class="form-group col {{ $errors->has('csoi.*.item_additional_info') ? 'has-error' : '' }}">' +
 						'<input type="text" name="csoi[' + xs + '][item_additional_info]" value="{{ @$value }}" id="oiai_' + xs + '" class="form-control form-control-sm" autocomplete="off" placeholder="Item Additional Info" />' +
 					'</div>' +
+					'<div class="form-group col {{ $errors->has('csoi.*.quantity') ? 'has-error' : '' }}">' +
+						'<input type="text" name="csoi[' + xs + '][quantity]" value="{{ @$value }}" id="oiq_' + xs + '" class="form-control form-control-sm" autocomplete="off" placeholder="Quantity" />' +
+					'</div>' +
 					'<div class="form-group col {{ $errors->has('csoi.*.order_item_status_id') ? 'has-error' : '' }}">' +
 						'<select name="csoi[' + xs + '][order_item_status_id]" id="ois_' + xs + '" class="form-control form-control-sm" autocomplete="off" placeholder="Please choose">' +
 							'<option value="">Please choose</option>' +
@@ -280,7 +283,14 @@ $('#form').bootstrapValidator({
 		'csoi[{!! $i !!}][item_additional_info]': {
 			validators: {
 				// notEmpty: {
-				// 	message: 'Please insert Item/Part. '
+				// 	message: 'Please insert Item/Part Additional Info. '
+				// }
+			}
+		},
+		'csoi[{!! $i !!}][quantity]': {
+			validators: {
+				// notEmpty: {
+				// 	message: 'Please insert Item/Part Quantity. '
 				// }
 			}
 		},
