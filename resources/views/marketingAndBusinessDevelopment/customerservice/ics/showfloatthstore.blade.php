@@ -88,16 +88,13 @@ use \Carbon\CarbonPeriod;
 					</p>
 					<p>Customer : {!! (!is_null($serviceReport->belongtocustomer()))?$serviceReport->belongtocustomer->customer:NULL !!}</p>
 
-<form method="POST" action="{!! route('serviceReport.floatthstore', $serviceReport->id) !!}" accept-charset="UTF-8" id="form" autocomplete="off" enctype="multipart/form-data">
-	{!! csrf_field() !!}
-
 		<table width="30%" cellspacing="1" cellpadding="1" border="0">
 			<tbody>
 <?php $count = 0 ?>
 @if($serviceReport->hasmanyjob()->get()->count() > 0)
-@foreach($serviceReport->hasmanyjob()->get() as $srj5)
+@foreach($serviceReport->hasmanyjob()->whereIn('id', $request->print)->get() as $srj5)
 				<tr>
-					<th align="left"><input type="checkbox" name="print[]" value="{{ $srj5->id }}"> Date : </th>
+					<th align="left">Date : </th>
 					<td colspan="14" align="left">{{ Carbon::parse($srj5->date)->format('D, j F Y') }}</td>
 				</tr>
 				<tr>
@@ -306,8 +303,6 @@ if($serviceReport->hasonediscount->discount_id == 1) {		// 1 = percentage
 			</tbody>
 		</table>
 		<p>&nbsp;</p>
-		<button type="submit">Print</button>
-</form>
 	</center>
 
 	</body>

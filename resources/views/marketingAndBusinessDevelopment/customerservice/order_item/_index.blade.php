@@ -3,6 +3,7 @@ use \App\Model\CSOrder;
 use \App\Model\CSOrderItem;
 
 use \Carbon\Carbon;
+use \Carbon\CarbonPeriod;
 ?>
 <div class="card">
 	<div class="card-header">Customer Order Item/Part List</div>
@@ -25,7 +26,34 @@ use \Carbon\Carbon;
 			</thead>
 			<tbody>
 		@foreach(CSOrder::all() as $cs)
-				<tr>
+<?php
+// checking for order that is not fully delivered yet
+$ch3 = 0;
+foreach ($cs->hasmanyorderitem()->get() as $v1) {
+	if( !is_null($v1->delivery_id) ) {
+		$ch4 = 0;
+	} else {
+		$ch4 = 1;
+	}
+	$ch3 += $ch4;
+}
+// echo 'id => '.$cs->id.' | check => '.$ch3.'<br />';
+if( $ch3 > 0 ) {
+	$period = CarbonPeriod::create($cs->date, '1 days', Carbon::now()->format('Y-m-d'));
+	// echo $period->count().'<br />';
+
+	if( $period->count() <= 15 ) {
+		$color = NULL;
+	} elseif ($period->count() >= 16 && $period->count() <= 30) {
+		$color = 'bg-warning';
+	} elseif ($period->count() >= 31) {
+		$color = 'bg-danger';
+	}
+} elseif ($ch3 == 0) {
+	$color = 'bg-success';
+}
+?>
+				<tr class="{!! $color !!}">
 					<td>COP-{!! $cs->id !!}</td>
 					<td>{!! Carbon::parse($cs->date)->format('D, j M Y') !!}</td>
 					<td>{!! $cs->belongtocustomer->customer !!}</td>
@@ -107,8 +135,20 @@ use \Carbon\Carbon;
 			<tbody>
 @foreach(CSOrder::all() as $cs)
 
-	@foreach( $cs->hasmanyorderitem()->get() as $v1 )
-		@if(!is_null($v1->delivery_id))
+<?php
+// checking for all delivered..
+$ch1 = 0;
+foreach ($cs->hasmanyorderitem()->get() as $v1) {
+	if( !is_null($v1->delivery_id) ) {
+		$ch2 = 0;
+	} else {
+		$ch2 = 1;
+	}
+	$ch1 += $ch2;
+}
+// echo 'id => '.$cs->id.' | check => '.$ch1.'<br />';
+?>
+	@if( $ch1 < 1 )
 				<tr>
 					<td>COP-{!! $cs->id !!}</td>
 					<td>{!! Carbon::parse($cs->date)->format('D, j M Y') !!}</td>
@@ -145,9 +185,7 @@ use \Carbon\Carbon;
 						</table>
 					</td>
 				</tr>
-
-		@endif
-	@endforeach
+	@endif
 @endforeach
 			</tbody>
 		</table>

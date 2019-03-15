@@ -24,7 +24,7 @@
 			</li>
 		</ul>
 		<div class="card">
-			<div class="card-header">Update Customer Order <strong>COI-{!! $csOrder->id !!}</strong></div>
+			<div class="card-header">Update Customer Order <strong>COP-{!! $csOrder->id !!}</strong></div>
 			<div class="card-body">
 
 {!! Form::model( $csOrder, ['route' => ['csOrder.update', $csOrder->id], 'method' => 'PATCH', 'id' => 'form', 'files' => true]) !!}

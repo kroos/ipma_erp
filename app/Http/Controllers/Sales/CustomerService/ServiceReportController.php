@@ -429,6 +429,12 @@ class ServiceReportController extends Controller
 		return view('marketingAndBusinessDevelopment.customerservice.ics.showfloatth', compact(['serviceReport']));
 	}
 
+	public function floatthstore(Request $request, ICSServiceReport $serviceReport)
+	{
+		// print_r($request->print);
+		return view('marketingAndBusinessDevelopment.customerservice.ics.showfloatthstore', compact(['serviceReport', 'request']));
+	}
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 	public function destroy(ICSServiceReport $serviceReport)
 	{

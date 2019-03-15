@@ -224,6 +224,11 @@ Route::get('/serviceReport/{serviceReport}/float-th', [
 	'as' => 'serviceReport.floatth',
 	'uses' => 'Sales\CustomerService\ServiceReportController@floatth'
 ]);
+// print parts of float-th
+Route::post('/serviceReport/{serviceReport}/floatthstore', [
+	'as' => 'serviceReport.floatthstore',
+	'uses' => 'Sales\CustomerService\ServiceReportController@floatthstore'
+]);
 // update kiv service report
 Route::patch('/serviceReport/{serviceReport}/updatekiv', [
 	'as' => 'serviceReport.updatekiv',

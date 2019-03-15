@@ -5,6 +5,7 @@
 				<th>ID</th>
 				<th>Order Item/Part</th>
 				<th>Item Additional Info</th>
+				<th>Quantity</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -13,6 +14,7 @@
 				<td>{!! $id->id !!}</td>
 				<td>{!! $id->order_item !!} {!! Form::hidden('orderitem[]', $id->id) !!}</td>
 				<td>{!! $id->item_additional_info !!}</td>
+				<td>{!! $id->quantity !!}</td>
 			</tr>
 @endforeach
 		</tbody>
