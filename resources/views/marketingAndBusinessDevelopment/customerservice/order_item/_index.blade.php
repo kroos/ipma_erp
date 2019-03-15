@@ -45,15 +45,16 @@ if( $ch3 > 0 ) {
 	if( $period->count() <= 15 ) {
 		$color = NULL;
 	} elseif ($period->count() >= 16 && $period->count() <= 30) {
-		$color = 'bg-warning';
+		$color = '#f7f796';
 	} elseif ($period->count() >= 31) {
-		$color = 'bg-danger';
+		$color = '#f79696';
 	}
 } elseif ($ch3 == 0) {
-	$color = 'bg-success';
+	$color = '#c6ee78';
 }
 ?>
-				<tr class="{!! $color !!}">
+	@if($ch3 > 0)
+				<tr style="background-color: {!! $color !!}">
 					<td>COP-{!! $cs->id !!}</td>
 					<td>{!! Carbon::parse($cs->date)->format('D, j M Y') !!}</td>
 					<td>{!! $cs->belongtocustomer->customer !!}</td>
@@ -111,6 +112,7 @@ if( $ch3 > 0 ) {
 						<span class="text-danger deletecs" data-id="{!! $cs->id !!}" title="Delete"><i class="far fa-trash-alt"></i></span>
 					</td>
 				</tr>
+	@endif
 		@endforeach
 			</tbody>
 		</table>
