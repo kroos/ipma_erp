@@ -62,7 +62,7 @@ if( $ch3 > 0 ) {
 					<td>{!! $cs->customer_PO_no !!}</td>
 					<td>{!! $cs->belongtoinformerorder->name !!}</td>
 					<td>{!! $cs->belongtopic->name !!}</td>
-					<td>{!! $cs->remarks !!}</td>
+					<td>{!! $cs->description !!}</td>
 					<td>
 		@if($cs->hasmanyorderitem()->get()->count())
 						{!! Form::open(['route' => ['csOrder.delivery'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
