@@ -51,7 +51,7 @@ $staff = Staff::where('active', 1)->get();
 							<select name="inform_by" id="inlineRadio2" class="form-control" placeholder="Please choose">
 								<option value="">Please choose</option>
 @foreach($staff as $st)
-								<option value="{!! $st->id !!}" {!! ($st->id == $serviceReport->inform_by)?'selected':NULL !!}>{!! $st->hasmanylogin()->where('active', 1)->first()->username !!} {!! $st->name !!}</option>
+								<option value="{!! $st->id !!}" {!! ($st->id == $serviceReport->inform_by)?'selected':NULL !!}>{!! $st->name !!}</option>
 @endforeach
 							</select>
 						</div>

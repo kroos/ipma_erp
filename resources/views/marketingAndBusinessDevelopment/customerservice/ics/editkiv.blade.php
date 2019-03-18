@@ -139,7 +139,7 @@ $(add_buttons).click(function(){
 									'<select name="sr[' + xs + '][attended_by]" id="staff_id_' + xs + '" class="form-control">' +
 										'<option value="">Please choose</option>' +
 @foreach($staff as $st)
-										'<option value="{!! $st->id !!}">{{ $st->hasmanylogin()->where('active', 1)->first()->username }} {{ $st->name }}</option>' +
+										'<option value="{!! $st->id !!}">{{ $st->name }}</option>' +
 @endforeach
 									'</select>' +
 								'</div>' +

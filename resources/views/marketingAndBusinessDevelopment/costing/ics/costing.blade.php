@@ -23,12 +23,7 @@
 		<div class="card">
 			<div class="card-header">Intelligence Customer Service</div>
 			<div class="card-body">
-				<div class="card">
-					<div class="card-header">Service Report List</div>
-					<div class="card-body table-responsive">
 @include('marketingAndBusinessDevelopment.costing.ics._content')
-					</div>
-				</div>
 			</div>
 		</div>
 

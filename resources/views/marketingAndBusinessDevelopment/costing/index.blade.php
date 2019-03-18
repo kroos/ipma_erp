@@ -22,7 +22,7 @@
 		</ul>
 
 		<div class="card">
-			<div class="card-header">costing main page</div>
+			<div class="card-header">Costing Main Page</div>
 			<div class="card-body"></div>
 		</div>
 
