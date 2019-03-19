@@ -17,6 +17,9 @@
 
 		<ul class="nav nav-tabs">
 			<li class="nav-item">
+				<a class="nav-link" href="{{ route('quot.index') }}">Quotation</a>
+			</li>
+			<li class="nav-item">
 				<a class="nav-link active" href="{{ route('ics.costing') }}">Intelligence Customer Service</a>
 			</li>
 		</ul>
