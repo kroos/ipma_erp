@@ -16,7 +16,7 @@ class CustomerController extends Controller
 
 	public function index()
 	{
-	//
+		return view('customer.index');
 	}
 
 	public function create(Request $request)
@@ -28,16 +28,10 @@ class CustomerController extends Controller
 	{
 		// var_dump($request->all());
 // die();
-		Customer::create($request->only(['customer', 'pc', 'address1', 'address2', 'address3', 'address4', 'phone', 'fax']));
+		// Customer::create($request->only(['customer', 'pc', 'address1', 'address2', 'address3', 'address4', 'phone', 'fax']));
+		Customer::create($request->except(['_method', '_token']));
 		Session::flash('flash_message', 'Data successfully save!');
-
-		if($request->id == 0) {
-			return redirect( route('serviceReport.create') );
-		} elseif ($request->kiv == 00) {
-			return redirect( route('serviceReport.editkiv', $request->id) );
-		} else {
-			return redirect( route('serviceReport.edit', $request->id) );
-		}
+		return redirect( route('customer.index') );
 	}
 
 	public function show(Customer $customer)
@@ -54,14 +48,7 @@ class CustomerController extends Controller
 	{
 		Customer::where('id', $customer->id)->update($request->only(['customer', 'pc', 'address1', 'address2', 'address3', 'address4', 'phone', 'fax']));
 		Session::flash('flash_message', 'Data successfully save!');
-
-		if($request->id == 0) {
-			return redirect( route('serviceReport.create') );
-		} elseif ($request->kiv == 00) {
-			return redirect( route('serviceReport.editkiv', $request->id) );
-		} else {
-			return redirect( route('serviceReport.edit', $request->id) );
-		}
+		return redirect( route('customer.index') );
 	}
 
 	public function destroy(Customer $customer)

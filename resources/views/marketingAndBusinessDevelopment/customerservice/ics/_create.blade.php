@@ -91,7 +91,9 @@ $staff = Staff::where('active', 1)->get();
 				</dl>
 
 			</div>
-			<div class="card-footer"><a href="{{ route('customer.create', 'id=0') }}" class="btn btn-primary float-right">Add Customer</a></div>
+<!-- 			<div class="card-footer">
+				<a href="{{ route('customer.create', 'id=0') }}" class="btn btn-primary float-right">Add Customer</a>
+			</div> -->
 		</div>
 	</div>
 

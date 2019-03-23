@@ -30,6 +30,12 @@
 					<li class="nav-item">
 						<a class="nav-link" href="{{ route('srConstant.index') }}">Settings</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('customer.index') }}">Customer</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('machine_model.index') }}">Model</a>
+					</li>
 				</ul>
 @include('marketingAndBusinessDevelopment.customerservice.ics._content')
 			</div>

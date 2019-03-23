@@ -7,7 +7,7 @@
 		@include('layouts.info')
 		@include('layouts.errorform')
 
-{!! Form::open(['route' => ['customer.store', 'id='.$_GET['id']], 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) !!}
+{!! Form::open(['route' => ['customer.store'], 'id' => 'form', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'files' => true]) !!}
 	@include('customer._create')
 {{ Form::close() }}
 		
@@ -19,7 +19,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////
 //ucwords
 $(document).on('keyup', 'input', function () {
-	uch(this);
+//	uch(this);
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -102,9 +102,9 @@ $('#form').bootstrapValidator({
 		},
 		pc: {
 			validators: {
-				notEmpty: {
-					message: 'Please insert this field. '
-				},
+				// notEmpty: {
+				// 	message: 'Please insert this field. '
+				// },
 			}
 		},
 		address1: {
@@ -123,11 +123,21 @@ $('#form').bootstrapValidator({
 		},
 		phone: {
 			validators: {
-				notEmpty: {
-					message: 'Please insert this field. '
-				},
+				// notEmpty: {
+				// 	message: 'Please insert this field. '
+				// },
 				digits: {
 					message: 'Only numbers. '
+				},
+			}
+		},
+		email: {
+			validators: {
+				// notEmpty: {
+				// 	message: 'Please insert this field. '
+				// },
+				emailAddress: {
+					message: 'The value is not a valid email address. '
 				},
 			}
 		},

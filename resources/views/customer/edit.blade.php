@@ -19,7 +19,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////
 //ucwords
 $(document).on('keyup', 'input', function () {
-	uch(this);
+//	uch(this);
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -134,6 +134,16 @@ $('#form').bootstrapValidator({
 			validators: {
 				digits: {
 					message: 'Only numbers. '
+				},
+			}
+		},
+		email: {
+			validators: {
+				// notEmpty: {
+				// 	message: 'Please insert this field. '
+				// },
+				emailAddress: {
+					message: 'The value is not a valid email address. '
 				},
 			}
 		},

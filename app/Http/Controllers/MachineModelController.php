@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Sales\CustomerService;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 
@@ -20,11 +20,12 @@ class MachineModelController extends Controller
 
 	public function index()
 	{
+		return view('machine_model.index');
 	}
 
 	public function create()
 	{
-		return view('marketingAndBusinessDevelopment.customerservice.machine_model.create');
+		return view('machine_model.create');
 	}
 
 	public function store(Request $request)
@@ -32,7 +33,7 @@ class MachineModelController extends Controller
 		// var_dump($request->all());
 		ICSMachineModel::create($request->only('model'));
 		Session::flash('flash_message', 'Data successfully stored!');
-		return redirect( route('serviceReport.edit', $request->id) );
+		return redirect( route('machine_model.index') );
 	}
 
 	public function show(ICSMachineModel $machine_model)
@@ -41,12 +42,14 @@ class MachineModelController extends Controller
 
 	public function edit(ICSMachineModel $machine_model)
 	{
-		return view('marketingAndBusinessDevelopment.customerservice.machine_model.edit', compact(['machine_model']));
+		return view('machine_model.edit', compact(['machine_model']));
 	}
 
 	public function update(Request $request, ICSMachineModel $machine_model)
 	{
-
+		ICSMachineModel::find($machine_model->id)->update($request->only('model'));
+		Session::flash('flash_message', 'Data successfully updated!');
+		return redirect( route('machine_model.index') );
 	}
 
 	public function destroy(ICSMachineModel $machine_model)

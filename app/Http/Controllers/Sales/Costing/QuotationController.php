@@ -7,14 +7,19 @@ use App\Http\Controllers\Controller;
 
 class QuotationController extends Controller
 {
+	function __construct()
+	{
+		$this->middleware('auth');
+	}
+
 	public function index()
 	{
-		//
+		return view('marketingAndBusinessDevelopment.costing.quotation.index');
 	}
 
 	public function create()
 	{
-		//
+		return view('marketingAndBusinessDevelopment.costing.quotation.create');
 	}
 
 	public function store(Request $request)

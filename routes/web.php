@@ -101,7 +101,7 @@ Route::resources([
 	'customer' => 'CustomerController',
 
 // ics machine model
-	'machine_model' => 'Sales\CustomerService\MachineModelController',
+	'machine_model' => 'MachineModelController',
 
 // memo category
 	'MemoCategoryController' => 'MemoCategoryController',
