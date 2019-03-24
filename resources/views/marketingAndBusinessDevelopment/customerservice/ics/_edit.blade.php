@@ -192,23 +192,7 @@ $iii = 1;
 						</div>
 					</div>
 @endforeach
-@else
-<!--					<div class="rowphoneattendees">
-						<div class="form-row col-sm-12">
 
-							<div class="col-sm-1 text-danger">
-									<i class="fas fa-trash remove_phoneattendees" aria-hidden="true" id="button_delete_"></i>
-							</div>
-
-							<div class="col-sm-11">
-								<div class="form-group {{ $errors->has('srpn.*.phone_number') ? 'has-error' : '' }}">
-									<input type="text" name="srpn[1][phone_number]" id="phoen_1" value="{{ $sra->phone_number }}" class="form-control" placeholder="Attendees Phone Number">
-								</div>
-							</div>
-
-						</div>
-					</div>
--->
 @endif
 				</div>
 				<div class="row col-lg-12 add_phoneattendees">
