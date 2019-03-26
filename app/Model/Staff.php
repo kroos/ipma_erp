@@ -180,6 +180,12 @@ class Staff extends Model
 		return $this->hasMany('\App\Model\CSOrder', 'pic');
 	}
 
+// quotation
+	public function hasmanyquotation()
+	{
+		return $this->hasMany('\App\Model\QuotQuotation', 'staff_id');
+	}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // https://laravel.com/docs/5.6/eloquent-relationships#many-to-many

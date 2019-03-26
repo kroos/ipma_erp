@@ -11,7 +11,22 @@ class QuotQuotation extends Model
 
 	public function hasmanyquotsection()
 	{
-		return $this->hasMany('App\Model\QuotQuotationSection', 'section_id');
+		return $this->hasMany('App\Model\QuotQuotationSection', 'quot_id');
+	}
+
+	public function hasmanytermofpayment()
+	{
+		return $this->hasMany('\App\Model\QuotQuotationTermOfPayment', 'quot_id');
+	}
+
+	public function hasmanyexclusions()
+	{
+		return $this->hasMany('\App\Model\QuotQuotationExclusion', 'quot_id');
+	}
+
+	public function hasmanyremarks()
+	{
+		return $this->hasMany('\App\Model\QuotQuotationRemark', 'quot_id');
 	}
 
 ///////////////////////////////////////////////////////////////////////////////
