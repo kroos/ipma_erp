@@ -33,7 +33,6 @@ class QuotationController extends Controller
 		// dd($request->all());
 		$qt = \Auth::user()->belongtostaff->hasmanyquotation()->create( array_add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'from', 'to', 'period_id', 'validity']), 'active', 1) );
 
-						$request->qs[1]['qssection'][2]['qsitem'][2]['image']->store('public/images/quot');
 		if ($request->has('qs')) {
 			foreach ($request->qs as $k1 => $v1) {
 
@@ -56,20 +55,31 @@ class QuotationController extends Controller
 
 					foreach ($v2['qsitem'] as $k3 => $v3) {
 
+						// $request->qs[1]['qssection'][2]['qsitem'][2]['image']->store('public/images/quot');
+						// $request->qs[$k1]['qssection'][$k2]['qsitem'][$k3]['image']->store('public/images/quot');
 						// dd($request->file($v3['image']));
-						// dd($v3);
+						// var_dump( $request->qs[$k1]['qssection'][$k2]['qsitem'][$k3] );
+						// $request->qs[$k1]['qssection'][$k2]['qsitem'][$k3]['image']->store('public/images/quot');
 						// dd($request->hasFile());
 						// dd($request->file());
 						// print_r($v3);
 						// echo '<br />';
 						// var_dump( file($v3[$k3]['image']) );
 						// var_dump( $request->file("qs[".$k1."][qssection][".$k2."][qsitem][".$k3."]") );
+						// if( !is_null($v3['image']) ) {
+							// $request->qs[$k1]['qssection'][$k2]['qsitem'][$k3]->store('public/images/quot');
+							// var_dump($request->qs[$k1]['qssection'][$k2]['qsitem'][$k3]->store('public/images/quot') );
+							echo '<br />';
+						// }
 						echo '<br />';
-						if ( $request->hasFile($v3) ) {
-						
+						echo '<br />';
 
-							var_dump($v3);
-						}
+						var_dump($v3);
+
+						// if( !is_null($v3['image']) ) {
+						// var_dump($v3['image']).'after if<br/>';
+						// }
+
 				//		if($request->file()) {
 				//			$filename = $v3->file('image')->store('public/images/quot');
 
