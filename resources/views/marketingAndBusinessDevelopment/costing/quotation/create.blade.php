@@ -402,7 +402,7 @@ $(document).on('click', '.exc_add', function() {
 				'<div class="col-1 text-danger exc_remove" data-id="' + xexc + '">' +
 					'<i class="fas fa-trash" aria-hidden="true"></i>' +
 				'</div>' +
-				'<div class="form-group col {{ $errors->has('qsexclusions.*.term_of_payment') ? 'has-error' : '' }}">' +
+				'<div class="form-group col {{ $errors->has('qsexclusions.*.exclusion_id') ? 'has-error' : '' }}">' +
 					'<select name="qsexclusions[' + xexc + '][exclusion_id]" class="form-control form-control-sm" id="exclusion_' + xexc + '" placeholder="Please choose">' +
 						'<option value="">Please choose</option>' +
 @foreach(\App\Model\QuotExclusion::all() as $exc)
@@ -462,7 +462,7 @@ $(document).on('click', '.rem_add', function() {
 				'<div class="col-1 text-danger rem_remove" data-id="' + xrem + '">' +
 					'<i class="fas fa-trash" aria-hidden="true"></i>' +
 				'</div>' +
-				'<div class="form-group col {{ $errors->has('qsremark.*.exclusion_id') ? 'has-error' : '' }}">' +
+				'<div class="form-group col {{ $errors->has('qsremark.*.remark_id') ? 'has-error' : '' }}">' +
 					'<select name="qsremark[' + xrem + '][remark_id]" class="form-control form-control-sm" id="remark_' + xrem + '" placeholder="Please choose">' +
 						'<option value="">Please choose</option>' +
 @foreach(\App\Model\QuotRemark::all() as $rem)
