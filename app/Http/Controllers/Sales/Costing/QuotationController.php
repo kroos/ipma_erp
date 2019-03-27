@@ -44,51 +44,54 @@ class QuotationController extends Controller
 				]);
 
 				// dd($v1['qssection']);
-
-				foreach($v1['qssection'] as $k2 => $v2){
-					$qt2 = $qt1->hasmanyquotsectionitem()->create([
-						'item_id' => $v2['item_id'],
-						'price_unit' => $v2['price_unit'],
-						'description' => $v2['description'],
-						'quantity' => $v2['quantity'],
-						'uom_id' => $v2['uom_id'],
-						'tax_id' => $v2['tax_id'],
-						'tax_value' => $v2['tax_value'],
-					]);
-
-					foreach ($v2['qsitem'] as $k3 => $v3) {
-
-						// $request->qs[1]['qssection'][2]['qsitem'][2]['image']->store('public/images/quot');					// yang ni jadi
-						// var_dump(array_has( $request->qs[$k1]['qssection'][$k2]['qsitem'][$k3], 'image' ));
-
-						if( array_has(  $v3, 'image' ) ) {
-
-							$filename = $v3['image']->store('public/images/quot');
-
-							$ass1 = explode('/', $filename);
-							$ass2 = array_except($ass1, ['0']);
-							$image = implode('/', $ass2);
-
-							// dd($image);
-
-							$imag = Image::make(storage_path('app/'.$filename));
-
-							// resize the image to a height of 400 and constrain aspect ratio (auto width)
-							$imag->resize(NULL, 400, function ($constraint) {
-								$constraint->aspectRatio();
-							});
-
-							$imag->save();
-						} else {
-							$image = NULL;
-						}
-
-						$qt3 = $qt2->hasmanyquotsectionitemattrib()->create([
-							'attribute_id' => $v3['attribute_id'],
-							'description_attribute' => $v3['description_attribute'],
-							'remarks' => $v3['remarks'],
-							'image' => $image,
+				if( array_has(  $v1, 'qssection') ) {
+					foreach($v1['qssection'] as $k2 => $v2){
+						$qt2 = $qt1->hasmanyquotsectionitem()->create([
+							'item_id' => $v2['item_id'],
+							'price_unit' => $v2['price_unit'],
+							'description' => $v2['description'],
+							'quantity' => $v2['quantity'],
+							'uom_id' => $v2['uom_id'],
+							'tax_id' => $v2['tax_id'],
+							'tax_value' => $v2['tax_value'],
 						]);
+
+						if( array_has(  $v2, 'qsitem') ) {
+							foreach ($v2['qsitem'] as $k3 => $v3) {
+
+								// $request->qs[1]['qssection'][2]['qsitem'][2]['image']->store('public/images/quot');					// yang ni jadi
+								// var_dump(array_has( $request->qs[$k1]['qssection'][$k2]['qsitem'][$k3], 'image' ));
+
+								if( array_has(  $v3, 'image' ) ) {
+
+									$filename = $v3['image']->store('public/images/quot');
+
+									$ass1 = explode('/', $filename);
+									$ass2 = array_except($ass1, ['0']);
+									$image = implode('/', $ass2);
+
+									// dd($image);
+
+									$imag = Image::make(storage_path('app/'.$filename));
+
+									// resize the image to a height of 400 and constrain aspect ratio (auto width)
+									$imag->resize(NULL, 400, function ($constraint) {
+										$constraint->aspectRatio();
+									});
+
+									$imag->save();
+								} else {
+									$image = NULL;
+								}
+
+								$qt3 = $qt2->hasmanyquotsectionitemattrib()->create([
+									'attribute_id' => $v3['attribute_id'],
+									'description_attribute' => $v3['description_attribute'],
+									'remarks' => $v3['remarks'],
+									'image' => $image,
+								]);
+							}
+						}
 					}
 				}
 			}
@@ -129,7 +132,7 @@ class QuotationController extends Controller
 
 	public function edit(QuotQuotation $quot)
 	{
-		//
+		return view('marketingAndBusinessDevelopment.costing.quotation.edit', compact(['quot']));
 	}
 
 	public function update(Request $request, QuotQuotation $quot)

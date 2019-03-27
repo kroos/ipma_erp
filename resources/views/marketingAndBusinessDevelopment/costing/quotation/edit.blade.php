@@ -63,8 +63,8 @@
 				Add Quotation
 			</div>
 			<div class="card-body">
-{!! Form::open(['route' => ['quot.store'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
-@include('marketingAndBusinessDevelopment.costing.quotation._create')
+{!! Form::model($quot, ['route' => ['quot.update', $quot->id], 'method' => 'PATCH', 'id' => 'form', 'files' => true]) !!}
+	@include('marketingAndBusinessDevelopment.costing.quotation._edit')
 {!! Form::close() !!}
 			</div>
 		</div>

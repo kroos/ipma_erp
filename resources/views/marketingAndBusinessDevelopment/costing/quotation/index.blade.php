@@ -26,7 +26,7 @@
 
 		<div class="card">
 			<div class="card-header">
-				Quotation
+				Quotation List
 				<a href="{{ route('quot.create') }}" class="btn btn-primary float-right">Add Quotation</a>
 			</div>
 			<div class="card-body">
@@ -37,6 +37,24 @@
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="{{ route('machine_model.index') }}">Model</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('quotdd.index') }}">Delivery Date</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('quotItem.index') }}">Product / Item</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('quotItemAttrib.index') }}">Product / Item Attribute</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('quotRem.index') }}">Remarks</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('quotExcl.index') }}">Exclusion</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('quotUOM.index') }}">Unit Of Measurement</a>
 					</li>
 				</ul>
 
@@ -53,6 +71,14 @@
 //ucwords
 $("#username").keyup(function() {
 	uch(this);
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
+$.fn.dataTable.moment( 'ddd, D MMM YYYY' );
+$('#quot1').DataTable({
+	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+	"order": [[1, "desc" ]],	// sorting the 2nd column ascending
+	// responsive: true
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////

@@ -112,6 +112,20 @@ Route::resources([
 
 // quotation
 	'quot' => 'Sales\Costing\QuotationController',
+	'quotRevision' => 'Sales\Costing\QuotationRevisionController',
+	'quotSection' => 'Sales\Costing\QuotationSectionController',
+	'quotSectionItem' => 'Sales\Costing\QuotationSectionItemController',
+	'quotSectionItemAttrib' => 'Sales\Costing\QuotationSectionItemAttributeController',
+	'quotTerm' => 'Sales\Costing\QuotQuotationTermOfPaymentController',
+	'quotExclusion' => 'Sales\Costing\QuotQuotationExclusionController',
+	'quotRemark' => 'Sales\Costing\QuotQuotationRemarkController',
+
+	'quotdd' => 'Sales\Costing\QuotationDeliveryDateController',
+	'quotItem' => 'Sales\Costing\QuotationItemController',
+	'quotItemAttrib' => 'Sales\Costing\QuotationItemAttributeController',
+	'quotRem' => 'Sales\Costing\QuotationRemarkController',
+	'quotExcl' => 'Sales\Costing\QuotationExclusionController',
+	'quotUOM' => 'Sales\Costing\QuotationUOMController',
 ]);
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // change password

@@ -44,6 +44,131 @@
 
 <!-- wrapper for section -->
 <div class="col section_wrapper">
+
+
+
+@if( $quot->hasmanyquotsection()->get()->count() )
+
+@foreach( $quot->hasmanyquotsection()->get() as $sect )
+			<div class="section_row">
+				<div class="card">
+					<div class="card-header">Section</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-1 text-danger section_delete"  id="section_remove_{{ $sect->id }}" data-sectionid="{!! $sect->id !!}">
+								<i class="fas fa-trash" aria-hidden="true"></i>
+							</div>
+							<div class="form-group col-11 {{ $errors->has('qs.*.section') ? 'has-error' : '' }}">
+								<input type="text" name="qs[{{ $sect->id }}][section]" value="{!! $sect->section !!}" id="section_{{ $sect->id }}" class="form-control form-control-sm" autocomplete="off" placeholder="Section Title" />
+							</div>
+							<div class="col-12">
+								<div class="card">
+									<div class="card-header">Item</div>
+									<div class="card-body">
+										<div class="col item_wrap">
+@if( $sect->hasmanyquotsectionitem()->get()->count() )
+@foreach( $sect->hasmanyquotsectionitem()->get() as $it )
+
+			<div class="item_row">
+				<div class="form-row col-12">
+					<div class="col-1 text-danger item_remove" data-sectionid="{!! $sect->id !!}" data-itemid="{!! $it->id !!}">
+							<i class="fas fa-trash" aria-hidden="true"></i>
+					</div>
+					<div class="form-group col {{ $errors->has('qs.*.qssection.*.item_id') ? 'has-error' : '' }}">
+						<select name="qs[{!! $sect->id !!}][qssection][{!! $it->id !!}][item_id]" id="item_{!! $sect->id !!}_{!! $it->id !!}" class="form-control form-control-sm itemprice" autocomplete="off" placeholder="Please choose">
+							<option value="">Please choose</option>
+@foreach(\App\Model\QuotItem::where('active', 1)->get() as $item)
+							<option value="{!! $item->id !!}" data-price="{!! $item->price !!}">{!! $item->item !!}</option>
+@endforeach
+						</select>
+					</div>
+					<div class="form-group col {{ $errors->has('qs.*.qssection.*.price_unit') ? 'has-error' : '' }}">
+						<input type="text" name="qs[{!! $sect->id !!}][qssection][{!! $it->id !!}][price_unit]" id="price_unit_{!! $sect->id !!}_{!! $it->id !!}" class="form-control form-control-sm priceunit" placeholder="Price/Unit">
+					</div>
+					<div class="form-group col {{ $errors->has('qs.*.qssection.*.description') ? 'has-error' : '' }}">
+						<input type="text" name="qs[{!! $sect->id !!}][qssection][{!! $it->id !!}][description]" id="remarks_{!! $sect->id !!}_{!! $it->id !!}" class="form-control form-control-sm" placeholder="Remarks" />
+					</div>
+					<div class="form-group col {{ $errors->has('qs.*.qssection.*.quantity') ? 'has-error' : '' }}">
+						<input type="text" name="qs[{!! $sect->id !!}][qssection][{!! $it->id !!}][quantity]" value="" id="quantity_{!! $sect->id !!}_{!! $it->id !!}" class="form-control form-control-sm quan" autocomplete="off" placeholder="Quantity" />
+					</div>
+					<div class="form-group col {{ $errors->has('qs.*.qssection.*.uom_id') ? 'has-error' : '' }}">
+						<select name="qs[{!! $sect->id !!}][qssection][{!! $it->id !!}][uom_id]" id="uom_id_{!! $sect->id !!}_{!! $it->id !!}" class="form-control form-control-sm" autocomplete="off" placeholder="Please choose">
+							<option value="">Please choose</option>
+@foreach(\App\Model\QuotUOM::all() as $uom)
+							<option value="{!! $uom->id !!}" >{!! $uom->uom !!}</option>
+@endforeach
+						</select>
+					</div>
+					<div class="form-group col {{ $errors->has('qs.*.qssection.*.tax_id') ? 'has-error' : '' }}">
+						<select type="text" name="qs[{!! $sect->id !!}][qssection][{!! $it->id !!}][tax_id]" value="" id="tax_id_{!! $sect->id !!}_{!! $it->id !!}" class="form-control form-control-sm tax" autocomplete="off" placeholder="Please choose" >
+							<option value="">Please choose</option>
+@foreach(\App\Model\Tax::all() as $tax)
+							<option value="{!! $tax->id !!}" data-taxvalue="{!! $tax->value !!}">{!! $tax->tax !!}</option>
+@endforeach
+						</select>
+					</div>
+					<div class="form-group col {{ $errors->has('qs.*.qssection.*.tax_value') ? 'has-error' : '' }}">
+						<input type="text" name="qs[{!! $sect->id !!}][qssection][{!! $it->id !!}][tax_value]" value="" id="tax_value_{!! $sect->id !!}_{!! $it->id !!}" class="form-control form-control-sm taxvalue" autocomplete="off" placeholder="Tax Value (%)" />
+					</div>
+					<div class="form col">
+						<input type="text" value="0.00" class="form-control form-control-sm price" disabled="disabled">
+					</div>
+				</div>
+				<div class="col attrib_wrap">
+				</div>
+				<div class="row col-2 attrib_add"  data-sectionid="{!! $sect->id !!}" data-itemid="{!! $it->id !!}">
+					<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Item Attribute</p>
+				</div>
+			</div>
+
+@endforeach
+@else
+@endif
+										</div>
+									</div>
+								</div>
+								<div class="row col-2 item_add" data-sectionid="{{ $sect->id }}">
+									<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Item</p>
+								</div>
+							</div>
+						</div>
+						<div class="form-row row col-12">
+							<div class="form-group col-3 offset-8">
+								<label for="grandtotal" class="col col-form-label">Total :</label>
+							</div>
+							<div class="form-group col-1">
+								<input type="text" value="0.00" class="form-control form-control-sm totalprice" disabled="disabled">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br />
+@endforeach
+@else
+@endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </div>
 
 <div class="row col-2 section_add">
