@@ -27,7 +27,6 @@
 		<div class="card">
 			<div class="card-header">
 				Quotation
-				<a href="{{ route('quot.create') }}" class="btn btn-primary float-right">Add Quotation</a>
 			</div>
 			<div class="card-body">
 
@@ -75,6 +74,13 @@
 
 @section('js')
 /////////////////////////////////////////////////////////////////////////////////////////
+// popover
+$('.name1').popover({ 
+	trigger: "hover",
+	html: true,
+});
+
+/////////////////////////////////////////////////////////////////////////////////////////
 // date
 $('#dat').datetimepicker({
 	format:'YYYY-MM-DD',
@@ -93,6 +99,85 @@ $('#curr, #cust, #tax_id, #ddp, #exclusion_1, #remark_1').select2({
 	width: '100%',
 });
 
+@if($quot->hasmanyexclusions()->get()->count())
+<?php $n1 = 1 ?>
+	@foreach($quot->hasmanyexclusions()->get() as $nj)
+		$('#exclusion_{{ $n1++ }}').select2({
+			placeholder: 'Please choose',
+			allowClear: true,
+			closeOnSelect: true,
+			width: '100%',
+		});
+	@endforeach
+@endif
+
+@if($quot->hasmanyremarks()->get()->count())
+<?php $n2 = 1 ?>
+	@foreach($quot->hasmanyremarks()->get() as $nb)
+		$('#remark_{!! $n2++ !!}').select2({
+					placeholder: 'Please choose',
+					allowClear: true,
+					closeOnSelect: true,
+					width: '100%',
+				});
+	@endforeach
+@endif
+
+@if($quot->hasmanyquotsection()->get()->count())
+	<?php
+		// section
+		$w1 = 1;	// main
+
+		// item
+		$w2 = 1;	// main
+		$w3 = 1;
+		$w4 = 1;
+
+		// attribute
+		$w5 = 1;	// main
+	?>
+	@foreach( $quot->hasmanyquotsection()->get() as $sect1 )
+		<?php $w1++ ?>
+		@if( $sect1->hasmanyquotsectionitem()->get()->count() )
+			@foreach( $sect1->hasmanyquotsectionitem()->get() as $it1 )
+
+				$('#item_{!! $w1-1 !!}_{!! $w2++ !!}, #uom_id_{!! $w1-1 !!}_{!! $w3++ !!}, #tax_id_{!! $w1-1 !!}_{!! $w4++ !!}').select2({
+					placeholder: 'Please choose',
+					allowClear: true,
+					closeOnSelect: true,
+					width: '100%',
+				});
+
+				@if( $it1->hasmanyquotsectionitemattrib()->get()->count() )
+					@foreach( $it1->hasmanyquotsectionitemattrib()->get() as $att )
+
+						$('#attrib_id_{!! $w1-1 !!}_{!! $w2-1 !!}_{!! $w5++ !!}').select2({
+							placeholder: 'Please choose',
+							allowClear: true,
+							closeOnSelect: true,
+							width: '100%',
+						});
+
+					@endforeach
+				@endif
+			@endforeach
+		@endif
+	@endforeach
+@else
+	<?php
+		// section
+		$w1 = NULL;	// main
+
+		// item
+		$w2 = 1;	// main
+		$w3 = 1;
+		$w4 = 1;
+
+		// attribute
+		$w5 = 1;	// main
+	?>
+@endif
+
 /////////////////////////////////////////////////////////////////////////////////////////
 // add section : add and remove row
 
@@ -100,7 +185,7 @@ var max_fields	= 50; //maximum input boxes allowed
 var add_buttons	= $(".section_add");
 var wrappers	= $(".section_wrapper");
 
-var xs = 0;
+var xs = {!! is_null($w1)?0:$w1-1 !!};
 $(add_buttons).click(function(){
 	// e.preventDefault();
 
@@ -173,7 +258,7 @@ $(wrappers).on("click",".section_remove", function(e){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // add more rows on item
 var max_items	= max_fields * 50;		//maximum input boxes allowed
-var xi = 0;
+var xi = {!! is_null($w2)?0:$w2-1 !!};
 
 $(document).on('click', '.item_add', function() {
 // $('.item_add').click(function(e){
@@ -294,7 +379,7 @@ $(document).on('click', '.item_remove', function(e) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // add more rows on item attrib
 var max_items_attrib	= max_items * 50;		//maximum input boxes allowed
-var xia = 0;
+var xia = {!! is_null($w5)?0:$w5-1 !!};
 
 $(document).on('click', '.attrib_add', function() {
 	var item_attrib_wrapper = $(this).parent().children('.attrib_wrap');
@@ -538,6 +623,159 @@ $(document).on('click', '.rem_remove', function(e) {
 
 	xrem--;
 });
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row section
+$(document).on('click', '.section_delete', function(e){
+	var section_id = $(this).data('sectionid');
+	SwalDeleteSection(section_id);
+	e.preventDefault();
+});
+
+function SwalDeleteSection(section_id){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('quotSection') }}' + '/' + section_id,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: section_id,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_product_' + section_id).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row section
+$(document).on('click', '.item_delete', function(e){
+	var item_id = $(this).data('itemid');
+	SwalDeleteItem(item_id);
+	e.preventDefault();
+});
+
+function SwalDeleteItem(item_id){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('quotSectionItem') }}' + '/' + item_id,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: item_id,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_product_' + item_id).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row section
+$(document).on('click', '.attrib_delete', function(e){
+	var attrib_id = $(this).data('id');
+	SwalDeleteAttrib(attrib_id);
+	e.preventDefault();
+});
+
+function SwalDeleteAttrib(attrib_id){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('quotSectionItemAttrib') }}' + '/' + attrib_id,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: attrib_id,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_product_' + attrib_id).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // auto populate price/unit and change the price and the total price
@@ -810,9 +1048,10 @@ $('#form').bootstrapValidator({
 					notEmpty: {
 						message: 'Please insert value. ',
 					},
-					integer: {
-						message: 'The value is not in integer. '
-					}
+					numeric: {
+						separator: '.',
+						message: 'The value is not in decimal. ',
+					},
 				}
 			},
 			'qs[{!! $i1 !!}][qssection][{!! $i2 !!}][uom_id]' : {

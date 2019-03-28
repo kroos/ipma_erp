@@ -27,7 +27,6 @@
 		<div class="card">
 			<div class="card-header">
 				Quotation
-				<a href="{{ route('quot.create') }}" class="btn btn-primary float-right">Add Quotation</a>
 			</div>
 			<div class="card-body">
 

@@ -29,6 +29,11 @@ class QuotQuotation extends Model
 		return $this->hasMany('\App\Model\QuotQuotationRemark', 'quot_id');
 	}
 
+	public function hasmanyrevision()
+	{
+		return $this->hasMany('\App\Model\QuotQuotationRevision', 'quot_id');
+	}
+
 ///////////////////////////////////////////////////////////////////////////////
 	public function belongtostaff()
 	{
