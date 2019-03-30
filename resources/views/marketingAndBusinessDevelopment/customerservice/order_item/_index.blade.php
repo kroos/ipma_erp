@@ -77,6 +77,7 @@ if( $ch3 > 0 ) {
 								</tr>
 							</thead>
 							<tbody>
+		<?php $u = 0 ?>
 		@foreach($cs->hasmanyorderitem()->get() as $csoi)
 								<tr>
 									<td>
@@ -89,13 +90,21 @@ if( $ch3 > 0 ) {
 									<td>
 		@if($csoi->order_item_status_id == 3 && is_null($csoi->delivery_id))
 										{!! Form::checkbox('print[]', $csoi->id) !!}
+			<?php
+				$f = 1;
+			?>
+		@else
+			<?php
+				$f = 0;
+			?>
 		@endif
 										<span class="text-danger deletecsoi" data-id="{!! $csoi->id !!}" title="Delete"><i class="far fa-trash-alt"></i></span>
 									</td>
 								</tr>
+			<?php $u += $f ?>
 		@endforeach
 							</tbody>
-		@if($csoi->order_item_status_id == 3 && is_null($csoi->delivery_id))
+		@if($u>0))
 							<tfoot>
 								<tr>
 									<th colspan="4">&nbsp;</th>

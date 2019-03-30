@@ -4,6 +4,14 @@ namespace App\Http\Controllers\Sales\Costing;
 
 // load model
 use \App\Model\QuotQuotation;
+use \App\Model\QuotQuotationSection;
+use \App\Model\QuotQuotationSectionItem;
+use \App\Model\QuotQuotationSectionItemAttrib;
+
+use \App\Model\QuotQuotationRevision;
+use \App\Model\QuotQuotationTermOfPayment;
+use \App\Model\QuotQuotationExclusion;
+use \App\Model\QuotQuotationRemark;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -138,19 +146,38 @@ class QuotationController extends Controller
 	public function update(Request $request, QuotQuotation $quot)
 	{
 		// dd($request->all());
-		$qt = \Auth::user()->belongtostaff->hasmanyquotation()->create( array_add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'from', 'to', 'period_id', 'validity']), 'active', 1) );
+		$quot->update( array_add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'from', 'to', 'period_id', 'validity']), 'active', 1) );
+
+		$filename1 = $request->file('revision_file')->store('public/quot_revs');
+
+		$ass11 = explode('/', $filename1);
+		$ass21 = array_except($ass11, ['0']);
+		$revfile = implode('/', $ass21);
+
+		$quot->hasmanyrevision()->create(array_add($request->only('revision'), 'revision_file', $revfile));
 
 		if ($request->has('qs')) {
-			foreach ($request->qs as $k1 => $v1) {
 
-				$qt1 = $qt->hasmanyquotsection()->create([
-					'section' => $v1['section'],
-				]);
+			foreach ($request->qs as $k1 => $v1) {
+// var_dump($request->qs);
+// die();
+
+				$qw1 = $quot->hasmanyquotsection()->updateOrCreate(
+					[
+						'id' => $v1['id']
+					],
+					[
+						'section' => $v1['section'],
+					]);
 
 				// dd($v1['qssection']);
 				if( array_has(  $v1, 'qssection') ) {
 					foreach($v1['qssection'] as $k2 => $v2){
-						$qt2 = $qt1->hasmanyquotsectionitem()->create([
+						$qw2 = $qw1->hasmanyquotsectionitem()->updateOrCreate(
+						[
+							'id' => $v2['id']
+						],
+						[
 							'item_id' => $v2['item_id'],
 							'price_unit' => $v2['price_unit'],
 							'description' => $v2['description'],
@@ -188,7 +215,11 @@ class QuotationController extends Controller
 									$image = NULL;
 								}
 
-								$qt3 = $qt2->hasmanyquotsectionitemattrib()->create([
+								$qw2->hasmanyquotsectionitemattrib()->updateOrCreate(
+								[
+									'id' => $v3['id']
+								],
+								[
 									'attribute_id' => $v3['attribute_id'],
 									'description_attribute' => $v3['description_attribute'],
 									'remarks' => $v3['remarks'],
@@ -203,25 +234,39 @@ class QuotationController extends Controller
 
 		if($request->has('qstop')) {
 			foreach ($request->qstop as $k4 => $v4) {
-				$qt->hasmanytermofpayment()->create([
-					'term_of_payment' => $v4['term_of_payment'],
-				]);
+				$quot->hasmanytermofpayment()->updateOrCreate(
+					[
+						'id' => $v4['id']
+					],
+					[
+						'term_of_payment' => $v4['term_of_payment'],
+					]);
 			}
 		}
 
 		if($request->has('qsexclusions')) {
 			foreach ($request->qsexclusions as $k5 => $v5) {
-				$qt->hasmanyexclusions()->create([
-					'exclusion_id' => $v5['exclusion_id'],
-				]);
+				$quot->hasmanyexclusions()->updateOrCreate(
+					[
+						'id' => $v5['id']
+					],
+					[
+						// 'quot_id' => $v5['quot_id'],
+						'exclusion_id' => $v5['exclusion_id'],
+					]);
 			}
 		}
 
 		if($request->has('qsremark')) {
 			foreach ($request->qsremark as $k6 => $v6) {
-				$qt->hasmanyremarks()->create([
-					'remark_id' => $v6['remark_id'],
-				]);
+				$quot->hasmanyremarks()->updateOrCreate(
+					[
+						'id' => $v6['id']
+					],
+					[
+						// 'quot_id' => $v6['quot_id'],
+						'remark_id' => $v6['remark_id'],
+					]);
 			}
 		}
 

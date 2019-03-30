@@ -40,73 +40,34 @@
 	</div>
 </div>
 
-
-
-
-
-
-
-
-
+<!-- revision -->
 <div class="row">
 	{{ Form::label( 'rev', 'Revision : ', ['class' => 'col-2 col-form-label'] ) }}
-	<div class=" col-10">
-
-		<div class="rev_wrapper">
-@if( $quot->hasmanyrevision()->get()->count() )
-<?php
-$e5 = 1;
-$e6 = 1;
-?>
-@foreach( $quot->hasmanyrevision()->get() as $hy )
-			<div class="row rev_row">
-				<div class="col-1 text-danger rev_remove" data-id="{!! $hy->id !!}">
-					<i class="fas fa-trash" aria-hidden="true"></i>
-				</div>
-				<div class="form-group col {{ $errors->has('qsremark.*.exclusion_id') ? 'has-error' : '' }}">
-
-				</div>
-			</div>
-@endforeach
-@else
-			<div class="row rev_row">
-				<div class="col-1 text-danger rev_remove" data-id="1">
-					<i class="fas fa-trash" aria-hidden="true"></i>
-				</div>
-				<div class="form-group col {{ $errors->has('qsremark.*.exclusion_id') ? 'has-error' : '' }}">
-					
-				</div>
-			</div>
-@endif
+	<div class="form-row col-10">
+		<div class="form-group col {{ $errors->has('revision') ? 'has-error' : '' }}">
+			{!! Form::text('revision', @$value, ['class' => 'form-control form-control-sm', 'id' => 'rev', 'placeholder' => 'Revision Remarks']) !!}
 		</div>
-		<div class="row col-3 rev_add">
-			<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Revisions</p>
+		<div class="form-group col {{ $errors->has('revision_file') ? 'has-error' : '' }}">
+			{!! Form::file('revision_file', @$value, ['class' => 'form-control-file form-control-file-sm', 'id' => 'rev', 'placeholder' => 'Quot Revision']) !!}
 		</div>
-
 	</div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
+<!-- end revision -->
 
 <p>Thank you very much for your enquiry of the above. We are pleased to quote below for your kind consideration:</p>
 
 <!-- wrapper for section -->
 <div class="col section_wrapper">
-<?php $gtotal = 0 ?>
+<?php
+$gtotal = 0;
+$price = 0;
+?>
 @if( $quot->hasmanyquotsection()->get()->count() )
 <?php
 // section
 $t1 = 1;	// main
 $t2 = 1;
+$t25 = 1;	// hidden
 
 // item
 $t3 = 1;	// main
@@ -123,6 +84,7 @@ $t13 = 1;
 $t14 = 1;
 $t15 = 1;
 $t16 = 1;
+$t27 = 1;	// hidden
 
 // attribute
 $t17 = 1;	// main
@@ -133,6 +95,7 @@ $t21 = 1;
 $t22 = 1;
 $t23 = 1;
 $t24 = 1;
+$t29 = 1;	// hidden
 ?>
 @foreach( $quot->hasmanyquotsection()->get() as $sect )
 			<div class="section_row">
@@ -143,6 +106,7 @@ $t24 = 1;
 							<div class="col-1 text-danger section_delete"  id="section_remove_{{ $sect->id }}" data-sectionid="{!! $sect->id !!}">
 								<i class="fas fa-trash" aria-hidden="true"></i>
 							</div>
+							{!! Form::hidden('qs['.$t25++.'][id]', $sect->id) !!}
 							<div class="form-group col-11 {{ $errors->has('qs.*.section') ? 'has-error' : '' }}">
 								<input type="text" name="qs[{{ $t1++ }}][section]" value="{!! $sect->section !!}" id="section_{{ $t2++ }}" class="form-control form-control-sm" placeholder="Section Title" />
 							</div>
@@ -155,7 +119,6 @@ $t24 = 1;
 <!-- wrapper for items -->
 										<div class="col item_wrap">
 		@if( $sect->hasmanyquotsectionitem()->get()->count() )
-		<?php $price = 0 ?>
 			@foreach( $sect->hasmanyquotsectionitem()->get() as $it )
 			<?php $pr = ($it->price_unit * $it->quantity ) ?>
 			<?php $price += $pr ?>
@@ -164,6 +127,7 @@ $t24 = 1;
 													<div class="col-1 text-danger item_delete" data-sectionid="{!! $sect->id !!}" data-itemid="{!! $it->id !!}">
 															<i class="fas fa-trash" aria-hidden="true"></i>
 													</div>
+													{!! Form::hidden('qs['.($t1-1).'][qssection]['.$t27++.'][id]', $it->id) !!}
 													<div class="form-group col {{ $errors->has('qs.*.qssection.*.item_id') ? 'has-error' : '' }}">
 														<select name="qs[{!! $t1-1 !!}][qssection][{!! $t3++ !!}][item_id]" id="item_{!! $t1-1 !!}_{!! $t4++ !!}" class="form-control form-control-sm itemprice" placeholder="Please choose">
 															<option value="">Please choose</option>
@@ -190,7 +154,7 @@ $t24 = 1;
 														</select>
 													</div>
 													<div class="form-group col {{ $errors->has('qs.*.qssection.*.tax_id') ? 'has-error' : '' }}">
-														<select type="text" name="qs[{!! $t1-1 !!}][qssection][{!! $t13 !!}][tax_id]" id="tax_id_{!! $t1-1 !!}_{!! $t14++ !!}" class="form-control form-control-sm tax" placeholder="Please choose" >
+														<select type="text" name="qs[{!! $t1-1 !!}][qssection][{!! $t13++ !!}][tax_id]" id="tax_id_{!! $t1-1 !!}_{!! $t14++ !!}" class="form-control form-control-sm tax" placeholder="Please choose" >
 															<option value="">Please choose</option>
 											@foreach(\App\Model\Tax::all() as $tax)
 															<option value="{!! $tax->id !!}" data-taxvalue="{!! $tax->value !!}" {!!  ($tax->id == $it->tax_id)?'selected':NULL !!}>{!! $tax->tax !!}</option>
@@ -219,6 +183,7 @@ $t24 = 1;
 															<div class="col-1 text-danger attrib_delete" data-sectionid="{!! $sect->id !!}" data-itemid="{!! $it->id !!}" data-id="{!! $att1->id !!}">
 																<i class="fas fa-trash" aria-hidden="true"></i>
 															</div>
+															{!! Form::hidden('qs['.($t1-1).'][qssection]['.($t3-1).'][qsitem]['.$t29++.'][id]', $att1->id) !!}
 @if($att1->attribute_id == 10)
 <span class="name1" data-content="<img src='{{ asset('storage/'.$att1->image) }}'' alt='{{ $att1->description_attribute }}' class='img-thumbnail rounded img-fluid' >" data-placement="bottom" data-original-title="{{ $att1->description_attribute }}" >{{ $att1->description_attribute }}</span>
 @endif
@@ -252,7 +217,7 @@ $t24 = 1;
 <!-- end wrapper for attribute -->
 
 
-												<div class="row col-2 attrib_add"  data-sectionid="{!! $sect->id !!}" data-itemid="{!! $it->id !!}">
+												<div class="row col-2 attrib_add"  data-sectionid="{!! $t1-1 !!}" data-itemid="{!! $t3-1 !!}">
 													<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Item Attribute</p>
 												</div>
 											</div>
@@ -267,7 +232,7 @@ $t24 = 1;
 
 									</div>
 								</div>
-								<div class="row col-2 item_add" data-sectionid="{{ $sect->id }}">
+								<div class="row col-2 item_add" data-sectionid="{{ $t1-1 }}">
 									<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Item</p>
 								</div>
 							</div>
@@ -344,19 +309,28 @@ $ap = (($quot->tax_value * $gtotal) / 100) + $gtotal;
 	</div>
 </div>
 
+<!-- term of payment -->
 <div class="row">
 	{{ Form::label( 'top', 'Term Of Payment : ', ['class' => 'col-2 col-form-label'] ) }}
 	<div class=" col-10">
 
 		<div class="top_wrapper">
 @if( $quot->hasmanytermofpayment()->get()->count() )
+<?php
+$r1 = 1;
+$r2 = 1;
+$r3 = 1;
+$r4 = 1;
+?>
 @foreach($quot->hasmanytermofpayment()->get() as $top)
 			<div class="row top_row">
 				<div class="col-1 text-danger top_delete" data-id="{!! $top->id !!}">
 					<i class="fas fa-trash" aria-hidden="true"></i>
 				</div>
+				{!! Form::hidden('qstop['.$r1++.'][id]', $top->id) !!}
+				{!! Form::hidden('qstop['.$r2++.'][quot_id]', $top->quot_id) !!}
 				<div class="form-group col {{ $errors->has('qstop.*.term_of_payment') ? 'has-error' : '' }}">
-					<input type="text" name="qstop[1][term_of_payment]" value="{!! $top->term_of_payment !!}" id="top_1" class="form-control form-control-sm" placeholder="Term Of Payment">
+					<input type="text" name="qstop[{!! $r3++ !!}][term_of_payment]" value="{!! $top->term_of_payment !!}" id="top_{!! $r4++ !!}" class="form-control form-control-sm" placeholder="Term Of Payment">
 				</div>
 			</div>
 @endforeach
@@ -369,6 +343,7 @@ $ap = (($quot->tax_value * $gtotal) / 100) + $gtotal;
 	</div>
 </div>
 
+<!-- exclusion -->
 <div class="row">
 	{{ Form::label( 'exclude', 'Exclusions : ', ['class' => 'col-2 col-form-label'] ) }}
 	<div class=" col-10">
@@ -378,14 +353,20 @@ $ap = (($quot->tax_value * $gtotal) / 100) + $gtotal;
 <?php
 $e1 = 1;
 $e2 = 1;
+$e3 = 1;
+$e4 = 1;
 ?>
 @foreach($quot->hasmanyexclusions()->get() as $ty)
 			<div class="row exc_row">
-				<div class="col-1 text-danger exc_remove" data-id="{!! $ty->id !!}">
+				<div class="col-1 text-danger exc_delete" data-id="{!! $ty->id !!}">
 					<i class="fas fa-trash" aria-hidden="true"></i>
 				</div>
+
+				{!! Form::hidden('qsexclusions['.$e1++.'][id]', $ty->id) !!}
+				{!! Form::hidden('qsexclusions['.$e2++.'][quot_id]', $ty->quot_id) !!}
+
 				<div class="form-group col {{ $errors->has('qsexclusions.*.exclusion_id') ? 'has-error' : '' }}">
-					<select name="qsexclusions[{!! $e1++ !!}][exclusion_id]" class="form-control form-control-sm" id="exclusion_{!! $e2++ !!}" placeholder="Please choose">
+					<select name="qsexclusions[{!! $e3++ !!}][exclusion_id]" class="form-control form-control-sm" id="exclusion_{!! $e4++ !!}" placeholder="Please choose">
 						<option value="">Please choose</option>
 					@foreach(\App\Model\QuotExclusion::all() as $exc)
 						<option value="{!! $exc->id !!}" {!! ($ty->exclusion_id == $exc->id)?'selected':NULL !!}>{!! $exc->exclusion !!}</option>
@@ -403,7 +384,7 @@ $e2 = 1;
 	</div>
 </div>
 
-
+<!-- remarks -->
 <div class="row">
 	{{ Form::label( 'exclude', 'Remarks : ', ['class' => 'col-2 col-form-label'] ) }}
 	<div class=" col-10">
@@ -411,16 +392,22 @@ $e2 = 1;
 		<div class="rem_wrapper">
 @if( $quot->hasmanyremarks()->get()->count() )
 <?php
-$e3 = 1;
-$e4 = 1;
+$e5 = 1;
+$e6 = 1;
+$e7 = 1;
+$e8 = 1;
 ?>
 @foreach( $quot->hasmanyremarks()->get() as $hy )
 			<div class="row rem_row">
-				<div class="col-1 text-danger rem_remove" data-id="{!! $hy->id !!}">
+				<div class="col-1 text-danger rem_delete" data-id="{!! $hy->id !!}">
 					<i class="fas fa-trash" aria-hidden="true"></i>
 				</div>
+
+				{!! Form::hidden('qsremark['.$e5++.'][id]', $hy->id) !!}
+				{!! Form::hidden('qsremark['.$e6++.'][quot_id]', $hy->quot_id) !!}
+
 				<div class="form-group col {{ $errors->has('qsremark.*.exclusion_id') ? 'has-error' : '' }}">
-					<select name="qsremark[{!! $e3++ !!}][remark_id]" class="form-control form-control-sm" id="remark_{!! $e4++ !!}" placeholder="Please choose">
+					<select name="qsremark[{!! $e7++ !!}][remark_id]" class="form-control form-control-sm" id="remark_{!! $e8++ !!}" placeholder="Please choose">
 						<option value="">Please choose</option>
 					@foreach(\App\Model\QuotRemark::all() as $rem)
 						<option value="{!! $rem->id !!}" {!! ($rem->id == $hy->remark_id)?'selected':NULL !!}>{!! $rem->quot_remarks !!}</option>

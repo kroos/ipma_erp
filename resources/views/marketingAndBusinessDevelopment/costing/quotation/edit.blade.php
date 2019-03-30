@@ -159,33 +159,67 @@ $('#curr, #cust, #tax_id, #ddp, #exclusion_1, #remark_1').select2({
 						});
 
 					@endforeach
+				@else
+					<?php
+						$w5 = NULL;	// main
+					?>
 				@endif
 			@endforeach
+		@else
+			<?php
+				$w2 = NULL;	// main
+			?>
 		@endif
 	@endforeach
 @else
 	<?php
 		// section
 		$w1 = NULL;	// main
-
-		// item
-		$w2 = 1;	// main
-		$w3 = 1;
-		$w4 = 1;
-
-		// attribute
-		$w5 = 1;	// main
 	?>
 @endif
 
 /////////////////////////////////////////////////////////////////////////////////////////
-// add section : add and remove row
+// calculate Xs, xi & xia
+// 
+<?php
+$q1 = $quot->hasmanyquotsection()->get();
+if( $q1->count() ) {
+	// add numerous section
+	$d1 = $q1->count();
+	foreach($q1 as $z1 => $x1){
+		$q2 = $x1->hasmanyquotsectionitem()->get();
+		if ( $q2->count() ) {
+			$d2 = $q2->count();
+			foreach ($q2 as $z2 => $x2) {
+				$q3 = $x2->hasmanyquotsectionitemattrib()->get();
+				$d3 = 0;
+				echo ' q3 '.$q3->count();
+				$d3 += $q3->count();
+			}
+
+		} else {
+			$d1 = $q1->count();
+			$d2 = 0;
+			$d3 = 0;
+		}
+	}
+} else {
+	// add 1 section
+	$d1 = 0;
+	$d2 = 0;
+	$d3 = 0;
+}
+echo '// '.$d1.'=>'.$d2.'=>'.$d3.'=';
+?>
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// add section : add and remove row section
 
 var max_fields	= 50; //maximum input boxes allowed
 var add_buttons	= $(".section_add");
 var wrappers	= $(".section_wrapper");
 
-var xs = {!! is_null($w1)?0:$w1-1 !!};
+var xs = {!! $d1 !!};
 $(add_buttons).click(function(){
 	// e.preventDefault();
 
@@ -202,6 +236,9 @@ $(add_buttons).click(function(){
 							'<div class="col-1 text-danger section_remove"  id="section_remove_' + xs + '" data-sectionid="' + xs + '">' +
 								'<i class="fas fa-trash" aria-hidden="true"></i>' +
 							'</div>' +
+
+							'<input type="hidden" name="qs[' + xs + '][id]" value="">' +
+
 							'<div class="form-group col-11 {{ $errors->has('qs.*.section') ? 'has-error' : '' }}">' +
 								'<input type="text" name="qs[' + xs + '][section]" value="" id="section_' + xs + '" class="form-control form-control-sm" autocomplete="off" placeholder="Section Title" />' +
 							'</div>' +
@@ -258,7 +295,7 @@ $(wrappers).on("click",".section_remove", function(e){
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // add more rows on item
 var max_items	= max_fields * 50;		//maximum input boxes allowed
-var xi = {!! is_null($w2)?0:$w2-1 !!};
+var xi = {!! $d2 !!};
 
 $(document).on('click', '.item_add', function() {
 // $('.item_add').click(function(e){
@@ -275,6 +312,9 @@ $(document).on('click', '.item_add', function() {
 					'<div class="col-1 text-danger item_remove" data-sectionid="' + section_id + '" data-itemid="' + xi + '">' +
 							'<i class="fas fa-trash" aria-hidden="true"></i>' +
 					'</div>' +
+
+					'<input type="hidden" name="qs[' + section_id + '][qssection][' + xi + '][id]" value="">' +
+
 					'<div class="form-group col {{ $errors->has('qs.*.qssection.*.item_id') ? 'has-error' : '' }}">' +
 						'<select name="qs[' + section_id + '][qssection][' + xi + '][item_id]" id="item_' + section_id + '_' + xi + '" class="form-control form-control-sm itemprice" autocomplete="off" placeholder="Please choose">' +
 							'<option value="">Please choose</option>' +
@@ -379,7 +419,7 @@ $(document).on('click', '.item_remove', function(e) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // add more rows on item attrib
 var max_items_attrib	= max_items * 50;		//maximum input boxes allowed
-var xia = {!! is_null($w5)?0:$w5-1 !!};
+var xia = {!! $d3 !!};
 
 $(document).on('click', '.attrib_add', function() {
 	var item_attrib_wrapper = $(this).parent().children('.attrib_wrap');
@@ -396,6 +436,9 @@ $(document).on('click', '.attrib_add', function() {
 					'<div class="col-1 text-danger attrib_remove" data-sectionid="' + section_id + '" data-itemid="' + item_id + '" data-id="' + xia + '">' +
 						'<i class="fas fa-trash" aria-hidden="true"></i>' +
 					'</div>' +
+
+					'<input type="hidden" name="qs[' + section_id + '][qssection][' + item_id + '][qsitem][' + xia + '][id]" value="">' +
+
 					'<div class="form-group col-2 {{ $errors->has('qs.*.qssection.*.qsitem.*.attribute_id') ? 'has-error' : '' }}">' +
 						'<select name="qs[' + section_id + '][qssection][' + item_id + '][qsitem][' + xia + '][attribute_id]" id="attrib_id_' + section_id + '_' + item_id + '_' + xia + '" class="form-control form-control-sm attrib" autocomplete="off" placeholder="Please choose">' +
 							'<option value="">Please choose</option>' +
@@ -459,7 +502,7 @@ $(document).on('click', '.attrib_remove', function(e) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // add more rows on term of payment
 var top	= 10;		//maximum input boxes allowed
-var xt = 1;
+var xt = {!! ($quot->hasmanytermofpayment()->get()->count())?$quot->hasmanytermofpayment()->get()->count():0 !!};
 
 $(document).on('click', '.top_add', function() {
 	var top_wrapper = $(this).parent().children('.top_wrapper');
@@ -473,6 +516,8 @@ $(document).on('click', '.top_add', function() {
 				'<div class="col-1 text-danger top_remove" data-id="' + xt + '">' +
 					'<i class="fas fa-trash" aria-hidden="true"></i>' +
 				'</div>' +
+				'<input type="hidden" name="qstop[' + xt + '][id]" value="">' +
+				'<input type="hidden" name="qstop[' + xt + '][quot_id]" value="{!! $quot->id !!}">' +
 				'<div class="form-group col {{ $errors->has('qstop.*.term_of_payment') ? 'has-error' : '' }}">' +
 					'<input type="text" name="qstop[' + xt + '][term_of_payment]" id="top_' + xt + '" class="form-control form-control-sm" placeholder="Term Of Payment">' +
 				'</div>' +
@@ -507,7 +552,7 @@ $(document).on('click', '.top_remove', function(e) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // add more rows on exclusions
 var max_exc	= 20;		//maximum input boxes allowed
-var xexc = 1;
+var xexc = {!! ($quot->hasmanyexclusions()->get()->count())?$quot->hasmanyexclusions()->get()->count():0 !!};
 
 $(document).on('click', '.exc_add', function() {
 	var exc_wrapper = $(this).parent().children('.exc_wrapper');
@@ -521,6 +566,8 @@ $(document).on('click', '.exc_add', function() {
 				'<div class="col-1 text-danger exc_remove" data-id="' + xexc + '">' +
 					'<i class="fas fa-trash" aria-hidden="true"></i>' +
 				'</div>' +
+				'<input type="hidden" name="qsexclusions[' + xexc + '][id]" value="">' +
+				'<input type="hidden" name="qsexclusions[' + xexc + '][quot_id]" value="{!! $quot->id !!}">' +
 				'<div class="form-group col {{ $errors->has('qsexclusions.*.exclusion_id') ? 'has-error' : '' }}">' +
 					'<select name="qsexclusions[' + xexc + '][exclusion_id]" class="form-control form-control-sm" id="exclusion_' + xexc + '" placeholder="Please choose">' +
 						'<option value="">Please choose</option>' +
@@ -567,7 +614,7 @@ $(document).on('click', '.exc_remove', function(e) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // add more rows on remark
 var max_rem	= 20;		//maximum input boxes allowed
-var xrem = 1;
+var xrem = {!! ($quot->hasmanyremarks()->get()->count())?$quot->hasmanyremarks()->get()->count():0 !!};
 
 $(document).on('click', '.rem_add', function() {
 	var rem_wrapper = $(this).parent().children('.rem_wrapper');
@@ -581,6 +628,8 @@ $(document).on('click', '.rem_add', function() {
 				'<div class="col-1 text-danger rem_remove" data-id="' + xrem + '">' +
 					'<i class="fas fa-trash" aria-hidden="true"></i>' +
 				'</div>' +
+				'<input type="hidden" name="qsremark[' + xrem + '][id]" value="">' +
+				'<input type="hidden" name="qsremark[' + xrem + '][quot_id]" value="{!! $quot->id !!}">' +
 				'<div class="form-group col {{ $errors->has('qsremark.*.remark_id') ? 'has-error' : '' }}">' +
 					'<select name="qsremark[' + xrem + '][remark_id]" class="form-control form-control-sm" id="remark_' + xrem + '" placeholder="Please choose">' +
 						'<option value="">Please choose</option>' +
@@ -676,7 +725,7 @@ function SwalDeleteSection(section_id){
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ajax post delete row section
+// ajax post delete row item
 $(document).on('click', '.item_delete', function(e){
 	var item_id = $(this).data('itemid');
 	SwalDeleteItem(item_id);
@@ -727,7 +776,7 @@ function SwalDeleteItem(item_id){
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// ajax post delete row section
+// ajax post delete row attrib
 $(document).on('click', '.attrib_delete', function(e){
 	var attrib_id = $(this).data('id');
 	SwalDeleteAttrib(attrib_id);
@@ -762,6 +811,159 @@ function SwalDeleteAttrib(attrib_id){
 						window.location.reload(true);
 					});
 					//$('#delete_product_' + attrib_id).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row top
+$(document).on('click', '.top_delete', function(e){
+	var top_id = $(this).data('id');
+	SwalDeleteTOP(top_id);
+	e.preventDefault();
+});
+
+function SwalDeleteTOP(top_id){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('quotTerm') }}' + '/' + top_id,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							// id: top_id,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_product_' + top_id).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row exclusion
+$(document).on('click', '.exc_delete', function(e){
+	var exc_id = $(this).data('id');
+	SwalDeleteExclusion(exc_id);
+	e.preventDefault();
+});
+
+function SwalDeleteExclusion(exc_id){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('quotExclusion') }}' + '/' + exc_id,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							// id: exc_id,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_product_' + exc_id).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row remarks
+$(document).on('click', '.rem_delete', function(e){
+	var rem_id = $(this).data('id');
+	SwalDeleteRemark(rem_id);
+	e.preventDefault();
+});
+
+function SwalDeleteRemark(rem_id){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('quotRemark') }}' + '/' + rem_id,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							// id: rem_id,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_product_' + rem_id).parent().parent().remove();
 				})
 				.fail(function(){
 					swal('Oops...', 'Something went wrong with ajax !', 'error');
@@ -986,6 +1188,26 @@ $('#form').bootstrapValidator({
 				numeric: {
 					separator: '.',
 					message: 'The value is not in decimal. ',
+				},
+			}
+		},
+		revision: {
+			validators: {
+				// notEmpty: {
+				// 	message: 'Please choose. '
+				// },
+			}
+		},
+		revision_file: {
+			validators: {
+				notEmpty: {
+					message: 'Please upload file. ',
+				},
+				file: {
+					extension: 'pdf',
+					type: 'application/pdf',
+					maxSize: 7990272,   // 3264 * 2448
+					message: 'The selected file is not valid'
 				},
 			}
 		},
