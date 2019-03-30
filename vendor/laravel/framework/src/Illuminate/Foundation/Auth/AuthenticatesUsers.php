@@ -67,7 +67,7 @@ trait AuthenticatesUsers
         //     'password' => 'required|string',
         // ]);
 
-
+        // this is for auth user active
         $this->validate($request, [
             $this->username() => 'required|exists:logins,' . $this->username() . ',active,1',
             'password' => 'required|string',
