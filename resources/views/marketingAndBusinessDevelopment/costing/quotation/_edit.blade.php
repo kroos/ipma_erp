@@ -185,7 +185,9 @@ $t29 = 1;	// hidden
 															</div>
 															{!! Form::hidden('qs['.($t1-1).'][qssection]['.($t3-1).'][qsitem]['.$t29++.'][id]', $att1->id) !!}
 @if($att1->attribute_id == 10)
-<span class="name1" data-content="<img src='{{ asset('storage/'.$att1->image) }}'' alt='{{ $att1->description_attribute }}' class='img-thumbnail rounded img-fluid' >" data-placement="bottom" data-original-title="{{ $att1->description_attribute }}" >{{ $att1->description_attribute }}</span>
+	<span class="name1" data-content="<img src='{{ asset('storage/'.$att1->image) }}'' alt='{{ $att1->description_attribute }}' class='img-thumbnail rounded img-fluid' >" data-placement="bottom" data-original-title="{{ $att1->description_attribute }}" >
+		{{ !is_null($att1->description_attribute)?$att1->description_attribute:'Image' }}
+	</span>
 @endif
 															<div class="form-group col-2 {{ $errors->has('qs.*.qssection.*.qsitem.*.attribute_id') ? 'has-error' : '' }}">
 																<select name="qs[{!! $t1-1 !!}][qssection][{!! $t3-1 !!}][qsitem][{!! $t17++ !!}][attribute_id]" id="attrib_id_{!! $t1-1 !!}_{!! $t3-1 !!}_{!! $t18++ !!}" class="form-control form-control-sm attrib" placeholder="Please choose">

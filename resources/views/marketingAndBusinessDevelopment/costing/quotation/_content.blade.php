@@ -35,7 +35,26 @@ $qp = (($q->tax_value * $qi) / 100) + $qi;
 ?>
 		<tr>
 			<td>QT-{!! $q->id !!}/{!! $arr[1] !!}</td>
-			<td>rev</td>
+			<td>
+				<table class="table table-hover table-sm" style="font-size:12px" id="quot2">
+					<thead>
+						<tr>
+							<th>Revision</th>
+							<th>Remark</th>
+							<th>Previous Revision File</th>
+						</tr>
+					</thead>
+					<tbody>
+			@foreach($q->hasmanyrevision()->get() as $rev)
+						<tr>
+							<td>{!! $rev->id !!}</td>
+							<td>{!! $rev->revision !!}</td>
+							<td><a href="storage/{!! $rev->revision_file !!}" target="_blank" title="Download"><i class="fas fa-download"></i>&nbsp;Download</a></td>
+						</tr>
+			@endforeach
+					</tbody>
+				</table>
+			</td>
 			<td>{!! $dts->format('D, j M Y') !!}</td>
 			<td>{!! $q->belongtocustomer->customer !!}</td>
 			<td>{!! $q->attn !!}</td>

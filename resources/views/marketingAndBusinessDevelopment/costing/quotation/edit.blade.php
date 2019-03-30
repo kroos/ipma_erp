@@ -99,6 +99,7 @@ $('#curr, #cust, #tax_id, #ddp, #exclusion_1, #remark_1').select2({
 	width: '100%',
 });
 
+// exclusion
 @if($quot->hasmanyexclusions()->get()->count())
 <?php $n1 = 1 ?>
 	@foreach($quot->hasmanyexclusions()->get() as $nj)
@@ -111,6 +112,7 @@ $('#curr, #cust, #tax_id, #ddp, #exclusion_1, #remark_1').select2({
 	@endforeach
 @endif
 
+// remarks
 @if($quot->hasmanyremarks()->get()->count())
 <?php $n2 = 1 ?>
 	@foreach($quot->hasmanyremarks()->get() as $nb)
@@ -123,91 +125,74 @@ $('#curr, #cust, #tax_id, #ddp, #exclusion_1, #remark_1').select2({
 	@endforeach
 @endif
 
-@if($quot->hasmanyquotsection()->get()->count())
-	<?php
-		// section
-		$w1 = 1;	// main
 
-		// item
-		$w2 = 1;	// main
-		$w3 = 1;
-		$w4 = 1;
 
-		// attribute
-		$w5 = 1;	// main
-	?>
-	@foreach( $quot->hasmanyquotsection()->get() as $sect1 )
-		<?php $w1++ ?>
-		@if( $sect1->hasmanyquotsectionitem()->get()->count() )
-			@foreach( $sect1->hasmanyquotsectionitem()->get() as $it1 )
+// section, item, attrib
+<?php
+// section
+$w1 = 1;	// main
 
+// item
+$w2 = 1;	// main
+$w3 = 1;
+$w4 = 1;
+
+// attribute
+$w5 = 1;	// main
+
+if ( $quot->hasmanyquotsection()->get()->count() ) {
+	foreach( $quot->hasmanyquotsection()->get() as $sect1 ) {
+		$w1++;
+		if( $sect1->hasmanyquotsectionitem()->get()->count() ) {
+			foreach( $sect1->hasmanyquotsectionitem()->get() as $it1 ) {
+?>
 				$('#item_{!! $w1-1 !!}_{!! $w2++ !!}, #uom_id_{!! $w1-1 !!}_{!! $w3++ !!}, #tax_id_{!! $w1-1 !!}_{!! $w4++ !!}').select2({
 					placeholder: 'Please choose',
 					allowClear: true,
 					closeOnSelect: true,
 					width: '100%',
 				});
-
-				@if( $it1->hasmanyquotsectionitemattrib()->get()->count() )
-					@foreach( $it1->hasmanyquotsectionitemattrib()->get() as $att )
-
+<?php
+				if( $it1->hasmanyquotsectionitemattrib()->get()->count() ) {
+					foreach( $it1->hasmanyquotsectionitemattrib()->get() as $att ) {
+?>
 						$('#attrib_id_{!! $w1-1 !!}_{!! $w2-1 !!}_{!! $w5++ !!}').select2({
 							placeholder: 'Please choose',
 							allowClear: true,
 							closeOnSelect: true,
 							width: '100%',
 						});
-
-					@endforeach
-				@else
-					<?php
-						$w5 = NULL;	// main
-					?>
-				@endif
-			@endforeach
-		@else
-			<?php
-				$w2 = NULL;	// main
-			?>
-		@endif
-	@endforeach
-@else
-	<?php
-		// section
-		$w1 = NULL;	// main
-	?>
-@endif
+<?php
+					}
+				}
+			}
+		}
+	}
+}
+?>
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // calculate Xs, xi & xia
 // 
 <?php
 $q1 = $quot->hasmanyquotsection()->get();
+$d1 = 0;
+$d2 = 0;
+$d3 = 0;
 if( $q1->count() ) {
 	// add numerous section
-	$d1 = $q1->count();
+	$d1 += $q1->count();
 	foreach($q1 as $z1 => $x1){
 		$q2 = $x1->hasmanyquotsectionitem()->get();
 		if ( $q2->count() ) {
-			$d2 = $q2->count();
+			$d2 += $q2->count();
 			foreach ($q2 as $z2 => $x2) {
 				$q3 = $x2->hasmanyquotsectionitemattrib()->get();
-				$d3 = 0;
-				echo ' q3 '.$q3->count();
 				$d3 += $q3->count();
 			}
 
-		} else {
-			$d1 = $q1->count();
-			$d2 = 0;
-			$d3 = 0;
 		}
 	}
-} else {
-	// add 1 section
-	$d1 = 0;
-	$d2 = 0;
-	$d3 = 0;
 }
 echo '// '.$d1.'=>'.$d2.'=>'.$d3.'=';
 ?>
