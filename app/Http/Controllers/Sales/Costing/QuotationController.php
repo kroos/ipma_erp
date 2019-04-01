@@ -42,7 +42,7 @@ class QuotationController extends Controller
 	public function store(Request $request)
 	{
 		// dd($request->all());
-		$qt = \Auth::user()->belongtostaff->hasmanyquotation()->create( array_add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'from', 'to', 'period_id', 'validity']), 'active', 1) );
+		$qt = \Auth::user()->belongtostaff->hasmanyquotation()->create( array_add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'mutual', 'from', 'to', 'period_id', 'validity']), 'active', 1) );
 
 		if ($request->has('qs')) {
 			foreach ($request->qs as $k1 => $v1) {
@@ -146,7 +146,15 @@ class QuotationController extends Controller
 	public function update(Request $request, QuotQuotation $quot)
 	{
 		// dd($request->all());
-		$quot->update( array_add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'from', 'to', 'period_id', 'validity']), 'active', 1) );
+		$quot->update( array_add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'mutual', 'from', 'to', 'period_id', 'validity']), 'active', 1) );
+// dd($request->mutual);
+		// if( $request->has('mutual') ) {
+		// 	foreach($request->mutual as $k => $v) {
+		// 		$quot->update([
+		// 			'mutual' => $v
+		// 		]);
+		// 	}
+		// }
 
 		$filename1 = $request->file('revision_file')->store('public/quot_revs');
 

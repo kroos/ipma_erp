@@ -81,12 +81,37 @@
 
 <div class="row">
 	{{ Form::label( 'ddp', 'Delivery Date : ', ['class' => 'col-2 col-form-label'] ) }}
-	<div class="form-row col-10">
+	<div class="col">
+		<div class="form-row">
+			<div class="form-group col-1 {{ $errors->has('mutual')?'has-error':NULL }}">
+				<div class="pretty p-icon p-round p-pulse" >
+					{!! Form::radio('mutual', 0, @$value) !!}
+					<small id="radio1button" class="form-text text-danger mutu"></small>
+					<div class="state p-success">
+						<i class="icon mdi mdi-check"></i>
+						<label >&nbsp;</label>
+					</div>
+				</div>
+			</div>
 		<div class="form-group col-2 {{ $errors->has('from')?'has-error':NULL }}">{!! Form::text('from', @$value, ['class' => 'form-control form-control-sm', 'id' => 'ddf', 'placeholder' => 'From']) !!}</div> to 
 		<div class="form-group col-2 {{ $errors->has('to')?'has-error':NULL }}">{!! Form::text('to', @$value, ['class' => 'form-control form-control-sm', 'id' => 'ddf', 'placeholder' => 'To']) !!}</div>
 		<div class="form-group col-2 {{ $errors->has('period_id')?'has-error':NULL }}">{!! Form::select('period_id', \App\Model\QuotDeliveryDate::pluck('delivery_date_period', 'id')->toArray(), @$value, ['class' => 'form-control form-control-sm', 'id' => 'ddp', 'placeholder' => 'Please choose']) !!}</div>  upon confirmation of order and receipt of down payment. 
+		</div>
+		<div class="form-row">
+			<div class="form-check col-2 {{ $errors->has('mutual')?'has-error':NULL }}">
+				<div class="pretty p-icon p-round p-pulse" >
+					{!! Form::radio('mutual', 1, @$value) !!}
+					<small id="radio2button" class="form-text text-danger mutu"></small>
+					<div class="state p-success">
+						<i class="icon mdi mdi-check"></i>
+						<label >Mutually Agreed</label>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
+<br />
 
 <div class="row">
 	{{ Form::label( 'valid', 'Validity : ', ['class' => 'col-2 col-form-label'] ) }}
@@ -144,7 +169,7 @@
 
 
 <div class="row">
-	{{ Form::label( 'exclude', 'Remarks : ', ['class' => 'col-2 col-form-label'] ) }}
+	{{ Form::label( 'remarks', 'Remarks : ', ['class' => 'col-2 col-form-label'] ) }}
 	<div class=" col-10">
 
 		<div class="rem_wrapper">

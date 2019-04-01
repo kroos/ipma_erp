@@ -860,7 +860,15 @@ $('#form').bootstrapValidator({
 		@endfor
 	@endfor
 @endfor
-
+		'mutual': {
+			// selecttor: 'mutual',
+			container: '.mutu',		//container where to put the error message
+			validators: {
+				notEmpty: {
+					message: 'Please choose. '
+				},
+			}
+		},
 		from: {
 			validators: {
 				notEmpty: {

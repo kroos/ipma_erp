@@ -34,6 +34,21 @@ class QuotQuotation extends Model
 		return $this->hasMany('\App\Model\QuotQuotationRevision', 'quot_id');
 	}
 
+	public function hasmanydealer()
+	{
+		return $this->hasMany('\App\Model\QuotQuotationDealer', 'quot_id');
+	}
+
+	public function hasmanybank()
+	{
+		return $this->hasMany('\App\Model\QuotQuotationBank', 'quot_id');
+	}
+
+	public function hasmanywarranty()
+	{
+		return $this->hasMany('\App\Model\QuotQuotationWarranty', 'quot_id');
+	}
+
 ///////////////////////////////////////////////////////////////////////////////
 	public function belongtostaff()
 	{

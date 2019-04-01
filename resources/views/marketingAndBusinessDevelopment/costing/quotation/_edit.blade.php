@@ -60,7 +60,6 @@
 <div class="col section_wrapper">
 <?php
 $gtotal = 0;
-$price = 0;
 ?>
 @if( $quot->hasmanyquotsection()->get()->count() )
 <?php
@@ -119,6 +118,7 @@ $t29 = 1;	// hidden
 <!-- wrapper for items -->
 										<div class="col item_wrap">
 		@if( $sect->hasmanyquotsectionitem()->get()->count() )
+			<?php $price = 0 ?>
 			@foreach( $sect->hasmanyquotsectionitem()->get() as $it )
 			<?php $pr = ($it->price_unit * $it->quantity ) ?>
 			<?php $price += $pr ?>
@@ -297,12 +297,40 @@ $ap = (($quot->tax_value * $gtotal) / 100) + $gtotal;
 
 <div class="row">
 	{{ Form::label( 'ddp', 'Delivery Date : ', ['class' => 'col-2 col-form-label'] ) }}
-	<div class="form-row col-10">
-		<div class="form-group col-2 {{ $errors->has('from')?'has-error':NULL }}">{!! Form::text('from', @$value, ['class' => 'form-control form-control-sm', 'id' => 'ddf', 'placeholder' => 'From']) !!}</div> to 
-		<div class="form-group col-2 {{ $errors->has('to')?'has-error':NULL }}">{!! Form::text('to', @$value, ['class' => 'form-control form-control-sm', 'id' => 'ddf', 'placeholder' => 'To']) !!}</div>
-		<div class="form-group col-2 {{ $errors->has('period_id')?'has-error':NULL }}">{!! Form::select('period_id', \App\Model\QuotDeliveryDate::pluck('delivery_date_period', 'id')->toArray(), @$value, ['class' => 'form-control form-control-sm', 'id' => 'ddp', 'placeholder' => 'Please choose']) !!}</div>  upon confirmation of order and receipt of down payment. 
+	<div class="col">
+		<div class="form-row">
+			<div class="form-group col-1 {{ $errors->has('mutual')?'has-error':NULL }}">
+				<div class="pretty p-icon p-round p-pulse" >
+					{!! Form::radio('mutual', 0, @$value) !!}
+					<small id="radio1button" class="form-text text-danger mutu"></small>
+					<div class="state p-success">
+						<i class="icon mdi mdi-check"></i>
+						<label >&nbsp;</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group col-2 {{ $errors->has('from')?'has-error':NULL }}">{!! Form::text('from', @$value, ['class' => 'form-control form-control-sm', 'id' => 'ddf', 'placeholder' => 'From']) !!}</div> to 
+			<div class="form-group col-2 {{ $errors->has('to')?'has-error':NULL }}">{!! Form::text('to', @$value, ['class' => 'form-control form-control-sm', 'id' => 'ddf', 'placeholder' => 'To']) !!}</div>
+			<div class="form-group col-2 {{ $errors->has('period_id')?'has-error':NULL }}">
+				{!! Form::select('period_id', \App\Model\QuotDeliveryDate::pluck('delivery_date_period', 'id')->toArray(), @$value, ['class' => 'form-control form-control-sm', 'id' => 'ddp', 'placeholder' => 'Please choose']) !!}
+			</div>
+			upon confirmation of order and receipt of down payment.
+		</div>
+		<div class="form-row">
+			<div class="form-check col-2 {{ $errors->has('mutual')?'has-error':NULL }}">
+				<div class="pretty p-icon p-round p-pulse" >
+					{!! Form::radio('mutual', 1, @$value) !!}
+					<small id="radio2button" class="form-text text-danger mutu"></small>
+					<div class="state p-success">
+						<i class="icon mdi mdi-check"></i>
+						<label >Mutually Agreed</label>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
+<br />
 
 <div class="row">
 	{{ Form::label( 'valid', 'Validity : ', ['class' => 'col-2 col-form-label'] ) }}
@@ -320,7 +348,6 @@ $ap = (($quot->tax_value * $gtotal) / 100) + $gtotal;
 @if( $quot->hasmanytermofpayment()->get()->count() )
 <?php
 $r1 = 1;
-$r2 = 1;
 $r3 = 1;
 $r4 = 1;
 ?>
@@ -330,7 +357,6 @@ $r4 = 1;
 					<i class="fas fa-trash" aria-hidden="true"></i>
 				</div>
 				{!! Form::hidden('qstop['.$r1++.'][id]', $top->id) !!}
-				{!! Form::hidden('qstop['.$r2++.'][quot_id]', $top->quot_id) !!}
 				<div class="form-group col {{ $errors->has('qstop.*.term_of_payment') ? 'has-error' : '' }}">
 					<input type="text" name="qstop[{!! $r3++ !!}][term_of_payment]" value="{!! $top->term_of_payment !!}" id="top_{!! $r4++ !!}" class="form-control form-control-sm" placeholder="Term Of Payment">
 				</div>
@@ -354,7 +380,6 @@ $r4 = 1;
 @if($quot->hasmanyexclusions()->get()->count())
 <?php
 $e1 = 1;
-$e2 = 1;
 $e3 = 1;
 $e4 = 1;
 ?>
@@ -365,7 +390,6 @@ $e4 = 1;
 				</div>
 
 				{!! Form::hidden('qsexclusions['.$e1++.'][id]', $ty->id) !!}
-				{!! Form::hidden('qsexclusions['.$e2++.'][quot_id]', $ty->quot_id) !!}
 
 				<div class="form-group col {{ $errors->has('qsexclusions.*.exclusion_id') ? 'has-error' : '' }}">
 					<select name="qsexclusions[{!! $e3++ !!}][exclusion_id]" class="form-control form-control-sm" id="exclusion_{!! $e4++ !!}" placeholder="Please choose">
@@ -388,14 +412,13 @@ $e4 = 1;
 
 <!-- remarks -->
 <div class="row">
-	{{ Form::label( 'exclude', 'Remarks : ', ['class' => 'col-2 col-form-label'] ) }}
+	{{ Form::label( 'remarks', 'Remarks : ', ['class' => 'col-2 col-form-label'] ) }}
 	<div class=" col-10">
 
 		<div class="rem_wrapper">
 @if( $quot->hasmanyremarks()->get()->count() )
 <?php
 $e5 = 1;
-$e6 = 1;
 $e7 = 1;
 $e8 = 1;
 ?>
@@ -406,7 +429,6 @@ $e8 = 1;
 				</div>
 
 				{!! Form::hidden('qsremark['.$e5++.'][id]', $hy->id) !!}
-				{!! Form::hidden('qsremark['.$e6++.'][quot_id]', $hy->quot_id) !!}
 
 				<div class="form-group col {{ $errors->has('qsremark.*.exclusion_id') ? 'has-error' : '' }}">
 					<select name="qsremark[{!! $e7++ !!}][remark_id]" class="form-control form-control-sm" id="remark_{!! $e8++ !!}" placeholder="Please choose">
@@ -422,6 +444,46 @@ $e8 = 1;
 		</div>
 		<div class="row col-3 rem_add">
 			<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Remarks</p>
+		</div>
+
+	</div>
+</div>
+
+
+<!-- dealer -->
+<div class="row">
+	{{ Form::label( 'dealer', 'Dealer Clause : ', ['class' => 'col-2 col-form-label'] ) }}
+	<div class=" col-10">
+
+		<div class="dealer_wrapper">
+@if( $quot->hasmanyremarks()->get()->count() )
+<?php
+$e9 = 1;
+$e10 = 1;
+$e11 = 1;
+?>
+@foreach( $quot->hasmanydealer()->get() as $qd )
+			<div class="row dealer_row">
+				<div class="col-1 text-danger dealer_delete" data-id="{!! $hy->id !!}">
+					<i class="fas fa-trash" aria-hidden="true"></i>
+				</div>
+
+				{!! Form::hidden('qsdealer['.$e9++.'][id]', $qd->id) !!}
+
+				<div class="form-group col {{ $errors->has('qsdealer.*.dealer_id') ? 'has-error' : '' }}">
+					<select name="qsdealer[{!! $e10++ !!}][dealer_id]" class="form-control form-control-sm" id="remark_{!! $e11++ !!}" placeholder="Please choose">
+						<option value="">Please choose</option>
+					@foreach(\App\Model\QuotDealer::all() as $dea)
+						<option value="{!! $dea->id !!}" {!! ($dea->id == $qd->dealer_id)?'selected':NULL !!}>{!! $dea->dealer !!}</option>
+					@endforeach
+					</select>
+				</div>
+			</div>
+@endforeach
+@endif
+		</div>
+		<div class="row col-3 dealer_add">
+			<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Dealer</p>
 		</div>
 
 	</div>

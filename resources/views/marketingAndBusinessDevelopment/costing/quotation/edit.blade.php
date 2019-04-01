@@ -59,7 +59,15 @@
 
 		<div class="card">
 			<div class="card-header">
-				Add Quotation
+<?php
+$dts = \Carbon\Carbon::parse($quot->date);
+$arr = str_split( $dts->format('Y'), 2 );
+$rev = $quot->hasmanyrevision()->get()->max('id');
+?>
+				Edit Quotation QT-{!! $quot->id !!}/{!! $arr[1] !!}
+@if($quot->hasmanyrevision()->get()->count())
+-({!! $rev !!})
+@endif
 			</div>
 			<div class="card-body">
 {!! Form::model($quot, ['route' => ['quot.update', $quot->id], 'method' => 'PATCH', 'id' => 'form', 'files' => true]) !!}
@@ -656,6 +664,67 @@ $(document).on('click', '.rem_remove', function(e) {
 	// $option14.css('border', 'solid 1px red');
 
 	xrem--;
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// add more rows on dealer
+var max_dealer	= 20;		//maximum input boxes allowed
+var xdeal = {!! ($quot->hasmanydealer()->get()->count())?$quot->hasmanydealer()->get()->count():0 !!};
+
+$(document).on('click', '.dealer_add', function() {
+	var dea_wrapper = $(this).parent().children('.dealer_wrapper');
+	// dea_wrapper.css('border', 'solid 1px red');
+
+	if(xdeal < max_dealer){
+		xdeal++;
+		$(dea_wrapper).append(
+
+			'<div class="row dealer_row">' +
+				'<div class="col-1 text-danger dea_remove" data-id="' + xdeal + '">' +
+					'<i class="fas fa-trash" aria-hidden="true"></i>' +
+				'</div>' +
+				'<input type="hidden" name="qsdealer[' + xdeal + '][id]" value="">' +
+				'<div class="form-group col {{ $errors->has('qsdealer.*.dealer_id') ? 'has-error' : '' }}">' +
+					'<select name="qsdealer[' + xdeal + '][dealer_id]" class="form-control form-control-sm" id="dealer_' + xdeal + '" placeholder="Please choose">' +
+						'<option value="">Please choose</option>' +
+					@foreach(\App\Model\QuotDealer::all() as $dea)
+						'<option value="{!! $dea->id !!}" >{!! $dea->dealer !!}</option>' +
+					@endforeach
+					'</select>' +
+				'</div>' +
+			'</div>'
+
+		);		// add input box
+
+		// select2
+		$( '#dealer_' + xdeal ).select2({
+			placeholder: 'Please choose',
+			allowClear: true,
+			closeOnSelect: true,
+			width: '100%',
+		});
+
+		//bootstrap validate
+		$('#form').bootstrapValidator('addField',$('.dealer_row').find('[name="qsdealer[' + xdeal + '][dealer_id]"]'));
+	}
+
+});
+
+$(document).on('click', '.dea_remove', function(e) {
+	var dea_id = $(this).data('id');
+
+	e.preventDefault();
+	var $row7 = $(this).parent('.dealer_row');
+	// $row7.css('border', 'solid 1px red');
+
+	var $option15 = $row7.find('[name="qsdealer[' + dea_id + '][dealer_id]"]');
+
+	$('#form').bootstrapValidator('removeField', $option15);
+	$row7.remove();
+
+	// $option15.css('border', 'solid 1px red');
+
+	xdeal--;
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1308,6 +1377,15 @@ $('#form').bootstrapValidator({
 	@endfor
 @endfor
 
+		'mutual': {
+			// selecttor: 'mutual',
+			container: '.mutu',		//container where to put the error message
+			validators: {
+				notEmpty: {
+					message: 'Please choose. '
+				},
+			}
+		},
 		from: {
 			validators: {
 				notEmpty: {
@@ -1365,6 +1443,15 @@ $('#form').bootstrapValidator({
 @endfor
 @for($i6=1; $i6<=20; $i6++)
 		'qsremark[{!! $i6 !!}][remark_id]': {
+			validators: {
+				notEmpty: {
+					message: 'Please choose ',
+				},
+			}
+		},
+@endfor
+@for($i7=1; $i7<=20; $i7++)
+		'qsdealer[{!! $i7 !!}][dealer_id]': {
 			validators: {
 				notEmpty: {
 					message: 'Please choose ',
