@@ -48,13 +48,22 @@
 						<a class="nav-link" href="{{ route('quotItemAttrib.index') }}">Product / Item Attribute</a>
 					</li>
 					<li class="nav-item">
+						<a class="nav-link" href="{{ route('quotUOM.index') }}">Unit Of Measurement</a>
+					</li>
+					<li class="nav-item">
 						<a class="nav-link" href="{{ route('quotRem.index') }}">Remarks</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="{{ route('quotExcl.index') }}">Exclusion</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{ route('quotUOM.index') }}">Unit Of Measurement</a>
+						<a class="nav-link" href="{{ route('quotDeal.index') }}">Dealer</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('quotWarr.index') }}">Warranty</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('quotBank.index') }}">Bank</a>
 					</li>
 				</ul>
 

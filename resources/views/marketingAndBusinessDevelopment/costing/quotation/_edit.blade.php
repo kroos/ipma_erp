@@ -456,7 +456,7 @@ $e8 = 1;
 	<div class=" col-10">
 
 		<div class="dealer_wrapper">
-@if( $quot->hasmanyremarks()->get()->count() )
+@if( $quot->hasmanydealer()->get()->count() )
 <?php
 $e9 = 1;
 $e10 = 1;
@@ -464,14 +464,14 @@ $e11 = 1;
 ?>
 @foreach( $quot->hasmanydealer()->get() as $qd )
 			<div class="row dealer_row">
-				<div class="col-1 text-danger dealer_delete" data-id="{!! $hy->id !!}">
+				<div class="col-1 text-danger dealer_delete" data-id="{!! $qd->id !!}">
 					<i class="fas fa-trash" aria-hidden="true"></i>
 				</div>
 
 				{!! Form::hidden('qsdealer['.$e9++.'][id]', $qd->id) !!}
 
 				<div class="form-group col {{ $errors->has('qsdealer.*.dealer_id') ? 'has-error' : '' }}">
-					<select name="qsdealer[{!! $e10++ !!}][dealer_id]" class="form-control form-control-sm" id="remark_{!! $e11++ !!}" placeholder="Please choose">
+					<select name="qsdealer[{!! $e10++ !!}][dealer_id]" class="form-control form-control-sm" id="dealer_{!! $e11++ !!}" placeholder="Please choose">
 						<option value="">Please choose</option>
 					@foreach(\App\Model\QuotDealer::all() as $dea)
 						<option value="{!! $dea->id !!}" {!! ($dea->id == $qd->dealer_id)?'selected':NULL !!}>{!! $dea->dealer !!}</option>
@@ -485,6 +485,75 @@ $e11 = 1;
 		<div class="row col-3 dealer_add">
 			<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Dealer</p>
 		</div>
+
+	</div>
+</div>
+
+
+
+<!-- warranty -->
+<div class="row">
+	{{ Form::label( 'warr', 'Warranty : ', ['class' => 'col-2 col-form-label'] ) }}
+	<div class=" col-10">
+
+		<div class="warranty_wrapper">
+@if( $quot->hasmanywarranty()->get()->count() )
+<?php
+$e12 = 1;
+$e13 = 1;
+$e14 = 1;
+?>
+@foreach( $quot->hasmanywarranty()->get() as $qd )
+			<div class="row warranty_row">
+				<div class="col-1 text-danger warranty_delete" data-id="{!! $qd->id !!}">
+					<i class="fas fa-trash" aria-hidden="true"></i>
+				</div>
+
+				{!! Form::hidden('qswarranty['.$e12++.'][id]', $qd->id) !!}
+
+				<div class="form-group col {{ $errors->has('qswarranty.*.warranty_id') ? 'has-error' : '' }}">
+					<select name="qswarranty[{!! $e13++ !!}][warranty_id]" class="form-control form-control-sm" id="warranty_{!! $e14++ !!}" placeholder="Please choose">
+						<option value="">Please choose</option>
+					@foreach(\App\Model\QuotWarranty::all() as $dea)
+						<option value="{!! $dea->id !!}" {!! ($dea->id == $qd->warranty_id)?'selected':NULL !!}>{!! $dea->warranty !!}</option>
+					@endforeach
+					</select>
+				</div>
+			</div>
+@endforeach
+@endif
+		</div>
+		<div class="row col-3 warranty_add">
+			<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Warranty</p>
+		</div>
+
+	</div>
+</div>
+
+
+<!-- bank -->
+<div class="row">
+	{{ Form::label( 'bnk', 'Bank : ', ['class' => 'col-2 col-form-label'] ) }}
+	<div class="row col-10">
+
+@foreach(\App\Model\QuotBank::all() as $dea)
+
+<div class="col-6">
+	<div class="card">
+		<div class="card-header">
+			<div class="form-group {{ $errors->has('bank_id')">
+				<input type="radio" name="bank_id" value="{!! $dea->id !!}" aria-describedby="emailHelp_{!! $dea->id !!}" id="bank_{!! $dea->id !!}" {!! ($dea->id == $quot->bank_id)?'checked':NULL !!}>
+				<label for="bank_{!! $dea->id !!}">Option {!! $dea->id !!}</label>
+				<small id="emailHelp_{!! $dea->id !!}" class="form-text text-muted">Click again to remove this option.</small>
+			</div>
+		</div>
+		<div class="card-body">
+			{!! nl2br($dea->bank) !!}
+		</div>
+	</div>
+</div>
+
+@endforeach
 
 	</div>
 </div>

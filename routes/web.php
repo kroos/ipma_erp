@@ -121,13 +121,19 @@ Route::resources([
 	'quotTerm' => 'Sales\Costing\QuotQuotationTermOfPaymentController',
 	'quotExclusion' => 'Sales\Costing\QuotQuotationExclusionController',
 	'quotRemark' => 'Sales\Costing\QuotQuotationRemarkController',
+	'quotRemark' => 'Sales\Costing\QuotQuotationRemarkController',
+	'quotDealer' => 'Sales\Costing\QuotQuotationDealerController',
+	'quotWarranty' => 'Sales\Costing\QuotQuotationWarrantyController',
 
 	'quotdd' => 'Sales\Costing\QuotationDeliveryDateController',
 	'quotItem' => 'Sales\Costing\QuotationItemController',
 	'quotItemAttrib' => 'Sales\Costing\QuotationItemAttributeController',
-	'quotRem' => 'Sales\Costing\QuotationRemarkController',
-	'quotExcl' => 'Sales\Costing\QuotationExclusionController',
 	'quotUOM' => 'Sales\Costing\QuotationUOMController',
+	'quotExcl' => 'Sales\Costing\QuotationExclusionController',
+	'quotRem' => 'Sales\Costing\QuotationRemarkController',
+	'quotDeal' => 'Sales\Costing\QuotationDealerController',
+	'quotWarr' => 'Sales\Costing\QuotationWarrantyController',
+	'quotBank' => 'Sales\Costing\QuotationBankController',
 ]);
 //////////////////////////////////////////////////////////////////////////////////////////////////
 // change password

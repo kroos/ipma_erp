@@ -42,7 +42,7 @@ class QuotationController extends Controller
 	public function store(Request $request)
 	{
 		// dd($request->all());
-		$qt = \Auth::user()->belongtostaff->hasmanyquotation()->create( array_add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'mutual', 'from', 'to', 'period_id', 'validity']), 'active', 1) );
+		$qt = \Auth::user()->belongtostaff->hasmanyquotation()->create( array_add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'mutual', 'from', 'to', 'period_id', 'validity', 'bank_id']), 'active', 1) );
 
 		if ($request->has('qs')) {
 			foreach ($request->qs as $k1 => $v1) {
@@ -129,6 +129,22 @@ class QuotationController extends Controller
 			}
 		}
 
+		if($request->has('qsdealer')) {
+			foreach ($request->qsdealer as $k7 => $v7) {
+				$qt->hasmanydealer()->create([
+					'dealer_id' => $v7['dealer_id'],
+				]);
+			}
+		}
+
+		if($request->has('qswarranty')) {
+			foreach ($request->qswarranty as $k8 => $v8) {
+				$qt->hasmanywarranty()->create([
+					'warranty_id' => $v8['warranty_id'],
+				]);
+			}
+		}
+
 		Session::flash('flash_message', 'Data successfully stored!');
 		return redirect(route('quot.index'));
 	}
@@ -145,8 +161,13 @@ class QuotationController extends Controller
 
 	public function update(Request $request, QuotQuotation $quot)
 	{
-		// dd($request->all());
-		$quot->update( array_add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'mutual', 'from', 'to', 'period_id', 'validity']), 'active', 1) );
+		if(is_null($request->bank_id)){
+			$bank = NULL;
+		} else {
+			$bank = $request->bank_id;
+		}
+		// dd( array_add($request->all(), 'bank', $bank) );
+		$quot->update( array_add(array_add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'mutual', 'from', 'to', 'period_id', 'validity']), 'active', 1), 'bank_id', $bank) );
 // dd($request->mutual);
 		// if( $request->has('mutual') ) {
 		// 	foreach($request->mutual as $k => $v) {
@@ -219,20 +240,32 @@ class QuotationController extends Controller
 									});
 
 									$imag->save();
-								} else {
-									$image = NULL;
-								}
 
-								$qw2->hasmanyquotsectionitemattrib()->updateOrCreate(
-								[
-									'id' => $v3['id']
-								],
-								[
-									'attribute_id' => $v3['attribute_id'],
-									'description_attribute' => $v3['description_attribute'],
-									'remarks' => $v3['remarks'],
-									'image' => $image,
-								]);
+									$qw2->hasmanyquotsectionitemattrib()->updateOrCreate(
+									[
+										'id' => $v3['id']
+									],
+									[
+										'attribute_id' => $v3['attribute_id'],
+										'description_attribute' => $v3['description_attribute'],
+										'remarks' => $v3['remarks'],
+										'image' => $image,
+									]);
+
+								} else {
+
+									$qw2->hasmanyquotsectionitemattrib()->updateOrCreate(
+									[
+										'id' => $v3['id']
+									],
+									[
+										'attribute_id' => $v3['attribute_id'],
+										'description_attribute' => $v3['description_attribute'],
+										'remarks' => $v3['remarks'],
+										// 'image' => $image,
+									]);
+
+								}
 							}
 						}
 					}
@@ -274,6 +307,30 @@ class QuotationController extends Controller
 					[
 						// 'quot_id' => $v6['quot_id'],
 						'remark_id' => $v6['remark_id'],
+					]);
+			}
+		}
+
+		if($request->has('qsdealer')) {
+			foreach ($request->qsdealer as $k7 => $v7) {
+				$quot->hasmanydealer()->updateOrCreate(
+					[
+						'id' => $v7['id']
+					],
+					[
+						'dealer_id' => $v7['dealer_id'],
+					]);
+			}
+		}
+
+		if($request->has('qswarranty')) {
+			foreach ($request->qswarranty as $k8 => $v8) {
+				$quot->hasmanywarranty()->updateOrCreate(
+					[
+						'id' => $v8['id']
+					],
+					[
+						'warranty_id' => $v8['warranty_id'],
 					]);
 			}
 		}

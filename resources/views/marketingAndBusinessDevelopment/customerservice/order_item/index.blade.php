@@ -32,6 +32,13 @@
 				<span class="float-right"> <a href="{!! route('csOrder.create') !!}" class="btn btn-primary btn-sm">Create Customer Order Item/Part</a></span>
 			</div>
 			<div class="card-body">
+
+				<ul class="nav nav-tabs">
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('customer.index') }}">Customer</a>
+					</li>
+				</ul>
+
 @include('marketingAndBusinessDevelopment.customerservice.order_item._index')
 			</div>
 		</div>

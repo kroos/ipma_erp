@@ -195,6 +195,103 @@
 </div>
 
 
+<!-- dealer -->
+<div class="row">
+	{{ Form::label( 'dealer', 'Dealer Clause : ', ['class' => 'col-2 col-form-label'] ) }}
+	<div class=" col-10">
+
+		<div class="dealer_wrapper">
+			<div class="row dealer_row">
+				<div class="col-1 text-danger dealer_delete" data-id="1">
+					<i class="fas fa-trash" aria-hidden="true"></i>
+				</div>
+
+				<div class="form-group col {{ $errors->has('qsdealer.*.dealer_id') ? 'has-error' : '' }}">
+					<select name="qsdealer[1][dealer_id]" class="form-control form-control-sm" id="dealer_1" placeholder="Please choose">
+						<option value="">Please choose</option>
+					@foreach(\App\Model\QuotDealer::all() as $dea)
+						<option value="{!! $dea->id !!}" >{!! $dea->dealer !!}</option>
+					@endforeach
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="row col-3 dealer_add">
+			<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Dealer</p>
+		</div>
+
+	</div>
+</div>
+
+
+
+<!-- warranty -->
+<div class="row">
+	{{ Form::label( 'warr', 'Warranty : ', ['class' => 'col-2 col-form-label'] ) }}
+	<div class=" col-10">
+
+		<div class="warranty_wrapper">
+
+			<div class="row warranty_row">
+				<div class="col-1 text-danger warranty_delete" data-id="1">
+					<i class="fas fa-trash" aria-hidden="true"></i>
+				</div>
+
+				<div class="form-group col {{ $errors->has('qswarranty.*.warranty_id') ? 'has-error' : '' }}">
+					<select name="qswarranty[1][warranty_id]" class="form-control form-control-sm" id="warranty_1" placeholder="Please choose">
+						<option value="">Please choose</option>
+					@foreach(\App\Model\QuotWarranty::all() as $dea)
+						<option value="{!! $dea->id !!}" >{!! $dea->warranty !!}</option>
+					@endforeach
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="row col-3 warranty_add">
+			<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Warranty</p>
+		</div>
+
+	</div>
+</div>
+
+
+<!-- bank -->
+<div class="row">
+	{{ Form::label( 'bnk', 'Bank : ', ['class' => 'col-2 col-form-label'] ) }}
+	<div class="row col-10">
+
+@foreach(\App\Model\QuotBank::all() as $dea)
+
+<div class="col-6">
+	<div class="card">
+		<div class="card-header">
+			<div class="form-group {{ $errors->has('bank_id')">
+				<input type="radio" name="bank_id" value="{!! $dea->id !!}" aria-describedby="emailHelp_{!! $dea->id !!}" id="bank_{!! $dea->id !!}" >
+				<label for="bank_{!! $dea->id !!}">Option {!! $dea->id !!}</label>
+				<small id="emailHelp_{!! $dea->id !!}" class="form-text text-muted">Click again to remove this option.</small>
+			</div>
+		</div>
+		<div class="card-body">
+			{!! nl2br($dea->bank) !!}
+		</div>
+	</div>
+</div>
+
+@endforeach
+
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
 
 
 

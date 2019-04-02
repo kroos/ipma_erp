@@ -64,4 +64,9 @@ class QuotQuotation extends Model
 	{
 		return $this->belongsTo('\App\Model\Currency', 'currency_id');
 	}
+
+	public function belongtobank()
+	{
+		return $this->belongsTo('\App\Model\QuotBank', 'bank_id');
+	}
 }

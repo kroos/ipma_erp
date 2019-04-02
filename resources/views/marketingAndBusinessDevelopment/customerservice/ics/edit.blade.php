@@ -2705,9 +2705,9 @@ $('#form').bootstrapValidator({
 		'srj[{{ $xc }}][srjde][2][meter_start]': {
 			group: '.form-group',
 			validators : {
-				notEmpty: {
-					message: 'Please insert this field. '
-				},
+//				notEmpty: {
+//					message: 'Please insert this field. '
+//				},
 				integer: {
 					message: 'The value is not an integer. '
 				},
@@ -2721,9 +2721,9 @@ $('#form').bootstrapValidator({
 		'srj[{{ $xc }}][srjde][2][meter_end]': {
 			group: '.form-group',
 			validators : {
-				notEmpty: {
-					message: 'Please insert this field. '
-				},
+//				notEmpty: {
+//					message: 'Please insert this field. '
+//				},
 				integer: {
 					message: 'The value is not an integer. '
 				},

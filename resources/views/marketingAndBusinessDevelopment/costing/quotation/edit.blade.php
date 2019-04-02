@@ -47,13 +47,22 @@
 						<a class="nav-link" href="{{ route('quotItemAttrib.index') }}">Product / Item Attribute</a>
 					</li>
 					<li class="nav-item">
+						<a class="nav-link" href="{{ route('quotUOM.index') }}">Unit Of Measurement</a>
+					</li>
+					<li class="nav-item">
 						<a class="nav-link" href="{{ route('quotRem.index') }}">Remarks</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="{{ route('quotExcl.index') }}">Exclusion</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{ route('quotUOM.index') }}">Unit Of Measurement</a>
+						<a class="nav-link" href="{{ route('quotDeal.index') }}">Dealer</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('quotWarr.index') }}">Warranty</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('quotBank.index') }}">Bank</a>
 					</li>
 				</ul>
 
@@ -86,6 +95,16 @@ $rev = $quot->hasmanyrevision()->get()->max('id');
 $('.name1').popover({ 
 	trigger: "hover",
 	html: true,
+});
+
+$("input:radio").on("click",function (e) {
+	var inp=$(this);
+	if (inp.is(".theone")) {
+		inp.prop("checked",false).removeClass("theone");
+	} else {
+		$("input:radio[name='"+inp.prop("name")+"'].theone").removeClass("theone");
+		inp.addClass("theone");
+	}
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -133,7 +152,31 @@ $('#curr, #cust, #tax_id, #ddp, #exclusion_1, #remark_1').select2({
 	@endforeach
 @endif
 
+// dealer
+@if($quot->hasmanydealer()->get()->count())
+<?php $n3 = 1 ?>
+	@foreach($quot->hasmanydealer()->get() as $nb)
+		$('#dealer_{!! $n3++ !!}').select2({
+					placeholder: 'Please choose',
+					allowClear: true,
+					closeOnSelect: true,
+					width: '100%',
+				});
+	@endforeach
+@endif
 
+// warranty
+@if($quot->hasmanywarranty()->get()->count())
+<?php $n4 = 1 ?>
+	@foreach($quot->hasmanywarranty()->get() as $nb)
+		$('#warranty_{!! $n4++ !!}').select2({
+					placeholder: 'Please choose',
+					allowClear: true,
+					closeOnSelect: true,
+					width: '100%',
+				});
+	@endforeach
+@endif
 
 // section, item, attrib
 <?php
@@ -728,6 +771,67 @@ $(document).on('click', '.dea_remove', function(e) {
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// add more rows on warranty
+var max_warr	= 20;		//maximum input boxes allowed
+var xwarr = {!! ($quot->hasmanywarranty()->get()->count())?$quot->hasmanywarranty()->get()->count():0 !!};
+
+$(document).on('click', '.warranty_add', function() {
+	var warranty_wrapper = $(this).parent().children('.warranty_wrapper');
+	// warranty_wrapper.css('border', 'solid 1px red');
+
+	if(xwarr < max_warr){
+		xwarr++;
+		$(warranty_wrapper).append(
+
+			'<div class="row warranty_row">' +
+				'<div class="col-1 text-danger warranty_remove" data-id="' + xwarr + '">' +
+					'<i class="fas fa-trash" aria-hidden="true"></i>' +
+				'</div>' +
+				'<input type="hidden" name="qswarranty[' + xwarr + '][id]" value="">' +
+				'<div class="form-group col {{ $errors->has('qswarranty.*.warranty_id') ? 'has-error' : '' }}">' +
+					'<select name="qswarranty[' + xwarr + '][warranty_id]" class="form-control form-control-sm" id="warranty_' + xwarr + '" placeholder="Please choose">' +
+						'<option value="">Please choose</option>' +
+					@foreach(\App\Model\QuotWarranty::all() as $dea)
+						'<option value="{!! $dea->id !!}" >{!! $dea->warranty !!}</option>' +
+					@endforeach
+					'</select>' +
+				'</div>' +
+			'</div>'
+
+		);		// add input box
+
+		// select2
+		$( '#warranty_' + xwarr ).select2({
+			placeholder: 'Please choose',
+			allowClear: true,
+			closeOnSelect: true,
+			width: '100%',
+		});
+
+		//bootstrap validate
+		$('#form').bootstrapValidator('addField',$('.warranty_row').find('[name="qswarranty[' + xwarr + '][warranty_id]"]'));
+	}
+
+});
+
+$(document).on('click', '.warranty_remove', function(e) {
+	var warranty_id = $(this).data('id');
+
+	e.preventDefault();
+	var $row8 = $(this).parent('.warranty_row');
+	// $row8.css('border', 'solid 1px red');
+
+	var $option16 = $row8.find('[name="qswarranty[' + warranty_id + '][warranty_id]"]');
+
+	$('#form').bootstrapValidator('removeField', $option16);
+	$row8.remove();
+
+	// $option16.css('border', 'solid 1px red');
+
+	xwarr--;
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ajax post delete row section
 $(document).on('click', '.section_delete', function(e){
 	var section_id = $(this).data('sectionid');
@@ -1018,6 +1122,108 @@ function SwalDeleteRemark(rem_id){
 						window.location.reload(true);
 					});
 					//$('#delete_product_' + rem_id).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row dealer
+$(document).on('click', '.dealer_delete', function(e){
+	var deal_id = $(this).data('id');
+	SwalDeleteDealer(deal_id);
+	e.preventDefault();
+});
+
+function SwalDeleteDealer(deal_id){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('quotDealer') }}' + '/' + deal_id,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							// id: deal_id,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_product_' + deal_id).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row warranty
+$(document).on('click', '.warranty_delete', function(e){
+	var warranty_id = $(this).data('id');
+	SwalDeleteWarranty(warranty_id);
+	e.preventDefault();
+});
+
+function SwalDeleteWarranty(warranty_id){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('quotWarranty') }}' + '/' + warranty_id,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							// id: warranty_id,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_product_' + warranty_id).parent().parent().remove();
 				})
 				.fail(function(){
 					swal('Oops...', 'Something went wrong with ajax !', 'error');

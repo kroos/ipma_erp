@@ -11,6 +11,6 @@ class QuotBank extends Model
 
 	public function hasmanyquotbank()
 	{
-		return $this->hasMany('App\Model\QuotQuotationBank', 'bank_id');
+		return $this->hasOne('App\Model\QuotQuotation', 'bank_id');
 	}
 }
