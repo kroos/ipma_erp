@@ -39,7 +39,7 @@
 						<a class="nav-link" href="{{ route('machine_model.index') }}">Model</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{ route('quotdd.index') }}">Delivery Date</a>
+						<a class="nav-link" href="{{ route('quotdd.index') }}">UOM Delivery Date Period</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="{{ route('quotItem.index') }}">Product / Item</a>

@@ -20,14 +20,19 @@ class QuotationDeliveryDateController extends Controller
 
 	public function index()
 	{
+		return view('quotation.delivery_date.index');
 	}
 
 	public function create()
 	{
+		return view('quotation.delivery_date.create');
 	}
 
 	public function store(Request $request)
 	{
+		QuotDeliveryDate::create($request->only(['delivery_date_period']));
+		Session::flash('flash_message', 'Data successfully stored!');
+		return redirect(route('quotdd.index'));
 	}
 
 	public function show(QuotDeliveryDate $quotdd)
@@ -37,11 +42,14 @@ class QuotationDeliveryDateController extends Controller
 
 	public function edit(QuotDeliveryDate $quotdd)
 	{
+		return view('quotation.delivery_date.edit', compact(['quotdd']));
 	}
 
 	public function update(Request $request, QuotDeliveryDate $quotdd)
 	{
-	//
+		$quotdd->update($request->only(['delivery_date_period']));
+		Session::flash('flash_message', 'Data successfully updated!');
+		return redirect(route('quotdd.index'));
 	}
 
 	public function destroy(QuotDeliveryDate $quotdd)

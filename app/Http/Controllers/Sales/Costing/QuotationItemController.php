@@ -20,6 +20,7 @@ class QuotationItemController extends Controller
 
 	public function index()
 	{
+		return view('quotation.item.index');
 	}
 
 	public function create()
