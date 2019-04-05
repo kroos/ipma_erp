@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header"><h1>Add Machine Model</h1></div>
+	<div class="card-header"><h1>Costing Department</h1></div>
 	<div class="card-body">
 		@include('layouts.info')
 		@include('layouts.errorform')
@@ -26,8 +26,7 @@
 
 		<div class="card">
 			<div class="card-header">
-				Quotation List
-				<a href="{{ route('quot.create') }}" class="btn btn-primary float-right">Add Quotation</a>
+				Quatation
 			</div>
 			<div class="card-body">
 
@@ -39,10 +38,10 @@
 						<a class="nav-link" href="{{ route('machine_model.index') }}">Model</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link active" href="{{ route('quotdd.index') }}">UOM Delivery Date Period</a>
+						<a class="nav-link" href="{{ route('quotdd.index') }}">UOM Delivery Date Period</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{ route('quotItem.index') }}">Product / Item</a>
+						<a class="nav-link active" href="{{ route('quotItem.index') }}">Product / Item</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="{{ route('quotItemAttrib.index') }}">Product / Item Attribute</a>
@@ -67,8 +66,8 @@
 					</li>
 				</ul>
 
-{!! Form::open(['route' => ['quotdd.store'], 'id' => 'form', 'files' => true]) !!}
-	@include('quotation.delivery_date._create')
+{!! Form::open(['route' => ['quotItem.store'], 'id' => 'form', 'files' => true]) !!}
+	@include('quotation.item._form')
 {{ Form::close() }}
 		
 	</div>
@@ -94,11 +93,36 @@ $('#form').bootstrapValidator({
 		validating: ''
 	},
 	fields: {
-		delivery_date_period: {
+		item: {
 			validators: {
 				notEmpty: {
-					message: 'UOM Delivery Date Period is required. '
+					message: 'Product / Item is required. '
 				},
+			}
+		},
+		info: {
+			validators: {
+				// notEmpty: {
+				// 	message: 'Product / Item is required. '
+				// },
+			}
+		},
+		price: {
+			validators: {
+				notEmpty: {
+					message: 'Product / Item is required. '
+				},
+				numeric: {
+					separator: '.',
+					message: 'The value must be in numeric. ',
+				}
+			}
+		},
+		remarks: {
+			validators: {
+				// notEmpty: {
+				// 	message: 'Product / Item is required. '
+				// },
 			}
 		},
 	}

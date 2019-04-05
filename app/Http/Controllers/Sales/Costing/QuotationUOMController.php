@@ -20,14 +20,19 @@ class QuotationUOMController extends Controller
 
 	public function index()
 	{
+		return view('quotation.uom.index');
 	}
 
 	public function create()
 	{
+		return view('quotation.uom.create');
 	}
 
 	public function store(Request $request)
 	{
+		QuotUOM::create($request->only('uom'));
+		Session::flash('flash_message', 'Data successfully stored!');
+		return redirect(route('quotUOM.index'));
 	}
 
 	public function show(QuotUOM $quotUOM)
@@ -37,11 +42,14 @@ class QuotationUOMController extends Controller
 
 	public function edit(QuotUOM $quotUOM)
 	{
+		return view('quotation.uom.edit', compact('quotUOM'));
 	}
 
 	public function update(Request $request, QuotUOM $quotUOM)
 	{
-	//
+		$quotUOM->update($request->uom);
+		Session::flash('flash_message', 'Data successfully updated!');
+		return redirect(route('quotUOM.index'));
 	}
 
 	public function destroy(QuotUOM $quotUOM)

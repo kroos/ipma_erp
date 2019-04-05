@@ -42,7 +42,7 @@
 						<a class="nav-link" href="{{ route('quotdd.index') }}">UOM Delivery Date Period</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link active" href="{{ route('quotItem.index') }}">Product / Item</a>
+						<a class="nav-link" href="{{ route('quotItem.index') }}">Product / Item</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="{{ route('quotItemAttrib.index') }}">Product / Item Attribute</a>
@@ -51,7 +51,7 @@
 						<a class="nav-link" href="{{ route('quotUOM.index') }}">Unit Of Measurement</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{ route('quotRem.index') }}">Remarks</a>
+						<a class="nav-link active" href="{{ route('quotRem.index') }}">Remarks</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="{{ route('quotExcl.index') }}">Exclusion</a>
@@ -67,8 +67,8 @@
 					</li>
 				</ul>
 
-{{ Form::model( $quotItem, ['route' => ['quotItem.update', $quotItem->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
-	@include('quotation.item._form')
+{{ Form::model( $quotRem, ['route' => ['quotRem.update', $quotRem->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
+	@include('quotation.remarks._form')
 {{ Form::close() }}
 		
 	</div>
@@ -93,36 +93,11 @@ $('#form').bootstrapValidator({
 		validating: ''
 	},
 	fields: {
-		item: {
+		quot_remarks: {
 			validators: {
 				notEmpty: {
-					message: 'Product / Item is required. '
+					message: 'Remarks is required. '
 				},
-			}
-		},
-		info: {
-			validators: {
-				// notEmpty: {
-				// 	message: 'Product / Item is required. '
-				// },
-			}
-		},
-		price: {
-			validators: {
-				notEmpty: {
-					message: 'Product / Item is required. '
-				},
-				numeric: {
-					separator: '.',
-					message: 'The value must be in numeric. ',
-				}
-			}
-		},
-		remarks: {
-			validators: {
-				// notEmpty: {
-				// 	message: 'Product / Item is required. '
-				// },
 			}
 		},
 	}

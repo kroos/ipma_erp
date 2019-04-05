@@ -20,14 +20,19 @@ class QuotationItemAttributeController extends Controller
 
 	public function index()
 	{
+		return view('quotation.attrib.index');
 	}
 
 	public function create()
 	{
+		return view('quotation.attrib.create');
 	}
 
 	public function store(Request $request)
 	{
+		QuotItemAttribute::create($request->only('attribute'));
+		Session::flash('flash_message', 'Data successfully stored!');
+		return redirect(route('quotItemAttrib.index'));
 	}
 
 	public function show(QuotItemAttribute $quotItemAttrib)
@@ -37,11 +42,14 @@ class QuotationItemAttributeController extends Controller
 
 	public function edit(QuotItemAttribute $quotItemAttrib)
 	{
+		return view('quotation.attrib.edit', compact('quotItemAttrib'));
 	}
 
 	public function update(Request $request, QuotItemAttribute $quotItemAttrib)
 	{
-	//
+		$quotItemAttrib->update( $request->only('attribute') );
+		Session::flash('flash_message', 'Data successfully updated!');
+		return redirect(route('quotItemAttrib.index'));
 	}
 
 	public function destroy(QuotItemAttribute $quotItemAttrib)

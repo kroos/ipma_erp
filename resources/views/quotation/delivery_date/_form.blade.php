@@ -1,5 +1,5 @@
 <div class="card">
-	<div class="card-header">Edit UOM Delivery Date Period</div>
+	<div class="card-header">UOM Delivery Date Period</div>
 	<div class="card-body">
 
 		<div class="form-group row {{ $errors->has('delivery_date_period')?'has-error':'' }}">

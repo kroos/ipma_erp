@@ -42,13 +42,13 @@
 						<a class="nav-link" href="{{ route('quotdd.index') }}">UOM Delivery Date Period</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link active" href="{{ route('quotItem.index') }}">Product / Item</a>
+						<a class="nav-link" href="{{ route('quotItem.index') }}">Product / Item</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="{{ route('quotItemAttrib.index') }}">Product / Item Attribute</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{ route('quotUOM.index') }}">Unit Of Measurement</a>
+						<a class="nav-link active" href="{{ route('quotUOM.index') }}">Unit Of Measurement</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="{{ route('quotRem.index') }}">Remarks</a>
@@ -67,7 +67,7 @@
 					</li>
 				</ul>
 
-				@include('quotation.item._content')
+				@include('quotation.uom._content')
 			</div>
 		</div>
 
@@ -87,7 +87,7 @@ $(document).on('keyup', 'input', function () {
 // $.fn.dataTable.moment( 'ddd, D MMM YYYY' );
 $("#mmodel").DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	"order": [[1, "asc" ]],	// sorting the 2nd column ascending
+	"order": [[0, "asc" ]],	// sorting the 2nd column ascending
 	// responsive: true
 });
 

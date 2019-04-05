@@ -8,7 +8,11 @@
 			<thead>
 				<tr>
 					<th>ID</th>
-					<th>UOM Period</th>
+					<th>Product/Item</th>
+					<th>Info</th>
+					<th>Price</th>
+					<th>Remarks</th>
+					<th>Active</th>
 					<th>&nbsp;</th>
 				</tr>
 			</thead>
@@ -16,12 +20,16 @@
 @foreach(\App\Model\QuotItem::all() as $k)
 				<tr>
 					<td>{{ $k->id }}</td>
-					<td>{{ $k->delivery_date_period }}</td>
+					<td>{{ $k->item }}</td>
+					<td>{{ $k->info }}</td>
+					<td>{{ $k->price }}</td>
+					<td>{{ $k->remarks }}</td>
 					<td>
-						<div class="row">
-							<a href="{!! route('quotdd.edit', $k->id) !!}" title="Update"><i class="far fa-edit"></i></a>
-							<span class="text-danger delete_model" data-id="{!! $k->id !!}" title="Delete"><i class="far fa-trash-alt"></i></span>
-						</div>
+						<span class="text-{!! ($k->active == 1)?'success':'danger' !!} toggle" data-id="{{ $k->id }}" data-value="{!! ($k->active == 1)?0:1 !!}" title="{!! ($k->active == 1)?'Deactivate':'Activate' !!}"><i class="fa fa-toggle-{!! ($k->active == 1)?'on':'off' !!}"></i></span>
+					</td>
+					<td class="row">
+						<a href="{!! route('quotItem.edit', $k->id) !!}" title="Update"><i class="far fa-edit"></i></a>
+						<!-- <span class="text-danger delete_item" data-id="{!! $k->id !!}" title="Delete"><i class="far fa-trash-alt"></i></span> -->
 					</td>
 				</tr>
 @endforeach

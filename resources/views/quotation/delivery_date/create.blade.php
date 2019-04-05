@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header"><h1>Add Machine Model</h1></div>
+	<div class="card-header"><h1>Costing Department</h1></div>
 	<div class="card-body">
 		@include('layouts.info')
 		@include('layouts.errorform')
@@ -26,7 +26,7 @@
 
 		<div class="card">
 			<div class="card-header">
-				Quotation List
+				Quotation
 				<a href="{{ route('quot.create') }}" class="btn btn-primary float-right">Add Quotation</a>
 			</div>
 			<div class="card-body">
@@ -68,7 +68,7 @@
 				</ul>
 
 {!! Form::open(['route' => ['quotdd.store'], 'id' => 'form', 'files' => true]) !!}
-	@include('quotation.delivery_date._create')
+	@include('quotation.delivery_date._form')
 {{ Form::close() }}
 		
 	</div>

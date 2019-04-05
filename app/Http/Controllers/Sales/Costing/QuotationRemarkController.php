@@ -20,14 +20,19 @@ class QuotationRemarkController extends Controller
 
 	public function index()
 	{
+		return view('quotation.remarks.index');
 	}
 
 	public function create()
 	{
+		return view('quotation.remarks.create');
 	}
 
 	public function store(Request $request)
 	{
+		QuotRemark::create( $request->only('quot_remarks') );
+		Session::flash('flash_message', 'Data successfully stored!');
+		return redirect(route('quotRem.index'));
 	}
 
 	public function show(QuotRemark $quotRem)
@@ -37,11 +42,14 @@ class QuotationRemarkController extends Controller
 
 	public function edit(QuotRemark $quotRem)
 	{
+		return view('quotation.remarks.edit', compact('quotRem'));
 	}
 
 	public function update(Request $request, QuotRemark $quotRem)
 	{
-	//
+		$quotRem->update( $request->only('quot_remarks') );
+		Session::flash('flash_message', 'Data successfully stored!');
+		return redirect(route('quotRem.index'));
 	}
 
 	public function destroy(QuotRemark $quotRem)

@@ -26,8 +26,7 @@
 
 		<div class="card">
 			<div class="card-header">
-				Quotation
-				<a href="{{ route('quot.create') }}" class="btn btn-primary float-right">Add Quotation</a>
+				Add Product / Item
 			</div>
 			<div class="card-body">
 
@@ -42,10 +41,10 @@
 						<a class="nav-link" href="{{ route('quotdd.index') }}">UOM Delivery Date Period</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link active" href="{{ route('quotItem.index') }}">Product / Item</a>
+						<a class="nav-link" href="{{ route('quotItem.index') }}">Product / Item</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="{{ route('quotItemAttrib.index') }}">Product / Item Attribute</a>
+						<a class="nav-link active" href="{{ route('quotItemAttrib.index') }}">Product / Item Attribute</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="{{ route('quotUOM.index') }}">Unit Of Measurement</a>
@@ -67,8 +66,8 @@
 					</li>
 				</ul>
 
-{{ Form::model( $quotItem, ['route' => ['quotItem.update', $quotItem->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
-	@include('quotation.item._form')
+{!! Form::open(['route' => ['quotItemAttrib.store'], 'id' => 'form', 'files' => true]) !!}
+	@include('quotation.attrib._form')
 {{ Form::close() }}
 		
 	</div>
@@ -84,6 +83,7 @@ $(document).on('keyup', 'input', function () {
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 // bootstrap validator
 
 $('#form').bootstrapValidator({
@@ -93,36 +93,11 @@ $('#form').bootstrapValidator({
 		validating: ''
 	},
 	fields: {
-		item: {
+		attribute: {
 			validators: {
 				notEmpty: {
-					message: 'Product / Item is required. '
+					message: 'Product Attribute is required. '
 				},
-			}
-		},
-		info: {
-			validators: {
-				// notEmpty: {
-				// 	message: 'Product / Item is required. '
-				// },
-			}
-		},
-		price: {
-			validators: {
-				notEmpty: {
-					message: 'Product / Item is required. '
-				},
-				numeric: {
-					separator: '.',
-					message: 'The value must be in numeric. ',
-				}
-			}
-		},
-		remarks: {
-			validators: {
-				// notEmpty: {
-				// 	message: 'Product / Item is required. '
-				// },
 			}
 		},
 	}

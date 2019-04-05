@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="card">
-	<div class="card-header"><h1>Edit UOM Delivery Date Period</h1></div>
+	<div class="card-header"><h1>Costing Department</h1></div>
 	<div class="card-body">
 		@include('layouts.info')
 		@include('layouts.errorform')
@@ -26,7 +26,7 @@
 
 		<div class="card">
 			<div class="card-header">
-				Quotation List
+				Quotation
 				<a href="{{ route('quot.create') }}" class="btn btn-primary float-right">Add Quotation</a>
 			</div>
 			<div class="card-body">
@@ -68,7 +68,7 @@
 				</ul>
 
 {{ Form::model( $quotdd, ['route' => ['quotdd.update', $quotdd->id], 'method' => 'PATCH', 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) }}
-	@include('quotation.delivery_date._edit')
+	@include('quotation.delivery_date._form')
 {{ Form::close() }}
 		
 	</div>

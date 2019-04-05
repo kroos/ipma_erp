@@ -312,6 +312,13 @@ Route::post('csOrder/deliverymethodstore', [
 		'uses' => 'Sales\CustomerService\CSOrderController@deliverymethodstore'
 	]);
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// quotation item
+Route::patch('/quotItem/{quotItem}/updatetoggle', [
+		'as' => 'quotItem.updateitem',
+		'uses' => 'Sales\Costing\QuotationItemController@updateitem'
+	]);
+
 ############################################################################
 // Division Page Controller
 Route::resources([
