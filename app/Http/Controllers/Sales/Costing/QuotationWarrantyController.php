@@ -20,14 +20,19 @@ class QuotationWarrantyController extends Controller
 
 	public function index()
 	{
+		return view('quotation.warranty.index');
 	}
 
 	public function create()
 	{
+		return view('quotation.warranty.create');
 	}
 
 	public function store(Request $request)
 	{
+		QuotWarranty::create($request->only(['warranty']));
+		Session::flash('flash_message', 'Data successfully stored!');
+		return redirect(route('quotWarr.index'));
 	}
 
 	public function show(QuotWarranty $quotWarr)
@@ -37,11 +42,14 @@ class QuotationWarrantyController extends Controller
 
 	public function edit(QuotWarranty $quotWarr)
 	{
+		return view('quotation.warranty.edit', compact(['quotWarr']));
 	}
 
 	public function update(Request $request, QuotWarranty $quotWarr)
 	{
-	//
+		$quotWarr->update($request->only(['warranty']));
+		Session::flash('flash_message', 'Data successfully updated!');
+		return redirect(route('quotWarr.index'));
 	}
 
 	public function destroy(QuotWarranty $quotWarr)

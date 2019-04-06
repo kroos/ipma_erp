@@ -151,7 +151,7 @@ class QuotationController extends Controller
 
 	public function show(QuotQuotation $quot)
 	{
-		//
+		echo view('pdfleave.quotation', compact(['quot']));
 	}
 
 	public function edit(QuotQuotation $quot)

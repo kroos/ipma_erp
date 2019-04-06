@@ -20,14 +20,19 @@ class QuotationBankController extends Controller
 
 	public function index()
 	{
+		return view('quotation.bank.index');
 	}
 
 	public function create()
 	{
+		return view('quotation.bank.create');
 	}
 
 	public function store(Request $request)
 	{
+		QuotBank::create($request->only('bank'));
+		Session::flash('flash_message', 'Data successfully stored!');
+		return redirect(route('quotBank.index'));
 	}
 
 	public function show(QuotBank $quotBank)
@@ -37,11 +42,14 @@ class QuotationBankController extends Controller
 
 	public function edit(QuotBank $quotBank)
 	{
+		return view('quotation.bank.edit', compact(['quotBank']));
 	}
 
 	public function update(Request $request, QuotBank $quotBank)
 	{
-	//
+		$quotBank->updated($request->only('bank'));
+		Session::flash('flash_message', 'Data successfully updated!');
+		return redirect(route('quotBank.index'));
 	}
 
 	public function destroy(QuotBank $quotBank)

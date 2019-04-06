@@ -65,7 +65,7 @@ if( $ch3 > 0 ) {
 					<td>{!! $cs->description !!}</td>
 					<td>
 		@if($cs->hasmanyorderitem()->get()->count())
-						{!! Form::open(['route' => ['csOrder.delivery'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true]) !!}
+						{!! Form::open(['route' => ['csOrder.delivery'], 'id' => 'form', 'autocomplete' => 'off', 'files' => true, 'target' => '_blank']) !!}
 						<table class="table table-hover table-sm" style="font-size:12px" id="orderitem2">
 							<thead>
 								<tr>
