@@ -15,7 +15,7 @@ use Carbon\CarbonPeriod;
 $dts = \Carbon\Carbon::parse($quot->date);
 $arr = str_split( $dts->format('Y'), 2 );
 if($quot->hasmanyrevision()->get()->count()) {
-	$rev = '-'.$quot->hasmanyrevision()->get()->max('id');
+	$rev = '-'.$quot->hasmanyrevision()->get()->count('id');
 } else {
 	$rev = NULL;
 }
@@ -163,18 +163,27 @@ class PDF extends Fpdf
 
 	// $pdf->Cell(0, 5, $induk, 0, 1, 'L'); // 210
 
-	// $pdf->Cell(0, 5, $pdf->GetY(), 0, 1, 'L'); // 210
 	// $pdf->Cell(0, 5, $pdf->GetX(), 0, 1, 'L'); // 210
 	// $pdf->Cell(0, 5, $pdf->GetPageHeight(), 0, 1, 'L'); // 148
 	// $pdf->Cell(0, 5, $pdf->GetPageWidth(), 0, 1, 'L'); // 210
 
 	// reset font
+	$pdf->Ln(25);
 	$pdf->SetFont('Arial', NULL, 9);
 
-	$pdf->Cell(15, 5, 'Our Ref :', 1, 0, 'L');
-	$pdf->Cell(15, 5, 'QT-'.$quot->id.'/'.$arr[1].$rev, 1, 0, 'L');
+	$pdf->Cell(20, 5, 'Our Ref :', 0, 0, 'L');
+	$pdf->Cell(20, 5, 'QT-'.$quot->id.'/'.$arr[1].$rev, 0, 1, 'L');
 
-	$filename = 'Quotation .pdf';
+	$pdf->Cell(20, 5, 'Date :', 0, 0, 'L');
+	$pdf->Cell(20, 5, Carbon::parse($quot->date)->format('d F Y'), 0, 1, 'L');
+
+	$pdf->Ln(5);
+	$pdf->SetFont('Arial', 'B', 9);
+	$pdf->Cell(20, 5, $quot->belongtocustomer->customer, 0, 1, 'L');
+
+
+
+	$filename = 'Quotation.pdf';
 
 	// use ob_get_clean() to make sure that the correct header is sent to the server so the correct pdf is being output
 	ob_get_clean();
