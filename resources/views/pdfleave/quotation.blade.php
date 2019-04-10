@@ -180,6 +180,73 @@ class PDF extends Fpdf
 	$pdf->Ln(5);
 	$pdf->SetFont('Arial', 'B', 9);
 	$pdf->Cell(20, 5, $quot->belongtocustomer->customer, 0, 1, 'L');
+	$pdf->SetFont('Arial', NULL, 9);
+	$pdf->Cell(20, 5, $quot->belongtocustomer->address1, 0, 1, 'L');
+	$pdf->Cell(20, 5, $quot->belongtocustomer->address2, 0, 1, 'L');
+	$pdf->Cell(20, 5, $quot->belongtocustomer->address3, 0, 1, 'L');
+	$pdf->Cell(20, 5, $quot->belongtocustomer->address4, 0, 1, 'L');
+	$pdf->Ln(5);
+
+	$pdf->SetFont('Arial', 'IB', 9);
+	$pdf->Cell(20, 5, 'Attn :', 0, 0, 'L');
+	$pdf->Cell(20, 5, $quot->attn, 0, 1, 'L');
+
+	$pdf->Ln(5);
+	$pdf->SetFont('Arial', NULL, 9);
+	$pdf->Cell(20, 5, 'Dear Sir,', 0, 1, 'L');
+
+	$pdf->SetFont('Arial', 'B', 9);
+	$pdf->Cell(20, 5, $quot->subject, 0, 1, 'L');
+
+	$pdf->Ln(5);
+	$pdf->SetFont('Arial', NULL, 9);
+	$pdf->Cell(20, 5, 'Thank you very much for your enquiry of the above. We are pleased to quote below for your kind consideration :', 0, 1, 'L');
+	$pdf->Ln(5);
+
+
+	// set width for each column (5 columns)
+	$pdf->SetWidths([10, 110, 20, 20, 30]);
+
+
+// ITEM SECTION
+	// if there is only 1 section
+	if($quot->hasmanyquotsection()->get()->count() == 1) {
+
+		$pdf->SetFont('Arial', 'B', 9);
+		$pdf->Cell(10, 5, 'No', 'B', 0, 'L');
+		$pdf->Cell(110, 5, 'Description', 'B', 0, 'L');
+		$pdf->Cell(20, 5, 'Quantity', 'B', 0, 'L');
+		$pdf->Cell(20, 5, 'Unit Price', 'B', 0, 'L');
+		$pdf->Cell(30, 5, 'Total Price', 'B', 1, 'L');
+
+		// foreach(){
+
+		// }
+
+	} else {
+
+		$pdf->SetFont('Arial', 'B', 9);
+		$pdf->Cell(10, 5, 'No', 'B', 0, 'L');
+		$pdf->Cell(110, 5, 'Description', 'B', 0, 'L');
+		$pdf->Cell(20, 5, 'Quantity', 'B', 0, 'L');
+		$pdf->Cell(20, 5, 'Unit Price', 'B', 0, 'L');
+		$pdf->Cell(30, 5, 'Total Price', 'B', 1, 'L');
+
+		if($quot->hasmanyquotsection()->get()->count()) {
+			foreach ($quot->hasmanyquotsection()->get() as $k1 => $v1) {
+
+				$pdf->SetFont('Arial', 'BU', 9);
+				$pdf->Cell(0, 5, $v1->section, 0, 1, 'L');
+
+				if( $v1->hasmanyquotsectionitem()->get()->count() ){
+					// iterate item
+					foreach( $v1->hasmanyquotsectionitem()->get() as $k2 => $v2 ) {
+
+					}
+				}
+			}
+		}
+	}
 
 
 

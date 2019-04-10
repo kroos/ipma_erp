@@ -71,7 +71,7 @@
 <?php
 $dts = \Carbon\Carbon::parse($quot->date);
 $arr = str_split( $dts->format('Y'), 2 );
-$rev = $quot->hasmanyrevision()->get()->max('id');
+$rev = $quot->hasmanyrevision()->get()->count('id');
 ?>
 				Edit Quotation QT-{!! $quot->id !!}/{!! $arr[1] !!}
 @if($quot->hasmanyrevision()->get()->count())
