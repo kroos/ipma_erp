@@ -25,6 +25,11 @@ class QuotQuotationSectionItem extends Model
 		return $this->belongsTo('\App\Model\QuotItem', 'item_id');
 	}
 
+	public function belongtoquotuom()
+	{
+		return $this->belongsTo('\App\Model\QuotUOM', 'uom_id');
+	}
+
 	public function belongtotax()
 	{
 		return $this->belongsTo('\App\Model\Tax', 'tax_id');

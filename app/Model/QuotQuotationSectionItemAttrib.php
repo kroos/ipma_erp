@@ -22,6 +22,6 @@ class QuotQuotationSectionItemAttrib extends Model
 
 	public function belongtoquotitemattrib()
 	{
-		return $this->belongsTo('\App\Model\QuotItemAttribute', 'attrib_id');
+		return $this->belongsTo('\App\Model\QuotItemAttribute', 'attribute_id');
 	}
 }

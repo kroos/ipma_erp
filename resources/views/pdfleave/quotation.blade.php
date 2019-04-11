@@ -28,7 +28,7 @@ class PDF extends Fpdf
 		// Logo
 		$this->Image('images/quot/header.png', 10, 5, 190);
 		$this->Image('images/quot/body.png', 10, 80, 190);
-
+		$this->Ln(25);
 	}
 	
 	// Page footer
@@ -168,7 +168,6 @@ class PDF extends Fpdf
 	// $pdf->Cell(0, 5, $pdf->GetPageWidth(), 0, 1, 'L'); // 210
 
 	// reset font
-	$pdf->Ln(25);
 	$pdf->SetFont('Arial', NULL, 9);
 
 	$pdf->Cell(20, 5, 'Our Ref :', 0, 0, 'L');
@@ -205,43 +204,108 @@ class PDF extends Fpdf
 
 
 	// set width for each column (5 columns)
-	$pdf->SetWidths([10, 110, 20, 20, 30]);
+	$pdf->SetWidths([10, 90, 20, 35, 35]);
+
+	// set alignment
+	$pdf->SetAligns(['C', 'L', 'C', 'R', 'R']);
+
+	// set line heights. This is the height of each lines, not rows.
+	$pdf->SetLineHeight(5);
 
 
 // ITEM SECTION
 	// if there is only 1 section
-	if($quot->hasmanyquotsection()->get()->count() == 1) {
+	if($quot->hasmanyquotsection()->get()->count()) {
+		if($quot->hasmanyquotsection()->get()->count() == 1) {
 
-		$pdf->SetFont('Arial', 'B', 9);
-		$pdf->Cell(10, 5, 'No', 'B', 0, 'L');
-		$pdf->Cell(110, 5, 'Description', 'B', 0, 'L');
-		$pdf->Cell(20, 5, 'Quantity', 'B', 0, 'L');
-		$pdf->Cell(20, 5, 'Unit Price', 'B', 0, 'L');
-		$pdf->Cell(30, 5, 'Total Price', 'B', 1, 'L');
+			$pdf->SetFont('Arial', 'B', 9);
+			$pdf->Cell(10, 5, 'No', 'B', 0, 'L');
+			$pdf->Cell(90, 5, 'Description', 'B', 0, 'L');
+			$pdf->Cell(20, 5, 'Quantity', 'B', 0, 'L');
+			$pdf->Cell(35, 5, 'Unit Price', 'B', 0, 'L');
+			$pdf->Cell(35, 5, 'Total Price', 'B', 1, 'L');
 
-		// foreach(){
+			// foreach(){
 
-		// }
+			// }
 
-	} else {
+		} else {
 
-		$pdf->SetFont('Arial', 'B', 9);
-		$pdf->Cell(10, 5, 'No', 'B', 0, 'L');
-		$pdf->Cell(110, 5, 'Description', 'B', 0, 'L');
-		$pdf->Cell(20, 5, 'Quantity', 'B', 0, 'L');
-		$pdf->Cell(20, 5, 'Unit Price', 'B', 0, 'L');
-		$pdf->Cell(30, 5, 'Total Price', 'B', 1, 'L');
+			$pdf->SetFont('Arial', 'B', 9);
+			$pdf->Cell(10, 5, 'No', 'B', 0, 'L');
+			$pdf->Cell(90, 5, 'Description', 'B', 0, 'L');
+			$pdf->Cell(20, 5, 'Quantity', 'B', 0, 'L');
+			$pdf->Cell(35, 5, 'Unit Price', 'B', 0, 'L');
+			$pdf->Cell(35, 5, 'Total Price', 'B', 1, 'L');
 
-		if($quot->hasmanyquotsection()->get()->count()) {
-			foreach ($quot->hasmanyquotsection()->get() as $k1 => $v1) {
+			if($quot->hasmanyquotsection()->get()->count()) {
+				// grand total
+				$gp1 = 0;
+				foreach ($quot->hasmanyquotsection()->get() as $k1 => $v1) {
 
-				$pdf->SetFont('Arial', 'BU', 9);
-				$pdf->Cell(0, 5, $v1->section, 0, 1, 'L');
+					$pdf->SetFont('Arial', 'BU', 9);
+					$pdf->MultiCell(0, 5, $v1->section, 1, 'L');
 
-				if( $v1->hasmanyquotsectionitem()->get()->count() ){
-					// iterate item
-					foreach( $v1->hasmanyquotsectionitem()->get() as $k2 => $v2 ) {
+					if( $v1->hasmanyquotsectionitem()->get()->count() ){
+						// iterate item
+						$i1 = 1;
+						$p1 = 0;
+						foreach( $v1->hasmanyquotsectionitem()->get() as $k2 => $v2 ) {
+							
+							$pdf->SetFont('Arial', NULL, 9);
 
+							if($v2->quantity > 1){
+								$uom = $v2->belongtoquotuom->uom.'s';
+							} else {
+								$uom = $v2->belongtoquotuom->uom;
+							}
+
+							// write data using Row() method containing array of values
+							$pdf->Row([
+								$i1++,		//nanti kena ganti dengan bilangan
+								$v2->belongtoquotitem->item,
+								$v2->quantity.' '.$uom,
+								$quot->belongtocurrency->iso_code.' '.number_format($v2->price_unit, 2),
+								$quot->belongtocurrency->iso_code.' '.number_format($v2->quantity * $v2->price_unit, 2)
+							]);
+
+							if( $v2->hasmanyquotsectionitemattrib()->get()->count() ){
+								// set width for each column (5 columns)
+								$pdf->SetWidths([10, 20, 70]);
+
+								// set alignment
+								$pdf->SetAligns(['C', 'L', 'L']);
+
+								// set line heights. This is the height of each lines, not rows.
+								$pdf->SetLineHeight(5);
+
+								foreach ($v2->hasmanyquotsectionitemattrib()->get() as $k3 => $v3) {
+
+									if( $v3->belongtoquotitemattrib->id == 10 ) {
+										$att = $pdf->Image('images/quot/header.png', 40, $pdf->GetY(), 70);
+										// $att = 'GetX '.$pdf->GetX().' => GetY '.$pdf->GetY();
+										// $att = $v3->description_attribute;
+									} else {
+										$att = $v3->description_attribute;
+									}
+									$pdf->Row([
+										NULL,
+										$v3->belongtoquotitemattrib->attribute,
+										$att,
+									]);
+								}
+								// reset it back to suit for the items part.
+								$pdf->SetWidths([10, 90, 20, 35, 35]);
+								$pdf->SetAligns(['C', 'L', 'C', 'R', 'R']);
+							}
+
+							$p1 += $v2->quantity * $v2->price_unit;
+						}
+						$pdf->SetFont('Arial', 'B', 9);
+						$pdf->Cell(155, 5, 'Sub Total', 1, 0, 'R');
+						$pdf->Cell(35, 5, $quot->belongtocurrency->iso_code.' '.number_format($p1, 2), 1, 1, 'R');
+						$pdf->SetFont('Arial', NULL, 9);
+						$pdf->Ln(5);
 					}
 				}
 			}

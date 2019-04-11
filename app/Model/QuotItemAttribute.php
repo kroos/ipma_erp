@@ -11,6 +11,6 @@ class QuotItemAttribute extends Model
 
 	public function hasmanyquotsectionitemattrib()
 	{
-		return $this->hasMany('App\Model\QuotQuotationSectionItemAttrib', 'attrib_id');
+		return $this->hasMany('App\Model\QuotQuotationSectionItemAttrib', 'attribute_id');
 	}
 }
