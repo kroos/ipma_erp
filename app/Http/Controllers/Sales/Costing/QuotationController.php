@@ -87,6 +87,9 @@ class QuotationController extends Controller
 										$constraint->aspectRatio();
 									});
 
+									// convert all image to jpg
+									// $imag->encode('jpg', 75);
+
 									$imag->save();
 								} else {
 									$image = NULL;
@@ -238,6 +241,9 @@ class QuotationController extends Controller
 									$imag->resize(NULL, 400, function ($constraint) {
 										$constraint->aspectRatio();
 									});
+
+									// convert all image to jpg
+									// $imag->encode('jpg', 75);
 
 									$imag->save();
 

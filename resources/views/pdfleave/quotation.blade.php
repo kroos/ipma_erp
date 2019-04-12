@@ -20,6 +20,7 @@ if($quot->hasmanyrevision()->get()->count()) {
 	$rev = NULL;
 }
 
+// header and footer
 class PDF extends Fpdf
 {
 	// Page header
@@ -216,31 +217,31 @@ class PDF extends Fpdf
 // ITEM SECTION
 	// if there is only 1 section
 	if($quot->hasmanyquotsection()->get()->count()) {
+				// grand total
+				$gp1 = 0;
 		if($quot->hasmanyquotsection()->get()->count() == 1) {
 
 			$pdf->SetFont('Arial', 'B', 9);
 			$pdf->Cell(10, 5, 'No', 'B', 0, 'L');
 			$pdf->Cell(90, 5, 'Description', 'B', 0, 'L');
-			$pdf->Cell(20, 5, 'Quantity', 'B', 0, 'L');
-			$pdf->Cell(35, 5, 'Unit Price', 'B', 0, 'L');
-			$pdf->Cell(35, 5, 'Total Price', 'B', 1, 'L');
+			$pdf->Cell(20, 5, 'Quantity', 'B', 0, 'C');
+			$pdf->Cell(35, 5, 'Unit Price', 'B', 0, 'R');
+			$pdf->Cell(35, 5, 'Total Price', 'B', 1, 'R');
 
-			// foreach(){
+			foreach(){
 
-			// }
+			}
 
 		} else {
 
 			$pdf->SetFont('Arial', 'B', 9);
 			$pdf->Cell(10, 5, 'No', 'B', 0, 'L');
 			$pdf->Cell(90, 5, 'Description', 'B', 0, 'L');
-			$pdf->Cell(20, 5, 'Quantity', 'B', 0, 'L');
-			$pdf->Cell(35, 5, 'Unit Price', 'B', 0, 'L');
-			$pdf->Cell(35, 5, 'Total Price', 'B', 1, 'L');
+			$pdf->Cell(20, 5, 'Quantity', 'B', 0, 'C');
+			$pdf->Cell(35, 5, 'Unit Price', 'B', 0, 'R');
+			$pdf->Cell(35, 5, 'Total Price', 'B', 1, 'R');
 
 			if($quot->hasmanyquotsection()->get()->count()) {
-				// grand total
-				$gp1 = 0;
 				foreach ($quot->hasmanyquotsection()->get() as $k1 => $v1) {
 
 					$pdf->SetFont('Arial', 'BU', 9);
@@ -282,9 +283,14 @@ class PDF extends Fpdf
 								foreach ($v2->hasmanyquotsectionitemattrib()->get() as $k3 => $v3) {
 
 									if( $v3->belongtoquotitemattrib->id == 10 ) {
-										$att = $pdf->Image('images/quot/header.png', 40, $pdf->GetY(), 70);
-										// $att = 'GetX '.$pdf->GetX().' => GetY '.$pdf->GetY();
-										// $att = $v3->description_attribute;
+
+										if( !is_null($v3->image) ) {
+
+											$att = $pdf->Image('storage/'.$v3->image, 40, $pdf->GetY(), NULL, 25).'                                                                                                                                                                                                                                                                                                                                                                                                     ';		// definitely fit for 5 rows (line heights (5) * rows 5) => 390 space
+										} else {
+											$att = NULL;
+										}
+
 									} else {
 										$att = $v3->description_attribute;
 									}
@@ -307,8 +313,14 @@ class PDF extends Fpdf
 						$pdf->SetFont('Arial', NULL, 9);
 						$pdf->Ln(5);
 					}
+					$gp1 += $p1;
 				}
 			}
+			$pdf->SetFont('Arial', 'B', 9);
+			$pdf->Cell(155, 5, 'Grand Total', 1, 0, 'R');
+			$pdf->Cell(35, 5, $quot->belongtocurrency->iso_code.' '.number_format($gp1, 2), 1, 1, 'R');
+			$pdf->SetFont('Arial', NULL, 9);
+			$pdf->Ln(5);
 		}
 	}
 

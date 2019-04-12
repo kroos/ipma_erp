@@ -45,9 +45,10 @@ $qp = (($q->tax_value * $qi) / 100) + $qi;
 						</tr>
 					</thead>
 					<tbody>
+			<?php $t = 1 ?>
 			@foreach($q->hasmanyrevision()->get() as $rev)
 						<tr>
-							<td>{!! $rev->id !!}</td>
+							<td>{!! $t++ !!}</td>
 							<td>{!! $rev->revision !!}</td>
 							<td><a href="storage/{!! $rev->revision_file !!}" target="_blank" title="Download"><i class="fas fa-download"></i>&nbsp;Download</a></td>
 						</tr>
