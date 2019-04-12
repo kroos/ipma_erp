@@ -109,7 +109,7 @@ $iii = 1;
 					<div class="rowposition">
 						<div class="row col-sm-12">
 							<div class="col-sm-1 text-danger">
-									<i class="fas fa-trash remove_position" aria-hidden="true" id="button_delete_{!! $sra->id !!}" data-id="{!! $sra->id !!}"></i>
+									<i class="fas fa-trash delete_attendees" aria-hidden="true" id="button_delete_{!! $sra->id !!}" data-id="{!! $sra->id !!}"></i>
 							</div>
 							<div class="col-sm-11">
 								<div class="form-group {{ $errors->has('sr.*.attended_by') ? 'has-error' : '' }}">

@@ -224,6 +224,57 @@ $(wrapp).on("click",".remove_phoneattendees", function(e){
 })
 
 /////////////////////////////////////////////////////////////////////////////////////////
+// ajax post delete row attendees
+$(document).on('click', '.delete_attendees', function(e){
+	var attendId = $(this).data('id');
+	SwalDeleteAttend(attendId);
+	e.preventDefault();
+});
+
+function SwalDeleteAttend(attendId){
+	swal({
+		title: 'Are you sure?',
+		text: "It will be deleted permanently!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Yes, delete it!',
+		showLoaderOnConfirm: true,
+
+		preConfirm: function() {
+			return new Promise(function(resolve) {
+				$.ajax({
+					url: '{{ url('srAttend') }}' + '/' + attendId,
+					type: 'DELETE',
+					data: {
+							_token : $('meta[name=csrf-token]').attr('content'),
+							id: attendId,
+					},
+					dataType: 'json'
+				})
+				.done(function(response){
+					swal('Deleted!', response.message, response.status)
+					.then(function(){
+						window.location.reload(true);
+					});
+					//$('#delete_attendees_' + attendId).parent().parent().remove();
+				})
+				.fail(function(){
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
+				})
+			});
+		},
+		allowOutsideClick: false			  
+	})
+	.then((result) => {
+		if (result.dismiss === swal.DismissReason.cancel) {
+			swal('Cancelled', 'Your data is safe from delete', 'info')
+		}
+	});
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
 $('#form').bootstrapValidator({
 	feedbackIcons: {
 		valid: '',
