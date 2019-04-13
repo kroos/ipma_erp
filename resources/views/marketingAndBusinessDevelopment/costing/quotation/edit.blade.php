@@ -1353,6 +1353,16 @@ $(document).on('keyup', '.priceunit', function () {
 });
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// update discount
+$(document).on('keyup', '#discount', function() {
+	var dis = $('#discount').val();
+	var gtt = $('#grandtotal' ).val();
+	var disn = ((dis * 100) / 100) + ((gtt * 100) / 100);
+
+	$('#netttotal').val( disn.toFixed(2) );
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // update tax
 $(document).on('keyup', '#tax_value', function() {
 	// update grand total
@@ -1375,6 +1385,18 @@ function update_grandtotal() {
 
 	// $('#grandtotal' ).val( psum.toFixed(2) );
 	$('#grandtotal' ).val( ttg.toFixed(2) );
+
+	update_netttotal();
+};
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// nett price
+function update_netttotal() {
+	var dis = $('#discount').val();
+	var gtt = $('#grandtotal' ).val();
+	var disn = ((dis * 100) / 100) + ((gtt * 100) / 100);
+
+	$('#netttotal').val( disn.toFixed(2) );
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -60,6 +60,11 @@ class QuotQuotation extends Model
 		return $this->belongsTo('\App\Model\Customer', 'customer_id');
 	}
 
+	public function belongtoperiod()
+	{
+		return $this->belongsTo('\App\Model\QuotDeliveryDate', 'period_id');
+	}
+
 	public function belongtocurrency()
 	{
 		return $this->belongsTo('\App\Model\Currency', 'currency_id');

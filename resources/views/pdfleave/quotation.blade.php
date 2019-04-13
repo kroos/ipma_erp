@@ -12,7 +12,7 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
 // initialize constant
-$dts = \Carbon\Carbon::parse($quot->date);
+$dts = Carbon::parse($quot->date);
 $arr = str_split( $dts->format('Y'), 2 );
 if($quot->hasmanyrevision()->get()->count()) {
 	$rev = '-'.$quot->hasmanyrevision()->get()->count('id');
@@ -89,7 +89,7 @@ class PDF extends Fpdf
 				$x=$this->GetX();
 				$y=$this->GetY();
 				//Draw the border
-				$this->Rect($x,$y,$w,$h);
+				// $this->Rect($x,$y,$w,$h);
 				//Print the text
 				$this->MultiCell($w,5,$data[$i],0,$a);
 				//Put the position to the right of the cell
@@ -161,6 +161,7 @@ class PDF extends Fpdf
 	$pdf->AliasNbPages();
 	$pdf->AddPage();
 	$pdf->SetTitle('QT');
+	$pdf->SetAutoPageBreak(1, '30');
 
 	// $pdf->Cell(0, 5, $induk, 0, 1, 'L'); // 210
 
@@ -203,7 +204,7 @@ class PDF extends Fpdf
 	$pdf->Cell(20, 5, 'Thank you very much for your enquiry of the above. We are pleased to quote below for your kind consideration :', 0, 1, 'L');
 	$pdf->Ln(5);
 
-
+	// starting PDF_MC_Table
 	// set width for each column (5 columns)
 	$pdf->SetWidths([10, 90, 20, 35, 35]);
 
@@ -217,23 +218,8 @@ class PDF extends Fpdf
 // ITEM SECTION
 	// if there is only 1 section
 	if($quot->hasmanyquotsection()->get()->count()) {
-				// grand total
-				$gp1 = 0;
-		if($quot->hasmanyquotsection()->get()->count() == 1) {
-
-			$pdf->SetFont('Arial', 'B', 9);
-			$pdf->Cell(10, 5, 'No', 'B', 0, 'L');
-			$pdf->Cell(90, 5, 'Description', 'B', 0, 'L');
-			$pdf->Cell(20, 5, 'Quantity', 'B', 0, 'C');
-			$pdf->Cell(35, 5, 'Unit Price', 'B', 0, 'R');
-			$pdf->Cell(35, 5, 'Total Price', 'B', 1, 'R');
-
-			foreach(){
-
-			}
-
-		} else {
-
+			// grand total
+			$gp1 = 0;
 			$pdf->SetFont('Arial', 'B', 9);
 			$pdf->Cell(10, 5, 'No', 'B', 0, 'L');
 			$pdf->Cell(90, 5, 'Description', 'B', 0, 'L');
@@ -244,8 +230,10 @@ class PDF extends Fpdf
 			if($quot->hasmanyquotsection()->get()->count()) {
 				foreach ($quot->hasmanyquotsection()->get() as $k1 => $v1) {
 
-					$pdf->SetFont('Arial', 'BU', 9);
-					$pdf->MultiCell(0, 5, $v1->section, 1, 'L');
+					if($quot->hasmanyquotsection()->get()->count() > 1) {
+						$pdf->SetFont('Arial', 'BU', 9);
+						$pdf->MultiCell(0, 5, $v1->section, 0, 'L');
+					}
 
 					if( $v1->hasmanyquotsectionitem()->get()->count() ){
 						// iterate item
@@ -269,6 +257,19 @@ class PDF extends Fpdf
 								$quot->belongtocurrency->iso_code.' '.number_format($v2->price_unit, 2),
 								$quot->belongtocurrency->iso_code.' '.number_format($v2->quantity * $v2->price_unit, 2)
 							]);
+
+						if( !is_null( $v2->tax_id ) ) {
+
+							// count tax
+							$tx1 = ($v2->tax_value * $v2->price_unit) / 100;
+
+							$pdf->SetFont('Arial', 'I', 9);
+							$pdf->Cell(100, 5, '(SST @ '.$v2->tax_value.'% if applicable)', 0, 0, 'R');
+							$pdf->SetFont('Arial', NULL, 9);
+							$pdf->Cell(20, 5, $v2->quantity.' '.$uom, 0, 0, 'C');
+							$pdf->Cell(35, 5, $quot->belongtocurrency->iso_code.' '.number_format($tx1, 2), 0, 0, 'R');
+							$pdf->Cell(35, 5, $quot->belongtocurrency->iso_code.' '.number_format($tx1 * $v2->quantity, 2), 0, 1, 'R');
+						}
 
 							if( $v2->hasmanyquotsectionitemattrib()->get()->count() ){
 								// set width for each column (5 columns)
@@ -308,25 +309,160 @@ class PDF extends Fpdf
 							$p1 += $v2->quantity * $v2->price_unit;
 						}
 						$pdf->SetFont('Arial', 'B', 9);
-						$pdf->Cell(155, 5, 'Sub Total', 1, 0, 'R');
-						$pdf->Cell(35, 5, $quot->belongtocurrency->iso_code.' '.number_format($p1, 2), 1, 1, 'R');
+						$pdf->Cell(155, 5, 'Sub Total', 0, 0, 'R');
+						$pdf->Cell(35, 5, $quot->belongtocurrency->iso_code.' '.number_format($p1, 2), 0, 1, 'R');
 						$pdf->SetFont('Arial', NULL, 9);
 						$pdf->Ln(5);
 					}
 					$gp1 += $p1;
 				}
 			}
+			if( !is_null($quot->tax_id) ) {
+				// count tax
+				$gst = ($quot->tax_value * $gp1) / 100;
+
+				$pdf->SetFont('Arial', 'BI', 9);
+				$pdf->Cell(155, 5, 'GST '.$quot->tax_value.'%', 0, 0, 'R');
+				$pdf->SetFont('Arial', 'B', 9);
+				$pdf->Cell(35, 5, $quot->belongtocurrency->iso_code.' '.number_format($gst, 2), 0, 1, 'R');
+
+				$gst1 = $gst + $gp1;
+			} else {
+				$gst1 = $gp1;
+			}
+
 			$pdf->SetFont('Arial', 'B', 9);
-			$pdf->Cell(155, 5, 'Grand Total', 1, 0, 'R');
-			$pdf->Cell(35, 5, $quot->belongtocurrency->iso_code.' '.number_format($gp1, 2), 1, 1, 'R');
+			$pdf->Cell(155, 5, 'Grand Total', 0, 0, 'R');
+			$pdf->Cell(35, 5, $quot->belongtocurrency->iso_code.' '.number_format($gst1, 2), 0, 1, 'R');
 			$pdf->SetFont('Arial', NULL, 9);
+
+			if(!is_null($quot->discount) || $quot->discount != 0 ) {
+				$pdf->SetFont('Arial', 'B', 9);
+				$pdf->Cell(155, 5, 'Less Special Discount :', 0, 0, 'R');
+				$pdf->Cell(35, 5, $quot->belongtocurrency->iso_code.' '.number_format($quot->discount, 2), 0, 1, 'R');
+				$pdf->Cell(155, 5, 'Nett Total :', 0, 0, 'R');
+				$pdf->Cell(35, 5, $quot->belongtocurrency->iso_code.' '.number_format($gst1 + $quot->discount, 2), 0, 1, 'R');
+				$pdf->SetFont('Arial', NULL, 9);
+			}
 			$pdf->Ln(5);
+	}
+
+	// delivery date
+	if (!is_null($quot->mutual)) {
+		if($quot->mutual == 1) {
+			$pdf->Cell(30, 5, 'Delivery Date :', 0, 0, 'L');
+			$pdf->Cell(0, 5, 'Mutually Agreed', 0, 1, 'L');
+		} elseif ($quot->mutual == 0) {
+			$pdf->Cell(30, 5, 'Delivery Date :', 0, 0, 'L');
+			$pdf->Cell(0, 5, $quot->from.' to '.$quot->to.' '.$quot->belongtoperiod->delivery_date_period.' upon confirmation of order and receipt of down payment.', 0, 1, 'L');
 		}
+	}
+
+	// validity
+	if(!is_null($quot->validity)) {
+		$pdf->Cell(30, 5, 'Validity :', 0, 0, 'L');
+		$pdf->Cell(0, 5, $quot->validity.' days from quotation date. ('.$dts->copy()->addDays($quot->validity)->format('D, j F Y').')', 0, 1, 'L');
+	}
+
+	// term of payment
+	if( $quot->hasmanytermofpayment()->get()->count() ) {
+		$pdf->Cell(30, 5, 'Term Of Payment :', 0, 0, 'L');
+
+		foreach($quot->hasmanytermofpayment()->get() as $ky1 => $vl1){
+			$pdf->SetX(40);
+			$pdf->MultiCell(0, 5, $vl1->term_of_payment, 0, 'L');
+			$pdf->SetX(10);
+		}
+	}
+
+	// exclusions
+	$pdf->SetFont('Arial', 'B', 9);
+	if($quot->hasmanyexclusions()->get()->count()) {
+		$pdf->Cell(30, 5, 'Exclusions :', 0, 0, 'L');
+
+		// starting PDF_MC_Table
+		// set width for each column (5 columns)
+		$pdf->SetWidths([10, 0]);
+		// set alignment
+		$pdf->SetAligns(['C', 'L']);
+		// set line heights. This is the height of each lines, not rows.
+		$pdf->SetLineHeight(5);
+		$r1 = 1;
+		foreach ($quot->hasmanyexclusions()->get() as $ky2 => $vl2) {
+			$pdf->SetX(40);
+			$pdf->Row([
+				$r1++.'.',
+				$vl2->belongtoexclusion->exclusion
+			]);
+			$pdf->SetX(0);
+		}
+		$pdf->Ln(3);
+	}
+
+	// remarks
+	if( $quot->hasmanyremarks()->get()->count() ) {
+		$pdf->Cell(30, 5, 'Remarks :', 0, 0, 'L');
+		// starting PDF_MC_Table
+		// set width for each column (5 columns)
+		$pdf->SetWidths([10, 0]);
+		// set alignment
+		$pdf->SetAligns(['C', 'L']);
+		// set line heights. This is the height of each lines, not rows.
+		$pdf->SetLineHeight(5);
+		$r2 = 1;
+		foreach ($quot->hasmanyremarks()->get() as $ky3 => $vl3) {
+			$pdf->SetX(40);
+			$pdf->Row([
+				$r2++.'.',
+				$vl3->belongtoremark->quot_remarks
+			]);
+			$pdf->SetX(0);
+		}
+		$pdf->Ln(3);
+	}
+
+	// dealer clause
+	if( $quot->hasmanydealer()->get()->count() ) {
+		$pdf->Cell(30, 5, 'Dealer Clause :', 0, 0, 'L');
+		// starting PDF_MC_Table
+		// set width for each column (5 columns)
+		$pdf->SetWidths([10, 0]);
+		// set alignment
+		$pdf->SetAligns(['C', 'L']);
+		// set line heights. This is the height of each lines, not rows.
+		$pdf->SetLineHeight(5);
+		$r3 = 1;
+		foreach ($quot->hasmanydealer()->get() as $ky4 => $vl4) {
+			$pdf->SetX(40);
+			$pdf->Row([
+				$r3++.'.',
+				$vl4->belongtodealer->dealer
+			]);
+			$pdf->SetX(0);
+		}
+		$pdf->Ln(3);
 	}
 
 
 
-	$filename = 'Quotation.pdf';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	$filename = 'Quotation QT-'.$quot->id.'/'.$arr[1].$rev.'.pdf';
 
 	// use ob_get_clean() to make sure that the correct header is sent to the server so the correct pdf is being output
 	ob_get_clean();

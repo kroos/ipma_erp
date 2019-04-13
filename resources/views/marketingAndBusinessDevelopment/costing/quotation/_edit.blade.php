@@ -294,6 +294,27 @@ $ap = (($quot->tax_value * $gtotal) / 100) + $gtotal;
 	</div>
 </div>
 
+<!-- less special discount -->
+<div class="form-row row col-12">
+	<div class="col-3 offset-8">
+		<label for="discount" class="col col-form-label">Less Special Discount :</label>
+	</div>
+	<div class="form-group col-1">
+		{!! Form::text('discount', @$value, ['class' => 'form-control form-control-sm discount', 'id' => 'discount', 'placeholder' => 'Less Special Discount', 'autocomplete' => 'off']) !!}
+	</div>
+</div>
+
+<!-- nett Total -->
+<div class="form-row row col-12">
+	<div class="col-3 offset-8">
+		<label for="grandtotal" class="col col-form-label">Nett Total :</label>
+	</div>
+	<div class="form-group col-1">
+		<input type="text" value="{!! ( is_null($quot->discount) || $quot->discount == 0 )?'0.00':($ap + $quot->discount) !!}" class="form-control form-control-sm netttotal" id="netttotal" disabled="disabled">
+	</div>
+</div>
+
+<p>&nbsp;</p>
 
 <div class="row">
 	{{ Form::label( 'ddp', 'Delivery Date : ', ['class' => 'col-2 col-form-label'] ) }}
