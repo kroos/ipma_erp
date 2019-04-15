@@ -35,11 +35,11 @@ class PDF extends Fpdf
 	// Page footer
 	function Footer()
 	{
-		$this->SetY(-18);
-		$this->Image('images/quot/footer.png', 10, 261, 190);
-		$this->SetFont('Arial', 'I', 5);
+		$this->SetY(-34);
+		$this->SetFont('Arial', 'I', 6);
 		// Page number
-		$this->Cell(0,4,'Page '.$this->PageNo().'of {nb}', 0, 1, 'C');
+		$this->Cell(0, 24, $this->Image('images/quot/footer.png', $this->GetX(), $this->GetY(), 190).'Page '.$this->PageNo().'of {nb}', 0, 1, 'C');
+		// $this->Cell(0,4,'Page '.$this->PageNo().'of {nb}', 1, 1, 'C');
 		// $this->Cell(0,4,'Page '.$this->PageNo().'of {nb} '.$this->GetY(), 0, 1, 'C');	// just to check the position
 	}
 }
@@ -161,7 +161,7 @@ class PDF extends Fpdf
 	$pdf->AliasNbPages();
 	$pdf->AddPage();
 	$pdf->SetTitle('QT');
-	$pdf->SetAutoPageBreak(1, '30');
+	$pdf->SetAutoPageBreak(1, 34);
 
 	// $pdf->Cell(0, 5, $induk, 0, 1, 'L'); // 210
 
@@ -352,9 +352,11 @@ class PDF extends Fpdf
 		if($quot->mutual == 1) {
 			$pdf->Cell(30, 5, 'Delivery Date :', 0, 0, 'L');
 			$pdf->Cell(0, 5, 'Mutually Agreed', 0, 1, 'L');
+			$pdf->Ln(3);
 		} elseif ($quot->mutual == 0) {
 			$pdf->Cell(30, 5, 'Delivery Date :', 0, 0, 'L');
 			$pdf->Cell(0, 5, $quot->from.' to '.$quot->to.' '.$quot->belongtoperiod->delivery_date_period.' upon confirmation of order and receipt of down payment.', 0, 1, 'L');
+			$pdf->Ln(3);
 		}
 	}
 
@@ -362,6 +364,7 @@ class PDF extends Fpdf
 	if(!is_null($quot->validity)) {
 		$pdf->Cell(30, 5, 'Validity :', 0, 0, 'L');
 		$pdf->Cell(0, 5, $quot->validity.' days from quotation date. ('.$dts->copy()->addDays($quot->validity)->format('D, j F Y').')', 0, 1, 'L');
+		$pdf->Ln(3);
 	}
 
 	// term of payment
@@ -373,6 +376,7 @@ class PDF extends Fpdf
 			$pdf->MultiCell(0, 5, $vl1->term_of_payment, 0, 'L');
 			$pdf->SetX(10);
 		}
+		$pdf->Ln(3);
 	}
 
 	// exclusions
@@ -380,21 +384,12 @@ class PDF extends Fpdf
 	if($quot->hasmanyexclusions()->get()->count()) {
 		$pdf->Cell(30, 5, 'Exclusions :', 0, 0, 'L');
 
-		// starting PDF_MC_Table
-		// set width for each column (5 columns)
-		$pdf->SetWidths([10, 0]);
-		// set alignment
-		$pdf->SetAligns(['C', 'L']);
-		// set line heights. This is the height of each lines, not rows.
-		$pdf->SetLineHeight(5);
 		$r1 = 1;
 		foreach ($quot->hasmanyexclusions()->get() as $ky2 => $vl2) {
 			$pdf->SetX(40);
-			$pdf->Row([
-				$r1++.'.',
-				$vl2->belongtoexclusion->exclusion
-			]);
-			$pdf->SetX(0);
+			$pdf->MultiCell(10, 5, $r1++.'.', 0, 'C');
+			$pdf->SetXY( $pdf->GetX() + 40, $pdf->GetY() - 5 );
+			$pdf->MultiCell(0, 5, $vl2->belongtoexclusion->exclusion, 0, 'L');
 		}
 		$pdf->Ln(3);
 	}
@@ -402,21 +397,12 @@ class PDF extends Fpdf
 	// remarks
 	if( $quot->hasmanyremarks()->get()->count() ) {
 		$pdf->Cell(30, 5, 'Remarks :', 0, 0, 'L');
-		// starting PDF_MC_Table
-		// set width for each column (5 columns)
-		$pdf->SetWidths([10, 0]);
-		// set alignment
-		$pdf->SetAligns(['C', 'L']);
-		// set line heights. This is the height of each lines, not rows.
-		$pdf->SetLineHeight(5);
 		$r2 = 1;
 		foreach ($quot->hasmanyremarks()->get() as $ky3 => $vl3) {
 			$pdf->SetX(40);
-			$pdf->Row([
-				$r2++.'.',
-				$vl3->belongtoremark->quot_remarks
-			]);
-			$pdf->SetX(0);
+			$pdf->MultiCell(10, 5, $r2++.'.', 0, 'C');
+			$pdf->SetXY($pdf->GetX() + 40, $pdf->GetY() - 5);
+			$pdf->MultiCell(0, 5, $vl3->belongtoremark->quot_remarks, 0, 'L');
 		}
 		$pdf->Ln(3);
 	}
@@ -424,21 +410,27 @@ class PDF extends Fpdf
 	// dealer clause
 	if( $quot->hasmanydealer()->get()->count() ) {
 		$pdf->Cell(30, 5, 'Dealer Clause :', 0, 0, 'L');
-		// starting PDF_MC_Table
-		// set width for each column (5 columns)
-		$pdf->SetWidths([10, 0]);
-		// set alignment
-		$pdf->SetAligns(['C', 'L']);
-		// set line heights. This is the height of each lines, not rows.
-		$pdf->SetLineHeight(5);
+
 		$r3 = 1;
 		foreach ($quot->hasmanydealer()->get() as $ky4 => $vl4) {
 			$pdf->SetX(40);
-			$pdf->Row([
-				$r3++.'.',
-				$vl4->belongtodealer->dealer
-			]);
-			$pdf->SetX(0);
+			$pdf->MultiCell(10, 5, $r3++.'.', 0, 'C');
+			$pdf->SetXY($pdf->GetX() + 40, $pdf->GetY() - 5);
+			$pdf->MultiCell(0, 5, $vl4->belongtodealer->dealer, 0, 'L');
+		}
+		$pdf->Ln(3);
+	}
+
+	// warranty
+	if( $quot->hasmanywarranty()->get()->count() ) {
+		$pdf->Cell(30, 5, 'Warranty :', 0, 0, 'L');
+
+		$r4 = 1;
+		foreach ($quot->hasmanywarranty()->get() as $ky5 => $vl5) {
+			$pdf->SetX(40);
+			$pdf->MultiCell(10, 5, $r4++.'.', 0, 'C');
+			$pdf->SetXY($pdf->GetX() + 40, $pdf->GetY() - 5);
+			$pdf->MultiCell(0, 5, $vl5->belongtowarranty->warranty, 0, 'L');
 		}
 		$pdf->Ln(3);
 	}
