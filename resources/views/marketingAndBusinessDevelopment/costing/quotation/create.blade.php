@@ -1104,6 +1104,22 @@ $('#form').bootstrapValidator({
 				}
 			}
 		},
+		dealer_price: {
+			validators: {
+				numeric: {
+					separator: '.',
+					message: 'The value is in numeric with 2 decimal point. '
+				}
+			}
+		},
+		budget_quot: {
+			validators: {
+				// numeric: {
+				// 	separator: '.',
+				// 	message: 'The value is in numeric with 2 decimal point. '
+				// }
+			}
+		},
 	}
 })
 .find('[name="reason"]')

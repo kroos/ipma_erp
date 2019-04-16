@@ -86,7 +86,7 @@ $("#username").keyup(function() {
 $.fn.dataTable.moment( 'ddd, D MMM YYYY' );
 $('#quot1').DataTable({
 	"lengthMenu": [ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-	"order": [[1, "desc" ]],	// sorting the 2nd column ascending
+	"order": [[2, "desc" ]],	// sorting the 2nd column ascending
 	// responsive: true
 });
 

@@ -42,7 +42,7 @@ class QuotationController extends Controller
 	public function store(Request $request)
 	{
 		// dd($request->all());
-		$qt = \Auth::user()->belongtostaff->hasmanyquotation()->create( array_add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'discount', 'mutual', 'from', 'to', 'period_id', 'validity', 'bank_id']), 'active', 1) );
+		$qt = \Auth::user()->belongtostaff->hasmanyquotation()->create( array_add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'discount', 'mutual', 'from', 'to', 'period_id', 'validity', 'bank_id', 'dealer_price', 'budget_quot']), 'active', 1) );
 
 		if ($request->has('qs')) {
 			foreach ($request->qs as $k1 => $v1) {
@@ -170,7 +170,7 @@ class QuotationController extends Controller
 			$bank = $request->bank_id;
 		}
 		// dd( array_add($request->all(), 'bank', $bank) );
-		$quot->update( array_add(array_add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'discount', 'mutual', 'from', 'to', 'period_id', 'validity']), 'active', 1), 'bank_id', $bank) );
+		$quot->update( array_add(array_add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'discount', 'mutual', 'from', 'to', 'period_id', 'validity', 'dealer_price', 'budget_quot']), 'active', 1), 'bank_id', $bank) );
 // dd($request->mutual);
 		// if( $request->has('mutual') ) {
 		// 	foreach($request->mutual as $k => $v) {

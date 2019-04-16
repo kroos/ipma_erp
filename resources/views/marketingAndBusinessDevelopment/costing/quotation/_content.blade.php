@@ -45,10 +45,121 @@ $qp = (($q->tax_value * $qi) / 100) + $qi;
 						</tr>
 					</thead>
 					<tbody>
-			<?php $t = 1 ?>
+<?php $t = 1 ?>
 			@foreach($q->hasmanyrevision()->get() as $rev)
+<?php
+switch ( $t++ ) {
+	case 1:
+		$re = 'A';
+		break;
+
+	case 2:
+		$re = 'B';
+		break;
+
+	case 3:
+		$re = 'C';
+		break;
+
+	case 4:
+		$re = 'D';
+		break;
+
+	case 5:
+		$re = 'E';
+		break;
+
+	case 6:
+		$re = 'F';
+		break;
+
+	case 7:
+		$re = 'G';
+		break;
+
+	case 8:
+		$re = 'H';
+		break;
+
+	case 9:
+		$re = 'I';
+		break;
+
+	case 10:
+		$re = 'J';
+		break;
+
+	case 11:
+		$re = 'K';
+		break;
+
+	case 12:
+		$re = 'L';
+		break;
+
+	case 13:
+		$re = 'M';
+		break;
+
+	case 14:
+		$re = 'N';
+		break;
+
+	case 15:
+		$re = 'O';
+		break;
+
+	case 16:
+		$re = 'P';
+		break;
+
+	case 17:
+		$re = 'Q';
+		break;
+
+	case 18:
+		$re = 'R';
+		break;
+
+	case 19:
+		$re = 'S';
+		break;
+
+	case 20:
+		$re = 'T';
+		break;
+
+	case 21:
+		$re = 'U';
+		break;
+
+	case 22:
+		$re = 'V';
+		break;
+
+	case 23:
+		$re = 'W';
+		break;
+
+	case 24:
+		$re = 'X';
+		break;
+
+	case 25:
+		$re = 'Y';
+		break;
+
+	case 26:
+		$re = 'Z';
+		break;
+
+	default:
+		$re = $t++;
+		break;
+}
+?>
 						<tr>
-							<td>{!! $t++ !!}</td>
+							<td>{!! $re !!}</td>
 							<td>{!! $rev->revision !!}</td>
 							<td><a href="storage/{!! $rev->revision_file !!}" target="_blank" title="Download"><i class="fas fa-download"></i>&nbsp;Download</a></td>
 						</tr>

@@ -15,10 +15,121 @@ use Carbon\CarbonPeriod;
 $dts = Carbon::parse($quot->date);
 $arr = str_split( $dts->format('Y'), 2 );
 if($quot->hasmanyrevision()->get()->count()) {
-	$rev = '-'.$quot->hasmanyrevision()->get()->count('id');
+
+	switch ( $quot->hasmanyrevision()->get()->count() ) {
+		case 1:
+			$rev = '-A';
+			break;
+
+		case 2:
+			$rev = '-B';
+			break;
+
+		case 3:
+			$rev = '-C';
+			break;
+
+		case 4:
+			$rev = '-D';
+			break;
+
+		case 5:
+			$rev = '-E';
+			break;
+
+		case 6:
+			$rev = '-F';
+			break;
+
+		case 7:
+			$rev = '-G';
+			break;
+
+		case 8:
+			$rev = '-H';
+			break;
+
+		case 9:
+			$rev = '-I';
+			break;
+
+		case 10:
+			$rev = '-J';
+			break;
+
+		case 11:
+			$rev = '-K';
+			break;
+
+		case 12:
+			$rev = '-L';
+			break;
+
+		case 13:
+			$rev = '-M';
+			break;
+
+		case 14:
+			$rev = '-N';
+			break;
+
+		case 15:
+			$rev = '-O';
+			break;
+
+		case 16:
+			$rev = '-P';
+			break;
+
+		case 17:
+			$rev = '-Q';
+			break;
+
+		case 18:
+			$rev = '-R';
+			break;
+
+		case 19:
+			$rev = '-S';
+			break;
+
+		case 20:
+			$rev = '-T';
+			break;
+
+		case 21:
+			$rev = '-U';
+			break;
+
+		case 22:
+			$rev = '-V';
+			break;
+
+		case 23:
+			$rev = '-W';
+			break;
+
+		case 24:
+			$rev = '-X';
+			break;
+
+		case 25:
+			$rev = '-Y';
+			break;
+
+		case 26:
+			$rev = '-Z';
+			break;
+
+		default:
+			$rev = $quot->hasmanyrevision()->get()->count();
+			break;
+	}
 } else {
 	$rev = NULL;
 }
+
+
 
 // header and footer
 class PDF extends Fpdf
@@ -36,7 +147,7 @@ class PDF extends Fpdf
 	function Footer()
 	{
 		$this->SetY(-34);
-		$this->SetFont('Arial', 'I', 6);
+		$this->SetFont('Times', 'I', 6);
 		// Page number
 		$this->Cell(0, 24, $this->Image('images/quot/footer.png', $this->GetX(), $this->GetY(), 190).'Page '.$this->PageNo().'of {nb}', 0, 1, 'C');
 		// $this->Cell(0,4,'Page '.$this->PageNo().'of {nb}', 1, 1, 'C');
@@ -161,7 +272,7 @@ class PDF extends Fpdf
 	$pdf->AliasNbPages();
 	$pdf->AddPage();
 	$pdf->SetTitle('QT');
-	$pdf->SetAutoPageBreak(1, 34);
+	$pdf->SetAutoPageBreak(TRUE, 34);
 
 	// $pdf->Cell(0, 5, $induk, 0, 1, 'L'); // 210
 
@@ -170,37 +281,37 @@ class PDF extends Fpdf
 	// $pdf->Cell(0, 5, $pdf->GetPageWidth(), 0, 1, 'L'); // 210
 
 	// reset font
-	$pdf->SetFont('Arial', NULL, 9);
+	$pdf->SetFont('Times', NULL, 9);
 
 	$pdf->Cell(20, 5, 'Our Ref :', 0, 0, 'L');
-	$pdf->Cell(20, 5, 'QT-'.$quot->id.'/'.$arr[1].$rev, 0, 1, 'L');
+	$pdf->Cell(20, 5, 'QT '.$quot->id.'/'.$arr[1].$rev, 0, 1, 'L');
 
 	$pdf->Cell(20, 5, 'Date :', 0, 0, 'L');
-	$pdf->Cell(20, 5, Carbon::parse($quot->date)->format('d F Y'), 0, 1, 'L');
+	$pdf->Cell(20, 5, Carbon::parse($quot->date)->format('jS F Y'), 0, 1, 'L');
 
 	$pdf->Ln(5);
-	$pdf->SetFont('Arial', 'B', 9);
+	$pdf->SetFont('Times', 'B', 9);
 	$pdf->Cell(20, 5, $quot->belongtocustomer->customer, 0, 1, 'L');
-	$pdf->SetFont('Arial', NULL, 9);
+	$pdf->SetFont('Times', NULL, 9);
 	$pdf->Cell(20, 5, $quot->belongtocustomer->address1, 0, 1, 'L');
 	$pdf->Cell(20, 5, $quot->belongtocustomer->address2, 0, 1, 'L');
 	$pdf->Cell(20, 5, $quot->belongtocustomer->address3, 0, 1, 'L');
 	$pdf->Cell(20, 5, $quot->belongtocustomer->address4, 0, 1, 'L');
 	$pdf->Ln(5);
 
-	$pdf->SetFont('Arial', 'IB', 9);
+	$pdf->SetFont('Times', 'IB', 9);
 	$pdf->Cell(20, 5, 'Attn :', 0, 0, 'L');
 	$pdf->Cell(20, 5, $quot->attn, 0, 1, 'L');
 
 	$pdf->Ln(5);
-	$pdf->SetFont('Arial', NULL, 9);
+	$pdf->SetFont('Times', NULL, 9);
 	$pdf->Cell(20, 5, 'Dear Sir,', 0, 1, 'L');
 
-	$pdf->SetFont('Arial', 'B', 9);
+	$pdf->SetFont('Times', 'B', 9);
 	$pdf->Cell(20, 5, $quot->subject, 0, 1, 'L');
 
 	$pdf->Ln(5);
-	$pdf->SetFont('Arial', NULL, 9);
+	$pdf->SetFont('Times', NULL, 9);
 	$pdf->Cell(20, 5, 'Thank you very much for your enquiry of the above. We are pleased to quote below for your kind consideration :', 0, 1, 'L');
 	$pdf->Ln(5);
 
@@ -220,7 +331,7 @@ class PDF extends Fpdf
 	if($quot->hasmanyquotsection()->get()->count()) {
 			// grand total
 			$gp1 = 0;
-			$pdf->SetFont('Arial', 'B', 9);
+			$pdf->SetFont('Times', 'B', 9);
 			$pdf->Cell(10, 5, 'No', 'B', 0, 'L');
 			$pdf->Cell(90, 5, 'Description', 'B', 0, 'L');
 			$pdf->Cell(20, 5, 'Quantity', 'B', 0, 'C');
@@ -231,7 +342,7 @@ class PDF extends Fpdf
 				foreach ($quot->hasmanyquotsection()->get() as $k1 => $v1) {
 
 					if($quot->hasmanyquotsection()->get()->count() > 1) {
-						$pdf->SetFont('Arial', 'BU', 9);
+						$pdf->SetFont('Times', 'BU', 9);
 						$pdf->MultiCell(0, 5, $v1->section, 0, 'L');
 					}
 
@@ -241,7 +352,7 @@ class PDF extends Fpdf
 						$p1 = 0;
 						foreach( $v1->hasmanyquotsectionitem()->get() as $k2 => $v2 ) {
 							
-							$pdf->SetFont('Arial', NULL, 9);
+							$pdf->SetFont('Times', NULL, 9);
 
 							if($v2->quantity > 1){
 								$uom = $v2->belongtoquotuom->uom.'s';
@@ -263,9 +374,9 @@ class PDF extends Fpdf
 							// count tax
 							$tx1 = ($v2->tax_value * $v2->price_unit) / 100;
 
-							$pdf->SetFont('Arial', 'I', 9);
+							$pdf->SetFont('Times', 'I', 9);
 							$pdf->Cell(100, 5, '(SST @ '.$v2->tax_value.'% if applicable)', 0, 0, 'R');
-							$pdf->SetFont('Arial', NULL, 9);
+							$pdf->SetFont('Times', NULL, 9);
 							$pdf->Cell(20, 5, $v2->quantity.' '.$uom, 0, 0, 'C');
 							$pdf->Cell(35, 5, $quot->belongtocurrency->iso_code.' '.number_format($tx1, 2), 0, 0, 'R');
 							$pdf->Cell(35, 5, $quot->belongtocurrency->iso_code.' '.number_format($tx1 * $v2->quantity, 2), 0, 1, 'R');
@@ -308,11 +419,11 @@ class PDF extends Fpdf
 
 							$p1 += $v2->quantity * $v2->price_unit;
 						}
-						$pdf->SetFont('Arial', 'B', 9);
+						$pdf->SetFont('Times', 'B', 9);
 						$pdf->Cell(155, 5, 'Sub Total', 0, 0, 'R');
 						$pdf->Cell(35, 5, $quot->belongtocurrency->iso_code.' '.number_format($p1, 2), 0, 1, 'R');
-						$pdf->SetFont('Arial', NULL, 9);
-						$pdf->Ln(5);
+						$pdf->SetFont('Times', NULL, 9);
+						// $pdf->Ln(5);
 					}
 					$gp1 += $p1;
 				}
@@ -321,9 +432,9 @@ class PDF extends Fpdf
 				// count tax
 				$gst = ($quot->tax_value * $gp1) / 100;
 
-				$pdf->SetFont('Arial', 'BI', 9);
+				$pdf->SetFont('Times', 'BI', 9);
 				$pdf->Cell(155, 5, 'GST '.$quot->tax_value.'%', 0, 0, 'R');
-				$pdf->SetFont('Arial', 'B', 9);
+				$pdf->SetFont('Times', 'B', 9);
 				$pdf->Cell(35, 5, $quot->belongtocurrency->iso_code.' '.number_format($gst, 2), 0, 1, 'R');
 
 				$gst1 = $gst + $gp1;
@@ -331,20 +442,40 @@ class PDF extends Fpdf
 				$gst1 = $gp1;
 			}
 
-			$pdf->SetFont('Arial', 'B', 9);
+			$pdf->SetFont('Times', 'B', 9);
 			$pdf->Cell(155, 5, 'Grand Total', 0, 0, 'R');
 			$pdf->Cell(35, 5, $quot->belongtocurrency->iso_code.' '.number_format($gst1, 2), 0, 1, 'R');
-			$pdf->SetFont('Arial', NULL, 9);
+			$pdf->SetFont('Times', NULL, 9);
 
 			if(!is_null($quot->discount) || $quot->discount != 0 ) {
-				$pdf->SetFont('Arial', 'B', 9);
+				$pdf->SetFont('Times', 'B', 9);
 				$pdf->Cell(155, 5, 'Less Special Discount :', 0, 0, 'R');
 				$pdf->Cell(35, 5, $quot->belongtocurrency->iso_code.' '.number_format($quot->discount, 2), 0, 1, 'R');
 				$pdf->Cell(155, 5, 'Nett Total :', 0, 0, 'R');
 				$pdf->Cell(35, 5, $quot->belongtocurrency->iso_code.' '.number_format($gst1 + $quot->discount, 2), 0, 1, 'R');
-				$pdf->SetFont('Arial', NULL, 9);
+				$pdf->SetFont('Times', NULL, 9);
 			}
 			$pdf->Ln(5);
+	}
+
+	// dealer price
+	if( !is_null($quot->dealer_price) || $quot->dealer_price > 0 ) {
+		$pdf->SetFont('Times', 'B', 9);
+		$pdf->Cell(0, 5, 'Recommended Minimum Selling Price Price RM '.$quot->dealer_price, 0, 1, 'L');
+		$pdf->SetFont('Times', NULL, 9);
+		$pdf->Ln(3);
+	}
+
+	// dealer clause
+	if( $quot->hasmanydealer()->get()->count() ) {
+		$pdf->SetFont('Times', 'B', 9);
+		$pdf->SetTextColor(190, 41, 236);
+		foreach ($quot->hasmanydealer()->get() as $ky4 => $vl4) {
+			$pdf->MultiCell(0, 5, $vl4->belongtodealer->dealer, 0, 'C');
+		}
+		$pdf->Ln(3);
+		$pdf->SetFont('Times', NULL, 9);
+		$pdf->SetTextColor(0, 0, 0);
 	}
 
 	// delivery date
@@ -363,7 +494,7 @@ class PDF extends Fpdf
 	// validity
 	if(!is_null($quot->validity)) {
 		$pdf->Cell(30, 5, 'Validity :', 0, 0, 'L');
-		$pdf->Cell(0, 5, $quot->validity.' days from quotation date. ('.$dts->copy()->addDays($quot->validity)->format('D, j F Y').')', 0, 1, 'L');
+		$pdf->Cell(0, 5, $quot->validity.' days from quotation date. ('.$dts->copy()->addDays($quot->validity)->format('D, jS F Y').')', 0, 1, 'L');
 		$pdf->Ln(3);
 	}
 
@@ -380,10 +511,9 @@ class PDF extends Fpdf
 	}
 
 	// exclusions
-	$pdf->SetFont('Arial', 'B', 9);
-	if($quot->hasmanyexclusions()->get()->count()) {
+	$pdf->SetFont('Times', 'B', 9);
+		if($quot->hasmanyexclusions()->get()->count()) {
 		$pdf->Cell(30, 5, 'Exclusions :', 0, 0, 'L');
-
 		$r1 = 1;
 		foreach ($quot->hasmanyexclusions()->get() as $ky2 => $vl2) {
 			$pdf->SetX(40);
@@ -396,6 +526,7 @@ class PDF extends Fpdf
 
 	// remarks
 	if( $quot->hasmanyremarks()->get()->count() ) {
+		$pdf->SetFont('Times', 'B', 9);
 		$pdf->Cell(30, 5, 'Remarks :', 0, 0, 'L');
 		$r2 = 1;
 		foreach ($quot->hasmanyremarks()->get() as $ky3 => $vl3) {
@@ -407,24 +538,10 @@ class PDF extends Fpdf
 		$pdf->Ln(3);
 	}
 
-	// dealer clause
-	if( $quot->hasmanydealer()->get()->count() ) {
-		$pdf->Cell(30, 5, 'Dealer Clause :', 0, 0, 'L');
-
-		$r3 = 1;
-		foreach ($quot->hasmanydealer()->get() as $ky4 => $vl4) {
-			$pdf->SetX(40);
-			$pdf->MultiCell(10, 5, $r3++.'.', 0, 'C');
-			$pdf->SetXY($pdf->GetX() + 40, $pdf->GetY() - 5);
-			$pdf->MultiCell(0, 5, $vl4->belongtodealer->dealer, 0, 'L');
-		}
-		$pdf->Ln(3);
-	}
-
 	// warranty
 	if( $quot->hasmanywarranty()->get()->count() ) {
+		$pdf->SetFont('Times', 'B', 9);
 		$pdf->Cell(30, 5, 'Warranty :', 0, 0, 'L');
-
 		$r4 = 1;
 		foreach ($quot->hasmanywarranty()->get() as $ky5 => $vl5) {
 			$pdf->SetX(40);
@@ -435,24 +552,67 @@ class PDF extends Fpdf
 		$pdf->Ln(3);
 	}
 
+	// bank
+	if( !is_null($quot->bank_id) ) {
+		$pdf->SetFont('Times', 'B', 9);
+		$pdf->MultiCell(0, 5, $quot->belongtobank->bank, 0, 'L');
+		$pdf->Ln(3);
+	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	// $pdf->Cell(0, 5, $pdf->GetY(), 1, 1, 'C');
+	if($quot->budget_quot == 0 || is_null($quot->budget_quot)) {
+		// bottom line
+		if( $pdf->GetY() >= 207 ) {
+			$pdf->AddPage();
+		}
+		// $pdf->SetY(-91);
+		$pdf->SetFont('Times', NULL, 9);
+		$pdf->Cell(95, 5, 'We hope that our above quotation is favourable to you.', 0, 1, 'L');
+		$pdf->Cell(95, 5, 'Thank You.', 0, 1, 'L');
+		$pdf->Ln(2);
+		$pdf->Cell(95, 5, 'Yours Faithfully,', 0, 1, 'L');
+		$pdf->SetFont('Times', 'B', 9);
+		$pdf->MultiCell(95, 5, 'IPMA INDUSTRY SDN.BHD.', 0, 'L');
+		$pdf->SetFont('Times', NULL, 9);
+		$pdf->SetXY($pdf->GetX() + 95, $pdf->GetY() - 5);
+		$pdf->MultiCell(95, 5, 'Agreed to Purchase by:', 0, 'L');
+		$pdf->MultiCell(95, 15, NULL, 0, 'L');
+		$pdf->SetXY($pdf->GetX() + 95, $pdf->GetY() - 15);
+		$pdf->MultiCell(95, 15, NULL, 0, 'L');
+		$pdf->MultiCell(95, 2, '.....................................................', 0, 'L');
+		$pdf->SetXY($pdf->GetX() + 95, $pdf->GetY() - 2);
+		$pdf->MultiCell(95, 2, '.....................................................', 0, 'L');
+		$pdf->MultiCell(95, 5, 'Ong Ree Sheng', 0, 'L');
+		$pdf->SetXY($pdf->GetX() + 95, $pdf->GetY() - 5);
+		$pdf->SetFont('Times', 'I', 9);
+		$pdf->MultiCell(95, 5, 'Signature & Company Stamp', 0, 'L');
+		$pdf->SetFont('Times', NULL, 9);
+		$pdf->MultiCell(95, 5, 'H/P : +60194158799', 0, 'L');
+		$pdf->SetXY($pdf->GetX() + 95, $pdf->GetY() - 5);
+		$pdf->SetFont('Times', 'I', 9);
+		$pdf->MultiCell(95, 5, 'Name :', 0, 'L');
+		$pdf->SetX($pdf->GetX() + 95);
+		$pdf->MultiCell(95, 5, 'Date :', 0, 'L');
+	}
+	elseif ($quot->budget_quot == 1) {
+		// bottom line
+		if( $pdf->GetY() >= 207 ) {
+			$pdf->AddPage();
+		}
+		// $pdf->SetY(-91);
+		$pdf->SetFont('Times', NULL, 9);
+		$pdf->Cell(95, 5, 'We hope that our above quotation is favourable to you.', 0, 1, 'L');
+		$pdf->Cell(95, 5, 'Thank You.', 0, 1, 'L');
+		$pdf->Ln(2);
+		$pdf->Cell(95, 5, 'Yours Faithfully,', 0, 1, 'L');
+		$pdf->SetFont('Times', 'B', 9);
+		$pdf->MultiCell(95, 5, 'IPMA INDUSTRY SDN.BHD.', 0, 'L');
+		$pdf->SetFont('Times', NULL, 9);
+		$pdf->MultiCell(95, 15, NULL, 0, 'L');
+		$pdf->MultiCell(95, 1, '.....................................................', 0, 'L');
+		$pdf->MultiCell(95, 5, 'Ong Ree Sheng', 0, 'L');
+		$pdf->MultiCell(95, 5, 'H/P : +60194158799', 0, 'L');
+	}
 
 	$filename = 'Quotation QT-'.$quot->id.'/'.$arr[1].$rev.'.pdf';
 

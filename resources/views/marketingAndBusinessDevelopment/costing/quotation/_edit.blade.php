@@ -315,7 +315,54 @@ $ap = (($quot->tax_value * $gtotal) / 100) + $gtotal;
 </div>
 
 <p>&nbsp;</p>
+<!-- dealer price -->
+<div class="form-group row {{ $errors->has('dealer_price')?'has-error':NULL }}">
+	{{ Form::label( 'dp', 'Recommended Selling Price For Dealer : ', ['class' => 'col-2 col-form-label'] ) }}
+	<div class="col-sm-10">
+		{!! Form::text('dealer_price', @$value, ['class' => 'form-control form-control-sm', 'id' => 'dp', 'placeholder' => 'Recommended Selling Price For Dealer']) !!}
+	</div>
+</div>
 
+<!-- dealer -->
+<div class="row">
+	{{ Form::label( 'dealer', 'Dealer Clause : ', ['class' => 'col-2 col-form-label'] ) }}
+	<div class=" col-10">
+
+		<div class="dealer_wrapper">
+@if( $quot->hasmanydealer()->get()->count() )
+<?php
+$e9 = 1;
+$e10 = 1;
+$e11 = 1;
+?>
+@foreach( $quot->hasmanydealer()->get() as $qd )
+			<div class="row dealer_row">
+				<div class="col-1 text-danger dealer_delete" data-id="{!! $qd->id !!}">
+					<i class="fas fa-trash" aria-hidden="true"></i>
+				</div>
+
+				{!! Form::hidden('qsdealer['.$e9++.'][id]', $qd->id) !!}
+
+				<div class="form-group col {{ $errors->has('qsdealer.*.dealer_id') ? 'has-error' : '' }}">
+					<select name="qsdealer[{!! $e10++ !!}][dealer_id]" class="form-control form-control-sm" id="dealer_{!! $e11++ !!}" placeholder="Please choose">
+						<option value="">Please choose</option>
+					@foreach(\App\Model\QuotDealer::all() as $dea)
+						<option value="{!! $dea->id !!}" {!! ($dea->id == $qd->dealer_id)?'selected':NULL !!}>{!! $dea->dealer !!}</option>
+					@endforeach
+					</select>
+				</div>
+			</div>
+@endforeach
+@endif
+		</div>
+		<div class="row col-3 dealer_add">
+			<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Dealer</p>
+		</div>
+
+	</div>
+</div>
+
+<!-- delivery date -->
 <div class="row">
 	{{ Form::label( 'ddp', 'Delivery Date : ', ['class' => 'col-2 col-form-label'] ) }}
 	<div class="col">
@@ -353,6 +400,7 @@ $ap = (($quot->tax_value * $gtotal) / 100) + $gtotal;
 </div>
 <br />
 
+<!-- validity -->
 <div class="row">
 	{{ Form::label( 'valid', 'Validity : ', ['class' => 'col-2 col-form-label'] ) }}
 	<div class="form-row col-10">
@@ -470,48 +518,6 @@ $e8 = 1;
 	</div>
 </div>
 
-
-<!-- dealer -->
-<div class="row">
-	{{ Form::label( 'dealer', 'Dealer Clause : ', ['class' => 'col-2 col-form-label'] ) }}
-	<div class=" col-10">
-
-		<div class="dealer_wrapper">
-@if( $quot->hasmanydealer()->get()->count() )
-<?php
-$e9 = 1;
-$e10 = 1;
-$e11 = 1;
-?>
-@foreach( $quot->hasmanydealer()->get() as $qd )
-			<div class="row dealer_row">
-				<div class="col-1 text-danger dealer_delete" data-id="{!! $qd->id !!}">
-					<i class="fas fa-trash" aria-hidden="true"></i>
-				</div>
-
-				{!! Form::hidden('qsdealer['.$e9++.'][id]', $qd->id) !!}
-
-				<div class="form-group col {{ $errors->has('qsdealer.*.dealer_id') ? 'has-error' : '' }}">
-					<select name="qsdealer[{!! $e10++ !!}][dealer_id]" class="form-control form-control-sm" id="dealer_{!! $e11++ !!}" placeholder="Please choose">
-						<option value="">Please choose</option>
-					@foreach(\App\Model\QuotDealer::all() as $dea)
-						<option value="{!! $dea->id !!}" {!! ($dea->id == $qd->dealer_id)?'selected':NULL !!}>{!! $dea->dealer !!}</option>
-					@endforeach
-					</select>
-				</div>
-			</div>
-@endforeach
-@endif
-		</div>
-		<div class="row col-3 dealer_add">
-			<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Dealer</p>
-		</div>
-
-	</div>
-</div>
-
-
-
 <!-- warranty -->
 <div class="row">
 	{{ Form::label( 'warr', 'Warranty : ', ['class' => 'col-2 col-form-label'] ) }}
@@ -551,47 +557,50 @@ $e14 = 1;
 	</div>
 </div>
 
-
 <!-- bank -->
 <div class="row">
 	{{ Form::label( 'bnk', 'Bank : ', ['class' => 'col-2 col-form-label'] ) }}
 	<div class="row col-10">
-
 @foreach(\App\Model\QuotBank::all() as $dea)
-
-<div class="col-6">
-	<div class="card">
-		<div class="card-header">
-			<div class="form-group {{ $errors->has('bank_id')">
-				<input type="radio" name="bank_id" value="{!! $dea->id !!}" aria-describedby="emailHelp_{!! $dea->id !!}" id="bank_{!! $dea->id !!}" {!! ($dea->id == $quot->bank_id)?'checked':NULL !!}>
-				<label for="bank_{!! $dea->id !!}">Option {!! $dea->id !!}</label>
-				<small id="emailHelp_{!! $dea->id !!}" class="form-text text-muted">Click again to remove this option.</small>
+		<div class="col-6">
+			<div class="card">
+				<div class="card-header">
+					<div class="form-group {{ $errors->has('bank_id')?'has-error':NULL }}">
+						<input type="radio" name="bank_id" value="{!! $dea->id !!}" aria-describedby="emailHelp_{!! $dea->id !!}" id="bank_{!! $dea->id !!}" {!! ($dea->id == $quot->bank_id)?'checked':NULL !!}>
+						<label for="bank_{!! $dea->id !!}">Option {!! $dea->id !!}</label>
+						<small id="emailHelp_{!! $dea->id !!}" class="form-text text-muted">Click again to remove this option.</small>
+					</div>
+				</div>
+				<div class="card-body">
+					{!! nl2br($dea->bank) !!}
+				</div>
 			</div>
 		</div>
-		<div class="card-body">
-			{!! nl2br($dea->bank) !!}
-		</div>
-	</div>
-</div>
-
 @endforeach
-
 	</div>
 </div>
 
-
-
-
-
-
-
-
-<div class="form-group row">
+<!-- budget quot -->
+<div class="form-group row {{ $errors->has('grandamount')?'has-error':NULL }}">
 	{!! Form::label('gamount', 'Grand Amount : ', ['class' => 'col-form-label col-2']) !!}
 	<div class="col-10">
 		{!! Form::text('grandamount', @$value, ['class' => 'form-control form-control-sm', 'id' => 'gamount', 'placeholder' => 'Grand Amount In English']) !!}
 	</div>
 </div>
+
+<!-- budget quot -->
+<div class="form-check  {{ $errors->has('budget_quot')?'has-error':NULL }}">
+	<div class="pretty p-icon p-round p-pulse">
+		<input type="hidden" value="1" name="budget_quot">
+		{!! Form::checkbox('budget_quot', 0, $quot->budget_quot, ['class' => 'form-check-input']) !!}
+		<div class="state p-success">
+			<i class="icon mdi mdi-check"></i>
+			{!! Form::label('gamount', 'Budget Quotation', ['class' => 'form-check-label']) !!}
+		</div>
+	</div>
+</div>
+
+
 
 <p>&nbsp;</p>
 

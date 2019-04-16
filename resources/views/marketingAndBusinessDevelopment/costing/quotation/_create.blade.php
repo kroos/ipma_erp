@@ -99,6 +99,30 @@
 </div>
 
 <p>&nbsp;</p>
+<!-- dealer price -->
+<div class="form-group row {{ $errors->has('dealer_price')?'has-error':NULL }}">
+	{{ Form::label( 'dp', 'Recommended Selling Price For Dealer : ', ['class' => 'col-2 col-form-label'] ) }}
+	<div class="col-sm-10">
+		{!! Form::text('dealer_price', @$value, ['class' => 'form-control form-control-sm', 'id' => 'dp', 'placeholder' => 'Recommended Selling Price For Dealer']) !!}
+	</div>
+</div>
+
+<!-- dealer clause -->
+<div class="row">
+	{{ Form::label( 'dealer', 'Dealer Clause : ', ['class' => 'col-2 col-form-label'] ) }}
+	<div class=" col-10">
+
+		<div class="dealer_wrapper">
+
+		</div>
+		<div class="row col-3 dealer_add">
+			<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Dealer</p>
+		</div>
+
+	</div>
+</div>
+
+<!-- delivery date -->
 <div class="row">
 	{{ Form::label( 'ddp', 'Delivery Date : ', ['class' => 'col-2 col-form-label'] ) }}
 	<div class="col">
@@ -161,6 +185,7 @@
 	</div>
 </div>
 
+<!-- exclusion -->
 <div class="row">
 	{{ Form::label( 'exclude', 'Exclusions : ', ['class' => 'col-2 col-form-label'] ) }}
 	<div class=" col-10">
@@ -187,7 +212,7 @@
 	</div>
 </div>
 
-
+<!-- remarks -->
 <div class="row">
 	{{ Form::label( 'remarks', 'Remarks : ', ['class' => 'col-2 col-form-label'] ) }}
 	<div class=" col-10">
@@ -214,58 +239,11 @@
 	</div>
 </div>
 
-
-<!-- dealer -->
-<div class="row">
-	{{ Form::label( 'dealer', 'Dealer Clause : ', ['class' => 'col-2 col-form-label'] ) }}
-	<div class=" col-10">
-
-		<div class="dealer_wrapper">
-			<div class="row dealer_row">
-				<div class="col-1 text-danger dealer_delete" data-id="1">
-					<i class="fas fa-trash" aria-hidden="true"></i>
-				</div>
-
-				<div class="form-group col {{ $errors->has('qsdealer.*.dealer_id') ? 'has-error' : '' }}">
-					<select name="qsdealer[1][dealer_id]" class="form-control form-control-sm" id="dealer_1" placeholder="Please choose">
-						<option value="">Please choose</option>
-					@foreach(\App\Model\QuotDealer::all() as $dea)
-						<option value="{!! $dea->id !!}" >{!! $dea->dealer !!}</option>
-					@endforeach
-					</select>
-				</div>
-			</div>
-		</div>
-		<div class="row col-3 dealer_add">
-			<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Dealer</p>
-		</div>
-
-	</div>
-</div>
-
-
-
 <!-- warranty -->
 <div class="row">
 	{{ Form::label( 'warr', 'Warranty : ', ['class' => 'col-2 col-form-label'] ) }}
 	<div class=" col-10">
-
 		<div class="warranty_wrapper">
-
-			<div class="row warranty_row">
-				<div class="col-1 text-danger warranty_delete" data-id="1">
-					<i class="fas fa-trash" aria-hidden="true"></i>
-				</div>
-
-				<div class="form-group col {{ $errors->has('qswarranty.*.warranty_id') ? 'has-error' : '' }}">
-					<select name="qswarranty[1][warranty_id]" class="form-control form-control-sm" id="warranty_1" placeholder="Please choose">
-						<option value="">Please choose</option>
-					@foreach(\App\Model\QuotWarranty::all() as $dea)
-						<option value="{!! $dea->id !!}" >{!! $dea->warranty !!}</option>
-					@endforeach
-					</select>
-				</div>
-			</div>
 		</div>
 		<div class="row col-3 warranty_add">
 			<p class="text-primary"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Warranty</p>
@@ -285,7 +263,7 @@
 <div class="col-6">
 	<div class="card">
 		<div class="card-header">
-			<div class="form-group {{ $errors->has('bank_id')">
+			<div class="form-group {{ $errors->has('bank_id')?'has-error':NULL }}">
 				<input type="radio" name="bank_id" value="{!! $dea->id !!}" aria-describedby="emailHelp_{!! $dea->id !!}" id="bank_{!! $dea->id !!}" >
 				<label for="bank_{!! $dea->id !!}">Option {!! $dea->id !!}</label>
 				<small id="emailHelp_{!! $dea->id !!}" class="form-text text-muted">Click again to remove this option.</small>
@@ -302,26 +280,23 @@
 	</div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<!-- grand amount -->
 <div class="form-group row">
 	{!! Form::label('gamount', 'Grand Amount : ', ['class' => 'col-form-label col-2']) !!}
 	<div class="col-10">
 		{!! Form::text('grandamount', @$value, ['class' => 'form-control form-control-sm', 'id' => 'gamount', 'placeholder' => 'Grand Amount In English']) !!}
+	</div>
+</div>
+
+<!-- budget quot -->
+<div class="form-check  {{ $errors->has('budget_quot')?'has-error':NULL }}">
+	<div class="pretty p-icon p-round p-pulse">
+		<input type="hidden" value="1" name="budget_quot">
+		{!! Form::checkbox('budget_quot', 0, NULL, ['class' => 'form-check-input']) !!}
+		<div class="state p-success">
+			<i class="icon mdi mdi-check"></i>
+			{!! Form::label('gamount', 'Budget Quotation', ['class' => 'form-check-label']) !!}
+		</div>
 	</div>
 </div>
 
