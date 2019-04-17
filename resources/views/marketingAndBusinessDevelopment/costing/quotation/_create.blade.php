@@ -291,11 +291,11 @@
 <!-- budget quot -->
 <div class="form-check  {{ $errors->has('budget_quot')?'has-error':NULL }}">
 	<div class="pretty p-icon p-round p-pulse">
-		<input type="hidden" value="1" name="budget_quot">
-		{!! Form::checkbox('budget_quot', 0, NULL, ['class' => 'form-check-input']) !!}
+		<input type="hidden" value="0" name="budget_quot">
+		{!! Form::checkbox('budget_quot', 1, NULL, ['class' => 'form-check-input', 'id' => 'bq']) !!}
 		<div class="state p-success">
 			<i class="icon mdi mdi-check"></i>
-			{!! Form::label('gamount', 'Budget Quotation', ['class' => 'form-check-label']) !!}
+			{!! Form::label('bq', 'Budget Quotation', ['class' => 'form-check-label']) !!}
 		</div>
 	</div>
 </div>

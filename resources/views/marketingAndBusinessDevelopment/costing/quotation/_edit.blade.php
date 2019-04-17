@@ -580,7 +580,7 @@ $e14 = 1;
 	</div>
 </div>
 
-<!-- budget quot -->
+<!-- grand amount -->
 <div class="form-group row {{ $errors->has('grandamount')?'has-error':NULL }}">
 	{!! Form::label('gamount', 'Grand Amount : ', ['class' => 'col-form-label col-2']) !!}
 	<div class="col-10">
@@ -591,11 +591,11 @@ $e14 = 1;
 <!-- budget quot -->
 <div class="form-check  {{ $errors->has('budget_quot')?'has-error':NULL }}">
 	<div class="pretty p-icon p-round p-pulse">
-		<input type="hidden" value="1" name="budget_quot">
-		{!! Form::checkbox('budget_quot', 0, $quot->budget_quot, ['class' => 'form-check-input']) !!}
+		<input type="hidden" value="0" name="budget_quot">
+		{!! Form::checkbox('budget_quot', 1, $quot->budget_quot, ['class' => 'form-check-input', 'id' => 'bq']) !!}
 		<div class="state p-success">
 			<i class="icon mdi mdi-check"></i>
-			{!! Form::label('gamount', 'Budget Quotation', ['class' => 'form-check-label']) !!}
+			{!! Form::label('bq', 'Budget Quotation', ['class' => 'form-check-label']) !!}
 		</div>
 	</div>
 </div>

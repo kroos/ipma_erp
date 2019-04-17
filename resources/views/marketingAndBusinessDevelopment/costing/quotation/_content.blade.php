@@ -174,7 +174,7 @@ switch ( $t++ ) {
 			<td>{!! $q->belongtocurrency->iso_code !!} {!! number_format((float) $qp, 2, '.', ''); !!}</td>
 			<td>
 				<a href="{!! route('quot.edit', $q->id) !!}" title="Update"><i class="far fa-edit"></i></a>
-				<a href="{!! route('quot.show', $q->id) !!}" title="PDF"><i class="far fa-file-pdf"></i></a>
+				<a href="{!! route('quot.show', $q->id) !!}" target="_blank" title="PDF"><i class="far fa-file-pdf"></i></a>
 				<span class="text-danger inactivate" data-id="{!! $q->id !!}" title="Delete"><i class="far fa-trash-alt"></i></span>
 			</td>
 		</tr>

@@ -1,6 +1,121 @@
 @extends('layouts.app')
 
 @section('content')
+<?php
+if($quot->hasmanyrevision()->get()->count()) {
+	switch ( $quot->hasmanyrevision()->get()->count('id') ) {
+		case 1:
+			$rev = '-A';
+			break;
+
+		case 2:
+			$rev = '-B';
+			break;
+
+		case 3:
+			$rev = '-C';
+			break;
+
+		case 4:
+			$rev = '-D';
+			break;
+
+		case 5:
+			$rev = '-E';
+			break;
+
+		case 6:
+			$rev = '-F';
+			break;
+
+		case 7:
+			$rev = '-G';
+			break;
+
+		case 8:
+			$rev = '-H';
+			break;
+
+		case 9:
+			$rev = '-I';
+			break;
+
+		case 10:
+			$rev = '-J';
+			break;
+
+		case 11:
+			$rev = '-K';
+			break;
+
+		case 12:
+			$rev = '-L';
+			break;
+
+		case 13:
+			$rev = '-M';
+			break;
+
+		case 14:
+			$rev = '-N';
+			break;
+
+		case 15:
+			$rev = '-O';
+			break;
+
+		case 16:
+			$rev = '-P';
+			break;
+
+		case 17:
+			$rev = '-Q';
+			break;
+
+		case 18:
+			$rev = '-R';
+			break;
+
+		case 19:
+			$rev = '-S';
+			break;
+
+		case 20:
+			$rev = '-T';
+			break;
+
+		case 21:
+			$rev = '-U';
+			break;
+
+		case 22:
+			$rev = '-V';
+			break;
+
+		case 23:
+			$rev = '-W';
+			break;
+
+		case 24:
+			$rev = '-X';
+			break;
+
+		case 25:
+			$rev = '-Y';
+			break;
+
+		case 26:
+			$rev = '-Z';
+			break;
+
+		default:
+			$rev = $quot->hasmanyrevision()->get()->count('id');
+			break;
+	}
+} else {
+	$rev = NULL;
+}
+?>
 <div class="card">
 	<div class="card-header"><h1>Costing Department</h1></div>
 	<div class="card-body">
@@ -71,11 +186,11 @@
 <?php
 $dts = \Carbon\Carbon::parse($quot->date);
 $arr = str_split( $dts->format('Y'), 2 );
-$rev = $quot->hasmanyrevision()->get()->count('id');
+// $rev = $quot->hasmanyrevision()->get()->count('id');
 ?>
 				Edit Quotation QT-{!! $quot->id !!}/{!! $arr[1] !!}
 @if($quot->hasmanyrevision()->get()->count())
--({!! $rev !!})
+{!! $rev !!}
 @endif
 			</div>
 			<div class="card-body">
