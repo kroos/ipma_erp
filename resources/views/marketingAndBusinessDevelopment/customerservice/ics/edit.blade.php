@@ -501,7 +501,7 @@ $(wrapmodel).on("click",".remove_model", function(e){
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // add part & Accessories : add and remove row
-var maxfpart	= 10; //maximum input boxes allowed
+var maxfpart	= 20; //maximum input boxes allowed
 var addbtnpart	= $(".add_part");
 var wrappart	= $(".part_wrap");
 
