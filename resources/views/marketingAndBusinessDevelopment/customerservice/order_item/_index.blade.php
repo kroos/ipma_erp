@@ -141,6 +141,7 @@ if( $ch3 > 0 ) {
 					<th>Customer</th>
 					<th>Informed By</th>
 					<th>Item/Part</th>
+					<th>&nbsp;</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -194,6 +195,9 @@ foreach ($cs->hasmanyorderitem()->get() as $v1) {
 				@endforeach
 							</tbody>
 						</table>
+					</td>
+					<td>
+						<a href="{!! route('csOrder.show', $cs->id) !!}" target="_blank" title="PDF"><i class="far fa-file-pdf"></i></a>
 					</td>
 				</tr>
 	@endif

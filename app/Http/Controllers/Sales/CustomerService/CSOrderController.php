@@ -49,7 +49,7 @@ class CSOrderController extends Controller
 
 	public function show(CSOrder $csOrder)
 	{
-	//
+		return view('marketingAndBusinessDevelopment.customerservice.order_item.showpdf', compact(['csOrder']));
 	}
 
 	public function edit(CSOrder $csOrder)
