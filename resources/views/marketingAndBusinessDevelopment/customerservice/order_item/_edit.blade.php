@@ -72,7 +72,8 @@ $i13 = 1;
 			<div class="roworderitem">
 				<div class="col-sm-12 form-row ">
 					<div class="col-sm-1 text-danger">
-							<i class="fas fa-trash delete_item" aria-hidden="true" id="delete_item_{{ $i1++ }}"></i>
+							<!-- <i class="fas fa-trash delete_item" aria-hidden="true" id="delete_item_{{ $i1++ }}"></i> -->
+							<i class="fas fa-trash delete_item" id="delete_item_{{ $i1++ }}" data-id="{!! $oi->id !!}"></i>
 @if(!is_null($oi->id))
 							{!! Form::hidden('csoi['.$i12++.'][id]', $oi->id) !!}
 @endif

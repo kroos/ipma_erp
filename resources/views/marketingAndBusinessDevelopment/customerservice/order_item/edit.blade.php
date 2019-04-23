@@ -181,7 +181,7 @@ $(wrappers).on("click",".remove_item", function(e){
 
 /////////////////////////////////////////////////////////////////////////////////////////
 // user disable
-$(document).on('click', '.delete_model', function(e){
+$(document).on('click', '.delete_item', function(e){
 	
 	var productId = $(this).data('id');
 	SwalDelete(productId);
@@ -203,7 +203,7 @@ function SwalDelete(productId){
 			return new Promise(function(resolve) {
 				$.ajax({
 					type: 'DELETE',
-					url: '{{ url('machine_model') }}' + '/' + productId,
+					url: '{{ url('csOrderItem') }}' + '/' + productId,
 					data: {
 							_token : $('meta[name=csrf-token]').attr('content'),
 							id: productId,
