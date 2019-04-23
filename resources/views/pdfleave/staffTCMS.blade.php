@@ -60,8 +60,119 @@ class PDF extends Fpdf
 	}
 }
 
+class PDF_MC_Table extends PDF {
+// variable to store widths and aligns of cells, and line height
+	var $widths;
+	var $aligns;
+	var $lineHeight;
+//Set the array of column widths
+	function SetWidths($w){
+		$this->widths=$w;
+	}
+//Set the array of column alignments
+	function SetAligns($a){
+		$this->aligns=$a;
+	}
+//Set line height
+	function SetLineHeight($h){
+		$this->lineHeight=$h;
+	}
+//Calculate the height of the row
+	function Row($data)
+	{
+// number of line
+		$nb=0;
+// loop each data to find out greatest line number in a row.
+		for($i=0;$i<count($data);$i++){
+// NbLines will calculate how many lines needed to display text wrapped in specified width.
+// then max function will compare the result with current $nb. Returning the greatest one. And reassign the $nb.
+			$nb=max($nb,$this->NbLines($this->widths[$i],$data[$i]));
+		}
+
+//multiply number of line with line height. This will be the height of current row
+		$h=$this->lineHeight * $nb;
+//Issue a page break first if needed
+		$this->CheckPageBreak($h);
+//Draw the cells of current row
+		for($i=0;$i<count($data);$i++)
+		{
+// width of the current col
+			$w=$this->widths[$i];
+// alignment of the current col. if unset, make it left.
+			$a=isset($this->aligns[$i]) ? $this->aligns[$i] : 'L';
+//Save the current position
+			$x=$this->GetX();
+			$y=$this->GetY();
+//Draw the border
+			$this->Rect($x,$y,$w,$h);
+//Print the text
+			$this->MultiCell($w,5,$data[$i],0,$a);
+//Put the position to the right of the cell
+			$this->SetXY($x+$w,$y);
+		}
+//Go to the next line
+		$this->Ln($h);
+	}
+	function CheckPageBreak($h)
+	{
+//If the height h would cause an overflow, add a new page immediately
+		if($this->GetY()+$h>$this->PageBreakTrigger)
+			$this->AddPage($this->CurOrientation);
+	}
+	function NbLines($w,$txt)
+	{
+//calculate the number of lines a MultiCell of width w will take
+		$cw=&$this->CurrentFont['cw'];
+		if($w==0)
+			$w=$this->w-$this->rMargin-$this->x;
+		$wmax=($w-2*$this->cMargin)*1000/$this->FontSize;
+		$s=str_replace("\r",'',$txt);
+		$nb=strlen($s);
+		if($nb>0 and $s[$nb-1]=="\n")
+			$nb--;
+		$sep=-1;
+		$i=0;
+		$j=0;
+		$l=0;
+		$nl=1;
+		while($i<$nb)
+		{
+			$c=$s[$i];
+			if($c=="\n")
+			{
+				$i++;
+				$sep=-1;
+				$j=$i;
+				$l=0;
+				$nl++;
+				continue;
+			}
+			if($c==' ')
+				$sep=$i;
+			$l+=$cw[$c];
+			if($l>$wmax)
+			{
+				if($sep==-1)
+				{
+					if($i==$j)
+						$i++;
+				}
+				else
+					$i=$sep+1;
+				$sep=-1;
+				$j=$i;
+				$l=0;
+				$nl++;
+			}
+			else
+				$i++;
+		}
+		return $nl;
+	}
+}
+
 // Instanciation of inherited class
-	$pdf = new Pdf('L','mm', 'A4');
+	$pdf = new PDF_MC_Table('L','mm', 'A4');
 	$pdf->AliasNbPages();
 	$pdf->AddPage();
 	$pdf->SetTitle('Staff Attendance Report - '. Carbon::parse($dts)->format('D, j F Y').' To '.Carbon::parse($dte)->format('D, j F Y'));
@@ -97,6 +208,17 @@ class PDF extends Fpdf
 	$pdf->Cell(25, 5, 'Leave Form', 1, 1, 'C');
 
 	$pdf->SetFont('Arial', NULL, 8);	// setting font
+
+	// starting PDF_MC_Table
+	// set width for each column (5 columns)
+	$pdf->SetWidths([20, 18, 15, 52, 15, 60, 72, 25]);
+
+	// set alignment
+	$pdf->SetAligns(['L', 'L', 'L', 'L', 'L', 'L', 'L', 'L']);
+
+	// set line heights. This is the height of each lines, not rows.
+	$pdf->SetLineHeight(5);
+
 	$i = 0;
 	foreach( $staffTCMS as $stcms ):
 		$lea = StaffLeave::where('staff_id', $stcms->staff_id)->whereRaw('"'.$stcms->date.'" BETWEEN DATE(staff_leaves.date_time_start) AND DATE(staff_leaves.date_time_end)')->whereIn('active', [1, 2])->first();
@@ -132,14 +254,24 @@ class PDF extends Fpdf
 
 					if( $stcms->belongtostaff->active == 1 ){
 							$i++;
-							$pdf->Cell(20, 10, Carbon::parse($stcms->date)->format('j M Y'), 1, 0, 'L');
-							$pdf->Cell(18, 10, $stcms->leave_taken, 1, 0, 'L');
-							$pdf->Cell(15, 10, $stcms->belongtostaff->belongtolocation->location, 1, 0, 'L');
-							$pdf->Cell(52, 10, $stcms->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first()->belongtodepartment->department, 1, 0, 'L');
-							$pdf->Cell(15, 10, $stcms->belongtostaff->hasmanylogin()->where('active', 1)->first()->username, 1, 0, 'L');
-							$pdf->Cell(60, 10, $stcms->belongtostaff->name, 1, 0, 'L');
-							$pdf->Cell(72, 10, $stcms->remark, 1, 0, 'L');
-							$pdf->Cell(25, 10, $leaid, 1, 1, 'L');
+							$pdf->Row([
+								Carbon::parse($stcms->date)->format('j M Y'),
+								$stcms->leave_taken,
+								$stcms->belongtostaff->belongtolocation->location,
+								$stcms->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first()->belongtodepartment->department,
+								$stcms->belongtostaff->hasmanylogin()->where('active', 1)->first()->username,
+								$stcms->belongtostaff->name,
+								$stcms->remark,
+								$leaid,
+							]);
+							// $pdf->Cell(20, 10, Carbon::parse($stcms->date)->format('j M Y'), 1, 0, 'L');
+							// $pdf->Cell(18, 10, $stcms->leave_taken, 1, 0, 'L');
+							// $pdf->Cell(15, 10, $stcms->belongtostaff->belongtolocation->location, 1, 0, 'L');
+							// $pdf->Cell(52, 10, $stcms->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first()->belongtodepartment->department, 1, 0, 'L');
+							// $pdf->Cell(15, 10, $stcms->belongtostaff->hasmanylogin()->where('active', 1)->first()->username, 1, 0, 'L');
+							// $pdf->Cell(60, 10, $stcms->belongtostaff->name, 1, 0, 'L');
+							// $pdf->Cell(72, 10, $stcms->remark, 1, 0, 'L');
+							// $pdf->Cell(25, 10, $leaid, 1, 1, 'L');
 					}
 				}
 			}
@@ -212,17 +344,28 @@ class PDF extends Fpdf
 
 			if( Carbon::createFromTimeString($stcms1->in)->gt( Carbon::createFromTimeString($time->first()->time_start_am) )  ):
 				$ii++;
-				$pdf->Cell(20, 10, Carbon::parse($stcms1->date)->format('j M Y'), 1, 0, 'L');
-				$pdf->Cell(18, 10, ($stcms1->exception != 1)?'Late':'Exception', 1, 0, 'L');
-				$pdf->Cell(15, 10, $stcms1->belongtostaff->belongtolocation->location, 1, 0, 'L');
-				$pdf->Cell(52, 10, $stcms1->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first()->belongtodepartment->department, 1, 0, 'L');
-				$pdf->Cell(15, 10, $stcms1->belongtostaff->hasmanylogin()->where('active', 1)->first()->username, 1, 0, 'L');
-				$pdf->Cell(60, 10, $stcms1->belongtostaff->name, 1, 0, 'L');
+				$pdf->Row([
+				]);
+				$pdf->MultiCell(20, 5, Carbon::parse($stcms1->date)->format('j M Y'), 1, 'L');
+				$pdf->SetXY($pdf->GetX() + 20, $pdf->GetY() - 5 );
+				$pdf->MultiCell(18, 5, ($stcms1->exception != 1)?'Late':'Exception', 1, 'L');
+				$pdf->SetXY($pdf->GetX() + 38, $pdf->GetY() - 5 );
+				$pdf->MultiCell(15, 5, $stcms1->belongtostaff->belongtolocation->location, 1, 'L');
+				$pdf->SetXY($pdf->GetX() + 53, $pdf->GetY() - 5 );
+				$pdf->MultiCell(52, 5, $stcms1->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first()->belongtodepartment->department, 1, 'L');
+				$pdf->SetXY($pdf->GetX() + 105, $pdf->GetY() - 5 );
+				$pdf->MultiCell(15, 5, $stcms1->belongtostaff->hasmanylogin()->where('active', 1)->first()->username, 1, 'L');
+				$pdf->SetXY($pdf->GetX() + 120, $pdf->GetY() - 5 );
+				$pdf->MultiCell(60, 5, $stcms1->belongtostaff->name, 1, 'L');
+				$pdf->SetXY($pdf->GetX() + 180, $pdf->GetY() - 5 );
 				$pdf->SetTextColor(255, 0, 0);
-				$pdf->Cell(14, 10, Carbon::createFromTimeString($stcms1->in)->format('h:i a'), 1, 0, 'L');
+				$pdf->MultiCell(14, 5, Carbon::createFromTimeString($stcms1->in)->format('h:i a'), 1, 'L');
+				$pdf->SetXY($pdf->GetX() + 194, $pdf->GetY() - 5 );
 				$pdf->SetTextColor(0, 0, 0);
-				$pdf->Cell(58, 10, $stcms1->remark, 1, 0, 'L');
-				$pdf->Cell(25, 10, $leaid, 1, 1, 'L');
+				$pdf->MultiCell(58, 5, $stcms1->remark, 1, 'L');
+				$pdf->SetXY($pdf->GetX() + 252, $pdf->GetY() - 5 );
+				$pdf->MultiCell(25, 5, $leaid, 1, 'L');
+				// $pdf->SetXY($pdf + 20->GetX(), $pdf->GetY() + 5);
 			endif;
 		endif;
 
@@ -247,6 +390,17 @@ class PDF extends Fpdf
 
 	$pdf->SetFont('Arial', NULL, 8);	// setting font
 
+	// starting PDF_MC_Table
+	// set width for each column (5 columns)
+	$pdf->SetWidths([20, 18, 15, 52, 15, 60, 72, 25]);
+
+	// set alignment
+	$pdf->SetAligns(['L', 'L', 'L', 'L', 'L', 'L', 'L', 'L']);
+
+	// set line heights. This is the height of each lines, not rows.
+	$pdf->SetLineHeight(5);
+
+
 	$iii = 0;
 	foreach( $staffTCMS as $stcms2 ):
 		if($stcms2->belongtostaff->active == 1):
@@ -263,14 +417,16 @@ class PDF extends Fpdf
 
 			if( $stcms2->leave_taken == 'Outstation' ):
 				$iii++;
-				$pdf->Cell(20, 10, Carbon::parse($stcms2->date)->format('j M Y'), 1, 0, 'L');
-				$pdf->Cell(18, 10, $stcms2->leave_taken, 1, 0, 'L');
-				$pdf->Cell(15, 10, $stcms2->belongtostaff->belongtolocation->location, 1, 0, 'L');
-				$pdf->Cell(52, 10, $stcms2->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first()->belongtodepartment->department, 1, 0, 'L');
-				$pdf->Cell(15, 10, $stcms2->belongtostaff->hasmanylogin()->where('active', 1)->first()->username, 1, 0, 'L');
-				$pdf->Cell(60, 10, $stcms2->belongtostaff->name, 1, 0, 'L');
-				$pdf->Cell(72, 10, $stcms2->remark, 1, 0, 'L');
-				$pdf->Cell(25, 10, $leaid, 1, 1, 'L');
+				$pdf->Row([
+					Carbon::parse($stcms2->date)->format('j M Y'),
+					$stcms2->leave_taken,
+					$stcms2->belongtostaff->belongtolocation->location,
+					$stcms2->belongtostaff->belongtomanyposition()->wherePivot('main', 1)->first()->belongtodepartment->department,
+					$stcms2->belongtostaff->hasmanylogin()->where('active', 1)->first()->username,
+					$stcms2->belongtostaff->name,
+					$stcms2->remark,
+					$leaid,
+				]);
 			endif;
 		endif;
 

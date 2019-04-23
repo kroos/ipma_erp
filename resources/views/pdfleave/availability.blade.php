@@ -62,6 +62,117 @@ class PDF extends Fpdf
 	}
 }
 
+class PDF_MC_Table extends PDF {
+// variable to store widths and aligns of cells, and line height
+	var $widths;
+	var $aligns;
+	var $lineHeight;
+//Set the array of column widths
+	function SetWidths($w){
+		$this->widths=$w;
+	}
+//Set the array of column alignments
+	function SetAligns($a){
+		$this->aligns=$a;
+	}
+//Set line height
+	function SetLineHeight($h){
+		$this->lineHeight=$h;
+	}
+//Calculate the height of the row
+	function Row($data)
+	{
+// number of line
+		$nb=0;
+// loop each data to find out greatest line number in a row.
+		for($i=0;$i<count($data);$i++){
+// NbLines will calculate how many lines needed to display text wrapped in specified width.
+// then max function will compare the result with current $nb. Returning the greatest one. And reassign the $nb.
+			$nb=max($nb,$this->NbLines($this->widths[$i],$data[$i]));
+		}
+
+//multiply number of line with line height. This will be the height of current row
+		$h=$this->lineHeight * $nb;
+//Issue a page break first if needed
+		$this->CheckPageBreak($h);
+//Draw the cells of current row
+		for($i=0;$i<count($data);$i++)
+		{
+// width of the current col
+			$w=$this->widths[$i];
+// alignment of the current col. if unset, make it left.
+			$a=isset($this->aligns[$i]) ? $this->aligns[$i] : 'L';
+//Save the current position
+			$x=$this->GetX();
+			$y=$this->GetY();
+//Draw the border
+			$this->Rect($x,$y,$w,$h);
+//Print the text
+			$this->MultiCell($w,5,$data[$i],0,$a);
+//Put the position to the right of the cell
+			$this->SetXY($x+$w,$y);
+		}
+//Go to the next line
+		$this->Ln($h);
+	}
+	function CheckPageBreak($h)
+	{
+//If the height h would cause an overflow, add a new page immediately
+		if($this->GetY()+$h>$this->PageBreakTrigger)
+			$this->AddPage($this->CurOrientation);
+	}
+	function NbLines($w,$txt)
+	{
+//calculate the number of lines a MultiCell of width w will take
+		$cw=&$this->CurrentFont['cw'];
+		if($w==0)
+			$w=$this->w-$this->rMargin-$this->x;
+		$wmax=($w-2*$this->cMargin)*1000/$this->FontSize;
+		$s=str_replace("\r",'',$txt);
+		$nb=strlen($s);
+		if($nb>0 and $s[$nb-1]=="\n")
+			$nb--;
+		$sep=-1;
+		$i=0;
+		$j=0;
+		$l=0;
+		$nl=1;
+		while($i<$nb)
+		{
+			$c=$s[$i];
+			if($c=="\n")
+			{
+				$i++;
+				$sep=-1;
+				$j=$i;
+				$l=0;
+				$nl++;
+				continue;
+			}
+			if($c==' ')
+				$sep=$i;
+			$l+=$cw[$c];
+			if($l>$wmax)
+			{
+				if($sep==-1)
+				{
+					if($i==$j)
+						$i++;
+				}
+				else
+					$i=$sep+1;
+				$sep=-1;
+				$j=$i;
+				$l=0;
+				$nl++;
+			}
+			else
+				$i++;
+		}
+		return $nl;
+	}
+}
+
 $now = Carbon::now();
 $ye = $now->copy()->format('Y');
 $n = Carbon::now();
@@ -79,7 +190,7 @@ switch ($ca) {
 }
 
 // Instanciation of inherited class
-	$pdf = new Pdf('L','mm', 'A3');
+	$pdf = new PDF_MC_Table('L','mm', 'A3');
 	$pdf->AliasNbPages();
 	$pdf->AddPage();
 	$pdf->SetTitle('Staff Leave And Availability Report For '.$cat.' Category ('.$ye.')');
@@ -209,21 +320,33 @@ foreach($stcms1 as $ke) {
 
 	// dd($colso);
 
+	// starting PDF_MC_Table
+	// set width for each column (5 columns)
+	$pdf->SetWidths([10, 15, 75, 30, 90, 20, 20, 20, 30, 30, 50]);
+
+	// set alignment
+	$pdf->SetAligns(['C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'C']);
+
+	// set line heights. This is the height of each lines, not rows.
+	$pdf->SetLineHeight(5);
+
 	$p = 1;
 	foreach ($colso as $key => $val) {
 		// $pdf->MultiCell(0, 5, $val['username'], 0, 'C');
 
-		$pdf->Cell(10, 10, $p++, 1, 0, 'C');
-		$pdf->Cell(15, 10, $val['username'], 1, 0, 'C');
-		$pdf->Cell(75, 10, $val['name'], 1, 0, 'C');
-		$pdf->Cell(30, 10, $val['location'], 1, 0, 'C');
-		$pdf->Cell(90, 10, $val['department'], 1, 0, 'C');
-		$pdf->Cell(20, 10, $val['al'], 1, 0, 'C');
-		$pdf->Cell(20, 10, $val['upl'], 1, 0, 'C');
-		$pdf->Cell(20, 10, $val['mc'], 1, 0, 'C');
-		$pdf->Cell(30, 10, $val['mc-upl'], 1, 0, 'C');
-		$pdf->Cell(30, 10, $val['absent'], 1, 0, 'C');
-		$pdf->Cell(50, 10, ($val['total'] > 1)?$val['total'].' days':$val['total'].' day', 1, 1, 'C');
+		$pdf->Row([
+			$p++,
+			$val['username'],
+			$val['name'],
+			$val['location'],
+			$val['department'],
+			$val['al'],
+			$val['upl'],
+			$val['mc'],
+			$val['mc-upl'],
+			$val['absent'],
+			($val['total'] > 1)?$val['total'].' days':$val['total'].' day',
+		]);
 	}
 // $pdf->Cell(0, 5, $pdf->GetY(), 1, 1, 'C');
 // $pdf->SetY( -1 );
