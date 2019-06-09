@@ -7,8 +7,10 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Traits\Macroable;
-use PHPUnit\Framework\Assert as PHPUnit;
+use Illuminate\Foundation\Testing\Assert as PHPUnit;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Foundation\Testing\Constraints\SeeInOrder;
 
 /**
@@ -26,6 +28,13 @@ class TestResponse
      * @var \Illuminate\Http\Response
      */
     public $baseResponse;
+
+    /**
+     * The streamed content of the response.
+     *
+     * @var string
+     */
+    protected $streamedContent;
 
     /**
      * Create a new test response instance.
@@ -221,9 +230,10 @@ class TestResponse
      * @param  string  $cookieName
      * @param  mixed  $value
      * @param  bool  $encrypted
+     * @param  bool  $unserialize
      * @return $this
      */
-    public function assertCookie($cookieName, $value = null, $encrypted = true)
+    public function assertCookie($cookieName, $value = null, $encrypted = true, $unserialize = false)
     {
         PHPUnit::assertNotNull(
             $cookie = $this->getCookie($cookieName),
@@ -237,7 +247,7 @@ class TestResponse
         $cookieValue = $cookie->getValue();
 
         $actual = $encrypted
-            ? app('encrypter')->decrypt($cookieValue) : $cookieValue;
+            ? app('encrypter')->decrypt($cookieValue, $unserialize) : $cookieValue;
 
         PHPUnit::assertEquals(
             $value, $actual,
@@ -332,7 +342,7 @@ class TestResponse
      */
     public function assertSee($value)
     {
-        PHPUnit::assertContains((string) $value, $this->getContent());
+        PHPUnit::assertStringContainsString((string) $value, $this->getContent());
 
         return $this;
     }
@@ -358,7 +368,7 @@ class TestResponse
      */
     public function assertSeeText($value)
     {
-        PHPUnit::assertContains((string) $value, strip_tags($this->getContent()));
+        PHPUnit::assertStringContainsString((string) $value, strip_tags($this->getContent()));
 
         return $this;
     }
@@ -384,7 +394,7 @@ class TestResponse
      */
     public function assertDontSee($value)
     {
-        PHPUnit::assertNotContains((string) $value, $this->getContent());
+        PHPUnit::assertStringNotContainsString((string) $value, $this->getContent());
 
         return $this;
     }
@@ -397,7 +407,7 @@ class TestResponse
      */
     public function assertDontSeeText($value)
     {
-        PHPUnit::assertNotContains((string) $value, strip_tags($this->getContent()));
+        PHPUnit::assertStringNotContainsString((string) $value, strip_tags($this->getContent()));
 
         return $this;
     }
@@ -568,7 +578,7 @@ class TestResponse
     public function assertJsonStructure(array $structure = null, $responseData = null)
     {
         if (is_null($structure)) {
-            return $this->assertJson($this->json());
+            return $this->assertExactJson($this->json());
         }
 
         if (is_null($responseData)) {
@@ -577,7 +587,7 @@ class TestResponse
 
         foreach ($structure as $key => $value) {
             if (is_array($value) && $key === '*') {
-                PHPUnit::assertInternalType('array', $responseData);
+                PHPUnit::assertIsArray($responseData);
 
                 foreach ($responseData as $responseDataItem) {
                     $this->assertJsonStructure($structure['*'], $responseDataItem);
@@ -628,12 +638,22 @@ class TestResponse
      */
     public function assertJsonValidationErrors($keys)
     {
-        $errors = $this->json()['errors'];
+        $keys = Arr::wrap($keys);
 
-        foreach (Arr::wrap($keys) as $key) {
-            PHPUnit::assertTrue(
-                isset($errors[$key]),
-                "Failed to find a validation error in the response for key: '{$key}'"
+        PHPUnit::assertNotEmpty($keys, 'No keys were provided.');
+
+        $errors = $this->json()['errors'] ?? [];
+
+        $errorMessage = $errors
+                ? 'Response has the following JSON validation errors:'.
+                        PHP_EOL.PHP_EOL.json_encode($errors, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE).PHP_EOL
+                : 'Response does not have JSON validation errors.';
+
+        foreach ($keys as $key) {
+            PHPUnit::assertArrayHasKey(
+                $key,
+                $errors,
+                "Failed to find a validation error in the response for key: '{$key}'".PHP_EOL.PHP_EOL.$errorMessage
             );
         }
 
@@ -646,7 +666,7 @@ class TestResponse
      * @param  string|array  $keys
      * @return $this
      */
-    public function assertJsonMissingValidationErrors($keys)
+    public function assertJsonMissingValidationErrors($keys = null)
     {
         $json = $this->json();
 
@@ -657,6 +677,13 @@ class TestResponse
         }
 
         $errors = $json['errors'];
+
+        if (is_null($keys) && count($errors) > 0) {
+            PHPUnit::fail(
+                'Response has unexpected validation errors: '.PHP_EOL.PHP_EOL.
+                json_encode($errors, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
+            );
+        }
 
         foreach (Arr::wrap($keys) as $key) {
             PHPUnit::assertFalse(
@@ -710,7 +737,7 @@ class TestResponse
     {
         $this->ensureResponseHasView();
 
-        PHPUnit::assertEquals($value, $this->original->getName());
+        PHPUnit::assertEquals($value, $this->original->name());
 
         return $this;
     }
@@ -733,9 +760,11 @@ class TestResponse
         if (is_null($value)) {
             PHPUnit::assertArrayHasKey($key, $this->original->getData());
         } elseif ($value instanceof Closure) {
-            PHPUnit::assertTrue($value($this->original->$key));
+            PHPUnit::assertTrue($value($this->original->getData()[$key]));
+        } elseif ($value instanceof Model) {
+            PHPUnit::assertTrue($value->is($this->original->getData()[$key]));
         } else {
-            PHPUnit::assertEquals($value, $this->original->$key);
+            PHPUnit::assertEquals($value, $this->original->getData()[$key]);
         }
 
         return $this;
@@ -758,6 +787,19 @@ class TestResponse
         }
 
         return $this;
+    }
+
+    /**
+     * Get a piece of data from the original view.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function viewData($key)
+    {
+        $this->ensureResponseHasView();
+
+        return $this->original->getData()[$key];
     }
 
     /**
@@ -861,13 +903,56 @@ class TestResponse
     }
 
     /**
+     * Assert that the session is missing the given errors.
+     *
+     * @param  string|array  $keys
+     * @param  string  $format
+     * @param  string  $errorBag
+     * @return $this
+     */
+    public function assertSessionDoesntHaveErrors($keys = [], $format = null, $errorBag = 'default')
+    {
+        $keys = (array) $keys;
+
+        if (empty($keys)) {
+            return $this->assertSessionHasNoErrors();
+        }
+
+        if (is_null($this->session()->get('errors'))) {
+            PHPUnit::assertTrue(true);
+
+            return $this;
+        }
+
+        $errors = $this->session()->get('errors')->getBag($errorBag);
+
+        foreach ($keys as $key => $value) {
+            if (is_int($key)) {
+                PHPUnit::assertFalse($errors->has($value), "Session has unexpected error: $value");
+            } else {
+                PHPUnit::assertNotContains($value, $errors->get($key, $format));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Assert that the session has no errors.
      *
      * @return $this
      */
     public function assertSessionHasNoErrors()
     {
-        $this->assertSessionMissing('errors');
+        $hasErrors = $this->session()->has('errors');
+
+        $errors = $hasErrors ? $this->session()->get('errors')->all() : [];
+
+        PHPUnit::assertFalse(
+            $hasErrors,
+            'Session has unexpected errors: '.PHP_EOL.PHP_EOL.
+            json_encode($errors, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
+        );
 
         return $this;
     }
@@ -933,6 +1018,38 @@ class TestResponse
         }
 
         dd($content);
+    }
+
+    /**
+     * Dump the headers from the response.
+     *
+     * @return void
+     */
+    public function dumpHeaders()
+    {
+        dd($this->headers->all());
+    }
+
+    /**
+     * Get the streamed content from the response.
+     *
+     * @return string
+     */
+    public function streamedContent()
+    {
+        if (! is_null($this->streamedContent)) {
+            return $this->streamedContent;
+        }
+
+        if (! $this->baseResponse instanceof StreamedResponse) {
+            PHPUnit::fail('The response is not a streamed response.');
+        }
+
+        ob_start();
+
+        $this->sendContent();
+
+        return $this->streamedContent = ob_get_clean();
     }
 
     /**

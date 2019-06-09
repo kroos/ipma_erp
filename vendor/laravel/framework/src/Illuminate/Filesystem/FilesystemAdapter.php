@@ -4,6 +4,7 @@ namespace Illuminate\Filesystem;
 
 use RuntimeException;
 use Illuminate\Http\File;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Illuminate\Support\Carbon;
@@ -11,6 +12,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use League\Flysystem\AdapterInterface;
 use PHPUnit\Framework\Assert as PHPUnit;
+use League\Flysystem\FileExistsException;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Cached\CachedAdapter;
@@ -20,6 +22,7 @@ use League\Flysystem\Adapter\Local as LocalAdapter;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Contracts\Filesystem\Cloud as CloudFilesystemContract;
 use Illuminate\Contracts\Filesystem\Filesystem as FilesystemContract;
+use Illuminate\Contracts\Filesystem\FileExistsException as ContractFileExistsException;
 use Illuminate\Contracts\Filesystem\FileNotFoundException as ContractFileNotFoundException;
 
 /**
@@ -48,27 +51,39 @@ class FilesystemAdapter implements FilesystemContract, CloudFilesystemContract
     /**
      * Assert that the given file exists.
      *
-     * @param  string  $path
-     * @return void
+     * @param  string|array  $path
+     * @return $this
      */
     public function assertExists($path)
     {
-        PHPUnit::assertTrue(
-            $this->exists($path), "Unable to find a file at path [{$path}]."
-        );
+        $paths = Arr::wrap($path);
+
+        foreach ($paths as $path) {
+            PHPUnit::assertTrue(
+                $this->exists($path), "Unable to find a file at path [{$path}]."
+            );
+        }
+
+        return $this;
     }
 
     /**
      * Assert that the given file does not exist.
      *
-     * @param  string  $path
-     * @return void
+     * @param  string|array  $path
+     * @return $this
      */
     public function assertMissing($path)
     {
-        PHPUnit::assertFalse(
-            $this->exists($path), "Found unexpected file at path [{$path}]."
-        );
+        $paths = Arr::wrap($path);
+
+        foreach ($paths as $path) {
+            PHPUnit::assertFalse(
+                $this->exists($path), "Found unexpected file at path [{$path}]."
+            );
+        }
+
+        return $this;
     }
 
     /**
@@ -123,7 +138,11 @@ class FilesystemAdapter implements FilesystemContract, CloudFilesystemContract
     {
         $response = new StreamedResponse;
 
-        $disposition = $response->headers->makeDisposition($disposition, $name ?? basename($path));
+        $filename = $name ?? basename($path);
+
+        $disposition = $response->headers->makeDisposition(
+            $disposition, $filename, Str::ascii($filename)
+        );
 
         $response->headers->replace($headers + [
             'Content-Type' => $this->mimeType($path),
@@ -132,7 +151,7 @@ class FilesystemAdapter implements FilesystemContract, CloudFilesystemContract
         ]);
 
         $response->setCallback(function () use ($path) {
-            $stream = $this->driver->readStream($path);
+            $stream = $this->readStream($path);
             fpassthru($stream);
             fclose($stream);
         });
@@ -240,7 +259,7 @@ class FilesystemAdapter implements FilesystemContract, CloudFilesystemContract
      *
      * @param  string  $path
      * @param  string  $visibility
-     * @return void
+     * @return bool
      */
     public function setVisibility($path, $visibility)
     {
@@ -253,7 +272,7 @@ class FilesystemAdapter implements FilesystemContract, CloudFilesystemContract
      * @param  string  $path
      * @param  string  $data
      * @param  string  $separator
-     * @return int
+     * @return bool
      */
     public function prepend($path, $data, $separator = PHP_EOL)
     {
@@ -270,7 +289,7 @@ class FilesystemAdapter implements FilesystemContract, CloudFilesystemContract
      * @param  string  $path
      * @param  string  $data
      * @param  string  $separator
-     * @return int
+     * @return bool
      */
     public function append($path, $data, $separator = PHP_EOL)
     {
@@ -368,6 +387,8 @@ class FilesystemAdapter implements FilesystemContract, CloudFilesystemContract
      *
      * @param  string  $path
      * @return string
+     *
+     * @throws \RuntimeException
      */
     public function url($path)
     {
@@ -389,6 +410,30 @@ class FilesystemAdapter implements FilesystemContract, CloudFilesystemContract
             return $this->getLocalUrl($path);
         } else {
             throw new RuntimeException('This driver does not support retrieving URLs.');
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function readStream($path)
+    {
+        try {
+            return $this->driver->readStream($path) ?: null;
+        } catch (FileNotFoundException $e) {
+            throw new ContractFileNotFoundException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function writeStream($path, $resource, array $options = [])
+    {
+        try {
+            return $this->driver->writeStream($path, $resource, $options);
+        } catch (FileExistsException $e) {
+            throw new ContractFileExistsException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
@@ -461,6 +506,8 @@ class FilesystemAdapter implements FilesystemContract, CloudFilesystemContract
      * @param  \DateTimeInterface  $expiration
      * @param  array  $options
      * @return string
+     *
+     * @throws \RuntimeException
      */
     public function temporaryUrl($path, $expiration, array $options = [])
     {

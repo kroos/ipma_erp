@@ -33,6 +33,7 @@ trait VarDumperTestTrait
     {
         $flags = getenv('DUMP_LIGHT_ARRAY') ? CliDumper::DUMP_LIGHT_ARRAY : 0;
         $flags |= getenv('DUMP_STRING_LENGTH') ? CliDumper::DUMP_STRING_LENGTH : 0;
+        $flags |= getenv('DUMP_COMMA_SEPARATOR') ? CliDumper::DUMP_COMMA_SEPARATOR : 0;
 
         $cloner = new VarCloner();
         $cloner->setMaxItems(-1);
@@ -48,7 +49,7 @@ trait VarDumperTestTrait
 
     private function prepareExpectation($expected, $filter)
     {
-        if (!is_string($expected)) {
+        if (!\is_string($expected)) {
             $expected = $this->getDump($expected, null, $filter);
         }
 

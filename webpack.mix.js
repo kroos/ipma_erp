@@ -23,7 +23,7 @@ mix
 		'node_modules/datatables.net-colreorder-bs4/css/colReorder.bootstrap4.css',
 		'node_modules/@claviska/jquery-minicolors/jquery.minicolors.css',
 		'node_modules/fullcalendar/dist/fullcalendar.css',
-		// 'node_modules/select2-bootstrap4-theme/dist/select2-bootstrap4.css',
+		'node_modules/chart.js/dist/chart.css',
 		'node_modules/animate.css/animate.css',
 		'node_modules/jarallax/dist/jarallax.css',
 		'resources/assets/js/jquery-ui/css/jquery-ui.css',

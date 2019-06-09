@@ -1,3 +1,15 @@
+## 3.4.1 (2019-03-18)
+
+[ADDED] Support for PHP 7.3.
+
+## 3.4.0 (2019-03-11)
+
+[ADDED] `get_users_info` method.
+
+## 3.3.1 (2019-01-18)
+
+[FIXED] PHP Notice for Undefined `socket_id` in triggerBatch
+
 ## 3.3.0 (2019-01-03)
 
 [ADDED] Support for End-to-end encrypted channels for triggerbatch

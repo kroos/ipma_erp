@@ -14,7 +14,7 @@ class Pusher implements LoggerAwareInterface
     /**
      * @var string Version
      */
-    public static $VERSION = '3.3.0';
+    public static $VERSION = '3.4.1';
 
     /**
      * @var null|PusherCrypto
@@ -573,7 +573,9 @@ class Pusher implements LoggerAwareInterface
     {
         foreach ($batch as $key => $event) {
             $this->validate_channel($event['channel']);
-            $this->validate_socket_id($event['socket_id']);
+            if (isset($event['socket_id'])) {
+                $this->validate_socket_id($event['socket_id']);
+            }
 
             $data = $event['data'];
             if (!is_string($data)) {
@@ -655,6 +657,26 @@ class Pusher implements LoggerAwareInterface
             $response->channels = get_object_vars($response->channels);
 
             return $response;
+        }
+
+        return false;
+    }
+
+    /**
+     * Fetch user ids currently subscribed to a presence channel.
+     *
+     * @param string $channel The name of the channel
+     *
+     * @throws PusherException Throws exception if curl wasn't initialized correctly
+     *
+     * @return array|bool
+     */
+    public function get_users_info($channel)
+    {
+        $response = $this->get('/channels/'.$channel.'/users');
+
+        if ($response['status'] === 200) {
+            return json_decode($response['body']);
         }
 
         return false;

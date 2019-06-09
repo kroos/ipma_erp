@@ -35,7 +35,8 @@ trait AuthenticatesUsers
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
-        if ($this->hasTooManyLoginAttempts($request)) {
+        if (method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)) {
             $this->fireLockoutEvent($request);
 
             return $this->sendLockoutResponse($request);
@@ -58,17 +59,18 @@ trait AuthenticatesUsers
      *
      * @param  \Illuminate\Http\Request  $request
      * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
     protected function validateLogin(Request $request)
     {
-        // original
-        // $this->validate($request, [
+        // $request->validate([
         //     $this->username() => 'required|string',
         //     'password' => 'required|string',
         // ]);
-
         // this is for auth user active
-        $this->validate($request, [
+        // dd( $request->username );
+        $request->validate([
             $this->username() => 'required|exists:logins,' . $this->username() . ',active,1',
             'password' => 'required|string',
         ], [
@@ -125,8 +127,7 @@ trait AuthenticatesUsers
      */
     protected function authenticated(Request $request, $user)
     {
-        // record each time succesfull login
-        Auth::user()->touch();
+        //
     }
 
     /**
@@ -151,8 +152,7 @@ trait AuthenticatesUsers
      */
     public function username()
     {
-        // return 'email';
-        return 'username';
+        return 'email';
     }
 
     /**

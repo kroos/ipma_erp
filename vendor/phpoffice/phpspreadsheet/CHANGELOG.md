@@ -2,8 +2,78 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/)
-and this project adheres to [Semantic Versioning](http://semver.org/).
+The format is based on [Keep a Changelog](https://keepachangelog.com)
+and this project adheres to [Semantic Versioning](https://semver.org).
+
+## [1.7.0] - 2019-05-26
+
+### Added
+
+- Added support for inline styles in Html reader (borders, alignment, width, height)
+- QuotedText cells no longer treated as formulae if the content begins with a `=`
+- Clean handling for DDE in formulae
+
+### Fixed
+
+- Fix handling for escaped enclosures and new lines in CSV Separator Inference
+- Fix MATCH an error was appearing when comparing strings against 0 (always true)
+- Fix wrong calculation of highest column with specified row [#700](https://github.com/PHPOffice/PhpSpreadsheet/issues/700)
+- Fix VLOOKUP 
+- Fix return type hint
+
+## [1.6.0] - 2019-01-02
+
+### Added
+
+- Refactored Matrix Functions to use external Matrix library
+- Possibility to specify custom colors of values for pie and donut charts - [#768](https://github.com/PHPOffice/PhpSpreadsheet/pull/768)
+
+### Fixed
+
+- Improve XLSX parsing speed if no readFilter is applied - [#772](https://github.com/PHPOffice/PhpSpreadsheet/issues/772)
+- Fix column names if read filter calls in XLSX reader skip columns - [#777](https://github.com/PHPOffice/PhpSpreadsheet/pull/777)
+- XLSX reader can now ignore blank cells, using the setReadEmptyCells(false) method. - [#810](https://github.com/PHPOffice/PhpSpreadsheet/issues/810)
+- Fix LOOKUP function which was breaking on edge cases - [#796](https://github.com/PHPOffice/PhpSpreadsheet/issues/796)
+- Fix VLOOKUP with exact matches - [#809](https://github.com/PHPOffice/PhpSpreadsheet/pull/809)
+- Support COUNTIFS multiple arguments - [#830](https://github.com/PHPOffice/PhpSpreadsheet/pull/830)
+- Change `libxml_disable_entity_loader()` as shortly as possible - [#819](https://github.com/PHPOffice/PhpSpreadsheet/pull/819)
+- Improved memory usage and performance when loading large spreadsheets - [#822](https://github.com/PHPOffice/PhpSpreadsheet/pull/822)
+- Improved performance when loading large spreadsheets - [#825](https://github.com/PHPOffice/PhpSpreadsheet/pull/825)
+- Improved performance when loading large spreadsheets - [#824](https://github.com/PHPOffice/PhpSpreadsheet/pull/824)
+- Fix color from CSS when reading from HTML - [#831](https://github.com/PHPOffice/PhpSpreadsheet/pull/831) 
+- Fix infinite loop when reading invalid ODS files - [#832](https://github.com/PHPOffice/PhpSpreadsheet/pull/832) 
+- Fix time format for duration is incorrect - [#666](https://github.com/PHPOffice/PhpSpreadsheet/pull/666)
+- Fix iconv unsupported `//IGNORE//TRANSLIT` on IBM i - [#791](https://github.com/PHPOffice/PhpSpreadsheet/issues/791)
+
+### Changed
+
+- `master` is the new default branch, `develop` does not exist anymore
+
+## [1.5.2] - 2018-11-25
+
+### Security
+
+- Improvements to the design of the XML Security Scanner - [#771](https://github.com/PHPOffice/PhpSpreadsheet/issues/771)
+
+## [1.5.1] - 2018-11-20
+
+### Security
+
+- Fix and improve XXE security scanning for XML-based and HTML Readers - [#771](https://github.com/PHPOffice/PhpSpreadsheet/issues/771)
+
+### Added
+
+- Support page margin in mPDF - [#750](https://github.com/PHPOffice/PhpSpreadsheet/issues/750)
+
+### Fixed
+
+- Support numeric condition in SUMIF, SUMIFS, AVERAGEIF, COUNTIF, MAXIF and MINIF - [#683](https://github.com/PHPOffice/PhpSpreadsheet/issues/683)
+- SUMIFS containing multiple conditions - [#704](https://github.com/PHPOffice/PhpSpreadsheet/issues/704)
+- Csv reader avoid notice when the file is empty - [#743](https://github.com/PHPOffice/PhpSpreadsheet/pull/743)
+- Fix print area parser for XLSX reader - [#734](https://github.com/PHPOffice/PhpSpreadsheet/pull/734)
+- Support overriding `DefaultValueBinder::dataTypeForValue()` without overriding `DefaultValueBinder::bindValue()` - [#735](https://github.com/PHPOffice/PhpSpreadsheet/pull/735)
+- Mpdf export can exceed pcre.backtrack_limit - [#637](https://github.com/PHPOffice/PhpSpreadsheet/issues/637)
+- Fix index overflow on data values array - [#748](https://github.com/PHPOffice/PhpSpreadsheet/pull/748)
 
 ## [1.5.0] - 2018-10-21
 
@@ -229,7 +299,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- Start following [SemVer](http://semver.org) properly.
+- Start following [SemVer](https://semver.org) properly.
 
 ### Fixed
 
