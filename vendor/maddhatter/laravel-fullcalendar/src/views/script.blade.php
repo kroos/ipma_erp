@@ -1,1 +1,0 @@
-$('#calendar-{{ $id }}').fullCalendar({!! $options !!});
