@@ -27,7 +27,7 @@
         "fullcalendar": "^3.10.0",
         "imagemin": "^6.1.0",
         "jarallax": "^1.10.7",
-        "jquery": "^3.4.1",
+        "jquery": "^3.5.0",
         "jquery-chained": "^1.0.1",
         "jquery-touchswipe": "^1.6.19",
         "jquery-viewport-checker": "^1.8.8",
