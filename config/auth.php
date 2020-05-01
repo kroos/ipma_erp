@@ -65,15 +65,22 @@ return [
     */
 
     'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => App\Model\Login::class,
-        ],
+        // 'users' => [
+        //     'driver' => 'eloquent',
+        //     'model' => App\Model\Login::class,
+        // ],
 
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+
+        // using this to override Illuminate\Auth\EloquentUserProvider
+        'users' => [
+            'driver' => 'loginuserprovider',
+            'model' => App\Model\Login::class,
+            'table' => 'logins',
+        ],
     ],
 
     /*

@@ -29,8 +29,8 @@
 {!! Form::model( $serviceReport, ['route' => ['serviceReport.update', $serviceReport->id], 'method' => 'PATCH', 'id' => 'form', 'files' => true]) !!}
 @include('marketingAndBusinessDevelopment.customerservice.ics._edit')
 {{ Form::close() }}
-{{-- 			</div>
-		</div> --}}
+			</div>
+		</div>
 	</div>
 </div>
 @endsection

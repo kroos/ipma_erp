@@ -89,8 +89,7 @@ class AccountPasswordBroker extends BasePasswordBroker implements PasswordBroker
             return $user;
         }
 
-        // $password = $credentials['password'];
-        $password = $credentials['c_headera'];
+        $password = $credentials['password'];
 
         // Once the reset has been validated, we'll call the given callback with the
         // new password. This gives the user an opportunity to store the password

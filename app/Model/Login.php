@@ -27,6 +27,18 @@ class Login extends Authenticatable
 	protected $hidden = [
 		'password', 'remember_token',
 	];
+
+
+	public function getAuthIdentifierName()
+	{
+		return 'username';
+	}
+
+	// for password
+	public function getAuthPassword()
+	{
+		return $this->password;
+	}
 	
 	public function belongtostaff()
 	{
