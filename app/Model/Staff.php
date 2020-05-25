@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 	// use Notifiable;
 // }
 
-class Staff extends Model
+class Staff extends Authenticatable
 {
 	use Notifiable;
 	use SoftDeletes;
@@ -27,13 +27,16 @@ class Staff extends Model
 	protected $table = 'staffs';
 	protected $dates = ['deleted_at'];
 
+	protected $fillable = [
+		'status_id', 'image', 'name', 'email', 'id_card_passport', 'location_id', 'leave_need_backup', 'religion_id', 'gender_id', 'race_id', 'address', 'place_of_birth', 'country_id', 'marital_status_id', 'mobile', 'phone', 'dob', 'cimb_account', 'epf_no', 'income_tax_no', 'active', 'join_at', 'confirmed_at', 'resignation_letter_at', 'resign_at', 'remarks'
+	];
 
-	/**
-	 * Route notifications for the mail channel.
-	 *
-	 * @param  \Illuminate\Notifications\Notification  $notification
-	 * @return string
-	 */
+	public function getEmailForPasswordReset()
+	{
+		return $this->email;
+	}
+
+	// yang ni penting untuk hantaq email
 	public function routeNotificationForMail($notification)
 	{
 		return $this->email;

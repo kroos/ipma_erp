@@ -45,6 +45,21 @@ class Login extends Authenticatable
 		return $this->belongsTo('App\Model\Staff', 'staff_id');
 	}
 
+    /**
+     * Get the e-mail address where password reset links are sent.
+     *
+     * @return string
+     */
+	public function getEmailForPasswordReset()
+	{
+		return $this->email;
+	}
+
+	// yang ni penting untuk hantaq email
+	public function routeNotificationForMail($notification)
+	{
+		return $this->email;
+	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// all acl will be done here

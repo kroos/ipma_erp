@@ -30,5 +30,9 @@ class AuthServiceProvider extends ServiceProvider
             return new Custom\EloquentUserProvider($app['hash'], $config['model']);
         });
 
+        // \Illuminate\Support\Facades\Auth::provider('loginuserprovider', function($app, array $config) {
+        //     return new Custom\EloquentUserProvider($app['hash'], $config['model']);
+        // });
+
     }
 }

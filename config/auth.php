@@ -45,6 +45,11 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
+        // guards for forgot password
+        'forgotpass' => [
+        	'driver' => 'session',
+        	'provider' => 'forgotpassprovider',
+        ],
     ],
 
     /*
@@ -81,6 +86,11 @@ return [
             'model' => App\Model\Login::class,
             'table' => 'logins',
         ],
+        'forgotpassprovider' => [
+        	'driver' => 'eloquent',
+        	'model' => App\Model\Staff::class,
+        	'table' => 'staffs',
+        ],
     ],
 
     /*
@@ -101,6 +111,11 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+        'users' => [
+            'provider' => 'forgotpassprovider',
             'table' => 'password_resets',
             'expire' => 60,
         ],

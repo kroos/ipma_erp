@@ -53,6 +53,8 @@ class AccountPasswordBroker extends BasePasswordBroker implements PasswordBroker
         // "flash" data in the session to indicate to the developers the errors.
         $user = $this->getUser($credentials);
 
+        // dd($user);
+
         if (is_null($user)) {
             return static::INVALID_USER;
         }
