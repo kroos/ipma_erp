@@ -4,7 +4,7 @@ use \App\Model\ICSServiceReport;
 use \Carbon\Carbon;
 use \Carbon\CarbonPeriod;
 
-use Crabbly\FPDF\FPDF as Fpdf;
+use Crabbly\FPDF\Fpdf as FPDF;
 
 // https://www.youtube.com/watch?v=pELrw9P5ywM
 class PDF_MC_Table extends FPDF {
