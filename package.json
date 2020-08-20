@@ -33,7 +33,7 @@
         "jquery-viewport-checker": "^1.8.8",
         "jquery.cookie": "^1.4.1",
         "laravel-mix": "^5.0.4",
-        "lodash": "^4.17.15",
+        "lodash": "^4.17.20",
         "moment": "2.24.0",
         "moment-range": "^4.0.2",
         "pc-bootstrap4-datetimepicker": "^4.17.51",
