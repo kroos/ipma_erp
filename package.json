@@ -17,7 +17,7 @@
         "axios": "^0.18.1",
         "bootstrap": "^4.5.0",
         "bootstrap-carousel-swipe": "0.0.6",
-        "chart.js": "^2.9.3",
+        "chart.js": "^2.9.4",
         "colresizable": "^1.6.0",
         "cross-env": "^5.2.1",
         "datatables.net": "^1.10.21",
