@@ -76,7 +76,7 @@ $(document).on('click', '.delete_nrl', function(e){
 });
 
 function SwalDelete(nrl_id){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -98,14 +98,14 @@ function SwalDelete(nrl_id){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_nrl_' + nrl_id).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -113,7 +113,7 @@ function SwalDelete(nrl_id){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }

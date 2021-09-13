@@ -1286,7 +1286,7 @@ $(document).on('click', '.delete_serial', function(e){
 });
 
 function SwalDeleteSerial(serialId){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1308,14 +1308,14 @@ function SwalDeleteSerial(serialId){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_product_' + serialId).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1323,7 +1323,7 @@ function SwalDeleteSerial(serialId){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -1337,7 +1337,7 @@ $(document).on('click', '.delete_attendees', function(e){
 });
 
 function SwalDeleteAttend(attendId){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1359,14 +1359,14 @@ function SwalDeleteAttend(attendId){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_attendees_' + attendId).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1374,7 +1374,7 @@ function SwalDeleteAttend(attendId){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -1388,7 +1388,7 @@ $(document).on('click', '.delete_model', function(e){
 });
 
 function SwalDeleteModel(modelId){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1410,14 +1410,14 @@ function SwalDeleteModel(modelId){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_attendees_' + modelId).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1425,7 +1425,7 @@ function SwalDeleteModel(modelId){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -1439,7 +1439,7 @@ $(document).on('click', '.delete_part', function(e){
 });
 
 function SwalDeletePart(partId){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1461,14 +1461,14 @@ function SwalDeletePart(partId){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_attendees_' + partId).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1476,7 +1476,7 @@ function SwalDeletePart(partId){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -1490,7 +1490,7 @@ $(document).on('click', '.delete_job', function(e){
 });
 
 function SwalDeleteJob(jobId){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1512,14 +1512,14 @@ function SwalDeleteJob(jobId){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_attendees_' + jobId).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1527,7 +1527,7 @@ function SwalDeleteJob(jobId){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -1541,7 +1541,7 @@ $(document).on('click', '.delete_feedProb', function(e){
 });
 
 function SwalDeleteFeedProblem(feedProbId){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1563,14 +1563,14 @@ function SwalDeleteFeedProblem(feedProbId){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_feedProb_' + feedProbId).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1578,7 +1578,7 @@ function SwalDeleteFeedProblem(feedProbId){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -1592,7 +1592,7 @@ $(document).on('click', '.delete_feedReq', function(e){
 });
 
 function SwalDeleteFeedRequest(feedReqId){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1614,14 +1614,14 @@ function SwalDeleteFeedRequest(feedReqId){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_feedReq_' + feedReqId).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1629,7 +1629,7 @@ function SwalDeleteFeedRequest(feedReqId){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -1643,7 +1643,7 @@ $(document).on('click', '.delete_logistic', function(e){
 });
 
 function SwalDeleteSRLogistic(srlogistik){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1665,14 +1665,14 @@ function SwalDeleteSRLogistic(srlogistik){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_logistic_' + srlogistik).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1680,7 +1680,7 @@ function SwalDeleteSRLogistic(srlogistik){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -1694,7 +1694,7 @@ $(document).on('click', '.delete_addcharge', function(e){
 });
 
 function SwalDeleteSRAddCharges(sraddC){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1716,14 +1716,14 @@ function SwalDeleteSRAddCharges(sraddC){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_logistic_' + sraddC).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1731,7 +1731,7 @@ function SwalDeleteSRAddCharges(sraddC){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -1745,7 +1745,7 @@ $(document).on('click', '.delete_phoneattendees', function(e){
 });
 
 function SwalDeleteSRPhoneAttendees(srdpatt){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1767,14 +1767,14 @@ function SwalDeleteSRPhoneAttendees(srdpatt){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_logistic_' + srdpatt).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1782,7 +1782,7 @@ function SwalDeleteSRPhoneAttendees(srdpatt){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -1796,7 +1796,7 @@ $(document).on('click', '.delete_discount', function(e){
 });
 
 function SwalDeleteSRDiscount(srDisc){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1818,14 +1818,14 @@ function SwalDeleteSRDiscount(srDisc){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_logistic_' + srDisc).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1833,7 +1833,7 @@ function SwalDeleteSRDiscount(srDisc){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -1847,7 +1847,7 @@ $(document).on('click', '.delete_feedItem', function(e){
 });
 
 function SwalDeleteSRFeedItem(srfeedItem){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1869,14 +1869,14 @@ function SwalDeleteSRFeedItem(srfeedItem){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_logistic_' + srfeedItem).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1884,7 +1884,7 @@ function SwalDeleteSRFeedItem(srfeedItem){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }

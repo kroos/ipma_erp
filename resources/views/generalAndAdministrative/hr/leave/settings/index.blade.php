@@ -74,7 +74,7 @@ $(document).on('click', '.delete_almcml', function(e){
 });
 
 function SwalDelete1(almcml_id){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -96,14 +96,14 @@ function SwalDelete1(almcml_id){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_almcml_' + almcml_id).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -111,7 +111,7 @@ function SwalDelete1(almcml_id){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -126,7 +126,7 @@ $(document).on('click', '#galmcml', function(e){
 });
 
 function SwalDelete(almcmly){
-	swal({
+	swal.fire({
 		title: 'Are you sure to generate AL, MC and ML for all active user in ' + almcmly + ' ?',
 		text: "Please note that the new intake will have to manually add for the next year once this function is used.",
 		type: 'question',
@@ -148,14 +148,14 @@ function SwalDelete(almcmly){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Success generate all AL, MC and ML!', response.message, response.status)
+					swal.fire('Success generate all AL, MC and ML!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					// $('#delete_nrl_' + almcmly).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -163,7 +163,7 @@ function SwalDelete(almcmly){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Generate AL, MC and ML is cancelled.', 'info')
+			swal.fire('Cancelled', 'Generate AL, MC and ML is cancelled.', 'info')
 		}
 	});
 }

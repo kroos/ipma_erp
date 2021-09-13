@@ -67,7 +67,7 @@ $(document).on('click', '.courtesycall', function(e){
 });
 
 function SwalCCallSR(srCCall){
-	swal({
+	swal.fire({
 		title: 'Service Report Feedback Courtesy Call',
 		text: 'Courtesy Call Feedback',
 		type: 'question',
@@ -114,7 +114,7 @@ function SwalCCallSR(srCCall){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Courtesy Call Saved!', response.message, response.status)
+					swal.fire('Courtesy Call Saved!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
@@ -127,7 +127,7 @@ function SwalCCallSR(srCCall){
  					for(i in resp.errors) {
 						x += '<p class="text-danger">' + resp.errors[i] + '</p>';
 					};
-					swal({
+					swal.fire({
 						title: resp.message,
 						html: x,
 						type: 'error',
@@ -139,7 +139,7 @@ function SwalCCallSR(srCCall){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Unsaved Service Report Courtesy Call', 'info')
+			swal.fire('Cancelled', 'Unsaved Service Report Courtesy Call', 'info')
 		}
 	});
 }
@@ -220,7 +220,7 @@ $(document).on('click', '.approval', function(e){
 });
 
 function SwalApproveSR(srDisc){
-	swal({
+	swal.fire({
 		title: 'Service Report Approval',
 		text: 'Approve This Service Report?',
 		type: 'question',
@@ -242,14 +242,14 @@ function SwalApproveSR(srDisc){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Approved!', response.message, response.status)
+					swal.fire('Approved!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_logistic_' + srDisc).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -257,7 +257,7 @@ function SwalApproveSR(srDisc){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Service Report Not Approve', 'info')
+			swal.fire('Cancelled', 'Service Report Not Approve', 'info')
 		}
 	});
 }
@@ -271,7 +271,7 @@ $(document).on('click', '.inactivate', function(e){
 });
 
 function SwalInactiveSR(sRinact){
-	swal({
+	swal.fire({
 		title: 'Deactivate Service Report',
 		text: 'Deactivate This Service Report?',
 		type: 'question',
@@ -293,14 +293,14 @@ function SwalInactiveSR(sRinact){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Approved!', response.message, response.status)
+					swal.fire('Approved!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_logistic_' + sRinact).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -308,7 +308,7 @@ function SwalInactiveSR(sRinact){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Service Report Active', 'info')
+			swal.fire('Cancelled', 'Service Report Active', 'info')
 		}
 	});
 }
@@ -322,7 +322,7 @@ $(document).on('click', '.send', function(e){
 });
 
 function SwalSendSR(sRsend){
-	swal({
+	swal.fire({
 		title: 'Service Report Transfer To Account',
 		text: 'Send This Service Report To Account?',
 		type: 'question',
@@ -345,14 +345,14 @@ function SwalSendSR(sRsend){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Approved!', response.message, response.status)
+					swal.fire('Approved!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_logistic_' + sRsend).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -360,7 +360,7 @@ function SwalSendSR(sRsend){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Service Report Not Send', 'info')
+			swal.fire('Cancelled', 'Service Report Not Send', 'info')
 		}
 	});
 }

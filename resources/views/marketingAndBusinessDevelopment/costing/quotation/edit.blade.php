@@ -955,7 +955,7 @@ $(document).on('click', '.section_delete', function(e){
 });
 
 function SwalDeleteSection(section_id){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -977,14 +977,14 @@ function SwalDeleteSection(section_id){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_product_' + section_id).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -992,7 +992,7 @@ function SwalDeleteSection(section_id){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -1006,7 +1006,7 @@ $(document).on('click', '.item_delete', function(e){
 });
 
 function SwalDeleteItem(item_id){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1028,14 +1028,14 @@ function SwalDeleteItem(item_id){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_product_' + item_id).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1043,7 +1043,7 @@ function SwalDeleteItem(item_id){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -1057,7 +1057,7 @@ $(document).on('click', '.attrib_delete', function(e){
 });
 
 function SwalDeleteAttrib(attrib_id){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1079,14 +1079,14 @@ function SwalDeleteAttrib(attrib_id){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_product_' + attrib_id).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1094,7 +1094,7 @@ function SwalDeleteAttrib(attrib_id){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -1108,7 +1108,7 @@ $(document).on('click', '.top_delete', function(e){
 });
 
 function SwalDeleteTOP(top_id){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1130,14 +1130,14 @@ function SwalDeleteTOP(top_id){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_product_' + top_id).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1145,7 +1145,7 @@ function SwalDeleteTOP(top_id){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -1159,7 +1159,7 @@ $(document).on('click', '.exc_delete', function(e){
 });
 
 function SwalDeleteExclusion(exc_id){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1181,14 +1181,14 @@ function SwalDeleteExclusion(exc_id){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_product_' + exc_id).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1196,7 +1196,7 @@ function SwalDeleteExclusion(exc_id){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -1210,7 +1210,7 @@ $(document).on('click', '.rem_delete', function(e){
 });
 
 function SwalDeleteRemark(rem_id){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1232,14 +1232,14 @@ function SwalDeleteRemark(rem_id){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_product_' + rem_id).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1247,7 +1247,7 @@ function SwalDeleteRemark(rem_id){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -1261,7 +1261,7 @@ $(document).on('click', '.dealer_delete', function(e){
 });
 
 function SwalDeleteDealer(deal_id){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1283,14 +1283,14 @@ function SwalDeleteDealer(deal_id){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_product_' + deal_id).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1298,7 +1298,7 @@ function SwalDeleteDealer(deal_id){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }
@@ -1312,7 +1312,7 @@ $(document).on('click', '.warranty_delete', function(e){
 });
 
 function SwalDeleteWarranty(warranty_id){
-	swal({
+	swal.fire({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -1334,14 +1334,14 @@ function SwalDeleteWarranty(warranty_id){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Deleted!', response.message, response.status)
+					swal.fire('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_product_' + warranty_id).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -1349,7 +1349,7 @@ function SwalDeleteWarranty(warranty_id){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Your data is safe from delete', 'info')
+			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }

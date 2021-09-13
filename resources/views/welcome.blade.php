@@ -6,7 +6,7 @@
 		<h1>Welcome To IPMA Industry Sdn Bhd</h1>
 	</div>
 	<div class="card-body">
-<!-- 		<div class="container">
+ 		<div class="container">
 			<div class="row">
 				<div class="col-sm-12 jumbotron">
 					test
@@ -168,7 +168,6 @@
 	// });
 
 	$('#formuser').bootstrapValidator({
-
 		fields: {
 			test: {
 				validators: {
@@ -264,7 +263,7 @@
 			success: function (response) {
 				// you will get response from your php page (what you echo or print)
 				// alert(response);
-				swal({
+				swal.fire({
 						title: 'Success Insert!',
 						text: 'Your data has been inserted.',
 						html: 'You can use <b>bold text</b>, ' +
@@ -295,7 +294,7 @@
 	// }
 
 	function SwalDelete(productId){
-		swal({
+		swal.fire({
 			title: 'Are you sure?',
 			text: "It will be deleted permanently!",
 			type: 'warning',
@@ -314,11 +313,11 @@
 						dataType: 'json'
 					})
 					.done(function(response){
-						swal('Deleted!', response.message, response.status);
+						swal.fire('Deleted!', response.message, response.status);
 						$('#delete_product_' + productId).parent().parent().remove();
 					})
 					.fail(function(){
-						swal('Oops...', 'Something went wrong with ajax !', 'error');
+						swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 					})
 				});
 			},
@@ -326,7 +325,7 @@
 		})
 		.then((result) => {
 			if (result.dismiss === swal.DismissReason.cancel) {
-				swal('Cancelled', 'Your data is safe from delete', 'info')
+				swal.fire('Cancelled', 'Your data is safe from delete', 'info')
 			}
 		});
 	}

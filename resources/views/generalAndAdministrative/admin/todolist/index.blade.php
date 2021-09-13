@@ -66,7 +66,7 @@ $(document).on('click', '.toggle', function(e){
 });
 
 function SwalToggle(tdsid, tdsval){
-	swal({
+	swal.fire({
 		title: 'Toggle Task Enable or Disable',
 		text: 'Toggle this task?',
 		type: 'question',
@@ -89,14 +89,14 @@ function SwalToggle(tdsid, tdsval){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal('Toggle Success!', response.message, response.status)
+					swal.fire('Toggle Success!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_logistic_' + tdsval).parent().parent().remove();
 				})
 				.fail(function(){
-					swal('Oops...', 'Something went wrong with ajax !', 'error');
+					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -104,7 +104,7 @@ function SwalToggle(tdsid, tdsval){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal('Cancelled', 'Task Unchange', 'info')
+			swal.fire('Cancelled', 'Task Unchange', 'info')
 		}
 	});
 }

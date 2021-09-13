@@ -404,7 +404,7 @@ function update_period() {
 						'<p>Please don\'t proceed with this value. Adjust your date so that the <b>Balance Change</b> is <b>GREEN</b>.</p>' +
 					'</div>'
 				);
-				//		swal({
+				//		swal.fire({
 				//			type: 'error',
 				//			title: 'Warning! Exceeding Balance Leave',
 				//			html: 'Please don\'t proceed with this value. Adjust your date so that the <b>Balance Change</b> is <b>GREEN</b>. Now, i\'ll refresh the page. Please wait.',
