@@ -92,19 +92,33 @@ function my($string) {
 @foreach( $staffHR->belongtomanyposition()->orderBy('staff_positions.main', 'desc')->get() as $val )
 										<tr>
 											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">Kategori :</td>
-											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">{{ empty($val->id)?'Not Set':$val->belongtocategory->category }}</td>
+											<td class="{{ ($val->pivot->main == 1)?'border border-primary':NULL }}" scope="col">
+<?php
+if(empty($val->id)){
+	echo 'Not Set';
+} else {
+	echo $val->belongtocategory->category;
+}
+?>
+											</td>
 										</tr>
 										<tr>
-											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">Divisi :</td>
-											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">{{ empty($val->id)?'Not Set':$val->belongtodivision->division }}</td>
+											<td class="{{ ($val->pivot->main == 1)?'border border-primary':NULL }}" scope="col">Divisi :</td>
+											<td class="{{ ($val->pivot->main == 1)?'border border-primary':NULL }}" scope="col">
+												{{ (empty($val->id))?'Not Set':$val->belongtodivision->division }}
+										</td>
 										</tr>
 										<tr>
-											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">Jabatan :</td>
-											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">{{ empty($val->id)?'Not Set': empty($val->department_id)?'': $val->belongtodepartment->department }}</td>
+											<td class="{{ ($val->pivot->main == 1)?'border border-primary':NULL }}" scope="col">Jabatan :</td>
+											<td class="{{ ($val->pivot->main == 1)?'border border-primary':NULL }}" scope="col">
+												{{ (empty($val->id))?'Not Set': ((empty($val->department_id))?NULL: $val->belongtodepartment->department) }}
+										</td>
 										</tr>
 										<tr>
-											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">Jawatan :</td>
-											<td class="{{ ($val->pivot->main == 1)?'border border-primary':'' }}" scope="col">{{ empty($val->id)?'Not Set':$val->position }}</td>
+											<td class="{{ ($val->pivot->main == 1)?'border border-primary':NULL }}" scope="col">Jawatan :</td>
+											<td class="{{ ($val->pivot->main == 1)?'border border-primary':NULL }}" scope="col">
+												{{ (empty($val->id))?'Not Set':$val->position }}
+										</td>
 										</tr>
 @endforeach
 										<tr>

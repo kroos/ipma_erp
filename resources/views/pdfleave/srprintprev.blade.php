@@ -9,7 +9,7 @@ use App\Model\StaffLeaveBackup;
 use App\Model\StaffLeaveReplacement;
 use App\Model\StaffLeaveApproval;
 
-use Crabbly\FPDF\FPDF as Fpdf;
+use Crabbly\Fpdf\Fpdf as Fpdf;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 

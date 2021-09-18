@@ -29,7 +29,7 @@ class ToDoListController extends Controller
 	public function index()
 	{
 		$events = [];
-		$data = $st = ToDoStaff::where('staff_id', \Auth::user()->belongtostaff->id)->get();
+		$data = ToDoStaff::where('staff_id', \Auth::user()->belongtostaff->id)->get();
 		// echo $data->count();
 		// die();
 		if ($data->count()) {
@@ -75,17 +75,18 @@ class ToDoListController extends Controller
 			}
 
 		}
-		$calendar = Calendar::addEvents($events)
-				->setCallbacks([ //set fullcalendar callback options (will not be JSON encoded)
-					'eventRender' => 'function(event, element) {
-						element.popover({
-								title: event.title,
-								content: event.description,
-								trigger: \'hover\',
-								placement: \'top\',
-								container: \'body\',
-							});
-					}'
+
+		$calendar = \Calendar::addEvents($events)
+				->setCallbacks([ // somehow callbacks not working
+					// 'eventRender' => 'function(event, element) {
+					// 	element.popover({
+					// 			title: event.title,
+					// 			content: event.description,
+					// 			trigger: \'hover\',
+					// 			placement: \'top\',
+					// 			container: \'body\',
+					// 		});
+					// }'
 				]);
 
 		return view('todolist.index', compact('calendar'));
@@ -113,7 +114,7 @@ class ToDoListController extends Controller
 
 	public function update(ToDoListUpdateByUserRequest $request, ToDoList $todoList)
 	{
-		$todoList->update( array_add($request->only(['description', 'completed']), 'update_by', \Auth::user()->belongtostaff->id) );
+		$todoList->update( Arr::add($request->only(['description', 'completed']), 'update_by', \Auth::user()->belongtostaff->id) );
 		Session::flash('flash_message', 'Data successfully updated!');
 		return redirect( route('todoList.index') );
 	}
@@ -123,7 +124,7 @@ class ToDoListController extends Controller
 	public function updatetask(ToDoListUpdateByUserRequest $request, ToDoList $todoList)
 	{
 		// var_dump($request->all());
-		$todoList->update( array_add($request->only(['description', 'completed']), 'update_by', \Auth::user()->belongtostaff->id) );
+		$todoList->update( Arr::add($request->only(['description', 'completed']), 'update_by', \Auth::user()->belongtostaff->id) );
 		Session::flash('flash_message', 'Data successfully stored!');
 		return redirect( route('todoList.index') );
 	}

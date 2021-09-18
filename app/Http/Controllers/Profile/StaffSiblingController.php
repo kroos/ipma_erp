@@ -51,7 +51,7 @@ class StaffSiblingController extends Controller
     {
         foreach ($request->staff as $key => $val)
         {
-            StaffSibling::create( array_add($val, 'staff_id', auth()->user()->belongtostaff->id) );
+            StaffSibling::create( Arr::add($val, 'staff_id', auth()->user()->belongtostaff->id) );
         }
         Session::flash('flash_message', 'Data successfully edited!');
         return redirect( route('staff.show', auth()->user()->belongtostaff->id) );

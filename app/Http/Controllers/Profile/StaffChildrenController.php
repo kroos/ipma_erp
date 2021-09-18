@@ -50,7 +50,7 @@ class StaffChildrenController extends Controller
      */
     public function store(StaffChildrenRequest $request)
     {
-        StaffChildren::create( array_add( $request->except(['_method', '_token']), 'staff_id', auth()->user()->belongtostaff->id) );
+        StaffChildren::create( Arr::add( $request->except(['_method', '_token']), 'staff_id', auth()->user()->belongtostaff->id) );
 
         Session::flash('flash_message', 'Data successfully edited!');
         return redirect( route('staff.show', auth()->user()->belongtostaff->id) );

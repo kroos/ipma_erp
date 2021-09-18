@@ -266,7 +266,7 @@ class WorkingHourAjaxController extends Controller
 		$holiday2 = array();
 		// $hnleave = "[moment('".implode("', 'YYYY-MM-DD'), moment('", $holiday)."', 'YYYY-MM-DD')";
 		// $hnleave = '["'.implode('", "', $holiday).'"]';
-		// $holiday = array_merge($holiday1, $holiday2);
+		// $holiday = Arr::merge($holiday1, $holiday2);
 		$holiday = $holiday1 + $holiday2;
 		return response()->json($holiday);
 		// return response($holiday)->header('Content-Type', 'text/plain');

@@ -69,19 +69,12 @@ class ToDoScheduleController extends Controller
 				);
 			}
 		}
-		$calendar = Calendar::addEvents($events)
-				->setCallbacks([ //set fullcalendar callback options (will not be JSON encoded)
-					'eventRender' => 'function(event, element) {
-						element.popover({
-								title: event.title,
-								content: event.description,
-								trigger: \'hover\',
-								placement: \'top\',
-								container: \'body\',
-							});
-					}'
+		$calendar = \Calendar::addEvents($events)
+				->setCallbacks([
+					// 'viewRender' => 'function(event, element) {element.popover({title: event.title,content: event.description,trigger: \'hover\',placement: \'top\',container: \'body\'});}'
 				]);
-		return view('generalAndAdministrative.admin.todolist.index', compact('calendar'));
+
+		return view('generalAndAdministrative.admin.todolist.index', compact(['calendar']));
 	}
 
 	public function create()
@@ -94,7 +87,7 @@ class ToDoScheduleController extends Controller
 		// var_dump($request->all());
 		// echo $request->category_id.' category id<br />';
 
-		$tds = ToDoSchedule::create( array_add(array_add($request->only(['category_id', 'task', 'description', 'period_reminder', 'dateline', 'priority_id']), 'created_by', \Auth::user()->belongtostaff->id), 'active', 1) );
+		$tds = ToDoSchedule::create( Arr::add(Arr::add($request->only(['category_id', 'task', 'description', 'period_reminder', 'dateline', 'priority_id']), 'created_by', \Auth::user()->belongtostaff->id), 'active', 1) );
 
 		// getting the reminder
 		$d = Carbon::parse($request->dateline);
@@ -110,7 +103,7 @@ class ToDoScheduleController extends Controller
 			$reminder = $d->copy()->subDays($request->period_reminder)->format('Y-m-d');
 		}
 
-		$tds->hasmanytask()->create( array_add($request->only(['dateline', 'priority_id']), 'reminder', $reminder) );
+		$tds->hasmanytask()->create( Arr::add($request->only(['dateline', 'priority_id']), 'reminder', $reminder) );
 
 		// assignee
 		if ($request->has('td')) {
