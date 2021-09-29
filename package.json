@@ -18,7 +18,7 @@
         "bootstrap": "4.6",
         "bootstrap-carousel-swipe": "^0.0.6",
         "chart.js": "^3.5.1",
-        "datatables.net": "^1.11.2",
+        "datatables.net": "^1.11.3",
         "datatables.net-bs4": "^1.11.2",
         "datatables.net-colreorder-bs4": "^1.5.4",
         "datatables.net-responsive-bs4": "^2.2.9",
