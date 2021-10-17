@@ -23,12 +23,12 @@ mix
 		'node_modules/datatables.net-colreorder-bs4/css/colReorder.bootstrap4.css',
 		'node_modules/@claviska/jquery-minicolors/jquery.minicolors.css',
 		'node_modules/fullcalendar/dist/fullcalendar.css',
-		'node_modules/chart.js/dist/chart.css',
+		//'node_modules/chart.js/dist/chart.css',
 		'node_modules/animate.css/animate.css',
 		'node_modules/jarallax/dist/jarallax.css',
 		'resources/assets/js/jquery-ui/css/jquery-ui.css',
 		'resources/assets/js/jquery-ui/css/jquery-ui.structure.css',
-		'resources/assets/js/jquery-ui/css/jquery-ui.themes.css',
+		'resources/assets/js/jquery-ui/css/jquery-ui.theme.css',
 		'resources/assets/sass/animate/animate.css',
 		], 'public/css/app.css')
 	// .setPublicPath('public/assets')
