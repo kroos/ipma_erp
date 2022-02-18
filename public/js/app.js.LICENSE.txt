@@ -1,5 +1,5 @@
 /*!
-  * Bootstrap v4.6.0 (https://getbootstrap.com/)
+  * Bootstrap v4.6.1 (https://getbootstrap.com/)
   * Copyright 2011-2021 The Bootstrap Authors (https://github.com/twbs/bootstrap/graphs/contributors)
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
@@ -23,9 +23,9 @@
  */
 
 /*!
- * Chart.js v3.5.1
+ * Chart.js v3.7.1
  * https://www.chartjs.org
- * (c) 2021 Chart.js Contributors
+ * (c) 2022 Chart.js Contributors
  * Released under the MIT License
  */
 
@@ -44,7 +44,7 @@
 
 /*!
  * Name    : Just Another Parallax [Jarallax]
- * Version : 1.12.7
+ * Version : 1.12.8
  * Author  : nK <https://nkdev.info>
  * GitHub  : https://github.com/nk-o/jarallax
  */
@@ -264,11 +264,11 @@
  * ©2018 SpryMedia Ltd - datatables.net/license
  */
 
-/*! ColReorder 1.5.4
+/*! ColReorder 1.5.5
  * ©2010-2021 SpryMedia Ltd - datatables.net/license
  */
 
-/*! DataTables 1.11.1
+/*! DataTables 1.11.4
  * ©2008-2021 SpryMedia Ltd - datatables.net/license
  */
 
