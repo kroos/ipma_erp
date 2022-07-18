@@ -27,7 +27,7 @@
         "jarallax": "^1.12.7",
         "jquery": "^3.6.0",
         "jquery-chained": "1.0",
-        "jquery-ui": "^1.12.1",
+        "jquery-ui": "^1.13.2",
         "laravel-mix": "^6.0.31",
         "lodash": "^4.17.21",
         "moment": "^2.29.1",
