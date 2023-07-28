@@ -308,6 +308,7 @@ if (typeof jQuery === 'undefined') {
 
                 if (container && container !== 'tooltip' && container !== 'popover') {
                     $message.addClass('has-error');
+                    // $message.addClass('is-invalid');
                 }
 
                 // Remove all error messages and feedback icons
@@ -328,6 +329,7 @@ if (typeof jQuery === 'undefined') {
                         $('<small/>')
                             .css('display', 'none')
                             .addClass('help-block')
+                            // .addClass('invalid-feedback')
                             .attr('data-bv-validator', validatorName)
                             .attr('data-bv-for', field)
                             .attr('data-bv-result', this.STATUS_NOT_VALIDATED)
@@ -1797,9 +1799,9 @@ if (typeof jQuery === 'undefined') {
         //      validating: 'fa fa-refresh'
         //  }
         feedbackIcons: {
-					valid: 'fas fa-check',
-					invalid: 'fas fa-times',
-					validating: 'fas fa-cog fa-spin'
+					valid: 'fa-solid fa-check',
+					invalid: 'fa-solid fa-xmark',
+					validating: 'fa-solid fa-spinner'
         },
 
         // Map the field name with validator rules
@@ -1808,7 +1810,7 @@ if (typeof jQuery === 'undefined') {
         // The CSS selector for indicating the element consists the field
         // By default, each field is placed inside the <div class="form-group"></div>
         // You should adjust this option if your form group consists of many fields which not all of them need to be validated
-        group: '.form-group , .form-check, .form-row, .form-inline',
+        group: '.form-group , .form-check, .form-row, .form-inline, .form-floating, .',
 
         // Live validating option
         // Can be one of 3 values:
