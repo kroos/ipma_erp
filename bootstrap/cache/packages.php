@@ -1,82 +1,111 @@
 <?php return array (
-  'crabbly/fpdf-laravel' => 
+  'barryvdh/laravel-dompdf' =>
   array (
-    'providers' => 
+    'providers' =>
     array (
-      0 => 'Crabbly\\Fpdf\\FpdfServiceProvider',
+      0 => 'Barryvdh\\DomPDF\\ServiceProvider',
+    ),
+    'aliases' =>
+    array (
+      'PDF' => 'Barryvdh\\DomPDF\\Facade',
     ),
   ),
-  'fideloper/proxy' => 
+  'crabbly/fpdf-laravel' =>
   array (
-    'providers' => 
+    'providers' =>
+    array (
+      0 => 'Crabbly\\FPDF\\FpdfServiceProvider',
+    ),
+  ),
+  'cviebrock/eloquent-sluggable' =>
+  array (
+    'providers' =>
+    array (
+      0 => 'Cviebrock\\EloquentSluggable\\ServiceProvider',
+    ),
+  ),
+  'fideloper/proxy' =>
+  array (
+    'providers' =>
     array (
       0 => 'Fideloper\\Proxy\\TrustedProxyServiceProvider',
     ),
   ),
-  'intervention/image' => 
+  'htmlmin/htmlmin' =>
   array (
-    'providers' => 
+    'providers' =>
+    array (
+      0 => 'HTMLMin\\HTMLMin\\HTMLMinServiceProvider',
+    ),
+    'aliases' =>
+    array (
+      'HTMLMin' => 'HTMLMin\\HTMLMin\\Facades\\HTMLMin',
+    ),
+  ),
+  'intervention/image' =>
+  array (
+    'providers' =>
     array (
       0 => 'Intervention\\Image\\ImageServiceProvider',
     ),
-    'aliases' => 
+    'aliases' =>
     array (
       'Image' => 'Intervention\\Image\\Facades\\Image',
     ),
   ),
-  'laravel/tinker' => 
+  'laravel/tinker' =>
   array (
-    'providers' => 
+    'providers' =>
     array (
       0 => 'Laravel\\Tinker\\TinkerServiceProvider',
     ),
   ),
-  'laravel/ui' => 
+  'laravelcollective/html' =>
   array (
-    'providers' => 
-    array (
-      0 => 'Laravel\\Ui\\UiServiceProvider',
-    ),
-  ),
-  'laravelcollective/html' => 
-  array (
-    'providers' => 
+    'providers' =>
     array (
       0 => 'Collective\\Html\\HtmlServiceProvider',
     ),
-    'aliases' => 
+    'aliases' =>
     array (
       'Form' => 'Collective\\Html\\FormFacade',
       'Html' => 'Collective\\Html\\HtmlFacade',
     ),
   ),
-  'maatwebsite/excel' => 
+  'maatwebsite/excel' =>
   array (
-    'providers' => 
+    'providers' =>
     array (
       0 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
     ),
-    'aliases' => 
+    'aliases' =>
     array (
       'Excel' => 'Maatwebsite\\Excel\\Facades\\Excel',
     ),
   ),
-  'nesbot/carbon' => 
+  'maddhatter/laravel-fullcalendar' =>
   array (
-    'providers' => 
+    'providers' =>
+    array (
+      0 => 'MaddHatter\\LaravelFullcalendar\\ServiceProvider',
+    ),
+    'aliases' =>
+    array (
+      'Calendar' => 'MaddHatter\\LaravelFullcalendar\\Facades\\Calendar',
+    ),
+  ),
+  'nesbot/carbon' =>
+  array (
+    'providers' =>
     array (
       0 => 'Carbon\\Laravel\\ServiceProvider',
     ),
   ),
-  'qlick/laravel-full-calendar' => 
+  'nunomaduro/collision' =>
   array (
-    'providers' => 
+    'providers' =>
     array (
-      0 => 'LaravelFullCalendar\\FullCalendarServiceProvider',
-    ),
-    'aliases' => 
-    array (
-      'Calendar' => 'LaravelFullCalendar\\Facades\\Calendar',
+      0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     ),
   ),
 );

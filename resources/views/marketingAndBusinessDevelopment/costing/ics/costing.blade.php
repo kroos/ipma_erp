@@ -62,7 +62,7 @@ $(document).on('click', '.check', function(e){
 });
 
 function SwalCheckSR(sRcheck){
-	swal.fire({
+	swal({
 		title: 'Checking & Review Service Report',
 		text: 'Checking Service Report',
 		type: 'question',
@@ -85,14 +85,14 @@ function SwalCheckSR(sRcheck){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal.fire('Approved!', response.message, response.status)
+					swal('Approved!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_logistic_' + sRcheck).parent().parent().remove();
 				})
 				.fail(function(){
-					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -100,7 +100,7 @@ function SwalCheckSR(sRcheck){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal.fire('Cancelled', 'Service Report Not Send', 'info')
+			swal('Cancelled', 'Service Report Not Send', 'info')
 		}
 	});
 }

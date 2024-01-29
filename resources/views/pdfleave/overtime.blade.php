@@ -8,7 +8,7 @@ use App\Model\StaffTCMS;
 use App\Model\HolidayCalendar;
 use App\Model\Location;
 
-use Crabbly\Fpdf\Fpdf as Fpdf;
+use Crabbly\FPDF\FPDF as Fpdf;
 
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;

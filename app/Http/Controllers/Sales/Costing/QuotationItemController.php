@@ -30,7 +30,7 @@ class QuotationItemController extends Controller
 
 	public function store(Request $request)
 	{
-		QuotItem::create( Arr::add( $request->only(['item', 'info', 'price', 'remarks']), 'active', 1 ) );
+		QuotItem::create( array_add( $request->only(['item', 'info', 'price', 'remarks']), 'active', 1 ) );
 		Session::flash('flash_message', 'Data successfully stored!');
 		return redirect(route('quotItem.index'));
 	}

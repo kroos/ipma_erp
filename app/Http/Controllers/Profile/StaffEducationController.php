@@ -49,7 +49,7 @@ class StaffEducationController extends Controller
 	*/
 	public function store(StaffEducationRequest $request)
 	{
-		StaffEducation::create( Arr::add($request->except(['_method', '_token']), 'staff_id', auth()->user()->belongtostaff->id) );
+		StaffEducation::create( array_add($request->except(['_method', '_token']), 'staff_id', auth()->user()->belongtostaff->id) );
 		Session::flash('flash_message', 'Data successfully created!');
 		return redirect( route('staff.show', auth()->user()->belongtostaff->id) );
 	}

@@ -312,7 +312,7 @@ class StaffLeaveController extends Controller
 				$filename = $request->file('document')->store('public/images/profiles');
 
 				$ass1 = explode('/', $filename);
-				$ass2 = Arr::except($ass1, ['0']);
+				$ass2 = array_except($ass1, ['0']);
 				$image = implode('/', $ass2);
 				// dd($image);
 

@@ -452,7 +452,7 @@ $(document).on('click', '.delete_spouse', function(e){
 });
 
 function SwalDelete(productId){
-	swal.fire({
+	swal({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -476,18 +476,18 @@ function SwalDelete(productId){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal.fire('Deleted!', response.message, response.status);
+					swal('Deleted!', response.message, response.status);
 					$('#delete_spouse_' + productId).parent().parent().remove();
 				})
 				.fail(function(){
-					swal.fire('Oops...', 'Something went wrong with ajax!', 'error');
+					swal('Oops...', 'Something went wrong with ajax!', 'error');
 				});
 			});
 		},
 	})
 	.then((result) => {
 		if(result.dismiss === swal.DismissReason.cancel) {
-			swal.fire('Cancelled', 'Your data is safe', 'info');
+			swal('Cancelled', 'Your data is safe', 'info');
 		}
 	});
 }
@@ -502,7 +502,7 @@ $(document).on('click', '.delete_sibling', function(e){
 });
 
 function SwalDeletesibling(siblingID){
-	swal.fire({
+	swal({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -526,18 +526,18 @@ function SwalDeletesibling(siblingID){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal.fire('Deleted!', response.message, response.status);
+					swal('Deleted!', response.message, response.status);
 					$('#delete_sibling_' + siblingID).parent().parent().remove();
 				})
 				.fail(function(){
-					swal.fire('Oops...', 'Something went wrong with ajax!', 'error');
+					swal('Oops...', 'Something went wrong with ajax!', 'error');
 				});
 			});
 		},
 	})
 	.then((result) => {
 		if(result.dismiss === swal.DismissReason.cancel) {
-			swal.fire('Cancelled', 'Your data is safe', 'info');
+			swal('Cancelled', 'Your data is safe', 'info');
 		}
 	});
 }
@@ -552,7 +552,7 @@ $(document).on('click', '.delete_children', function(e){
 });
 
 function SwalDeletechildren(childrenID){
-	swal.fire({
+	swal({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -576,18 +576,18 @@ function SwalDeletechildren(childrenID){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal.fire('Deleted!', response.message, response.status);
+					swal('Deleted!', response.message, response.status);
 					$('#delete_children_' + childrenID).parent().parent().remove();
 				})
 				.fail(function(){
-					swal.fire('Oops...', 'Something went wrong with ajax!', 'error');
+					swal('Oops...', 'Something went wrong with ajax!', 'error');
 				});
 			});
 		},
 	})
 	.then((result) => {
 		if(result.dismiss === swal.DismissReason.cancel) {
-			swal.fire('Cancelled', 'Your data is safe', 'info');
+			swal('Cancelled', 'Your data is safe', 'info');
 		}
 	});
 }
@@ -602,7 +602,7 @@ $(document).on('click', '.delete_emergencyperson', function(e){
 });
 
 function SwalDeleteemergencyperson(emergencypersonID){
-	swal.fire({
+	swal({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -626,18 +626,18 @@ function SwalDeleteemergencyperson(emergencypersonID){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal.fire('Deleted!', response.message, response.status);
+					swal('Deleted!', response.message, response.status);
 					$('#delete_emergencyperson_' + emergencypersonID).parent().parent().remove();
 				})
 				.fail(function(){
-					swal.fire('Oops...', 'Something went wrong with ajax!', 'error');
+					swal('Oops...', 'Something went wrong with ajax!', 'error');
 				});
 			});
 		},
 	})
 	.then((result) => {
 		if(result.dismiss === swal.DismissReason.cancel) {
-			swal.fire('Cancelled', 'Your data is safe', 'info');
+			swal('Cancelled', 'Your data is safe', 'info');
 		}
 	});
 }
@@ -652,7 +652,7 @@ $(document).on('click', '.delete_emergencypersonphone', function(e){
 });
 
 function SwalDeleteemergencypersonphone(emergencypersonphoneID){
-	swal.fire({
+	swal({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -676,18 +676,18 @@ function SwalDeleteemergencypersonphone(emergencypersonphoneID){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal.fire('Deleted!', response.message, response.status);
+					swal('Deleted!', response.message, response.status);
 					$('#delete_emergencypersonphone_' + emergencypersonphoneID).parent().parent().remove();
 				})
 				.fail(function(){
-					swal.fire('Oops...', 'Something went wrong with ajax!', 'error');
+					swal('Oops...', 'Something went wrong with ajax!', 'error');
 				});
 			});
 		},
 	})
 	.then((result) => {
 		if(result.dismiss === swal.DismissReason.cancel) {
-			swal.fire('Cancelled', 'Your data is safe', 'info');
+			swal('Cancelled', 'Your data is safe', 'info');
 		}
 	});
 }
@@ -702,7 +702,7 @@ $(document).on('click', '.delete_staffEducation', function(e){
 });
 
 function SwalDeletestaffEducation(staffEducationID){
-	swal.fire({
+	swal({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -726,18 +726,18 @@ function SwalDeletestaffEducation(staffEducationID){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal.fire('Deleted!', response.message, response.status);
+					swal('Deleted!', response.message, response.status);
 					$('#delete_staffEducation_' + staffEducationID).parent().parent().remove();
 				})
 				.fail(function(){
-					swal.fire('Oops...', 'Something went wrong with ajax!', 'error');
+					swal('Oops...', 'Something went wrong with ajax!', 'error');
 				});
 			});
 		},
 	})
 	.then((result) => {
 		if(result.dismiss === swal.DismissReason.cancel) {
-			swal.fire('Cancelled', 'Your data is safe', 'info');
+			swal('Cancelled', 'Your data is safe', 'info');
 		}
 	});
 }

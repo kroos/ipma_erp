@@ -231,7 +231,7 @@ $(document).on('click', '.cancel_btn', function(e){
 });
 
 function SwalDelete(ackID){
-	swal.fire({
+	swal({
 		title: 'Cancel Leave',
 		text: 'Are you sure to cancel this leave?',
 		type: 'info',
@@ -255,14 +255,14 @@ function SwalDelete(ackID){
 					},
 				})
 				.done(function(response){
-					swal.fire('Accept', response.message, response.status)
+					swal('Accept', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					// $('#cancel_btn_' + ackID).parent().parent().remove();
 				})
 				.fail(function(){
-					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -270,7 +270,7 @@ function SwalDelete(ackID){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal.fire('Cancel Action', 'Leave is still active.', 'info')
+			swal('Cancel Action', 'Leave is still active.', 'info')
 		}
 	});
 }

@@ -45,11 +45,6 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
-        // guards for forgot password
-        'forgotpass' => [
-        	'driver' => 'session',
-        	'provider' => 'forgotpassprovider',
-        ],
     ],
 
     /*
@@ -70,27 +65,15 @@ return [
     */
 
     'providers' => [
-        // 'users' => [
-        //     'driver' => 'eloquent',
-        //     'model' => App\Model\Login::class,
-        // ],
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\Model\Login::class,
+        ],
 
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
-
-        // using this to override Illuminate\Auth\EloquentUserProvider
-        'users' => [
-            'driver' => 'loginuserprovider',
-            'model' => App\Model\Login::class,
-            'table' => 'logins',
-        ],
-        'forgotpassprovider' => [
-        	'driver' => 'eloquent',
-        	'model' => App\Model\Staff::class,
-        	'table' => 'staffs',
-        ],
     ],
 
     /*
@@ -111,11 +94,6 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table' => 'password_resets',
-            'expire' => 60,
-        ],
-        'users' => [
-            'provider' => 'forgotpassprovider',
             'table' => 'password_resets',
             'expire' => 60,
         ],

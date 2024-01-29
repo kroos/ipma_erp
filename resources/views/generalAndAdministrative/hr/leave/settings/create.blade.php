@@ -181,7 +181,7 @@ $(document).on('click', '.delete_almcml', function(e){
 });
 
 function SwalDelete(almcml_id){
-	swal.fire({
+	swal({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -203,14 +203,14 @@ function SwalDelete(almcml_id){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal.fire('Deleted!', response.message, response.status)
+					swal('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_nrl_' + almcml_id).parent().parent().remove();
 				})
 				.fail(function(){
-					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -218,7 +218,7 @@ function SwalDelete(almcml_id){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
+			swal('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }

@@ -46,7 +46,7 @@ class ServiceReportController extends Controller
 		// print_r($request->all());
 
 		$sr = \Auth::user()->belongtostaff->hasmanyservicereport()->create(
-			Arr::add($request->only(['date', 'charge_id', 'customer_id', 'inform_by', 'remarks']), 'active', 1)
+			array_add($request->only(['date', 'charge_id', 'customer_id', 'inform_by', 'remarks']), 'active', 1)
 		);
 
 		$sr->hasmanycomplaint()->create( $request->only(['complaint', 'complaint_by']) );
@@ -100,7 +100,7 @@ class ServiceReportController extends Controller
 	public function updatekiv(Request $request, ICSServiceReport $serviceReport)
 	{
 		// dd($request->all());
-		$serviceReport->update( Arr::add($request->only(['date', 'charge_id', 'customer_id', 'proceed_id', 'remarks', 'inform_by']), 'updated_by', \Auth::user()->belongtostaff->id) );
+		$serviceReport->update( array_add($request->only(['date', 'charge_id', 'customer_id', 'proceed_id', 'remarks', 'inform_by']), 'updated_by', \Auth::user()->belongtostaff->id) );
 
 		// serial
 		if ($request->has('serial')) {
@@ -146,7 +146,7 @@ class ServiceReportController extends Controller
 
 	public function updateinvoiceSR(Request $request, ICSServiceReport $serviceReport)
 	{
-		$serviceReport->update(Arr::add($request->only(['invoice_id', 'invoice_remarks']), 'invoice_date', today()));
+		$serviceReport->update(array_add($request->only(['invoice_id', 'invoice_remarks']), 'invoice_date', today()));
 		Session::flash('flash_message', 'Data successfully stored!');
 		return redirect( route('ics.account') );
 	}
@@ -168,7 +168,7 @@ class ServiceReportController extends Controller
 		// print_r($request->all());
 		// echo '<br />';
 
-		$serviceReport->update( Arr::add($request->only(['date', 'charge_id', 'customer_id', 'proceed_id', 'remarks', 'inform_by', 'category_id', 'status_id']), 'updated_by', \Auth::user()->belongtostaff->id) );
+		$serviceReport->update( array_add($request->only(['date', 'charge_id', 'customer_id', 'proceed_id', 'remarks', 'inform_by', 'category_id', 'status_id']), 'updated_by', \Auth::user()->belongtostaff->id) );
 
 		// serial
 		if ($request->has('srs')) {

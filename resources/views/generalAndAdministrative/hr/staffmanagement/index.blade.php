@@ -107,7 +107,7 @@ $(document).on('click', '.disable_user', function(e){
 });
 
 function SwalDelete(productId){
-	swal.fire({
+	swal({
 		title: 'User Deactivate',
 		text: "This user will be deactivate, are you sure?",
 		type: 'warning',
@@ -129,14 +129,14 @@ function SwalDelete(productId){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal.fire('Deleted!', response.message, response.status)
+					swal('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#disable_user_' + productId).parent().parent().remove();
 				})
 				.fail(function(){
-					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -144,7 +144,7 @@ function SwalDelete(productId){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal.fire('Cancelled', 'User is safe from deactivate', 'info')
+			swal('Cancelled', 'User is safe from deactivate', 'info')
 		}
 	});
 }

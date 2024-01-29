@@ -5,7 +5,7 @@
 use App\Model\QuotQuotation;
 
 // load pdf library
-use Crabbly\Fpdf\Fpdf as Fpdf;
+use Crabbly\FPDF\FPDF as Fpdf;
 
 // load time library
 use Carbon\Carbon;

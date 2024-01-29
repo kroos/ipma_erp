@@ -25,14 +25,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        // using this to override Illuminate\Auth\EloquentUserProvider
-        \Illuminate\Support\Facades\Auth::provider('loginuserprovider', function($app, array $config) {
-            return new Custom\EloquentUserProvider($app['hash'], $config['model']);
-        });
-
-        // \Illuminate\Support\Facades\Auth::provider('loginuserprovider', function($app, array $config) {
-        //     return new Custom\EloquentUserProvider($app['hash'], $config['model']);
-        // });
-
+        //
     }
 }

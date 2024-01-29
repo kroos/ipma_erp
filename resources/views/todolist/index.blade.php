@@ -46,7 +46,7 @@ $('#todolist1').DataTable({
 // });
 // 
 // function SwalCCallSR(srCCall){
-// 	swal.fire({
+// 	swal({
 // 		title: 'Update Task List',
 // 		text: 'Update TSchedule Task',
 // 		type: 'question',
@@ -89,7 +89,7 @@ $('#todolist1').DataTable({
 // 					dataType: 'json'
 // 				})
 // 				.done(function(response){
-// 					swal.fire('Task Updated!', response.message, response.status)
+// 					swal('Task Updated!', response.message, response.status)
 // 					.then(function(){
 // 						window.location.reload(true);
 // 					});
@@ -102,7 +102,7 @@ $('#todolist1').DataTable({
 //  					for(i in resp.errors) {
 // 						x += '<p class="text-danger">' + resp.errors[i] + '</p>';
 // 					};
-// 					swal.fire({
+// 					swal({
 // 						title: resp.message,
 // 						html: x,
 // 						type: 'error',
@@ -114,7 +114,7 @@ $('#todolist1').DataTable({
 // 	})
 // 	.then((result) => {
 // 		if (result.dismiss === swal.DismissReason.cancel) {
-// 			swal.fire('Cancelled', 'Not Updating Task List', 'info')
+// 			swal('Cancelled', 'Not Updating Task List', 'info')
 // 		}
 // 	});
 // }

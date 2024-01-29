@@ -27,39 +27,12 @@ class Login extends Authenticatable
 	protected $hidden = [
 		'password', 'remember_token',
 	];
-
-
-	public function getAuthIdentifierName()
-	{
-		return 'username';
-	}
-
-	// for password
-	public function getAuthPassword()
-	{
-		return $this->password;
-	}
 	
 	public function belongtostaff()
 	{
 		return $this->belongsTo('App\Model\Staff', 'staff_id');
 	}
 
-    /**
-     * Get the e-mail address where password reset links are sent.
-     *
-     * @return string
-     */
-	public function getEmailForPasswordReset()
-	{
-		return $this->email;
-	}
-
-	// yang ni penting untuk hantaq email
-	public function routeNotificationForMail($notification)
-	{
-		return $this->email;
-	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// all acl will be done here

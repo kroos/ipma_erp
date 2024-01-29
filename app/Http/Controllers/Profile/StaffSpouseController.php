@@ -52,7 +52,7 @@ class StaffSpouseController extends Controller
     public function store(StaffSpouseRequest $request)
     {
         // dd(auth()->user()->belongtostaff->id);
-        // dd( Arr::add($request->staff, 'staff_id', auth()->user()->belongtostaff->id) );
+        // dd( array_add($request->staff, 'staff_id', auth()->user()->belongtostaff->id) );
 
 
         // \App\Model\StaffSpouse::create( $request->all() );
@@ -64,7 +64,7 @@ class StaffSpouseController extends Controller
 
             // auth()->user()->belongtostaff->save($staffspouse);
 
-            StaffSpouse::create( Arr::add($val, 'staff_id', auth()->user()->belongtostaff->id) );
+            StaffSpouse::create( array_add($val, 'staff_id', auth()->user()->belongtostaff->id) );
 
             // $serialtrack = StaffSpouse::create([
             //         'id_sales' => $inv->id,

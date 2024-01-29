@@ -56,10 +56,10 @@ class StaffEmergencyPersonController extends Controller
 	{
 		// dd($request->except(['_method', '_token', 'emerg']));
 
-		$emergency = StaffEmergencyPerson::create( Arr::add($request->except(['_method', '_token', 'emerg']), 'staff_id', auth()->user()->belongtostaff->id) );
+		$emergency = StaffEmergencyPerson::create( array_add($request->except(['_method', '_token', 'emerg']), 'staff_id', auth()->user()->belongtostaff->id) );
 
         foreach ($request->emerg as $key => $val) {
-            StaffEmergencyPersonPhone::create( Arr::add($val, 'emergency_person_id', $emergency->id) );
+            StaffEmergencyPersonPhone::create( array_add($val, 'emergency_person_id', $emergency->id) );
         }
 
         Session::flash('flash_message', 'Data successfully edited!');

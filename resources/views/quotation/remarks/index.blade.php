@@ -102,7 +102,7 @@ $(document).on('click', '.toggle', function(e){
 });
 
 function SwalToggle(Id, val){
-	swal.fire({
+	swal({
 		title: 'Toggle Product / Item Enable or Disable',
 		text: "Toggle this Product?",
 		type: 'warning',
@@ -124,14 +124,14 @@ function SwalToggle(Id, val){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal.fire('Deleted!', response.message, response.status)
+					swal('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#disable_user_' + Id).parent().parent().remove();
 				})
 				.fail(function(){
-					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -139,7 +139,7 @@ function SwalToggle(Id, val){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal.fire('Cancelled', 'Data Unchanged', 'info')
+			swal('Cancelled', 'Data Unchanged', 'info')
 		}
 	});
 }
@@ -154,7 +154,7 @@ $(document).on('click', '.delete_item', function(e){
 });
 
 function SwalDelete(Id){
-	swal.fire({
+	swal({
 		title: 'Delete Item',
 		text: "Delete this item?",
 		type: 'warning',
@@ -175,14 +175,14 @@ function SwalDelete(Id){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal.fire('Deleted!', response.message, response.status)
+					swal('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#disable_user_' + Id).parent().parent().remove();
 				})
 				.fail(function(){
-					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -190,7 +190,7 @@ function SwalDelete(Id){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal.fire('Cancelled', 'Data Unchanged', 'info')
+			swal('Cancelled', 'Data Unchanged', 'info')
 		}
 	});
 }

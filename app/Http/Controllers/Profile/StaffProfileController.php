@@ -96,7 +96,7 @@ class StaffProfileController extends Controller
             $filename = $request->file('image')->store('public/images/profiles');
 
             $ass1 = explode('/', $filename);
-            $ass2 = Arr::except($ass1, ['0']);
+            $ass2 = array_except($ass1, ['0']);
             $image = implode('/', $ass2);
 
             // dd($image);
@@ -109,9 +109,9 @@ class StaffProfileController extends Controller
             });
 
             $imag->save();
-            // dd( Arr::add($request->except(['image']), 'image', $filename) );
+            // dd( array_add($request->except(['image']), 'image', $filename) );
 
-            $res = \App\Model\Staff::updateOrCreate(['id' => $staff->id], Arr::add($request->except(['image', 'drivelicense']), 'image', $image));
+            $res = \App\Model\Staff::updateOrCreate(['id' => $staff->id], array_add($request->except(['image', 'drivelicense']), 'image', $image));
         } else {
             $res = \App\Model\Staff::updateOrCreate(['id' => $staff->id], $request->except(['image', 'drivelicense']));
         }

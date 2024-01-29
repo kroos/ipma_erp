@@ -167,12 +167,12 @@ return [
         Intervention\Image\ImageServiceProvider::class,
 
         // $ composer require crabbly/fpdf-laravel
-        Crabbly\Fpdf\FpdfServiceProvider::class,
+        Crabbly\FPDF\FpdfServiceProvider::class,
 
         Collective\Html\HtmlServiceProvider::class,
 
         // https://github.com/maddhatter/laravel-fullcalendar
-        ////MaddHatter\LaravelFullcalendar\ServiceProvider::class,
+        MaddHatter\LaravelFullcalendar\ServiceProvider::class,
     ],
 
     /*
@@ -234,9 +234,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
 
         // https://github.com/HTMLMin/Laravel-HTMLMin
-        ////'HTMLMin' => HTMLMin\HTMLMin\Facades\HTMLMin::class,
-
-        'Fpdf' => Crabbly\Fpdf\Fpdf::class,
+        'HTMLMin' => HTMLMin\HTMLMin\Facades\HTMLMin::class,
 
     ],
 

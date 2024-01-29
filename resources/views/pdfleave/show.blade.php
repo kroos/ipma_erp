@@ -9,7 +9,7 @@ use App\Model\StaffLeaveBackup;
 use App\Model\StaffLeaveReplacement;
 use App\Model\StaffLeaveApproval;
 
-use Crabbly\Fpdf\Fpdf as Fpdf;
+use Crabbly\FPDF\FPDF as Fpdf;
 use Carbon\Carbon;
 
 // ref no
@@ -176,7 +176,7 @@ if ( !is_null( $bakvalid ) ) :
 	$pdf->Cell(50, 4, 'Tandatangan : ', 1, 0, 'C');
 	$pdf->Cell(60, 4, 'Tarikh : ', 1, 1, 'C');
 	// data
-	$pdf->Cell(80, 4, $bakvalid->belongtostaff->name, 'LRB', 0, 'C');
+	// $pdf->Cell(80, 4, ((!is_null($bakvalid->belongtostaff)?$bakvalid->belongtostaff->name:NULL), 'LRB', 0, 'C');
 	$pdf->Cell(50, 4, $ack, 'LRB', 0, 'C');
 
 if (is_null($ack)) {

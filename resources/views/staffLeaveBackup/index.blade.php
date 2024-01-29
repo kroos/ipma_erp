@@ -102,7 +102,7 @@ $(document).on('click', '.ackbtn', function(e){
 });
 
 function SwalDelete(ackID){
-	swal.fire({
+	swal({
 		title: 'Please approve ',
 		text: 'Applicants will appreciate it',
 		type: 'info',
@@ -125,14 +125,14 @@ function SwalDelete(ackID){
 					},
 				})
 				.done(function(response){
-					swal.fire('Accept', response.message, response.status)
+					swal('Accept', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					// $('#ackbtn_' + ackID).parent().parent().remove();
 				})
 				.fail(function(){
-					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -140,7 +140,7 @@ function SwalDelete(ackID){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal.fire('Reject', 'Cancel Approval. Ohh.. come on..', 'info')
+			swal('Reject', 'Cancel Approval. Ohh.. come on..', 'info')
 		}
 	});
 }

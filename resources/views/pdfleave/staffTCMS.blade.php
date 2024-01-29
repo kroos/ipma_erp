@@ -8,7 +8,7 @@ use App\Model\StaffLeave;
 use App\Model\StaffTCMS;
 use App\Model\HolidayCalendar;
 
-use Crabbly\Fpdf\Fpdf as Fpdf;
+use Crabbly\FPDF\FPDF as Fpdf;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 
@@ -240,7 +240,7 @@ class PDF_MC_Table extends PDF {
 					}
 				}
 			}
-			if( !Arr::has($hol, $stcms->date) ) {
+			if( !array_has($hol, $stcms->date) ) {
 
 
 				if( $stcms->leave_taken == 'ABSENT' /*&& is_null($lea)*/ || $stcms->leave_taken != 'Outstation' && !empty($stcms->leave_taken )  ) {

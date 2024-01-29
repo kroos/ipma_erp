@@ -42,7 +42,7 @@ class QuotationController extends Controller
 	public function store(Request $request)
 	{
 		// dd($request->all());
-		$qt = \Auth::user()->belongtostaff->hasmanyquotation()->create( Arr::add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'discount', 'mutual', 'from', 'to', 'period_id', 'validity', 'bank_id', 'dealer_price', 'budget_quot']), 'active', 1) );
+		$qt = \Auth::user()->belongtostaff->hasmanyquotation()->create( array_add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'discount', 'mutual', 'from', 'to', 'period_id', 'validity', 'bank_id', 'dealer_price', 'budget_quot']), 'active', 1) );
 
 		if ($request->has('qs')) {
 			foreach ($request->qs as $k1 => $v1) {
@@ -52,7 +52,7 @@ class QuotationController extends Controller
 				]);
 
 				// dd($v1['qssection']);
-				if( Arr::has(  $v1, 'qssection') ) {
+				if( array_has(  $v1, 'qssection') ) {
 					foreach($v1['qssection'] as $k2 => $v2){
 						$qt2 = $qt1->hasmanyquotsectionitem()->create([
 							'item_id' => $v2['item_id'],
@@ -64,18 +64,18 @@ class QuotationController extends Controller
 							'tax_value' => $v2['tax_value'],
 						]);
 
-						if( Arr::has(  $v2, 'qsitem') ) {
+						if( array_has(  $v2, 'qsitem') ) {
 							foreach ($v2['qsitem'] as $k3 => $v3) {
 
 								// $request->qs[1]['qssection'][2]['qsitem'][2]['image']->store('public/images/quot');					// yang ni jadi
-								// var_dump(Arr::has( $request->qs[$k1]['qssection'][$k2]['qsitem'][$k3], 'image' ));
+								// var_dump(array_has( $request->qs[$k1]['qssection'][$k2]['qsitem'][$k3], 'image' ));
 
-								if( Arr::has(  $v3, 'image' ) ) {
+								if( array_has(  $v3, 'image' ) ) {
 
 									$filename = $v3['image']->store('public/images/quot');
 
 									$ass1 = explode('/', $filename);
-									$ass2 = Arr::except($ass1, ['0']);
+									$ass2 = array_except($ass1, ['0']);
 									$image = implode('/', $ass2);
 
 									// dd($image);
@@ -169,8 +169,8 @@ class QuotationController extends Controller
 		} else {
 			$bank = $request->bank_id;
 		}
-		// dd( Arr::add($request->all(), 'bank', $bank) );
-		$quot->update( Arr::add(Arr::add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'discount', 'mutual', 'from', 'to', 'period_id', 'validity', 'dealer_price', 'budget_quot']), 'active', 1), 'bank_id', $bank) );
+		// dd( array_add($request->all(), 'bank', $bank) );
+		$quot->update( array_add(array_add($request->only(['date', 'currency_id', 'customer_id', 'attn', 'subject', 'description', 'grandamount', 'tax_id', 'tax_value', 'discount', 'mutual', 'from', 'to', 'period_id', 'validity', 'dealer_price', 'budget_quot']), 'active', 1), 'bank_id', $bank) );
 // dd($request->mutual);
 		// if( $request->has('mutual') ) {
 		// 	foreach($request->mutual as $k => $v) {
@@ -183,10 +183,10 @@ class QuotationController extends Controller
 		$filename1 = $request->file('revision_file')->store('public/quot_revs');
 
 		$ass11 = explode('/', $filename1);
-		$ass21 = Arr::except($ass11, ['0']);
+		$ass21 = array_except($ass11, ['0']);
 		$revfile = implode('/', $ass21);
 
-		$quot->hasmanyrevision()->create(Arr::add($request->only('revision'), 'revision_file', $revfile));
+		$quot->hasmanyrevision()->create(array_add($request->only('revision'), 'revision_file', $revfile));
 
 		if ($request->has('qs')) {
 
@@ -203,7 +203,7 @@ class QuotationController extends Controller
 					]);
 
 				// dd($v1['qssection']);
-				if( Arr::has(  $v1, 'qssection') ) {
+				if( array_has(  $v1, 'qssection') ) {
 					foreach($v1['qssection'] as $k2 => $v2){
 						$qw2 = $qw1->hasmanyquotsectionitem()->updateOrCreate(
 						[
@@ -219,18 +219,18 @@ class QuotationController extends Controller
 							'tax_value' => $v2['tax_value'],
 						]);
 
-						if( Arr::has(  $v2, 'qsitem') ) {
+						if( array_has(  $v2, 'qsitem') ) {
 							foreach ($v2['qsitem'] as $k3 => $v3) {
 
 								// $request->qs[1]['qssection'][2]['qsitem'][2]['image']->store('public/images/quot');					// yang ni jadi
-								// var_dump(Arr::has( $request->qs[$k1]['qssection'][$k2]['qsitem'][$k3], 'image' ));
+								// var_dump(array_has( $request->qs[$k1]['qssection'][$k2]['qsitem'][$k3], 'image' ));
 
-								if( Arr::has(  $v3, 'image' ) ) {
+								if( array_has(  $v3, 'image' ) ) {
 
 									$filename = $v3['image']->store('public/images/quot');
 
 									$ass1 = explode('/', $filename);
-									$ass2 = Arr::except($ass1, ['0']);
+									$ass2 = array_except($ass1, ['0']);
 									$image = implode('/', $ass2);
 
 									// dd($image);

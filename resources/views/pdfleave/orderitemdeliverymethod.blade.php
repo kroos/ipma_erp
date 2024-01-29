@@ -6,7 +6,7 @@ use App\Model\CSOrder;
 use App\Model\CSOrderItem;
 use App\Model\CSOrderDelivery;
 
-use Crabbly\Fpdf\Fpdf as Fpdf;
+use Crabbly\FPDF\FPDF as Fpdf;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 

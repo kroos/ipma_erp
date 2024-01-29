@@ -232,7 +232,7 @@ $(document).on('click', '.delete_attendees', function(e){
 });
 
 function SwalDeleteAttend(attendId){
-	swal.fire({
+	swal({
 		title: 'Are you sure?',
 		text: "It will be deleted permanently!",
 		type: 'warning',
@@ -254,14 +254,14 @@ function SwalDeleteAttend(attendId){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal.fire('Deleted!', response.message, response.status)
+					swal('Deleted!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_attendees_' + attendId).parent().parent().remove();
 				})
 				.fail(function(){
-					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -269,7 +269,7 @@ function SwalDeleteAttend(attendId){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal.fire('Cancelled', 'Your data is safe from delete', 'info')
+			swal('Cancelled', 'Your data is safe from delete', 'info')
 		}
 	});
 }

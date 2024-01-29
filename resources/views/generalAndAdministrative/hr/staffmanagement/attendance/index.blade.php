@@ -82,7 +82,7 @@ $(document).on('click', '.remove_staffMemo', function(e){
 });
 
 function SwalToggle(tdsid){
-	swal.fire({
+	swal({
 		title: 'Delete Warning',
 		text: 'Delete this warning?',
 		type: 'question',
@@ -104,14 +104,14 @@ function SwalToggle(tdsid){
 					dataType: 'json'
 				})
 				.done(function(response){
-					swal.fire('Delete Success!', response.message, response.status)
+					swal('Delete Success!', response.message, response.status)
 					.then(function(){
 						window.location.reload(true);
 					});
 					//$('#delete_logistic_' + tdsid).parent().parent().remove();
 				})
 				.fail(function(){
-					swal.fire('Oops...', 'Something went wrong with ajax !', 'error');
+					swal('Oops...', 'Something went wrong with ajax !', 'error');
 				})
 			});
 		},
@@ -119,7 +119,7 @@ function SwalToggle(tdsid){
 	})
 	.then((result) => {
 		if (result.dismiss === swal.DismissReason.cancel) {
-			swal.fire('Cancelled', 'Your data is saved', 'info')
+			swal('Cancelled', 'Your data is saved', 'info')
 		}
 	});
 }
