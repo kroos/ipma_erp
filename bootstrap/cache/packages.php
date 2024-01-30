@@ -7,7 +7,8 @@
     ),
     'aliases' =>
     array (
-      'PDF' => 'Barryvdh\\DomPDF\\Facade',
+      'Pdf' => 'Barryvdh\\DomPDF\\Facade\\Pdf',
+      'PDF' => 'Barryvdh\\DomPDF\\Facade\\Pdf',
     ),
   ),
   'crabbly/fpdf-laravel' =>
@@ -17,33 +18,11 @@
       0 => 'Crabbly\\Fpdf\\FpdfServiceProvider',
     ),
   ),
-  'fideloper/proxy' =>
+  'laravel/sanctum' =>
   array (
     'providers' =>
     array (
-      0 => 'Fideloper\\Proxy\\TrustedProxyServiceProvider',
-    ),
-  ),
-  'htmlmin/htmlmin' =>
-  array (
-    'providers' =>
-    array (
-      0 => 'HTMLMin\\HTMLMin\\HTMLMinServiceProvider',
-    ),
-    'aliases' =>
-    array (
-      'HTMLMin' => 'HTMLMin\\HTMLMin\\Facades\\HTMLMin',
-    ),
-  ),
-  'intervention/image' =>
-  array (
-    'providers' =>
-    array (
-      0 => 'Intervention\\Image\\ImageServiceProvider',
-    ),
-    'aliases' =>
-    array (
-      'Image' => 'Intervention\\Image\\Facades\\Image',
+      0 => 'Laravel\\Sanctum\\SanctumServiceProvider',
     ),
   ),
   'laravel/tinker' =>
@@ -51,6 +30,13 @@
     'providers' =>
     array (
       0 => 'Laravel\\Tinker\\TinkerServiceProvider',
+    ),
+  ),
+  'laravel/ui' =>
+  array (
+    'providers' =>
+    array (
+      0 => 'Laravel\\Ui\\UiServiceProvider',
     ),
   ),
   'laravelcollective/html' =>
@@ -76,17 +62,6 @@
       'Excel' => 'Maatwebsite\\Excel\\Facades\\Excel',
     ),
   ),
-  'maddhatter/laravel-fullcalendar' =>
-  array (
-    'providers' =>
-    array (
-      0 => 'MaddHatter\\LaravelFullcalendar\\ServiceProvider',
-    ),
-    'aliases' =>
-    array (
-      'Calendar' => 'MaddHatter\\LaravelFullcalendar\\Facades\\Calendar',
-    ),
-  ),
   'nesbot/carbon' =>
   array (
     'providers' =>
@@ -99,6 +74,24 @@
     'providers' =>
     array (
       0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
+    ),
+  ),
+  'nunomaduro/termwind' =>
+  array (
+    'providers' =>
+    array (
+      0 => 'Termwind\\Laravel\\TermwindServiceProvider',
+    ),
+  ),
+  'spatie/laravel-ignition' =>
+  array (
+    'providers' =>
+    array (
+      0 => 'Spatie\\LaravelIgnition\\IgnitionServiceProvider',
+    ),
+    'aliases' =>
+    array (
+      'Flare' => 'Spatie\\LaravelIgnition\\Facades\\Flare',
     ),
   ),
 );

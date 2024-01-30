@@ -5,6 +5,14 @@ namespace App\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+// use Illuminate\Database\Eloquent\Relations\HasOne;
+// use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+// use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+// use Illuminate\Database\Eloquent\Relations\HasMany;
+// use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+// use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
 class Login extends Authenticatable
 {
 	protected $connection = 'mysql';
@@ -18,7 +26,7 @@ class Login extends Authenticatable
 	protected $fillable = [
 		'staff_id', 'username', 'password', 'active'
 	];
-	
+
 	/**
 	* The attributes that should be hidden for arrays.
 	*
@@ -39,7 +47,7 @@ class Login extends Authenticatable
 	{
 		return $this->password;
 	}
-	
+
 	public function belongtostaff()
 	{
 		return $this->belongsTo('App\Model\Staff', 'staff_id');
@@ -62,6 +70,13 @@ class Login extends Authenticatable
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	// db relation belongsTo
+	public function belongstostaff(): BelongsTo
+	{
+		return $this->belongsTo(\App\Model\Staff::class, 'staff_id');
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	// all acl will be done here
 	// only main position is counted, else, deny access
 	public function isOwner( $id ) {
@@ -76,7 +91,7 @@ class Login extends Authenticatable
 			}
 		}
 	}
-	
+
 	public function editStaffChildren( $id )
 	{
 	// dd( \Auth::user()->belongtostaff->hasmanychildren()->get() );
@@ -93,7 +108,7 @@ class Login extends Authenticatable
 			}
 		}
 	}
-	
+
 	public function editStaffSpouse( $id )
 	{
 	// dd( \Auth::user()->belongtostaff->hasmanyspouse()->get() );
@@ -110,7 +125,7 @@ class Login extends Authenticatable
 			}
 		}
 	}
-	
+
 	public function editStaffSibling( $id )
 	{
 	// dd( \Auth::user()->belongtostaff->hasmanysibling()->get() );
@@ -127,7 +142,7 @@ class Login extends Authenticatable
 			}
 		}
 	}
-	
+
 	public function editStaffEmergencyPerson( $id )
 	{
 	// dd( \Auth::user()->belongtostaff->hasmanyemergencyperson()->get() );
@@ -144,7 +159,7 @@ class Login extends Authenticatable
 			}
 		}
 	}
-	
+
 	public function editStaffEmergencyPersonPhone( $id )
 	{
 		if ( \Auth::user()->belongtostaff()->first()->id == $id ) {
@@ -157,9 +172,9 @@ class Login extends Authenticatable
 				}
 			}
 		}
-	
+
 	}
-	
+
 	public function editStaffEducation( $id )
 	{
 		foreach ( \Auth::user()->belongtostaff->hasmanyeducation()->get() as $key) {
@@ -175,7 +190,7 @@ class Login extends Authenticatable
 			}
 		}
 	}
-	
+
 	public function accessdivision( $id )
 	{
 		$rt = \Auth::user()->belongtostaff->belongtomanyposition()->get();
@@ -192,7 +207,7 @@ class Login extends Authenticatable
 			}
 		}
 	}
-	
+
 	public function accessdepartment( $id )
 	{
 		$rt = \Auth::user()->belongtostaff->belongtomanyposition()->get();
